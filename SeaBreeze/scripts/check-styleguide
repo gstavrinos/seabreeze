@@ -4,6 +4,8 @@
 ################################################################################
 #                                                                              #
 #  Description:  Report and/or fix style-guide errors prior to commit/release. #
+#                Most importantly, ensures that every header and source file   #
+#                are marked with the current license boilerplate.              #
 #                                                                              #
 #  Author:       Mark Zieg <mark.zieg@oceanoptics.com>                         #
 #                                                                              #
@@ -185,15 +187,17 @@ sub update_license
     splice @$lines, $license_offset, $license_length, @prefixed_license;
 }
 
+# remove or warn on anything that should not appear in any file
 sub remove_fluff
 {
     my $filename = shift;
     my $lines = shift;
 
+    # todo: expand tabs?
+
+    # remove trailing whitespace
     for (@$lines)
     {
-        s/\/\*\s*end (of )?namespace\s*\*\///gi;
-        s/\/\*\s*end namespace [a-z]+\s*\*\///gi;
         s/\s*$//;
     }
 }
@@ -207,6 +211,10 @@ sub write_file
 
     open(OUTFILE, ">$filename") || die "can't write $filename: $!\n";
     print OUTFILE join("\n", @$lines);
+
+    # ensure trailing linefeed...absence breaks at least one compiler
+    print OUTFILE "\n" unless $lines->[-1] =~ /^\s*$/; 
+
     close(OUTFILE);
 }
 
