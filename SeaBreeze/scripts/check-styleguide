@@ -9,8 +9,11 @@
 #                                                                              #
 #  Author:       Mark Zieg <mark.zieg@oceanoptics.com>                         #
 #                                                                              #
-#  Invocation:   $ find include src | egrep '\.(h|c|cpp)$' \                   #
+#  Invocation:   $ find include src test sample-code | egrep '\.(h|c|cpp)$' \  #
 #                  | xargs scripts/check-styleguide                            #
+#                                                                              #
+#  Todo:         Consider adding call to 'astyle' to enforce consistent code   #
+#                formatting at check-in.                                       #
 #                                                                              #
 ################################################################################
 
