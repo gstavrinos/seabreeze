@@ -10,7 +10,7 @@
 * http://stackoverflow.com/questions/6947413/how-to-open-read-and-write-from-serial-port-in-c
 *
 * Please see STS Data Sheet for Ocean Binary Protocol API:
-* http://www.oceanoptics.com/technical/engineering/STS%20Data%20Sheet.pdf
+* http://oceanoptics.com//wp-content/uploads/STS-Data-Sheet.pdf
 *
 * LICENSE:
 *
@@ -68,6 +68,12 @@
 #define OBP_MESSAGE_GET_CORRECTED_SPECTRUM  0x00101000L
 #define OBP_MESSAGE_SET_SUBSPECTRUM_SPEC    0x00102010L
 #define OBP_MESSAGE_GET_SUBSPECTRUM         0x00102080L
+#define OBP_MESSAGE_GET_WL_COEFF_COUNT      0x00180100L
+#define OBP_MESSAGE_GET_WL_COEFF            0x00180101L
+#define OBP_MESSAGE_SET_WL_COEFF            0x00180111L
+#define OBP_MESSAGE_GET_NLC_COEFF_COUNT     0x00181100L
+#define OBP_MESSAGE_GET_NLC_COEFF           0x00181101L
+#define OBP_MESSAGE_SET_NLC_COEFF           0x00181101L
 
 // convert 2-byte LSB-MSB to native
 #define LITTLE_ENDIAN_SHORT(base) (((base)[1] << 8) | (base)[0])
@@ -967,6 +973,104 @@ int main(int argc, char **argv)
         }
         else
             printf("ERROR: unable to execute SET_SUBSPECTRUM_SPECIFICATION transaction\n");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get wavecal
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1)
+    {
+        unsigned char coeff_count = 0;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type       = OBP_MESSAGE_GET_WL_COEFF_COUNT;
+        xfer.response_len       = sizeof(coeff_count);
+        xfer.response           = &coeff_count;
+
+        printf("\ngetting wavecal coeff count...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.response_len == xfer.actual_response_len)
+            {
+                printf("Wavecal coeff count: %u\n", coeff_count);
+
+                for (unsigned char i = 0; i < coeff_count; i++)
+                {
+                    unsigned char buf[4];
+                    memset(buf, 0, sizeof(buf));
+
+                    memset(&xfer, 0, sizeof(xfer));
+                    xfer.message_type = OBP_MESSAGE_GET_WL_COEFF;
+                    xfer.request_len  = 1;
+                    xfer.request      = &i;
+                    xfer.response_len = sizeof(buf);
+                    xfer.response     = buf;
+
+                    if (!sendOBPMessage(&xfer))
+                    {
+                        float* coeff = (float*) buf;
+                        printf("  Wavecal coeff %u: %.2e\n", i, *coeff);
+                    }
+                    else
+                        printf("ERROR: error with get_wavecal_coeff(%u) exchange\n", i);
+                }
+            }
+            else
+                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                    xfer.response_len, xfer.message_type, xfer.actual_response_len);
+        }
+        else
+            printf("ERROR: unable to execute GET_WL_COEFF_COUNT transaction\n");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get NLC 
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1)
+    {
+        unsigned char coeff_count = 0;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type       = OBP_MESSAGE_GET_NLC_COEFF_COUNT;
+        xfer.response_len       = sizeof(coeff_count);
+        xfer.response           = &coeff_count;
+
+        printf("\ngetting nonlinearity coeff count...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.response_len == xfer.actual_response_len)
+            {
+                printf("Nonlinearity coeff count: %u\n", coeff_count);
+
+                for (unsigned char i = 0; i < coeff_count; i++)
+                {
+                    unsigned char buf[4];
+                    memset(buf, 0, sizeof(buf));
+
+                    memset(&xfer, 0, sizeof(xfer));
+                    xfer.message_type = OBP_MESSAGE_GET_NLC_COEFF;
+                    xfer.request_len  = 1;
+                    xfer.request      = &i;
+                    xfer.response_len = sizeof(buf);
+                    xfer.response     = buf;
+
+                    if (!sendOBPMessage(&xfer))
+                    {
+                        float* coeff = (float*) buf;
+                        printf("  NLC coeff %u: %.2e\n", i, *coeff);
+                    }
+                    else
+                        printf("ERROR: error with get_nlc_coeff(%u) exchange\n", i);
+                }
+            }
+            else
+                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                    xfer.response_len, xfer.message_type, xfer.actual_response_len);
+        }
+        else
+            printf("ERROR: unable to execute GET_NLC_COEFF_COUNT transaction\n");
     }
 
     ////////////////////////////////////////////////////////////////////////////
