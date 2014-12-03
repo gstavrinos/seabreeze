@@ -291,6 +291,8 @@ int read_buffer(unsigned char *response, size_t len)
         printf("%s: bytes_left_to_read = %d\n", __FUNCTION__, bytes_left_to_read);
 #else
     total_bytes_read = seabreeze_read_usb(spec_index, &error, STS_RESPONSE_ENDPOINT, response, len);
+    if (enable_verbose_com)
+        dumpHex("reading", "  [COM] <<", response, total_bytes_read);
 #endif
 
     if (enable_verbose_obp)
