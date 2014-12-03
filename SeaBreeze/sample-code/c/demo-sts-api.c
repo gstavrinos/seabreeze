@@ -757,7 +757,7 @@ int main(int argc, char **argv)
     // get flow-control mode
     ////////////////////////////////////////////////////////////////////////////
 
-    if (1)
+    if (0)
     {
         unsigned char mode = 0;
 
