@@ -103,6 +103,7 @@ Dependencies
 - Visual Studio
 - <a href="http://www.microsoft.com/en-us/download/details.aspx?id=11800">Microsoft WinDDK</a> (7600.16385.1 recommended)
 - (Note that .NET is not required)
+- Visual Studio 2013 requires the <a href="https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d">Installer Projects extension</a>
 
 \subsubsection visual_studio Visual Studio
 
