@@ -11,7 +11,9 @@ public partial class SeaBreezeWrapper
     public const int SLOT_LENGTH = 15;
     public const int ERROR_SUCCESS = 0;
 
-    const string DLL = "SeaBreeze.dll";
+    // NOTE: To Debug SeaBreeze.dll set the full absolute path to your debug build of SeaBreeze.dll
+    //       For example: const string DLL = @"C:\Code\seabreeze-code\trunk\SeaBreeze\os-support\windows\VisualStudio2013\x64\Debug\SeaBreeze.dll";
+    const string DLL = @"SeaBreeze.dll";
 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern double seabreeze_read_double                        (int index, ref int errorCode, int slot_number); 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern double seabreeze_read_tec_temperature               (int index, ref int errorCode); 
