@@ -96,8 +96,8 @@ SetUp.msi installer, you may skip this section.</i>
 \subsection build_win Windows
 
 SeaBreeze is normally built under Windows using Visual Studio 2010, although
-we've provided working solution and project directories for 2005, 2010, and
-2012 in the os-support/windows directory.
+we've provided working solution and project directories for 2005, 2010, 2012,
+and 2013 in the os-support/windows directory.
 
 Dependencies
 - Visual Studio
@@ -290,6 +290,13 @@ the provided tests and sample_code files:
 
 To test SeaBreeze from a Windows GUI, build and run the "CSharpDemo" provided
 in sample-code.
+
+To debug SeaBreeze.dll from the "CSharpDemo" edit "SeaBreezeWrapper.cs" to
+load your debug build of SeaBreeze.dll.
+Change the following line in "SeaBreezeWrapper.cs":
+    const string DLL = @"SeaBreeze.dll";
+To the path of your debug SeaBreeze.dll such as:
+    const string DLL = @"C:\Code\seabreeze-code\trunk\SeaBreeze\os-support\windows\VisualStudio2013\x64\Debug\SeaBreeze.dll";
 
 \subsection test_linux Linux
 
