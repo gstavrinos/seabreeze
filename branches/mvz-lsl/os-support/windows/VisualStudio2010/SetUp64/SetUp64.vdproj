@@ -303,6 +303,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_74266F7BFFAD4C18A1941AD31D9A2D0A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_77073A3228564F8AB6B8B7925E014F03"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -592,6 +598,12 @@
         "Entry"
         {
         "MsmKey" = "8:_F5E64A4ADD3D4E1B95FE7FC513CB3164"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F7561D1217DF4E3794F2F95B49641494"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1656,6 +1668,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74266F7BFFAD4C18A1941AD31D9A2D0A"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.cat"
+            "TargetName" = "8:OOI_MayaLSL.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77073A3228564F8AB6B8B7925E014F03"
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650_XP.inf"
@@ -2600,6 +2632,26 @@
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus_XP.cat"
             "TargetName" = "8:OOI_USB2000Plus_XP.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F7561D1217DF4E3794F2F95B49641494"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.inf"
+            "TargetName" = "8:OOI_MayaLSL.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
             "Condition" = "8:"

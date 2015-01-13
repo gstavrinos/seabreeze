@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1C7D1463280F46F8A34DD30FBE637C7E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_208CA3FFBD4644BF8C7EA784000EF1E1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -375,6 +381,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_74B32CD391514FC19B950A46543D543D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_82D00779D3D94386B784119A1D9B9437"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -479,12 +491,6 @@
         {
         "MsmKey" = "8:_C4127A3D31104A679FDDC85EB5994148"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C86FA6B79D9841548F24D19186F396A1"
-        "OwnerKey" = "8:_9CE1C5E561814195B89C2CF3B51C5993"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -742,6 +748,26 @@
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650.cat"
             "TargetName" = "8:OOI_USB650.cat"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C7D1463280F46F8A34DD30FBE637C7E"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.cat"
+            "TargetName" = "8:OOI_MayaLSL.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
             "Condition" = "8:"
@@ -1862,6 +1888,26 @@
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus.inf"
             "TargetName" = "8:OOI_USB2000Plus.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74B32CD391514FC19B950A46543D543D"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.inf"
+            "TargetName" = "8:OOI_MayaLSL.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
             "Condition" = "8:"
@@ -3226,20 +3272,6 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C86FA6B79D9841548F24D19186F396A1"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:Microsoft_VC100_DebugCRT_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
         }
         "ProjectOutput"
         {
