@@ -157,6 +157,7 @@ OOIUSBInterface *__seabreeze_getUSB(Device *dev, int *errorCode) {
 }
 
 int __seabreeze_deviceCount(Device *dev) {
+    LOG(__FUNCTION__);
     int retval = 0;
     vector<DeviceLocatorInterface *> *locations;
     vector<Bus *>::iterator iter;
@@ -300,6 +301,7 @@ int SeaBreezeWrapper::openSpectrometer(int index, int *errorCode) {
         Device *dev = deviceFactory->create(i);  /* Create device exemplar */
 
         /* Query the number of devices of this type */
+        logger.debug("Looking for %s", dev->getName().c_str());
         int instanceCount = __seabreeze_deviceCount(dev);
 
         if(instanceCount + devicesFound > index) {
@@ -1378,6 +1380,8 @@ int SeaBreezeWrapper::writeUSB(int index, int *errorCode, unsigned char endpoint
 }
 
 void SeaBreezeWrapper::setVerbose(bool flag) {
+    LOG(__FUNCTION__);
+    logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
     seabreeze::USB::setVerbose(flag);
 }
 
