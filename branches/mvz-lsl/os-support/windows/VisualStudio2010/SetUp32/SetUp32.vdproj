@@ -2755,15 +2755,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SeaBreeze"
-        "ProductCode" = "8:{D1D1CD33-A867-410B-B51A-EF1EC5AB2E3B}"
-        "PackageCode" = "8:{2E20A90B-BE20-45DF-8E4E-4EEA5CDEDEAF}"
+        "ProductCode" = "8:{0438B8F8-E9E6-415A-BE31-01C4EC2EA86B}"
+        "PackageCode" = "8:{62485B6B-EDEA-43C0-9870-1C58254DB113}"
         "UpgradeCode" = "8:{5C008FE7-8489-4986-91CB-2D64834BBFB6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.1.6"
+        "ProductVersion" = "8:3.0.2"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.oceanoptics.com"
@@ -3277,7 +3277,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9CE1C5E561814195B89C2CF3B51C5993"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\Debug\\SeaBreeze.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\x64\\Debug\\SeaBreeze.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"
