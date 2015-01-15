@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    OOIUSBProductID.h
- * @date    February 2009
+ * @file    MayaLSLUSB.cpp
+ * @date    13-Jan-2015
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -27,27 +27,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OOIUSBPRODUCTID_H
-#define OOIUSBPRODUCTID_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/buses/usb/MayaLSLUSB.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
+#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
+#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
 
-#define USB2000_USB_PID         0x1002
-#define HR2000_USB_PID          0x100a
-#define HR4000_USB_PID          0x1012
-#define HR2000PLUS_USB_PID      0x1016
-#define QE65000_USB_PID         0x1018
-#define USB2000PLUS_USB_PID     0x101E
-#define USB4000_USB_PID         0x1022
-#define NIRQUEST512_USB_PID     0x1026
-#define NIRQUEST256_USB_PID     0x1028
-#define MAYA2000PRO_USB_PID     0x102a
-#define MAYA2000_USB_PID        0x102c
-#define MAYALSL_USB_PID         0x1046
-#define TORUS_USB_PID           0x1040
-#define APEX_USB_PID            0x1044
-#define JAZ_USB_PID             0x2000
-#define STS_USB_PID             0x4000
-#define QEPRO_USB_PID           0x4004
-#define VENTANA_USB_PID         0x5000
-#define GENERIC_SMARTPHONE_MODULE_PID 0x7002
+using namespace seabreeze;
+using namespace seabreeze::ooiProtocol;
 
-#endif /* OOIUSBPRODUCTID_H */
+MayaLSLUSB::MayaLSLUSB() 
+{
+    this->productID = MAYALSL_USB_PID;
+}
+
+MayaLSLUSB::~MayaLSLUSB() { }
+
+bool MayaLSLUSB::open() 
+{
+    if (!OOIUSBInterface::open())
+        return false;
+
+    ControlHint *controlHint = new ControlHint();
+    SpectrumHint *spectrumHint = new SpectrumHint();
+    OOIUSBFPGAEndpointMap epMap;
+
+    clearHelpers();
+    addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper((this->usb), epMap));
+    addHelper(controlHint, new OOIUSBControlTransferHelper((this->usb), epMap));
+
+    return true;
+}

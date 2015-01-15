@@ -43,6 +43,7 @@
 #include "vendors/OceanOptics/devices/Jaz.h"
 #include "vendors/OceanOptics/devices/Maya2000.h"
 #include "vendors/OceanOptics/devices/Maya2000Pro.h"
+#include "vendors/OceanOptics/devices/MayaLSL.h"
 #include "vendors/OceanOptics/devices/NIRQuest256.h"
 #include "vendors/OceanOptics/devices/NIRQuest512.h"
 #include "vendors/OceanOptics/devices/QE65000.h"
@@ -92,6 +93,7 @@ DeviceFactory::DeviceFactory()
     nameToCreator.insert(make_pair("Jaz",         (creatorFunction) &deviceFactory<Jaz        >));
     nameToCreator.insert(make_pair("Maya2000",    (creatorFunction) &deviceFactory<Maya2000   >));
     nameToCreator.insert(make_pair("Maya2000Pro", (creatorFunction) &deviceFactory<Maya2000Pro>));
+    nameToCreator.insert(make_pair("MayaLSL",     (creatorFunction) &deviceFactory<MayaLSL    >));
     nameToCreator.insert(make_pair("NIRQuest256", (creatorFunction) &deviceFactory<NIRQuest256>));
     nameToCreator.insert(make_pair("NIRQuest512", (creatorFunction) &deviceFactory<NIRQuest512>));
     nameToCreator.insert(make_pair("QE65000",     (creatorFunction) &deviceFactory<QE65000    >));

@@ -27,7 +27,7 @@ public partial class SeaBreezeWrapper
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_formatted_spectrum             (int index, ref int errorCode, ref double buffer, int length); 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_formatted_spectrum_length      (int index, ref int errorCode); 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_serial_number                  (int index, ref int errorCode, ref byte buffer, int length); 
-    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_spectrometer_type              (int index, ref int errorCode, ref byte buffer, int length); 
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_model                          (int index, ref int errorCode, ref byte buffer, int length); 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_unformatted_spectrum           (int index, ref int errorCode, ref byte buffer, int length); 
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_unformatted_spectrum_length    (int index, ref int errorCode);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern int    seabreeze_get_usb_descriptor_string          (int index, ref int errorCode, int id, ref byte buffer, int length);

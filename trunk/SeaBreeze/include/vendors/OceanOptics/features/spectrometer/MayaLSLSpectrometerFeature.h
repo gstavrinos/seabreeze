@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OOIUSBProductID.h
+ * @file    MayaLSLSpectrometerFeature.h
  * @date    February 2009
  * @author  Ocean Optics, Inc.
  *
@@ -27,27 +27,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OOIUSBPRODUCTID_H
-#define OOIUSBPRODUCTID_H
+#ifndef MAYALSLSPECTROMETERFEATURE_H
+#define MAYALSLSPECTROMETERFEATURE_H
 
-#define USB2000_USB_PID         0x1002
-#define HR2000_USB_PID          0x100a
-#define HR4000_USB_PID          0x1012
-#define HR2000PLUS_USB_PID      0x1016
-#define QE65000_USB_PID         0x1018
-#define USB2000PLUS_USB_PID     0x101E
-#define USB4000_USB_PID         0x1022
-#define NIRQUEST512_USB_PID     0x1026
-#define NIRQUEST256_USB_PID     0x1028
-#define MAYA2000PRO_USB_PID     0x102a
-#define MAYA2000_USB_PID        0x102c
-#define MAYALSL_USB_PID         0x1046
-#define TORUS_USB_PID           0x1040
-#define APEX_USB_PID            0x1044
-#define JAZ_USB_PID             0x2000
-#define STS_USB_PID             0x4000
-#define QEPRO_USB_PID           0x4004
-#define VENTANA_USB_PID         0x5000
-#define GENERIC_SMARTPHONE_MODULE_PID 0x7002
+#include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
 
-#endif /* OOIUSBPRODUCTID_H */
+namespace seabreeze {
+
+    class MayaLSLSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    public:
+        MayaLSLSpectrometerFeature();
+        virtual ~MayaLSLSpectrometerFeature();
+
+        // Inherited from Feature 
+        virtual bool initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+
+    private:
+        static const long INTEGRATION_TIME_MINIMUM;
+        static const long INTEGRATION_TIME_MAXIMUM;
+        static const long INTEGRATION_TIME_INCREMENT;
+        static const long INTEGRATION_TIME_BASE;
+    };
+
+}
+
+#endif /* MAYALSLSPECTROMETERFEATURE_H */

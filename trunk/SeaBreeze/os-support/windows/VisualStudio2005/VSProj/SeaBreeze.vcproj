@@ -264,6 +264,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\JazUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\Maya2000ProUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\Maya2000USB.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\MayaLSLUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\NIRQuest256USB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\NIRQuest512USB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\OOIUSB4KSpectrumTransferHelper.h"></File>
@@ -288,6 +289,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Jaz.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Maya2000.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Maya2000Pro.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\MayaLSL.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\NIRQuest256.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\NIRQuest512.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\QE65000.h"></File>
@@ -335,6 +337,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\JazSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\Maya2000ProSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\Maya2000SpectrometerFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\MayaLSLSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuest256SpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.h"></File>
@@ -531,6 +534,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\JazUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\Maya2000ProUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\Maya2000USB.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\MayaLSLUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\NIRQuest256USB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\NIRQuest512USB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\OOIUSB4KSpectrumTransferHelper.cpp"></File>
@@ -554,6 +558,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Jaz.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Maya2000.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Maya2000Pro.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\MayaLSL.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\NIRQuest256.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\NIRQuest512.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\QE65000.cpp"></File>
@@ -591,6 +596,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\JazSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\Maya2000ProSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\Maya2000SpectrometerFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\MayaLSLSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest256SpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.cpp"></File>

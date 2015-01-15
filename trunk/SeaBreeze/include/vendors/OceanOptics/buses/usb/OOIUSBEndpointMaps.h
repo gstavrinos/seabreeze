@@ -58,7 +58,7 @@ namespace seabreeze {
     };
 
     /* This map is appropriate for the following spectrometers:
-     * HR2000+, HR4000, Maya, Maya2000Pro, QE65000, USB2000+, USB4000
+     * HR2000+, HR4000, Maya, Maya2000Pro, MayaLSL, QE65000, USB2000+, USB4000
      */
     class OOIUSBFPGAEndpointMap : public OOIUSBCypressEndpointMap {
     public:
