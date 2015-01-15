@@ -202,12 +202,13 @@ extern "C" {
      *      HR2000PLUS:  Represents an HR2000+ Spectrometer
      *      HR4000:      Represents an HR4000 Spectrometer
      *      JAZ:         Represents a Jaz Spectrometer
-     *      MAYA2000:    Represents a MAYA2000 Spectrometer
-     *      MAYA2000PRO: Represents a MAYA2000PRO Spectrometer
-     *      NIRQUEST256: Represents an NIRQUEST256 Spectrometer
-     *      NIRQUEST512: Represents an NIRQUEST512 Spectrometer
+     *      MAYA2000:    Represents a Maya2000 Spectrometer
+     *      MAYALSL:     Represents a Maya-LSL Spectrometer
+     *      MAYA2000PRO: Represents a Maya2000 Pro Spectrometer
+     *      NIRQUEST256: Represents an NIRQuest256 Spectrometer
+     *      NIRQUEST512: Represents an NIRQuest512 Spectrometer
      *      QE65000:     Represents a QE65000 Spectrometer
-     *      QE-PRO:      Represents a QE-PRO Spectrometer
+     *      QE-PRO:      Represents a QE-Pro Spectrometer
      *      STS:         Represents an STS Spectrometer
      *      TORUS:       Represents a Torus Spectrometer
      *      USB2000:     Represents a USB2000 Spectrometer
