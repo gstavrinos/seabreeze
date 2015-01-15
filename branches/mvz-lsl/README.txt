@@ -405,7 +405,6 @@ application.
 
 \subsection backlog_high High
 
-- add Maya LSL
 - enable SeaBreezeAPI from binary-only distribution (provide missing headers, etc)
 - generate Feature Matrix showing which features are (N)ot-possible, (P)ossible,
   (I)mplemented or (W)orkaround-available for each spectrometer, for both 
@@ -423,6 +422,12 @@ application.
 - provide bindings for Python, Ruby, Perl, etc
 
 \section history Appendix A: Version History
+
+\date 2014-10-01 (version 3.0.2)
+- Added Maya-LSL
+
+\date 2014-10-01 (version 3.0.1)
+- Fixed header newlines to build on Linux
 
 \date 2014-10-01 (version 3.0)
 - Moved to MIT License
