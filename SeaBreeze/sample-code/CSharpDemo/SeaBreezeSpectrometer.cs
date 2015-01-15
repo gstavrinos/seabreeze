@@ -154,7 +154,7 @@ public class SeaBreezeSpectrometer : Spectrometer
         {
             byte[] slot = new byte[SeaBreezeWrapper.SLOT_LENGTH];
             int error = 0;
-            SeaBreezeWrapper.seabreeze_get_spectrometer_type(specIndex, ref error, ref slot[0], SeaBreezeWrapper.SLOT_LENGTH);
+            SeaBreezeWrapper.seabreeze_get_model(specIndex, ref error, ref slot[0], SeaBreezeWrapper.SLOT_LENGTH);
             if (checkSeaBreezeError("get_spectrometer_type", error))
                 result = byteToString(slot);
         }

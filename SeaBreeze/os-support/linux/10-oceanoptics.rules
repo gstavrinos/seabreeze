@@ -39,6 +39,8 @@ ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1026", SYMLINK+="nirquest512-%n", MO
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102C", SYMLINK+="maya2000-%n", MODE:="0666"
 # Ocean Optics Inc. Maya Pro 2000 spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102A", SYMLINK+="mayapro2000-%n", MODE:="0666"
+# Ocean Optics Inc. Maya LSL spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1046", SYMLINK+="mayalsl-%n", MODE:="0666"
 # Ocean Optics Inc. Torus spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1040", SYMLINK+="torus-%n", MODE:="0666"
 # Ocean Optics Inc. Apex spectrometer
@@ -59,5 +61,7 @@ ATTRS{idVendor}=="0547", ATTRS{idProduct}=="2131", SYMLINK+="ezUSB-%n", MODE:="0
 ATTRS{idVendor}=="0547", ATTRS{idProduct}=="2235", SYMLINK+="ezUSB-FX-%n", MODE:="0666"
 # unprogrammed EzUSB-FX2
 ATTRS{idVendor}=="04b4", ATTRS{idProduct}=="8613", SYMLINK+="ezUSB-FX2-%n", MODE:="0666"
+# generic smartphone module
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="7002", SYMLINK+="ooi-smartphone-module-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

@@ -231,7 +231,7 @@ extern "C" {
      * @param deviceTypeName (Input) The name of a type of device.  This can be
      *      one of the following:
      *          HR2000, HR2000Plus, HR4000, Jaz, Maya2000, Maya2000Pro,
-     *          NIRQuest256, NIRQuest512, QE65000, STS, Torus, USB2000,
+     *          MayaLSL, NIRQuest256, NIRQuest512, QE65000, STS, Torus, USB2000,
      *          USB2000Plus, or USB4000.
      *
      * @param deviceBusPath (Input) The location of the device on the RS232 bus.
@@ -358,6 +358,7 @@ extern "C" {
      *      \li JAZ: Represents a Jaz spectrometer
      *      \li MAYA2000: Represents a MAYA2000 spectrometer
      *      \li MAYA2000PRO: Represents a MAYA2000PRO spectrometer
+     *      \li MAYALSL: Represents a Maya-LSL spectrometer
      *      \li NIRQUEST256: Represents an NIRQUEST256 spectrometer
      *      \li NIRQUEST512: Represents an NIRQUEST512 spectrometer
      *      \li QE65000: Represents a QE65000 spectrometer

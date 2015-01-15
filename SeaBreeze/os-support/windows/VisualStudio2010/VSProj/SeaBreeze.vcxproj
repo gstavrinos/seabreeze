@@ -336,6 +336,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\JazUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\Maya2000ProUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\Maya2000USB.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\MayaLSLUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\NIRQuest256USB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\NIRQuest512USB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\OOIUSB4KSpectrumTransferHelper.h" />
@@ -360,6 +361,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Jaz.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Maya2000.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Maya2000Pro.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\MayaLSL.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\NIRQuest256.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\NIRQuest512.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\QE65000.h" />
@@ -407,6 +409,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\JazSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\Maya2000ProSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\Maya2000SpectrometerFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\MayaLSLSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuest256SpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.h" />
@@ -611,6 +614,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\JazUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\Maya2000ProUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\Maya2000USB.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\MayaLSLUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\NIRQuest256USB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\NIRQuest512USB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\OOIUSB4KSpectrumTransferHelper.cpp" />
@@ -634,6 +638,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Jaz.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Maya2000.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Maya2000Pro.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\MayaLSL.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\NIRQuest256.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\NIRQuest512.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\QE65000.cpp" />
@@ -671,6 +676,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\JazSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\Maya2000ProSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\Maya2000SpectrometerFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\MayaLSLSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest256SpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.cpp" />
