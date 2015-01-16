@@ -423,7 +423,10 @@ application.
 
 \section history Appendix A: Version History
 
-\date 2014-10-01 (version 3.0.2)
+\date 2015-01-16 (version 3.0.3)
+- Enabled continuous strobe for Maya2000Pro and Maya-LSL
+
+\date 2015-01-15 (version 3.0.2)
 - Added Maya-LSL
 
 \date 2014-10-01 (version 3.0.1)

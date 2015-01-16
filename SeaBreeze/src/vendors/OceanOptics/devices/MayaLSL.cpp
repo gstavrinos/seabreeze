@@ -41,6 +41,7 @@
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/MayaLSLSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/continuous_strobe/ContinuousStrobeFeature_FPGA.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
@@ -68,6 +69,8 @@ MayaLSL::MayaLSL()
     vector<ProtocolHelper *> strobeLampHelpers;
     strobeLampHelpers.push_back(new OOIStrobeLampProtocol());
     this->features.push_back(new StrobeLampFeature(strobeLampHelpers));
+
+    this->features.push_back(new ContinuousStrobeFeature_FPGA());
 
     OOIIrradCalProtocol *ooiIrrad = new OOIIrradCalProtocol(2068);
     vector<ProtocolHelper *> irradHelpers;
