@@ -36,7 +36,6 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPShutterProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPContinuousStrobeProtocol.h"
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/STSUSB.h"
@@ -44,7 +43,6 @@
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
-#include "vendors/OceanOptics/features/shutter/ShutterFeature.h"
 #include "vendors/OceanOptics/features/continuous_strobe/ContinuousStrobeFeature.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
@@ -72,11 +70,6 @@ STS::STS() {
     vector<ProtocolHelper *> serialNumberHelpers;
     serialNumberHelpers.push_back(new OBPSerialNumberProtocol());
     this->features.push_back(new SerialNumberFeature(serialNumberHelpers));
-
-    /* Add shutter feature */
-    vector<ProtocolHelper *> shutterHelpers;
-    shutterHelpers.push_back(new OBPShutterProtocol());
-    this->features.push_back(new ShutterFeature(shutterHelpers));
 
     /* This creates a specific ProtocolHelper that this device can use to
      * handle irradiance calibration.  This makes for better code reuse
