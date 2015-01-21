@@ -423,6 +423,9 @@ application.
 
 \section history Appendix A: Version History
 
+\date 2015-01-16 (version 3.0.4)
+- Removed phantom shutter feature from STS
+
 \date 2015-01-16 (version 3.0.3)
 - Enabled continuous strobe for Maya2000Pro and Maya-LSL
 
