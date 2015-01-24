@@ -63,6 +63,7 @@ struct global_args_t {
     int         listDescriptors;
     int         listEEPROMs;
     int         listIrrad;
+    int         listEDCPixels;
     const char *irradFilename;
     const char *serialNumber;
     const char *serialNumberNew;
@@ -77,6 +78,7 @@ static const struct option opts[] = {
     { "list-descriptors",   no_argument,        NULL,  0  }, // long-only
     { "list-eeproms",       required_argument,  NULL, 'e' },
     { "list-irrad",         no_argument,        NULL, 'r' },
+    { "list-edc-pixels",    no_argument,        NULL,  0  }, // long-only
     { "serial-number",      required_argument,  NULL, 's' },
     { "set-irrad",          required_argument,  NULL,  0  }, // long-only
     { "set-serial-number",  required_argument,  NULL,  0  }, // long-only
@@ -93,7 +95,7 @@ void usage() {
          "Usage:\n"
          "  $ seabreeze-util [--index i] [--serial-number sn] [--type t]\n"
          "                   [--list] [--list-irrad] [--list-eeproms n]\n"
-         "                   [--list-descriptors]\n"
+         "                   [--list-descriptors] [--list-edc-pixels]\n"
          "                   [--set-serial-number new_sn] [--set-irrad file]\n"
          "                   [--debug]\n"
          "\n"
@@ -113,6 +115,7 @@ void parseArgs(int argc, char **argv) {
     gArgs.list              = 0;
     gArgs.listDescriptors   = 0;
     gArgs.listEEPROMs       = 0;
+    gArgs.listEDCPixels     = 0;
     gArgs.listIrrad         = 0;
     gArgs.index             = -1;
     gArgs.irradFilename     = NULL;
@@ -138,6 +141,8 @@ void parseArgs(int argc, char **argv) {
                     gArgs.irradFilename = optarg;
                 } else if (!strcmp("list-descriptors", opts[longIndex].name)) {
                     gArgs.listDescriptors = 1;
+                } else if (!strcmp("list-edc-pixels", opts[longIndex].name)) {
+                    gArgs.listEDCPixels = 1;
                 } else {
                     usage();
                 }
@@ -152,8 +157,9 @@ void parseArgs(int argc, char **argv) {
     }
 
     // any --list-foo option implies --list
-    if (  gArgs.listIrrad   ||
-          gArgs.listEEPROMs ||
+    if (  gArgs.listIrrad     ||
+          gArgs.listEEPROMs   ||
+          gArgs.listEDCPixels ||
           gArgs.listDescriptors )
         gArgs.list = 1;
 
@@ -388,6 +394,20 @@ int main(int argc, char **argv) {
             }
             fflush(stdout);
             free(irrad);
+        }
+
+        // --list-edc-pixels
+        if (gArgs.listEDCPixels) {
+            #define MAX_INDICES 100
+            int indices[MAX_INDICES];
+            int count = seabreeze_get_electric_dark_pixel_indices(index, &error, indices, MAX_INDICES);
+            fflush(stdout);
+            if (!check_error(index, &error, "seabreeze_get_electric_dark_pixel_indices")) {
+                printf("[%02d] found %d electrical dark pixel indices:\n", index, count);
+                for (unsigned j = 0; j < count; j++) {
+                    printf("[%02d]    EDC index #%04d: %d\n", index, j, indices[j]);
+                }
+            }
         }
 
         // --set-irrad
