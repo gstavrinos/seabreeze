@@ -53,6 +53,18 @@ else ifeq ($(findstring CYGWIN, $(UNAME)), CYGWIN)
                   -ggdb3 \
                   -shared
 
+# MinGW-32 configuration
+else ifeq ($(findstring MINGW, $(UNAME)), MINGW)
+    SUFFIX      = dll
+    LIBBASENAME = libseabreeze
+    LFLAGS_APP += -L/local/lib \
+                  -lusb0 \
+                  -lstdc++ \
+                  -lm
+    LFLAGS_LIB += -L/local/lib \
+                  -lusb0 \
+                  -shared
+
 # Linux configuration
 else
     SUFFIX      = so
