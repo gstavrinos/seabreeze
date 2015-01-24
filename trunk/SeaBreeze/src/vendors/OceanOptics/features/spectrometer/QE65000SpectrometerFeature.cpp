@@ -57,7 +57,10 @@ QE65000SpectrometerFeature::QE65000SpectrometerFeature() {
     this->integrationTimeBase = QE65000SpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = QE65000SpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 1025; i < 1028; i++) {
+    for(int i = 0; i < 4; i++) {
+        this->electricDarkPixelIndices.push_back(i);
+    }
+    for(int i = 1040; i < 1044; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
 

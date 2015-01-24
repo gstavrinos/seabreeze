@@ -423,6 +423,9 @@ application.
 
 \section history Appendix A: Version History
 
+\date 2015-01-23 (version 3.0.5)
+- Fixed EDC pixel indices for QE65000 and QE65Pro
+
 \date 2015-01-16 (version 3.0.4)
 - Removed phantom shutter feature from STS
 
