@@ -92,6 +92,7 @@ SetUp.msi installer, you may skip this section.</i>
 - \ref build_win
 - \ref build_linux
 - \ref build_macos
+- \ref build_mingw
 
 \subsection build_win Windows
 
@@ -191,6 +192,20 @@ Dependencies
 - gcc / g++ (comes with <a href="https://developer.apple.com/xcode">XCode</a>)
 
 Basically, you should be able to follow the \ref build_linux instructions (i.e. \c make).
+
+\subsection build_mingw MinGW
+
+The following was tested with an msys environment using 64bit (mingw-w64) gcc (4.8.2).
+
+Dependencies
+- libusb-win32 1.2.6 (https://sourceforge.net/projects/libusb-win32/files/)
+
+With respect to the msys tree:
+1. copy libusb0.dll into /local/lib 
+2. copy libusb0_usb.h into /local/include 
+
+To use Ocean spectrometers via libusb on Windows, you can create libusb0-based 
+drivers using Zadig (http://zadig.akeo.ie/).
 
 \section install Installing SeaBreeze
 
@@ -422,6 +437,9 @@ application.
 - provide bindings for Python, Ruby, Perl, etc
 
 \section history Appendix A: Version History
+
+\date 2015-01-24 (version 3.0.6)
+- Added MinGW patch and instructions from Andras Barta
 
 \date 2015-01-23 (version 3.0.5)
 - Fixed EDC pixel indices for QE65000 and QE65Pro

@@ -67,8 +67,13 @@ void *RS232Open(char *device, int *errorCode) {
     _snprintf(portString,49,"\\\\.\\%s", device);
     /* Convert to a wide string for use with CreateFile */
     MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, portString, (int) strlen(portString) + 1, wideString, 50);
+#ifdef __MINGW32__
+    dev = CreateFile((LPCSTR)wideString, (GENERIC_READ | GENERIC_WRITE), 0, NULL,
+            OPEN_EXISTING, 0, NULL);
+#else
     dev = CreateFile(wideString, (GENERIC_READ | GENERIC_WRITE), 0, NULL,
             OPEN_EXISTING, 0, NULL);
+#endif
     if(dev == INVALID_HANDLE_VALUE) {
         /* Failed to open the device. */
         SET_ERROR_CODE(NO_DEVICE_FOUND);
