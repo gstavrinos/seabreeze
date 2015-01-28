@@ -39,6 +39,7 @@
 #include <unistd.h>  /* For sleep() */
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 
+
 /* Prototypes */
 void test_serial_number_feature(long deviceID);
 void test_spectrometer_feature(long deviceID);
@@ -49,6 +50,7 @@ void test_eeprom_feature(long deviceID);
 void test_irradcal_feature(long deviceID);
 void test_tec_feature(long deviceID);
 void test_nonlinearity_coeffs_feature(long deviceID);
+void test_temperature_feature(long deviceID);
 void test_stray_light_coeffs_feature(long deviceID);
 void test_continuous_strobe_feature(long deviceID);
 
@@ -69,6 +71,7 @@ static testfunc_t __test_functions[] = {
     test_irradcal_feature,
     test_tec_feature,
     test_nonlinearity_coeffs_feature,
+    test_temperature_feature,
     test_stray_light_coeffs_feature,
     test_continuous_strobe_feature,
 };
@@ -164,7 +167,7 @@ void test_serial_number_feature(long deviceID) {
     int i;
     char buffer[80];
 
-    printf("\tTesting serial number features:\n");
+    printf("\n\tTesting serial number features:\n");
 
     printf("\t\tGetting number of serial numbers:\n");
     number_of_serial_numbers = sbapi_get_number_of_serial_number_features(deviceID, &error);
@@ -217,7 +220,7 @@ void test_spectrometer_feature(long deviceID) {
     int *edarkBuffer = 0;
     int j;
 
-    printf("\tTesting spectrometer features:\n");
+    printf("\n\tTesting spectrometer features:\n");
 
     printf("\t\tGetting number of spectrometers:\n");
     number_of_spectrometers = sbapi_get_number_of_spectrometer_features(deviceID, &error);
@@ -320,6 +323,7 @@ void test_spectrometer_feature(long deviceID) {
             printf("\t\t\t\tSpectrometer has no electric dark pixels.\n");
         }
 
+		
         printf("\t\t%d: Finished testing device 0x%02lX, spectrometer 0x%02lX\n",
                 i, deviceID, spectrometer_ids[i]);
     }
@@ -335,7 +339,7 @@ void test_shutter_feature(long deviceID) {
     long *shutter_ids = 0;
     int i;
 
-    printf("\tTesting shutter features:\n");
+    printf("\n\tTesting shutter features:\n");
 
     printf("\t\tGetting number of shutters:\n");
     number_of_shutters = sbapi_get_number_of_shutter_features(deviceID, &error);
@@ -392,7 +396,7 @@ void test_light_source_feature(long deviceID) {
     unsigned char flag;
     float intensity = 0;
 
-    printf("\tTesting light source features:\n");
+    printf("\n\tTesting light source features:\n");
 
     printf("\t\tGetting number of light sources:\n");
     number_of_light_sources = sbapi_get_number_of_light_source_features(deviceID, &error);
@@ -495,7 +499,7 @@ void test_lamp_feature(long deviceID) {
     long *lamp_ids = 0;
     int i;
 
-    printf("\tTesting lamp features:\n");
+    printf("\n\tTesting lamp features:\n");
 
     printf("\t\tGetting number of lamps:\n");
     number_of_lamps = sbapi_get_number_of_lamp_features(deviceID, &error);
@@ -547,7 +551,7 @@ void test_eeprom_feature(long deviceID) {
     unsigned char buffer[80];
     int i;
 
-    printf("\tTesting EEPROM features:\n");
+    printf("\n\tTesting EEPROM features:\n");
 
     printf("\t\tGetting number of EEPROMs:\n");
     number_of_eeproms = sbapi_get_number_of_eeprom_features(deviceID, &error);
@@ -596,7 +600,7 @@ void test_irradcal_feature(long deviceID) {
     int flag;
     float area;
 
-    printf("\tTesting irradiance calibration features:\n");
+    printf("\n\tTesting irradiance calibration features:\n");
 
     printf("\t\tGetting number of irradiance calibration features:\n");
     number_of_irradcals = sbapi_get_number_of_irrad_cal_features(deviceID, &error);
@@ -658,7 +662,7 @@ void test_tec_feature(long deviceID) {
     int i;
     float temperature;
 
-    printf("\tTesting TEC features:\n");
+    printf("\n\tTesting TEC features:\n");
 
     printf("\t\tGetting number of TECs:\n");
     number_of_tec = sbapi_get_number_of_thermo_electric_features(deviceID, &error);
@@ -712,7 +716,7 @@ void test_nonlinearity_coeffs_feature(long deviceID) {
     int i;
     int length;
 
-    printf("\tTesting nonlinearity coefficient features:\n");
+    printf("\n\tTesting nonlinearity coefficient features:\n");
 
     printf("\t\tGetting number of nonlinearity coefficient features:\n");
     number_of_nonlinearity_coeff_features =
@@ -756,6 +760,60 @@ void test_nonlinearity_coeffs_feature(long deviceID) {
 }
 
 
+void test_temperature_feature(long deviceID) {
+    int error = 0;
+    int number_of_temperature_features;
+    long *temperature_feature_ids = 0;
+    double buffer[10];  // how many temperatures could there be on _any_ given spectrometer
+    int i;
+    int length;
+
+    printf("\n\tTesting temperature features:\n");
+
+    printf("\t\tGetting number of temperature features:\n");
+    number_of_temperature_features =
+        sbapi_get_number_of_temperature_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_temperature_features,
+            sbapi_get_error_string(error));
+
+    if(0 == number_of_temperature_features) {
+        printf("\tNo temperature capabilities found.\n");
+        return;
+    }
+
+    temperature_feature_ids =
+        (long *)calloc(number_of_temperature_features, sizeof(long));
+    printf("\t\tGetting temperature feature IDs...\n");
+    number_of_temperature_features = sbapi_get_temperature_features(
+            deviceID, &error, temperature_feature_ids,
+            number_of_temperature_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_temperature_features,
+            sbapi_get_error_string(error));
+
+    for(i = 0; i < number_of_temperature_features; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, temperatures 0x%02lX\n",
+                i, deviceID, temperature_feature_ids[i]);
+
+        printf("\t\t\tAttempting to get temperatures...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        length = sbapi_temperature_get_all(deviceID,
+            temperature_feature_ids[i], &error, buffer, 10);
+        printf("\t\t\t\tResult is %d [%s]\n", length, sbapi_get_error_string(error));
+        for(int t_index=0; t_index<length; t_index++) {
+        	if(0 == error && length > 0) {
+            	printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, buffer[t_index]);
+        	}
+		}
+		
+        printf("\t\t%d: Finished testing device 0x%02lX, temperatures 0x%02lX\n",
+                i, deviceID, temperature_feature_ids[i]);
+    }
+    free(temperature_feature_ids);
+
+    printf("\tFinished testing temperature capabilities.\n");
+}
+
+
 void test_stray_light_coeffs_feature(long deviceID) {
     int error = 0;
     int number_of_stray_light_coeff_features;
@@ -764,7 +822,7 @@ void test_stray_light_coeffs_feature(long deviceID) {
     int i;
     int length;
 
-    printf("\tTesting stray light coefficient features:\n");
+    printf("\n\tTesting stray light coefficient features:\n");
 
     printf("\t\tGetting number of stray light coefficient features:\n");
     number_of_stray_light_coeff_features =
@@ -814,7 +872,7 @@ void test_continuous_strobe_feature(long deviceID) {
     long *cont_strobe_ids = 0;
     int i;
 
-    printf("\tTesting continuous strobe features:\n");
+    printf("\n\tTesting continuous strobe features:\n");
 
     printf("\t\tGetting number of continuous strobes:\n");
     number_of_cont_strobes = sbapi_get_number_of_continuous_strobe_features(deviceID, &error);

@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    FeatureFamilies.h
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This provides a way to get references to different kinds
  * of features (e.g. spectrometer, TEC) generically.
@@ -111,6 +111,12 @@ namespace seabreeze {
             virtual ~NonlinearityCoeffsFeatureFamily();
         };
 
+        class TemperatureFeatureFamily : public FeatureFamily {
+        public:
+            TemperatureFeatureFamily();
+            virtual ~TemperatureFeatureFamily();
+        };
+
         class StrayLightCoeffsFeatureFamily : public FeatureFamily {
         public:
             StrayLightCoeffsFeatureFamily();
@@ -137,6 +143,7 @@ namespace seabreeze {
             const ShutterFeatureFamily SHUTTER;
             const WaveCalFeatureFamily WAVELENGTH_CAL;
             const NonlinearityCoeffsFeatureFamily NONLINEARITY_COEFFS;
+            const TemperatureFeatureFamily TEMPERATURE;
             const StrayLightCoeffsFeatureFamily STRAY_LIGHT_COEFFS;
             const RawBusAccessFeatureFamily RAW_BUS_ACCESS;
 

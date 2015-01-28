@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.h
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    February 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is an interface to SeaBreeze that allows
  * the user to connect to devices over USB and other buses.
@@ -120,17 +120,17 @@ public:
     /* Spectrometer capabilities */
     int getNumberOfSpectrometerFeatures(long id, int *errorCode);
     int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void spectrometerSetTriggerMode(long deviceID, long featureID, int *errorCode, int mode);
-    void spectrometerSetIntegrationTimeMicros(long deviceID, long featureID, int *errorCode, unsigned long integrationTimeMicros);
-    unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrumLength(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrum(long deviceID, long featureID, int *errorCode, unsigned char *buffer, int bufferLength);
-    int spectrometerGetFormattedSpectrumLength(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetFormattedSpectrum(long deviceID, long featureID, int *errorCode, double *buffer, int bufferLength);
-    int spectrometerGetWavelengths(long deviceID, long featureID, int *errorCode, double *wavelengths, int length);
-    int spectrometerGetElectricDarkPixelCount(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetElectricDarkPixelIndices(long deviceID, long featureID, int *errorCode, int *indices, int length);
-
+    void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
+    void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
+    unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
+    int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength);
+    int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
+    int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
+        
     /* TEC capabilities */
     int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
     int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -184,6 +184,13 @@ public:
     int getNonlinearityCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
 
+    /* Temperature capabilities */
+    int getNumberOfTemperatureFeatures(long deviceID, int *errorCode);
+    int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    double temperatureGet(long deviceID, long featureID, int *errorCode, int index);
+    int temperatureGet_All(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+
+        
     /* Stray light coefficient capabilities */
     int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
     int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -1380,6 +1387,71 @@ extern "C" {
      */
     DLL_DECL int sbapi_nonlinearity_coeffs_get(long deviceID, long featureID,
             int *error_code, double *buffer, int max_length);
+
+/**
+     * This function returns the total number of temperature feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_temperature_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_temperature_features(
+            long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each temperature
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of temperature feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_temperature_features(long deviceID, int *error_code,
+            long *temperatureFeatures, int max_features);
+
+    /**
+     * This function reads out temperature from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_temperature_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param index (Input) An index for the device's temperature sensors
+     *
+     * @return the temperature
+     */
+    DLL_DECL double sbapi_temperature_get(long deviceID, long temperatureFeatureID, int *error_code, int index);
+
+    /**
+     * This function reads out temperature from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_temperature_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param buffer (Output) preallocated buffer to store temperatures
+     * @param max_length (Input) size of preallocated buffer
+     *
+     * @return the number of doubles read from the device into the buffer
+     */
+    DLL_DECL int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code, double *buffer, int max_length);
 
 
     /**

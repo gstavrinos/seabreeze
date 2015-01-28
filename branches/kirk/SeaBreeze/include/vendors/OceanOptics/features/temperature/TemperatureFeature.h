@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    TemperatureFeature.h
+ * @date    January 2015
+ * @author  Kirk Clendinning, Heliospecgtra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,36 +27,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef TEMPERATUREFEATURE_H
+#define TEMPERATUREFEATURE_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
+#include <vector>
 
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "vendors/OceanOptics/features/temperature/TemperatureFeatureInterface.h"
+#include "common/protocols/Protocol.h"
+#include "common/features/Feature.h"
+#include "common/buses/Bus.h"
+#include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
+    class TemperatureFeature
+                : public Feature, public TemperatureFeatureInterface {
     public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
-
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
+        TemperatureFeature(std::vector<ProtocolHelper *> helpers);
+        virtual ~TemperatureFeature();
+        virtual double readTemperature(const Protocol &protocol,
+                const Bus &bus, int index) throw (FeatureException);
+		virtual std::vector<double> *readAllTemperatures(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException);
+                
+        /* Overriding from Feature */
+        virtual FeatureFamily getFeatureFamily();
     };
 
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif /* TEMPERATUREFEATURE_H */

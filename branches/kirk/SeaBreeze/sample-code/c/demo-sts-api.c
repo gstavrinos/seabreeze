@@ -865,6 +865,8 @@ int main(int argc, char **argv)
                     printf("Serial Number: %s\n", serial_number);
                 else
                     printf("ERROR: error with get_serial_number exchange\n");
+                
+                free(serial_number);
             }
             else
                 printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",

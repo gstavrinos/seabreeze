@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    OBPGetTemperatureCountExchange.h
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,36 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef OBPGETTEMPERATURECOUNTEXCHANGE_H
+#define OBPGETTEMPERATURECOUNTEXCHANGE_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
-
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
-    public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
-
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
-    };
-
+    namespace oceanBinaryProtocol {
+        class OBPGetTemperatureCountExchange : public OBPQuery {
+        public:
+            OBPGetTemperatureCountExchange();
+            virtual ~OBPGetTemperatureCountExchange();
+        };
+    }
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif /* OBPGETTEMPERATURECOUNTEXCHANGE_H */

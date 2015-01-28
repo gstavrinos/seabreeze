@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    DeviceAdapter.h
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is a wrapper that allows
  * access to SeaBreeze DeviceInterface instances.
@@ -91,6 +91,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ContinuousStrobeFeatureAdapter>(continuousStrobeFeatures);
     __delete_feature_adapters<ShutterFeatureAdapter>(shutterFeatures);
     __delete_feature_adapters<NonlinearityCoeffsFeatureAdapter>(nonlinearityFeatures);
+    __delete_feature_adapters<TemperatureFeatureAdapter>(temperatureFeatures);
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
 
@@ -201,6 +202,11 @@ int DeviceAdapter::open(int *errorCode) {
                     NonlinearityCoeffsFeatureAdapter>(this->device,
             nonlinearityFeatures, bus, featureFamilies.NONLINEARITY_COEFFS);
 
+    /* Create temperature feature list */
+    __create_feature_adapters<TemperatureFeatureInterface,
+                    TemperatureFeatureAdapter>(this->device,
+            temperatureFeatures, bus, featureFamilies.TEMPERATURE);
+            
     /* Create stray light coefficients feature list */
     __create_feature_adapters<StrayLightCoeffsFeatureInterface,
                     StrayLightCoeffsFeatureAdapter>(this->device,
@@ -778,6 +784,41 @@ int DeviceAdapter::nonlinearityCoeffsGet(long featureID, int *errorCode,
     return feature->readNonlinearityCoeffs(errorCode, buffer, bufferLength);
 }
 
+/* Temperature feature wrappers */
+int DeviceAdapter::getNumberOfTemperatureFeatures() {
+    return (int) this->temperatureFeatures.size();
+}
+
+int DeviceAdapter::getTemperatureFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<TemperatureFeatureAdapter>(
+                temperatureFeatures, buffer, maxFeatures);
+}
+
+TemperatureFeatureAdapter *DeviceAdapter::getTemperatureFeatureByID(long temperatureFeatureID) {
+    return __getFeatureByID<TemperatureFeatureAdapter>(
+                temperatureFeatures, temperatureFeatureID);
+}
+
+double DeviceAdapter::temperatureGet(long temperatureFeatureID, int *errorCode, int index) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readTemperature(errorCode, index);
+}
+
+int DeviceAdapter::temperatureGet_All(long temperatureFeatureID, int *errorCode,
+        double *buffer, int bufferLength) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readAllTemperatures(errorCode, buffer, bufferLength);
+}
 
 /* Stray light coefficients feature wrappers */
 int DeviceAdapter::getNumberOfStrayLightCoeffsFeatures() {

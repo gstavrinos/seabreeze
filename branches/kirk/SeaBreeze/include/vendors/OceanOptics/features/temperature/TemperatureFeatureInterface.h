@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
+ * @file    TemperatureFeatureInterface.h
+ * @date    February 2012
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -27,36 +27,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef TEMPERATUREFEATUREINTERFACE_H
+#define TEMPERATUREFEATUREINTERFACE_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "common/protocols/Protocol.h"
+#include "common/buses/Bus.h"
+#include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
+    class TemperatureFeatureInterface {
     public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
-
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
+        virtual ~TemperatureFeatureInterface() = 0;
+        virtual double readTemperature(const Protocol &protocol,
+                const Bus &bus, int index) throw (FeatureException) = 0;
+        virtual std::vector<double> *readAllTemperatures(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
     };
 
+    /* Default implementation for (otherwise) pure virtual destructor */
+    inline TemperatureFeatureInterface::~TemperatureFeatureInterface() {}
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif /* TEMPERATUREFEATUREINTERFACE_H */

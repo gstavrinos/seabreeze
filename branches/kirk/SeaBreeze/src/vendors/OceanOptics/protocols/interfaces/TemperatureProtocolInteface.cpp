@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    TemperatureProtocolInterface.cpp
+ * @date    January 2015
+ * @author  Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,36 +27,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
+using namespace seabreeze;
 
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
-
-namespace seabreeze {
-
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
-    public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
-
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
-    };
+TemperatureProtocolInterface::TemperatureProtocolInterface(Protocol *protocol)
+    : ProtocolHelper(protocol) {
 
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+TemperatureProtocolInterface::~TemperatureProtocolInterface() {
+
+}

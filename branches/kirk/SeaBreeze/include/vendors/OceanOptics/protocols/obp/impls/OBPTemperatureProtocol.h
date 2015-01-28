@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    OBPTemperatureProtocol.h
+ * @date    January 2015
+ * @author  Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,36 +27,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
+#define SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "common/SeaBreeze.h"
+#include "common/buses/Bus.h"
+#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
+#include <vector>
 
 namespace seabreeze {
-
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
+  namespace oceanBinaryProtocol {
+    class OBPTemperatureProtocol : public TemperatureProtocolInterface {
     public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
+        OBPTemperatureProtocol();
+        virtual ~OBPTemperatureProtocol();
 
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
+        virtual double readTemperature(const Bus &bus, int index)
+                throw (ProtocolException);
+                
+        virtual std::vector<double> *readAllTemperatures(const Bus &bus)
+                throw (ProtocolException);
     };
-
+  }
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif

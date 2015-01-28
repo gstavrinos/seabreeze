@@ -1,7 +1,7 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    OBPGetAllTemperaturesExchange.h
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
@@ -27,36 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef OBPGETALLTEMPERATURESEXCHANGE_H
+#define OBPGETALLTEMPERATURESEXCHANGE_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
-
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
-    public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
-
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
-    };
-
+    namespace oceanBinaryProtocol {
+        class OBPGetAllTemperaturesExchange : public OBPQuery {
+        public:
+            OBPGetAllTemperaturesExchange();
+            virtual ~OBPGetAllTemperaturesExchange();
+        };
+    }
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif /* OBPGETALLTEMPERATURESEXCHANGE_H */

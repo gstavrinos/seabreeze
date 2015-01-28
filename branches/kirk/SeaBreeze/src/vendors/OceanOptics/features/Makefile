@@ -9,6 +9,7 @@ SUBDIRS = \
     irradcal            \
     light_source        \
     nonlinearity        \
+    temperature         \
     raw_bus_access      \
     serial_number       \
     shutter             \

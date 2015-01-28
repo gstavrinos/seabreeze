@@ -74,18 +74,15 @@ public:
     int    getFormattedSpectrum      (int index, int *errorCode, double* buffer, int buffer_length);
     int    getUnformattedSpectrum    (int index, int *errorCode, unsigned char *buffer, int buffer_length);
     int    getFormattedSpectrumLength(int index, int *errorCode);
-    int    getUnformattedSpectrumLength
-                                     (int index, int *errorCode);
-    long   getMinIntegrationTimeMicrosec
-                                     (int index, int *errorCode);
+    int    getUnformattedSpectrumLength(int index, int *errorCode);
+    long   getMinIntegrationTimeMicrosec(int index, int *errorCode);
 
     // advanced features
     int    getElectricDarkPixelIndices(int index, int *errorCode, int *indices, int length);
     void   setTriggerMode            (int index, int *errorCode, int mode);
     void   setStrobeEnable           (int index, int *errorCode, unsigned char strobe_enable);
     void   setShutterOpen            (int index, int *errorCode, unsigned char opened);
-    void   setContinuousStrobePeriodMicrosec
-                                     (int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec);
+    void   setContinuousStrobePeriodMicrosec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec);
 
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);

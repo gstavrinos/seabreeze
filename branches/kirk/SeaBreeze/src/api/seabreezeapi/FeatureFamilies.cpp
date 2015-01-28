@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    FeatureFamilies.cpp
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This provides a way to get references to different kinds
  * of features (e.g. spectrometer, TEC) generically.
@@ -48,6 +48,7 @@
 #define FEATURE_FAMILY_ID_RAW_BUS_ACCESS    11
 #define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 12
 #define FEATURE_FAMILY_ID_LIGHT_SOURCE      13
+#define FEATURE_FAMILY_ID_TEMPERATURE    	14
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -186,6 +187,15 @@ seabreeze::api::RawBusAccessFeatureFamily::~RawBusAccessFeatureFamily() {
 
 }
 
+seabreeze::api::TemperatureFeatureFamily::TemperatureFeatureFamily()
+        : FeatureFamily("Temperature", FEATURE_FAMILY_ID_TEMPERATURE) {
+
+}
+
+seabreeze::api::TemperatureFeatureFamily::~TemperatureFeatureFamily() {
+
+}
+
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
     /* This creates new instances of these so the class-wide fields do not risk
@@ -204,6 +214,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new StrayLightCoeffsFeatureFamily());
     retval.push_back(new RawBusAccessFeatureFamily());
     retval.push_back(new LightSourceFeatureFamily());
+    retval.push_back(new TemperatureFeatureFamily());
 
     return retval;
 }

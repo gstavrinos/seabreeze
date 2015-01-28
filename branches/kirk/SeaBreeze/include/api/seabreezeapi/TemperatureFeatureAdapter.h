@@ -1,7 +1,10 @@
 /***************************************************//**
- * @file    STSSpectrometerFeature.h
- * @date    May 2009
- * @author  Ocean Optics, Inc.
+ * @file    TemperatureFeatureAdapter.h
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ *
+ * This is a wrapper that allows
+ * access to SeaBreeze TemperatureFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -27,36 +30,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSSPECTROMETERFEATURE_H
-#define STSSPECTROMETERFEATURE_H
+#ifndef SEABREEZE_TEMPERATUREFEATUREADAPTER_H
+#define SEABREEZE_TEMPERATUREFEATUREADAPTER_H
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-
-
-#define STS_TEMPERATURE_DETECTOR_INDEX 0
-#define STS_TEMPERATURE_RESERVED_INDEX 1
-#define	STS_TEMPERATURE_CPU_INDEX 2
+#include "api/seabreezeapi/FeatureAdapterTemplate.h"
+#include "vendors/OceanOptics/features/temperature/TemperatureFeatureInterface.h"
 
 namespace seabreeze {
+    namespace api {
 
-    class STSSpectrometerFeature : public OOISpectrometerFeature {
-    public:
-        STSSpectrometerFeature();
-        virtual ~STSSpectrometerFeature();
+        class TemperatureFeatureAdapter
+                : public FeatureAdapterTemplate<TemperatureFeatureInterface> {
+        public:
+            TemperatureFeatureAdapter(TemperatureFeatureInterface *intf,
+                    const FeatureFamily &f,
+                    Protocol *p, Bus *b, unsigned short instanceIndex);
+            virtual ~TemperatureFeatureAdapter();
 
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);       
+            double readTemperature(int *errorCode, int index);
+            int readAllTemperatures(int *errorCode, double *buffer, int bufferLength);
+        };
 
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
-    };
-
+    }
 }
 
-#endif /* STSSPECTROMETERFEATURE_H */
+#endif
