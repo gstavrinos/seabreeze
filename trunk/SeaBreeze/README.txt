@@ -73,7 +73,7 @@ release (RTF, converted to Microsoft .docx) which may be found in the
 ./doc directory.
 
 Assuming you have the "doxygen" command installed (available free at
-http://doxygen.org, optionally with GraphViz for UML), you can generate
+http://doxygen.org -- optionally with GraphViz for UML), you can generate
 documentation automatically in HTML, RTF, and 'man' formats by typing:
 
 \verbatim
