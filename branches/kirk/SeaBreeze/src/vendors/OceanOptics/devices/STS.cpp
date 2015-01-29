@@ -36,6 +36,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPOpticalBenchProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPShutterProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPContinuousStrobeProtocol.h"
@@ -45,6 +46,7 @@
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
+#include "vendors/OceanOptics/features/optical_bench/OpticalBenchFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
 #include "vendors/OceanOptics/features/shutter/ShutterFeature.h"
 #include "vendors/OceanOptics/features/continuous_strobe/ContinuousStrobeFeature.h"
@@ -100,6 +102,12 @@ STS::STS() {
     temperatureHelpers.push_back(new OBPTemperatureProtocol());
     this->features.push_back(
         new TemperatureFeature(temperatureHelpers));
+
+    /* Add optical bench feature */
+    vector<ProtocolHelper *> opticalBenchHelpers;
+    opticalBenchHelpers.push_back(new OBPOpticalBenchProtocol());
+    this->features.push_back(
+        new OpticalBenchFeature(opticalBenchHelpers));
         
     /* Add stray light coefficients feature */
     vector<ProtocolHelper *> strayHelpers;

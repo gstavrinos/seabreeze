@@ -189,6 +189,7 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
 
     /* Make a copy of the response buffer so response can be deleted */
     bytes = new vector<byte>(*response->getData());
+    
     delete response;
     return bytes;
 }

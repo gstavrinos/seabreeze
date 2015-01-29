@@ -49,6 +49,7 @@
 #define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 12
 #define FEATURE_FAMILY_ID_LIGHT_SOURCE      13
 #define FEATURE_FAMILY_ID_TEMPERATURE    	14
+#define FEATURE_FAMILY_ID_OPTICAL_BENCH    	15
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -196,6 +197,15 @@ seabreeze::api::TemperatureFeatureFamily::~TemperatureFeatureFamily() {
 
 }
 
+seabreeze::api::OpticalBenchFeatureFamily::OpticalBenchFeatureFamily()
+        : FeatureFamily("OpticalBench", FEATURE_FAMILY_ID_OPTICAL_BENCH) {
+
+}
+
+seabreeze::api::OpticalBenchFeatureFamily::~OpticalBenchFeatureFamily() {
+
+}
+
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
     /* This creates new instances of these so the class-wide fields do not risk
@@ -215,6 +225,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new RawBusAccessFeatureFamily());
     retval.push_back(new LightSourceFeatureFamily());
     retval.push_back(new TemperatureFeatureFamily());
-
+	retval.push_back(new OpticalBenchFeatureFamily());
+	
     return retval;
 }

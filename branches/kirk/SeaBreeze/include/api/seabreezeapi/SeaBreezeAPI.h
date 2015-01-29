@@ -188,9 +188,19 @@ public:
     int getNumberOfTemperatureFeatures(long deviceID, int *errorCode);
     int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     double temperatureGet(long deviceID, long featureID, int *errorCode, int index);
-    int temperatureGet_All(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+    int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
 
-        
+    /* Optical Bench capabilities */
+    int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode);
+    int getOpticalBenchFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode);
+    unsigned int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode);
+    int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+
     /* Stray light coefficient capabilities */
     int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
     int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -1454,6 +1464,176 @@ extern "C" {
     DLL_DECL int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code, double *buffer, int max_length);
 
 
+/**
+     * This function returns the total number of optical bench feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_optical_bench_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_optical_bench_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each optical bench
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of optical bench feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_optical_bench_features(long deviceID, int *error_code, long *opticalBenchFeatures, int max_features);
+
+    /**
+     * This function reads out the optical bench fiber diameter in microns
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a optical
+     *        bench feature.  Valid IDs can be found with the
+     *        sbapi_get_optical_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the fiber diameter in microns
+     */
+    DLL_DECL unsigned int sbapi_optical_bench_get_fiber_diameter_microns(long deviceID, long opticalBenchFeatureID, int *error_code);
+
+    /**
+     * This function reads out the optical bench slit width in microns
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a optical
+     *        bench feature.  Valid IDs can be found with the
+     *        sbapi_get_optical_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the slit width in microns
+     */
+    DLL_DECL unsigned int sbapi_optical_bench_get_slit_width_microns(long deviceID, long opticalBenchFeatureID, int *error_code);
+
+    /**
+     * This reads the optical bench ID and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_id(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+ 
+     /**
+     * This reads the optical bench Serial Number and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_serial_number(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+
+
+    /**
+     * This reads the optical bench Coating and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_coating(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+     /**
+     * This reads the optical bench filter and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_filter(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+    /**
+     * This reads the optical bench grating and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_grating(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+                 
     /**
      * This function returns the total number of stray light coefficient feature
      * instances available in the indicated device.

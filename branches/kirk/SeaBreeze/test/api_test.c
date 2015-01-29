@@ -51,6 +51,7 @@ void test_irradcal_feature(long deviceID);
 void test_tec_feature(long deviceID);
 void test_nonlinearity_coeffs_feature(long deviceID);
 void test_temperature_feature(long deviceID);
+void test_optical_bench_feature(long deviceID);
 void test_stray_light_coeffs_feature(long deviceID);
 void test_continuous_strobe_feature(long deviceID);
 
@@ -63,6 +64,7 @@ typedef void (*testfunc_t)(long);
 /* Create a list of functions to run on each device that is found and opened */
 static testfunc_t __test_functions[] = {
     test_serial_number_feature,
+    test_optical_bench_feature,
     test_spectrometer_feature,
     test_shutter_feature,
     test_light_source_feature,
@@ -207,6 +209,97 @@ void test_serial_number_feature(long deviceID) {
     printf("\tFinished testing serial number capabilities.\n");
 }
 
+
+void test_optical_bench_feature(long deviceID) {
+    int error = 0;
+    int number_of_optical_benches;
+    long *optical_bench_ids = 0;
+    int i;
+    unsigned int slit_or_fiber;
+    char buffer[80];
+
+    printf("\n\tTesting optical bench features:\n");
+
+    printf("\t\tGetting number of optical benches:\n");
+    number_of_optical_benches = sbapi_get_number_of_optical_bench_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_optical_benches, sbapi_get_error_string(error));
+
+    if(0 == number_of_optical_benches) {
+        printf("\tNo optical bench capabilities found.\n");
+        return;
+    }
+
+    optical_bench_ids = (long *)calloc(number_of_optical_benches, sizeof(long));
+    printf("\t\tGetting optical bench feature IDs...\n");
+    number_of_optical_benches = sbapi_get_optical_bench_features(deviceID, &error, optical_bench_ids, number_of_optical_benches);
+    printf("\t\t\tResult is %d [%s]\n", number_of_optical_benches, sbapi_get_error_string(error));
+
+    for(i = 0; i < number_of_optical_benches; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, optical bench feature id 0x%02lX\n", i, deviceID, optical_bench_ids[i]);
+
+        printf("\t\t\tAttempting to get optical bench ID...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        sbapi_optical_bench_get_id(deviceID, optical_bench_ids[i], &error, buffer, 79);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench ID: [%s]\n", buffer);
+        }
+        
+        printf("\t\t\tAttempting to get optical bench serial number...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        sbapi_optical_bench_get_serial_number(deviceID, optical_bench_ids[i], &error, buffer, 79);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench Serial Number: [%s]\n", buffer);
+        }        
+
+        printf("\t\t\tAttempting to get optical bench coating type...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        sbapi_optical_bench_get_coating(deviceID, optical_bench_ids[i], &error, buffer, 79);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench coating type: [%s]\n", buffer);
+        }
+
+        printf("\t\t\tAttempting to get optical bench filter type...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        sbapi_optical_bench_get_filter(deviceID, optical_bench_ids[i], &error, buffer, 79);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench filter type: [%s]\n", buffer);
+        } 
+        
+        printf("\t\t\tAttempting to get optical bench grating type...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        sbapi_optical_bench_get_grating(deviceID, optical_bench_ids[i], &error, buffer, 79);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench grating type: [%s]\n", buffer);
+        }         
+        
+        printf("\t\t\tAttempting to get optical bench slit width...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        slit_or_fiber=sbapi_optical_bench_get_slit_width_microns(deviceID, optical_bench_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench slit width (microns): [%d]\n", slit_or_fiber);
+        } 
+        
+        printf("\t\t\tAttempting to get optical bench fiber diameter...\n");
+        memset(buffer, (int)0, sizeof(buffer));
+        slit_or_fiber=sbapi_optical_bench_get_slit_width_microns(deviceID, optical_bench_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tOptical Bench fiber diameter (microns): [%d]\n", slit_or_fiber);
+        } 
+        
+        printf("\t\t%d: Finished testing device 0x%02lX, optical bench feature id 0x%02lX\n", i, deviceID, optical_bench_ids[i]);
+    }
+
+    free(optical_bench_ids);
+
+    printf("\tFinished testing optical bench capabilities.\n");
+}
 
 void test_spectrometer_feature(long deviceID) {
     int error = 0;

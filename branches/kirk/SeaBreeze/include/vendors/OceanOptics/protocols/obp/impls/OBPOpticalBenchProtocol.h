@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TemperatureFeature.h
+ * @file    OBPOpticalBenchProtocol.h
  * @date    January 2015
  * @author  Kirk Clendinning, Heliospectra
  *
@@ -27,33 +27,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef TEMPERATUREFEATURE_H
-#define TEMPERATUREFEATURE_H
+#ifndef SEABREEZE_OBP_OPTICAL_BENCHROTOCOL_H
+#define SEABREEZE_OBP_OPTICAL_BENCHROTOCOL_H
 
+#include "common/SeaBreeze.h"
+#include "common/buses/Bus.h"
+#include "vendors/OceanOptics/protocols/interfaces/OpticalBenchProtocolInterface.h"
 #include <vector>
 
-#include "vendors/OceanOptics/features/temperature/TemperatureFeatureInterface.h"
-#include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
-#include "common/buses/Bus.h"
-#include "common/exceptions/FeatureException.h"
-
 namespace seabreeze {
-
-    class TemperatureFeature
-                : public Feature, public TemperatureFeatureInterface {
+  namespace oceanBinaryProtocol {
+    class OBPOpticalBenchProtocol : public OpticalBenchProtocolInterface {
     public:
-        TemperatureFeature(std::vector<ProtocolHelper *> helpers);
-        virtual ~TemperatureFeature();
-        virtual double readTemperature(const Protocol &protocol,
-                const Bus &bus, int index) throw (FeatureException);
-		virtual std::vector<double> *readAllTemperatures(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
-                
-        /* Overriding from Feature */
-        virtual FeatureFamily getFeatureFamily();
-    };
+        OBPOpticalBenchProtocol();
+        virtual ~OBPOpticalBenchProtocol();
 
+        virtual unsigned int readOpticalBenchSlitWidthMicrons(const Bus &bus)
+                throw (ProtocolException);
+        virtual unsigned int readOpticalBenchFiberDiameterMicrons(const Bus &bus)
+                throw (ProtocolException);
+        virtual std::string *readOpticalBenchID(const Bus &bus)
+                throw (ProtocolException);        
+        virtual std::string *readOpticalBenchSerialNumber(const Bus &bus)
+                throw (ProtocolException);
+        virtual std::string *readOpticalBenchCoating(const Bus &bus)
+                throw (ProtocolException);
+        virtual std::string *readOpticalBenchFilter(const Bus &bus)
+                throw (ProtocolException);
+        virtual std::string *readOpticalBenchGrating(const Bus &bus)
+                throw (ProtocolException);        
+    };
+  }
 }
 
-#endif /* TEMPERATUREFEATURE_H */
+#endif

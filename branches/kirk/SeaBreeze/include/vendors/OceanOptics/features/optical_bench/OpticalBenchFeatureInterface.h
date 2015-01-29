@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TemperatureFeatureInterface.h
+ * @file    OpticalBenchFeatureInterface.h
  * @date    January 2015
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
@@ -27,8 +27,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef TEMPERATUREFEATUREINTERFACE_H
-#define TEMPERATUREFEATUREINTERFACE_H
+#ifndef OPTICALBENCHFEATUREINTERFACE_H
+#define OPTICALBENCHFEATUREINTERFACE_H
 
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
@@ -36,17 +36,27 @@
 
 namespace seabreeze {
 
-    class TemperatureFeatureInterface {
+    class OpticalBenchFeatureInterface {
     public:
-        virtual ~TemperatureFeatureInterface() = 0;
-        virtual double readTemperature(const Protocol &protocol,
-                const Bus &bus, int index) throw (FeatureException) = 0;
-        virtual std::vector<double> *readAllTemperatures(const Protocol &protocol,
+        virtual ~OpticalBenchFeatureInterface() = 0;
+        virtual unsigned int readOpticalBenchFiberDiameterMicrons(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;
+        virtual unsigned int readOpticalBenchSlitWidthMicrons(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual std::string *readOpticalBenchID(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual std::string *readOpticalBenchSerialNumber(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual std::string *readOpticalBenchCoating(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual std::string *readOpticalBenchFilter(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual std::string *readOpticalBenchGrating(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;                
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */
-    inline TemperatureFeatureInterface::~TemperatureFeatureInterface() {}
+    inline OpticalBenchFeatureInterface::~OpticalBenchFeatureInterface() {}
 }
 
-#endif /* TEMPERATUREFEATUREINTERFACE_H */
+#endif /* OPTICALBENCHFEATUREINTERFACE_H */

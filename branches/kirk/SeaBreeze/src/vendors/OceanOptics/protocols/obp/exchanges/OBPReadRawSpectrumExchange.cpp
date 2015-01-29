@@ -59,7 +59,7 @@ OBPReadRawSpectrumExchange::~OBPReadRawSpectrumExchange() {
 }
 
 unsigned int OBPReadRawSpectrumExchange::isLegalMessageType(unsigned int t) {
-    if(OBPMessageTypes::OBP_GET_SPECTRUM_NOW == t) {
+    if(OBPMessageTypes::OBP_GET_RAW_SPECTRUM_NOW == t) {
         return 1;
     }
 

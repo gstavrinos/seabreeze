@@ -1,10 +1,13 @@
 /***************************************************//**
- * @file    SeaBreezeAPIConstants.h
+ * @file    ProtocolTransactionException.h
  * @date    January 2015
- * @author  Ocean Optics, Inc.
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
- * This file defines constants for use with SeaBreeze API
- * implementations.
+ * This is a base class for a family of exceptions that
+ * arise from errors in during OBPTransactions.  These may be thrown
+ * at the protocol layer, and all exceptions thrown at
+ * that layer must extend this class so that they can be
+ * uniformly handled.
  *
  * LICENSE:
  *
@@ -29,18 +32,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
-#ifndef SEABREEZEAPICONSTANTS_H
-#define SEABREEZEAPICONSTANTS_H
 
-/* Constants */
-#define ERROR_SUCCESS               0
-#define ERROR_INVALID_ERROR         1
-#define ERROR_NO_DEVICE             2
-#define ERROR_FAILED_TO_CLOSE       3
-#define ERROR_NOT_IMPLEMENTED       4
-#define ERROR_FEATURE_NOT_FOUND     5
-#define ERROR_TRANSFER_ERROR        6
-#define ERROR_BAD_USER_BUFFER       7
-#define ERROR_INPUT_OUT_OF_BOUNDS   8
+#ifndef SEABREEZE_PROTOCOLTRANSACTIONEXCEPTION_H
+#define SEABREEZE_PROTOCOLTRANSACTIONEXCEPTION_H
 
-#endif /* SEABREEZEAPICONSTANTS_H */
+#include <stdexcept>
+#include <string>
+
+namespace seabreeze {
+
+    class ProtocolTransactionException : public std::runtime_error {
+    public:
+        ProtocolTransactionException(const std::string &error);
+    };
+
+}
+
+#endif

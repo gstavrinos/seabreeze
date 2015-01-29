@@ -65,7 +65,7 @@ namespace seabreeze {
 
 //Spectra queries
         static const unsigned int OBP_GET_BUF_SPEC32_META     		= 0x00100928;
-        static const unsigned int OBP_GET_SPECTRUM_NOW        		= 0x00101000;
+        static const unsigned int OBP_GET_CORRECTED_SPECTRUM_NOW    = 0x00101000;
         static const unsigned int OBP_GET_RAW_SPECTRUM_NOW    		= 0x00101100;
         static const unsigned int OBP_GET_PARTIAL_SPECTRUM_MODE 	= 0x00102000;
         static const unsigned int OBP_SET_PARTIAL_SPECTRUM_MODE 	= 0x00102010;
@@ -111,11 +111,11 @@ namespace seabreeze {
 // Optical Bench       
         static const unsigned int OBP_GET_BENCH_ID       			= 0x001B0000;
         static const unsigned int OBP_GET_BENCH_SERIAL_NUMBER  		= 0x001B0100;
-        static const unsigned int OBP_GET_SLIT_WIDTH_MICRONS        = 0x001B0200;
-        static const unsigned int OBP_GET_FIBER_DIAMETER_MICROS     = 0x001B0300;
-        static const unsigned int OBP_GET_GRATING         			= 0x001B0400;
-        static const unsigned int OBP_GET_FILTER         			= 0x001B0500;
-        static const unsigned int OBP_GET_COATING         			= 0x001B0600;
+        static const unsigned int OBP_GET_BENCH_SLIT_WIDTH_MICRONS  = 0x001B0200;
+        static const unsigned int OBP_GET_BENCH_FIBER_DIAM_MICRONS  = 0x001B0300;
+        static const unsigned int OBP_GET_BENCH_GRATING         	= 0x001B0400;
+        static const unsigned int OBP_GET_BENCH_FILTER         		= 0x001B0500;
+        static const unsigned int OBP_GET_BENCH_COATING         	= 0x001B0600;
 
 // GPIO
         static const unsigned int OBP_GET_GPIO_NUMBER_OF_PINS  		= 0x00200000;

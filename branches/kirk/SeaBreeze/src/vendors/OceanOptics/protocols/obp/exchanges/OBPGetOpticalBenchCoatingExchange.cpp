@@ -1,14 +1,11 @@
 /***************************************************//**
- * @file    SeaBreezeAPIConstants.h
+ * @file    OBPGetOpticalBenchCoatingExchange.cpp
  * @date    January 2015
- * @author  Ocean Optics, Inc.
- *
- * This file defines constants for use with SeaBreeze API
- * implementations.
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -29,18 +26,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
-#ifndef SEABREEZEAPICONSTANTS_H
-#define SEABREEZEAPICONSTANTS_H
 
-/* Constants */
-#define ERROR_SUCCESS               0
-#define ERROR_INVALID_ERROR         1
-#define ERROR_NO_DEVICE             2
-#define ERROR_FAILED_TO_CLOSE       3
-#define ERROR_NOT_IMPLEMENTED       4
-#define ERROR_FEATURE_NOT_FOUND     5
-#define ERROR_TRANSFER_ERROR        6
-#define ERROR_BAD_USER_BUFFER       7
-#define ERROR_INPUT_OUT_OF_BOUNDS   8
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetOpticalBenchCoatingExchange.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 
-#endif /* SEABREEZEAPICONSTANTS_H */
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+
+OBPGetOpticalBenchCoatingExchange::OBPGetOpticalBenchCoatingExchange() {
+    this->messageType = OBPMessageTypes::OBP_GET_BENCH_COATING;
+
+    this->hints->push_back(new OBPControlHint());
+}
+
+OBPGetOpticalBenchCoatingExchange::~OBPGetOpticalBenchCoatingExchange() {
+
+}

@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SerialNumberFeatureAdapter.h
+ * @file    SerialNumberFeatureAdapter.cpp
  * @date    February 2012
  * @author  Ocean Optics, Inc.
  *

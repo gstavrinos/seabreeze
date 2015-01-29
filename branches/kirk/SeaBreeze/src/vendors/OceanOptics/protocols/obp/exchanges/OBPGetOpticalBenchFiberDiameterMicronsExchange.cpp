@@ -1,10 +1,7 @@
 /***************************************************//**
- * @file    SeaBreezeAPIConstants.h
+ * @file    OBPGetOpticalBenchFiberDiameterMicronsExchange.cpp
  * @date    January 2015
- * @author  Ocean Optics, Inc.
- *
- * This file defines constants for use with SeaBreeze API
- * implementations.
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
@@ -29,18 +26,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
-#ifndef SEABREEZEAPICONSTANTS_H
-#define SEABREEZEAPICONSTANTS_H
 
-/* Constants */
-#define ERROR_SUCCESS               0
-#define ERROR_INVALID_ERROR         1
-#define ERROR_NO_DEVICE             2
-#define ERROR_FAILED_TO_CLOSE       3
-#define ERROR_NOT_IMPLEMENTED       4
-#define ERROR_FEATURE_NOT_FOUND     5
-#define ERROR_TRANSFER_ERROR        6
-#define ERROR_BAD_USER_BUFFER       7
-#define ERROR_INPUT_OUT_OF_BOUNDS   8
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetOpticalBenchFiberDiameterMicronsExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
-#endif /* SEABREEZEAPICONSTANTS_H */
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+
+OBPGetOpticalBenchFiberDiameterMicronsExchange::OBPGetOpticalBenchFiberDiameterMicronsExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_BENCH_FIBER_DIAM_MICRONS;
+    this->payload.resize(1);
+}
+
+OBPGetOpticalBenchFiberDiameterMicronsExchange::~OBPGetOpticalBenchFiberDiameterMicronsExchange() {
+
+}

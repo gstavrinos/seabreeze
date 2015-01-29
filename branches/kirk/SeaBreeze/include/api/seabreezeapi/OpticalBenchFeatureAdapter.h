@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TemperatureFeatureAdapter.h
+ * @file    OpticalBenchFeatureAdapter.h
  * @date    January 2015
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
@@ -30,25 +30,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_TEMPERATUREFEATUREADAPTER_H
-#define SEABREEZE_TEMPERATUREFEATUREADAPTER_H
+#ifndef SEABREEZE_OPTICALBENCHFEATUREADAPTER_H
+#define SEABREEZE_OPTICALBENCHFEATUREADAPTER_H
 
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/temperature/TemperatureFeatureInterface.h"
+#include "vendors/OceanOptics/features/optical_bench/OpticalBenchFeatureInterface.h"
 
 namespace seabreeze {
     namespace api {
 
-        class TemperatureFeatureAdapter
-                : public FeatureAdapterTemplate<TemperatureFeatureInterface> {
+        class OpticalBenchFeatureAdapter
+                : public FeatureAdapterTemplate<OpticalBenchFeatureInterface> {
         public:
-            TemperatureFeatureAdapter(TemperatureFeatureInterface *intf,
+            OpticalBenchFeatureAdapter(OpticalBenchFeatureInterface *intf,
                     const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex);
-            virtual ~TemperatureFeatureAdapter();
+            virtual ~OpticalBenchFeatureAdapter();
 
-            double readTemperature(int *errorCode, int index);
-            int readAllTemperatures(int *errorCode, double *buffer, int bufferLength);
+            unsigned int readOpticalBenchFiberDiameterMicrons(int *errorCode);
+            unsigned int readOpticalBenchSlitWidthMicrons(int *errorCode);
+            int readOpticalBenchID(int *errorCode, char *buffer, int buffer_length);
+            int readOpticalBenchSerialNumber(int *errorCode, char *buffer, int buffer_length);
+            int readOpticalBenchCoating(int *errorCode, char *buffer, int buffer_length);
+            int readOpticalBenchFilter(int *errorCode, char *buffer, int buffer_length);
+            int readOpticalBenchGrating(int *errorCode, char *buffer, int buffer_length);
         };
 
     }
