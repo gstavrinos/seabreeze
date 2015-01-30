@@ -39,9 +39,9 @@ namespace seabreeze {
     class OpticalBenchFeatureInterface {
     public:
         virtual ~OpticalBenchFeatureInterface() = 0;
-        virtual unsigned int readOpticalBenchFiberDiameterMicrons(const Protocol &protocol,
+        virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;
-        virtual unsigned int readOpticalBenchSlitWidthMicrons(const Protocol &protocol,
+        virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;
         virtual std::string *readOpticalBenchID(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;

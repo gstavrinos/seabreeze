@@ -51,6 +51,7 @@ void test_irradcal_feature(long deviceID);
 void test_tec_feature(long deviceID);
 void test_nonlinearity_coeffs_feature(long deviceID);
 void test_temperature_feature(long deviceID);
+void test_revision_feature(long deviceID);
 void test_optical_bench_feature(long deviceID);
 void test_stray_light_coeffs_feature(long deviceID);
 void test_continuous_strobe_feature(long deviceID);
@@ -64,6 +65,7 @@ typedef void (*testfunc_t)(long);
 /* Create a list of functions to run on each device that is found and opened */
 static testfunc_t __test_functions[] = {
     test_serial_number_feature,
+    test_revision_feature,
     test_optical_bench_feature,
     test_spectrometer_feature,
     test_shutter_feature,
@@ -167,7 +169,8 @@ void test_serial_number_feature(long deviceID) {
     int number_of_serial_numbers;
     long *serial_number_ids = 0;
     int i;
-    char buffer[80];
+    unsigned char length;
+    char *buffer;
 
     printf("\n\tTesting serial number features:\n");
 
@@ -192,14 +195,21 @@ void test_serial_number_feature(long deviceID) {
         printf("\t\t%d: Testing device 0x%02lX, serial number 0x%02lX\n",
                 i, deviceID, serial_number_ids[i]);
 
+        printf("\t\t\tAttempting to get the maximum serial number length...\n");
+        length=sbapi_get_serial_number_maximum_length(deviceID, serial_number_ids[i], &error);
+        printf("\t\t\tResult is %d [%s]\n", length,
+            sbapi_get_error_string(error));
+        
+        buffer = calloc(length, sizeof(char));
         printf("\t\t\tAttempting to get serial number...\n");
-        memset(buffer, (int)0, sizeof(buffer));
+        //memset(buffer, (int)0, sizeof(buffer));
         sbapi_get_serial_number(deviceID,
                 serial_number_ids[i], &error, buffer, 79);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         if(0 == error) {
             printf("\t\t\t\tSerial number: [%s]\n", buffer);
         }
+        free(buffer);
         printf("\t\t%d: Finished testing device 0x%02lX, serial number 0x%02lX\n",
                 i, deviceID, serial_number_ids[i]);
     }
@@ -209,6 +219,49 @@ void test_serial_number_feature(long deviceID) {
     printf("\tFinished testing serial number capabilities.\n");
 }
 
+void test_revision_feature(long deviceID) {
+    int error = 0;
+    int number_of_revision_features;
+    long *revision_feature_ids = 0;
+    int i;
+
+    printf("\n\tTesting revision features:\n");
+
+    printf("\t\tGetting number of revision features:\n");
+    number_of_revision_features =
+        sbapi_get_number_of_revision_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_revision_features,
+            sbapi_get_error_string(error));
+
+    if(0 == number_of_revision_features) {
+        printf("\tNo revision capabilities found.\n");
+        return;
+    }
+
+    revision_feature_ids =
+        (long *)calloc(number_of_revision_features, sizeof(long));
+    printf("\t\tGetting revisino feature IDs...\n");
+    number_of_revision_features = sbapi_get_revision_features(
+            deviceID, &error, revision_feature_ids,
+            number_of_revision_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_revision_features,
+            sbapi_get_error_string(error));
+
+    for(i = 0; i < number_of_revision_features; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, revision 0x%02lX\n", i, deviceID, revision_feature_ids[i]);
+        printf("\t\t\tAttempting to get revisions...\n");
+        printf("\t\t\t\tHardware Revision: 0x%x\n", sbapi_revision_hardware_get(deviceID, revision_feature_ids[i], &error));
+        printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		printf("\t\t\t\tFirmware Revision: 0x%x\n", sbapi_revision_firmware_get(deviceID, revision_feature_ids[i], &error));
+		printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));		
+		
+        printf("\t\t%d: Finished testing device 0x%02lX, revision 0x%02lX\n",
+                i, deviceID, revision_feature_ids[i]);
+    }
+    free(revision_feature_ids);
+
+    printf("\tFinished testing revision capabilities.\n");
+}
 
 void test_optical_bench_feature(long deviceID) {
     int error = 0;
@@ -860,6 +913,7 @@ void test_temperature_feature(long deviceID) {
     double buffer[10];  // how many temperatures could there be on _any_ given spectrometer
     int i;
     int length;
+    float myTemp;
 
     printf("\n\tTesting temperature features:\n");
 
@@ -887,14 +941,27 @@ void test_temperature_feature(long deviceID) {
         printf("\t\t%d: Testing device 0x%02lX, temperatures 0x%02lX\n",
                 i, deviceID, temperature_feature_ids[i]);
 
-        printf("\t\t\tAttempting to get temperatures...\n");
-        memset(buffer, (int)0, sizeof(buffer));
+        printf("\t\t\tAttempting to get all temperatures...\n");
+        memset(buffer, (int)0, sizeof(buffer));        
         length = sbapi_temperature_get_all(deviceID,
             temperature_feature_ids[i], &error, buffer, 10);
         printf("\t\t\t\tResult is %d [%s]\n", length, sbapi_get_error_string(error));
         for(int t_index=0; t_index<length; t_index++) {
         	if(0 == error && length > 0) {
             	printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, buffer[t_index]);
+        	}
+		}
+		
+		printf("\t\t\tAttempting to get the number of specific temperatures...\n");
+        
+        length = sbapi_temperature_count_get(deviceID,
+            temperature_feature_ids[i], &error);
+        printf("\t\t\t\tResult is %d [%s]\n", length, sbapi_get_error_string(error));
+        
+        for(int t_index=0; t_index<length; t_index++) {
+        	if(0 == error && length > 0) {
+        		myTemp=sbapi_temperature_get(deviceID, temperature_feature_ids[i], &error, t_index);
+            	printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, myTemp);
         	}
 		}
 		

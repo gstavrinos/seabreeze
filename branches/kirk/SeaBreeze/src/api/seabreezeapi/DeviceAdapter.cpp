@@ -92,6 +92,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ShutterFeatureAdapter>(shutterFeatures);
     __delete_feature_adapters<NonlinearityCoeffsFeatureAdapter>(nonlinearityFeatures);
     __delete_feature_adapters<TemperatureFeatureAdapter>(temperatureFeatures);
+    __delete_feature_adapters<RevisionFeatureAdapter>(revisionFeatures);
     __delete_feature_adapters<OpticalBenchFeatureAdapter>(opticalBenchFeatures);
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
@@ -207,7 +208,12 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<TemperatureFeatureInterface,
                     TemperatureFeatureAdapter>(this->device,
             temperatureFeatures, bus, featureFamilies.TEMPERATURE);
- 
+
+    /* Create revision feature list */
+    __create_feature_adapters<RevisionFeatureInterface,
+                    RevisionFeatureAdapter>(this->device,
+            revisionFeatures, bus, featureFamilies.REVISION);
+             
      /* Create optical bench feature list */
     __create_feature_adapters<OpticalBenchFeatureInterface,
                     OpticalBenchFeatureAdapter>(this->device,
@@ -309,6 +315,16 @@ int DeviceAdapter::getSerialNumber(long featureID, int *errorCode,
     }
 
     return feature->getSerialNumber(errorCode, buffer, bufferLength);
+}
+
+unsigned char DeviceAdapter::getSerialNumberMaximumLength(long featureID, int *errorCode) {
+    SerialNumberFeatureAdapter *feature = getSerialNumberFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getSerialNumberMaximumLength(errorCode);
 }
 
 /* Spectrometer feature wrappers */
@@ -805,6 +821,16 @@ TemperatureFeatureAdapter *DeviceAdapter::getTemperatureFeatureByID(long tempera
                 temperatureFeatures, temperatureFeatureID);
 }
 
+unsigned char DeviceAdapter::temperatureCountGet(long temperatureFeatureID, int *errorCode) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readTemperatureCount(errorCode);
+}
+
 double DeviceAdapter::temperatureGet(long temperatureFeatureID, int *errorCode, int index) {
     TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
     if(NULL == feature) {
@@ -826,6 +852,41 @@ int DeviceAdapter::temperatureGetAll(long temperatureFeatureID, int *errorCode,
     return feature->readAllTemperatures(errorCode, buffer, bufferLength);
 }
 
+/* Revision feature wrappers */
+int DeviceAdapter::getNumberOfRevisionFeatures() {
+    return (int) this->revisionFeatures.size();
+}
+
+int DeviceAdapter::getRevisionFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<RevisionFeatureAdapter>(
+                revisionFeatures, buffer, maxFeatures);
+}
+
+RevisionFeatureAdapter *DeviceAdapter::getRevisionFeatureByID(long revisionFeatureID) {
+    return __getFeatureByID<RevisionFeatureAdapter>(
+                revisionFeatures, revisionFeatureID);
+}
+
+unsigned char DeviceAdapter::revisionHardwareGet(long revisionFeatureID, int *errorCode) {
+    RevisionFeatureAdapter *feature = getRevisionFeatureByID(revisionFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readHardwareRevision(errorCode);
+}
+
+unsigned short int DeviceAdapter::revisionFirmwareGet(long revisionFeatureID, int *errorCode) {
+    RevisionFeatureAdapter *feature = getRevisionFeatureByID(revisionFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readFirmwareRevision(errorCode);
+}
+
 /* Optical Bench feature wrappers */
 int DeviceAdapter::getNumberOfOpticalBenchFeatures() {
     return (int) this->opticalBenchFeatures.size();
@@ -841,7 +902,7 @@ OpticalBenchFeatureAdapter *DeviceAdapter::getOpticalBenchFeatureByID(long optic
                opticalBenchFeatures, opticalBenchFeatureID);
 }
 
-unsigned int DeviceAdapter::opticalBenchGetFiberDiameterMicrons(long opticalBenchFeatureID, int *errorCode) {
+unsigned short int DeviceAdapter::opticalBenchGetFiberDiameterMicrons(long opticalBenchFeatureID, int *errorCode) {
     OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(opticalBenchFeatureID);
     if(NULL == feature) {
         SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
@@ -851,7 +912,7 @@ unsigned int DeviceAdapter::opticalBenchGetFiberDiameterMicrons(long opticalBenc
     return feature->readOpticalBenchFiberDiameterMicrons(errorCode);
 }
 
-unsigned int DeviceAdapter::opticalBenchGetSlitWidthMicrons(long opticalBenchFeatureID, int *errorCode) {
+unsigned short int DeviceAdapter::opticalBenchGetSlitWidthMicrons(long opticalBenchFeatureID, int *errorCode) {
     OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(opticalBenchFeatureID);
     if(NULL == feature) {
         SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);

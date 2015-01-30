@@ -52,6 +52,8 @@ namespace seabreeze {
     public:
         TemperatureProtocolInterface(Protocol *protocol);
         virtual ~TemperatureProtocolInterface();
+        virtual unsigned char readTemperatureCount(const Bus &bus)
+                throw (ProtocolException) = 0;
         virtual double readTemperature(const Bus &bus, int index)
                 throw (ProtocolException) = 0;
         virtual std::vector<double> *readAllTemperatures(const Bus &bus)

@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPSerialNumberProtocol.cpp
- * @date    February 2011
+ * @file    OBPRevisionProtocol.cpp
+ * @date    January 2012
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,76 +28,32 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetSerialNumberExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetSerialNumberMaximumLengthExchange.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPRevisionProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetHardwareRevisionExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetFirmwareRevisionExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
-#include "common/ByteVector.h"
 #include "common/exceptions/ProtocolBusMismatchException.h"
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-OBPSerialNumberProtocol::OBPSerialNumberProtocol()
-        : SerialNumberProtocolInterface(new OceanBinaryProtocol()) {
+OBPRevisionProtocol::OBPRevisionProtocol()
+        : RevisionProtocolInterface(new OceanBinaryProtocol()) {
 
 }
 
-OBPSerialNumberProtocol::~OBPSerialNumberProtocol() {
+OBPRevisionProtocol::~OBPRevisionProtocol() {
 
 }
 
-string *OBPSerialNumberProtocol::readSerialNumber(const Bus &bus)
-                throw (ProtocolException) {
 
-    vector<byte> *result;
-    string *retval = NULL;
-
-    OBPGetSerialNumberExchange xchange;
-
-    TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) {
-        string error("Failed to find a helper to bridge given protocol and bus.");
-        throw ProtocolBusMismatchException(error);
-    }
-
-    result = xchange.queryDevice(helper);
-    if(NULL == result) {
-        string error("Expected queryDevice to produce a non-null result "
-            "containing a serial number.  Without this data, it is not possible to "
-            "continue.");
-        throw ProtocolException(error);
-    }
-
-    retval = new string();
-    vector<byte>::iterator iter;
-    /* This is probably not the most efficient way to copy
-     * from a vector of bytes into a string, but at least
-     * this way issues of string encoding should be
-     * avoided (i.e. the sizeof a string element is not
-     * assumed here).  Since this function will not be called
-     * continuously nor is the serial number ever very long,
-     * this should suffice.
-     */
-    for(iter = result->begin(); iter != result->end(); iter++) {
-        retval->push_back((char) * iter);
-        if('\0' == *iter) {
-            break;
-        }
-    }
-
-    delete result;
-
-    return retval;
-}
-
-unsigned char OBPSerialNumberProtocol::readSerialNumberMaximumLength(const Bus &bus) throw (ProtocolException) 
+unsigned char OBPRevisionProtocol::readHardwareRevision(const Bus &bus) throw (ProtocolException) 
 {
     vector<byte> *result = NULL;
-    unsigned char length;
+    unsigned char hardwareRevision;
     
-    OBPGetSerialNumberMaximumLengthExchange xchange;
+    OBPGetHardwareRevisionExchange xchange;
 	
     TransferHelper *helper = bus.getHelper(xchange.getHints());
     if(NULL == helper) 
@@ -115,8 +71,48 @@ unsigned char OBPSerialNumberProtocol::readSerialNumberMaximumLength(const Bus &
 		throw ProtocolException(error);
 	}
 		
-	length=(*result)[0]; 
+	hardwareRevision=(*result)[0]; 
 	delete result;
 	
-	return length;
+	return hardwareRevision;
 }
+
+unsigned short int OBPRevisionProtocol::readFirmwareRevision(const Bus &bus) throw (ProtocolException) 
+{
+    vector<byte> *result = NULL;
+    unsigned short int firmwareRevision;
+    byte *bptr;
+    
+    OBPGetFirmwareRevisionExchange xchange;
+	
+    TransferHelper *helper = bus.getHelper(xchange.getHints());
+    if(NULL == helper) 
+    {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
+    
+	result = xchange.queryDevice(helper);
+	if(NULL == result) 
+	{
+		string error("Expected Transfer::transfer to produce a non-null result "
+			"containing temperature.  Without this data, it is not possible to "
+			"continue.");
+		throw ProtocolException(error);
+	}
+	
+
+	// queryDevice returns a byte stream, turn that into an unsigned int... mind our endians.
+	bptr = (byte *)&firmwareRevision;
+	for(unsigned int j = 0; j < sizeof(unsigned short int); j++) 
+	{
+		//printf("byte %d=%x\n", j, (*result)[j]);
+		bptr[j] = (*result)[j];  // little endian 2-byte integer
+	}
+
+	delete result;
+	
+	return firmwareRevision;
+}
+
+

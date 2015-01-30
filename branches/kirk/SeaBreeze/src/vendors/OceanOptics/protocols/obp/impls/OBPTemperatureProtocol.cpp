@@ -49,6 +49,29 @@ OBPTemperatureProtocol::~OBPTemperatureProtocol() {
 }
 
 
+unsigned char OBPTemperatureProtocol::readTemperatureCount(const Bus &bus)
+                throw (ProtocolException) 
+{
+    int count = 0;
+    vector<byte> *countResult;
+
+	OBPGetTemperatureCountExchange countExchange;
+	
+    TransferHelper *helper = bus.getHelper(countExchange.getHints());
+    if(NULL == helper) 
+    {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
+    
+    countResult = countExchange.queryDevice(helper);
+
+    count = (*countResult)[0];
+    delete countResult;
+
+	return count;
+}
+
 double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
                 throw (ProtocolException) 
 {
@@ -95,8 +118,11 @@ double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
 		
 		// queryDevice returns a byte stream, turn that into a float... mind our endians.
 		bptr = (byte *)&temperature;
-		for(unsigned int j = 0; j < sizeof(float); j++) 
-			bptr[j] = (*result)[j];
+		for(unsigned int j = 0; j < sizeof(float); j++)  // four bytes returned
+		{
+			//printf("byte %d=%x\n", j, (*result)[j]);
+			bptr[j] = (*result)[j];  // get a little endian float
+		}
 	}
 	else  
 	{

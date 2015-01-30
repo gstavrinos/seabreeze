@@ -73,6 +73,23 @@ string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol
     return retval;
 }
 
+
+// this feature is not supported by EEPROM spectrometers. 
+//  The Jaz serial number length is 15, but can't be queried. 
+//  
+unsigned char SerialNumberEEPROMSlotFeature::readSerialNumberMaximumLength(const Protocol &protocol,
+        const Bus &bus) throw (FeatureException) {
+        
+        unsigned char bogus=0;
+        
+         string error("Serial Number length is not supported by EEPROM Slot Features.");
+        // FIXME: This function needs to be here to supply serial number length 
+        //     to devices that don't use eeprom slot reads and writes.
+        throw FeatureProtocolNotFoundException(error);
+        
+       	return bogus; 
+}
+
 FeatureFamily SerialNumberEEPROMSlotFeature::getFeatureFamily() {
     FeatureFamilies families;
 

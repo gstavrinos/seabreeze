@@ -50,6 +50,7 @@
 #define FEATURE_FAMILY_ID_LIGHT_SOURCE      13
 #define FEATURE_FAMILY_ID_TEMPERATURE    	14
 #define FEATURE_FAMILY_ID_OPTICAL_BENCH    	15
+#define FEATURE_FAMILY_ID_REVISION	    	16
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -194,6 +195,15 @@ seabreeze::api::TemperatureFeatureFamily::TemperatureFeatureFamily()
 }
 
 seabreeze::api::TemperatureFeatureFamily::~TemperatureFeatureFamily() {
+
+}
+
+seabreeze::api::RevisionFeatureFamily::RevisionFeatureFamily()
+        : FeatureFamily("Revision", FEATURE_FAMILY_ID_REVISION) {
+
+}
+
+seabreeze::api::RevisionFeatureFamily::~RevisionFeatureFamily() {
 
 }
 

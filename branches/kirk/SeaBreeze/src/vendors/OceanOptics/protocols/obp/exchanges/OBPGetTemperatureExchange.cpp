@@ -5,7 +5,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetTemperatureExchange::OBPGetTemperatureExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_TEMPERATURE;
-    this->payload.resize(1);
+    this->payload.resize(4); // a four byte float is returned
 }
 
 OBPGetTemperatureExchange::~OBPGetTemperatureExchange() {

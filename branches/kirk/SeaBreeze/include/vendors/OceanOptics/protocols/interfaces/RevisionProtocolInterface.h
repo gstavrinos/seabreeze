@@ -1,15 +1,15 @@
 /***************************************************//**
- * @file    OpticalBenchProtocolInterface.h
+ * @file    RevisionProtocolInterface.h
  * @date    Janaure 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @author  Kirk Clendinning, Heliospectra
  *
  * This is a simple interface for any protocol to implement
  * that provides a protocol-agnostic mechanism for accessing
- * Optical Bench Parameters on an Ocean Optics device.
+ * temperature sensors on an Ocean Optics device.
  *
- * This does not extend Protocol or otherwise read involved
+ * This does not extend Protocol or otherwise get involved
  * in that hierarchy because it might interfere with the
- * lookup process for readting a Protocol object to delegate
+ * lookup process for getting a Protocol object to delegate
  * these methods to.  Worse, it could end up inheriting
  * twice from the same base class, which is just messy.
  *
@@ -37,8 +37,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OPTICALBENCHPROTOCOLINTERFACE_H
-#define OPTICALBENCHPROTOCOLINTERFACE_H
+#ifndef REVISIONPROTOCOLINTERFACE_H
+#define REVISIONPROTOCOLINTERFACE_H
 
 #include "common/SeaBreeze.h"
 #include "common/buses/Bus.h"
@@ -48,26 +48,18 @@
 
 namespace seabreeze {
 
-    class OpticalBenchProtocolInterface : public ProtocolHelper {
+    class RevisionProtocolInterface : public ProtocolHelper {
     public:
-        OpticalBenchProtocolInterface(Protocol *protocol);
-        virtual ~OpticalBenchProtocolInterface();
-        virtual std::string *readOpticalBenchID(const Bus &bus)
+        RevisionProtocolInterface(Protocol *protocol);
+        virtual ~RevisionProtocolInterface();
+
+        virtual unsigned char readHardwareRevision(const Bus &bus)
                 throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchSerialNumber(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Bus &bus)
-                throw (ProtocolException) = 0;
-    	virtual std::string *readOpticalBenchGrating(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchFilter(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchCoating(const Bus &bus)
+        
+        virtual unsigned short int readFirmwareRevision(const Bus &bus)
                 throw (ProtocolException) = 0;
     };
 
 }
 
-#endif /* OPTICALBENCHPROTOCOLINTERFACE_H */
+#endif /* REVISIONPROTOCOLINTERFACE_H */

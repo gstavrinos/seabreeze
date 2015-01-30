@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPTemperatureProtocol.h
+ * @file    OBPGetHardwareRevisionExchange.cpp
  * @date    January 2015
- * @author  Kirk Clendinning, Heliospectra
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
+ * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,30 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
-#define SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetHardwareRevisionExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
-#include <vector>
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 
-namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPTemperatureProtocol : public TemperatureProtocolInterface {
-    public:
-        OBPTemperatureProtocol();
-        virtual ~OBPTemperatureProtocol();
-
-		virtual unsigned char readTemperatureCount(const Bus &bus)
-                throw (ProtocolException);
-        virtual double readTemperature(const Bus &bus, int index)
-                throw (ProtocolException);
-                
-        virtual std::vector<double> *readAllTemperatures(const Bus &bus)
-                throw (ProtocolException);
-    };
-  }
+OBPGetHardwareRevisionExchange::OBPGetHardwareRevisionExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_HARDWARE_REVISION;
+    this->payload.resize(1);  // specification says it returns 1 byte 
 }
 
-#endif
+OBPGetHardwareRevisionExchange::~OBPGetHardwareRevisionExchange() {
+
+}
+

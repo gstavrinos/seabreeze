@@ -1,14 +1,14 @@
 /***************************************************//**
- * @file    SerialNumberFeatureAdapter.cpp
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @file    RevisionFeatureAdapter.cpp
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is a wrapper that allows access to SeaBreeze
- * SerialNumberFeatureInterface instances.
+ * RevisionFeatureInterface instances.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -35,23 +35,23 @@
 
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
-#include "api/seabreezeapi/SerialNumberFeatureAdapter.h"
+#include "api/seabreezeapi/REvisionFeatureAdapter.h"
 #include <string.h> /* for memcpy */
-#include <string>
+#include <vector>
 
 using namespace seabreeze;
 using namespace seabreeze::api;
 using namespace std;
 
-SerialNumberFeatureAdapter::SerialNumberFeatureAdapter(
-        SerialNumberFeatureInterface *intf, const FeatureFamily &f,
+RevisionFeatureAdapter::RevisionFeatureAdapter(
+        RevisionFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<SerialNumberFeatureInterface>(intf, f, p, b, instanceIndex) {
+        : FeatureAdapterTemplate<RevisionFeatureInterface>(intf, f, p, b, instanceIndex) {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-SerialNumberFeatureAdapter::~SerialNumberFeatureAdapter() {
+RevisionFeatureAdapter::~RevisionFeatureAdapter() {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
 
@@ -59,50 +59,35 @@ SerialNumberFeatureAdapter::~SerialNumberFeatureAdapter() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-int SerialNumberFeatureAdapter::getSerialNumber(int *errorCode,
-            char *buffer, int buffer_length) {
-
-    string *serialNumber;
-
-    try {
-        serialNumber = this->feature->readSerialNumber(
-            *this->protocol, *this->bus);
-    } catch (FeatureException &fe) {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-        return 0;
+// this function is here to follow the same class hierarchy as readAllTemperatures so
+//  that data flow is easier to see. This function needs no free()
+unsigned char RevisionFeatureAdapter::readHardwareRevision(int *errorCode) {
+	unsigned char returnValue;
+	
+	// no memory allocated, just pass it through
+	try {
+    	returnValue=this->feature->readHardwareRevision(*this->protocol, *this->bus);
+    	SET_ERROR_CODE(ERROR_SUCCESS);
     }
-
-    if(NULL == serialNumber) {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-        return 0;
+    catch (FeatureException &fe) {
+    	returnValue=0; 
+    	SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
-
-    memset(buffer, (int)0, buffer_length);
-
-    string::iterator iter;
-    int i = 0;
-    for(iter = serialNumber->begin(); iter != serialNumber->end() && i < buffer_length; iter++, i++) {
-        buffer[i] = *iter;
-    }
-    delete serialNumber;
-
-    SET_ERROR_CODE(ERROR_SUCCESS);
-    return i;
+    return returnValue;
 }
 
-unsigned char SerialNumberFeatureAdapter::getSerialNumberMaximumLength(int *errorCode) {
-
-    unsigned char length;
-
-    try {
-        length = this->feature->readSerialNumberMaximumLength(
-            *this->protocol, *this->bus);
-    } catch (FeatureException &fe) {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-        return 0;
+unsigned short int RevisionFeatureAdapter::readFirmwareRevision(int *errorCode) {
+	unsigned short int returnValue;
+	
+	// no memory allocated, just pass it through
+	try {
+    	returnValue=this->feature->readFirmwareRevision(*this->protocol, *this->bus);
+    	SET_ERROR_CODE(ERROR_SUCCESS);
     }
-
-    SET_ERROR_CODE(ERROR_SUCCESS);
-    return length;
+    catch (FeatureException &fe) {
+    	returnValue=0; 
+    	SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+    }
+    return returnValue;
 }
 

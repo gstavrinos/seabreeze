@@ -47,6 +47,7 @@ namespace seabreeze {
                     Protocol *p, Bus *b, unsigned short instanceIndex);
             virtual ~TemperatureFeatureAdapter();
 
+			unsigned char readTemperatureCount(int *errorCode);
             double readTemperature(int *errorCode, int index);
             int readAllTemperatures(int *errorCode, double *buffer, int bufferLength);
         };

@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPTemperatureProtocol.h
+ * @file    RevisionProtocolInterface.cpp
  * @date    January 2015
  * @author  Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
+ * SeaBreeze Copyright (C) 2015, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,30 +27,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
-#define SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/interfaces/RevisionProtocolInterface.h"
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
-#include <vector>
+using namespace seabreeze;
 
-namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPTemperatureProtocol : public TemperatureProtocolInterface {
-    public:
-        OBPTemperatureProtocol();
-        virtual ~OBPTemperatureProtocol();
+RevisionProtocolInterface::RevisionProtocolInterface(Protocol *protocol)
+    : ProtocolHelper(protocol) {
 
-		virtual unsigned char readTemperatureCount(const Bus &bus)
-                throw (ProtocolException);
-        virtual double readTemperature(const Bus &bus, int index)
-                throw (ProtocolException);
-                
-        virtual std::vector<double> *readAllTemperatures(const Bus &bus)
-                throw (ProtocolException);
-    };
-  }
 }
 
-#endif
+RevisionProtocolInterface::~RevisionProtocolInterface() {
+
+}

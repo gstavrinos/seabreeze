@@ -55,6 +55,34 @@ TemperatureFeature::~TemperatureFeature() {
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
+
+unsigned char TemperatureFeature::readTemperatureCount(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+
+    TemperatureProtocolInterface *temperaturePI = NULL;
+	unsigned char temperatureCount;
+    ProtocolHelper *proto = NULL;
+
+    try {
+        proto = lookupProtocolImpl(protocol);
+        temperaturePI = static_cast<TemperatureProtocolInterface *>(proto);
+    } catch (FeatureProtocolNotFoundException &e) {
+        string error(
+                "Could not find matching protocol implementation to get temperature.");
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureProtocolNotFoundException(error);
+    }
+
+    try {
+        temperatureCount = temperaturePI->readTemperatureCount(bus);
+        return temperatureCount;
+    } catch (ProtocolException &pe) {
+        string error("Caught protocol exception: ");
+        error += pe.what();
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureControlException(error);
+    }
+}
+
 double TemperatureFeature::readTemperature(const Protocol &protocol, const Bus &bus, int index) throw (FeatureException) {
 
     TemperatureProtocolInterface *temperaturePI = NULL;

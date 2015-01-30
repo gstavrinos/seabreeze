@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPTemperatureProtocol.h
+ * @file    RevisionFeatureInterface.h
  * @date    January 2015
- * @author  Kirk Clendinning, Heliospectra
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc, Heliospectra AB
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,30 +27,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
-#define SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
+#ifndef REVISIONFEATUREINTERFACE_H
+#define REVISIONFEATUREINTERFACE_H
 
-#include "common/SeaBreeze.h"
+#include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
-#include <vector>
+#include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPTemperatureProtocol : public TemperatureProtocolInterface {
-    public:
-        OBPTemperatureProtocol();
-        virtual ~OBPTemperatureProtocol();
 
-		virtual unsigned char readTemperatureCount(const Bus &bus)
-                throw (ProtocolException);
-        virtual double readTemperature(const Bus &bus, int index)
-                throw (ProtocolException);
-                
-        virtual std::vector<double> *readAllTemperatures(const Bus &bus)
-                throw (ProtocolException);
+    class RevisionFeatureInterface {
+    public:
+        virtual ~RevisionFeatureInterface() = 0;
+        virtual unsigned char readHardwareRevision(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+        virtual unsigned short int readFirmwareRevision(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
     };
-  }
+
+    /* Default implementation for (otherwise) pure virtual destructor */
+    inline RevisionFeatureInterface::~RevisionFeatureInterface() {}
 }
 
-#endif
+#endif /* REVISIONFEATUREINTERFACE_H */

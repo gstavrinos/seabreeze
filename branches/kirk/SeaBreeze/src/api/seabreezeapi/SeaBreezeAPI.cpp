@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.cpp
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    Janaury 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is a wrapper around the SeaBreeze driver.
  * Both C and C++ language interfaces are provided.  Please
@@ -363,6 +363,16 @@ int SeaBreezeAPI::getSerialNumber(long deviceID, long featureID, int *errorCode,
     }
 
     return adapter->getSerialNumber(featureID, errorCode, buffer, bufferLength);
+}
+
+unsigned char SeaBreezeAPI::getSerialNumberMaximumLength(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->getSerialNumberMaximumLength(featureID, errorCode);
 }
 
 /**************************************************************************************/
@@ -1006,6 +1016,17 @@ int SeaBreezeAPI::getTemperatureFeatures(long deviceID, int *errorCode,
     return adapter->getTemperatureFeatures(buffer, maxLength);
 }
 
+unsigned char SeaBreezeAPI::temperatureCountGet(long deviceID, long temperatureFeatureID,
+        int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->temperatureCountGet(temperatureFeatureID, errorCode);
+}
+
 double SeaBreezeAPI::temperatureGet(long deviceID, long temperatureFeatureID,
         int *errorCode, int index) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
@@ -1026,6 +1047,55 @@ int SeaBreezeAPI::temperatureGetAll(long deviceID, long temperatureFeatureID,
     }
 
     return adapter->temperatureGetAll(temperatureFeatureID, errorCode, buffer, maxLength);
+}
+
+/**************************************************************************************/
+//  Revision Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI::getNumberOfRevisionFeatures(long deviceID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getNumberOfRevisionFeatures();
+}
+
+int SeaBreezeAPI::getRevisionFeatures(long deviceID, int *errorCode,
+        long *buffer, unsigned int maxLength) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getRevisionFeatures(buffer, maxLength);
+}
+
+unsigned char SeaBreezeAPI::revisionHardwareGet(long deviceID, long revisionFeatureID,
+        int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->revisionHardwareGet(revisionFeatureID, errorCode);
+}
+
+unsigned short int SeaBreezeAPI::revisionFirmwareGet(long deviceID, long revisionFeatureID,
+        int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->revisionFirmwareGet(revisionFeatureID, errorCode);
 }
 
 /**************************************************************************************/
@@ -1055,7 +1125,7 @@ int SeaBreezeAPI::getOpticalBenchFeatures(long deviceID, int *errorCode,
     return adapter->getOpticalBenchFeatures(buffer, maxLength);
 }
 
-unsigned int SeaBreezeAPI::opticalBenchGetFiberDiameterMicrons(long deviceID, long opticalBenchFeatureID, int *errorCode) {
+unsigned short int SeaBreezeAPI::opticalBenchGetFiberDiameterMicrons(long deviceID, long opticalBenchFeatureID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {
         SET_ERROR_CODE(ERROR_NO_DEVICE);
@@ -1065,7 +1135,7 @@ unsigned int SeaBreezeAPI::opticalBenchGetFiberDiameterMicrons(long deviceID, lo
     return adapter->opticalBenchGetFiberDiameterMicrons(opticalBenchFeatureID, errorCode);
 }
 
-unsigned int SeaBreezeAPI::opticalBenchGetSlitWidthMicrons(long deviceID, long opticalBenchFeatureID, int *errorCode) {
+unsigned short int SeaBreezeAPI::opticalBenchGetSlitWidthMicrons(long deviceID, long opticalBenchFeatureID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {
         SET_ERROR_CODE(ERROR_NO_DEVICE);
@@ -1287,6 +1357,13 @@ sbapi_get_serial_number(long deviceID, long featureID, int *error_code,
 
     return wrapper->getSerialNumber(deviceID, featureID,
             error_code, buffer, buffer_length);
+}
+
+unsigned char
+sbapi_get_serial_number_maximum_length(long deviceID, long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getSerialNumberMaximumLength(deviceID, featureID, error_code);
 }
 
 /**************************************************************************************/
@@ -1788,6 +1865,12 @@ int sbapi_get_temperature_features(long deviceID, int *error_code, long *tempera
             temperatureFeatures, max_features);
 }
 
+unsigned char sbapi_temperature_count_get(long deviceID, long temperatureFeatureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->temperatureCountGet(deviceID, temperatureFeatureID, error_code);
+}
+
 double sbapi_temperature_get(long deviceID, long temperatureFeatureID, int *error_code,
         int index) {
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
@@ -1801,6 +1884,37 @@ int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *err
 
     return wrapper->temperatureGetAll(deviceID, temperatureFeatureID, error_code,
             buffer, max_length);
+}
+
+
+/**************************************************************************************/
+//  C language wrapper for revision features
+/**************************************************************************************/
+
+int sbapi_get_number_of_revision_features(long deviceID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getNumberOfRevisionFeatures(deviceID, error_code);
+}
+
+int sbapi_get_revision_features(long deviceID, int *error_code, long *revisionFeatures,
+        int max_features) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getRevisionFeatures(deviceID, error_code,
+            revisionFeatures, max_features);
+}
+
+unsigned char sbapi_revision_hardware_get(long deviceID, long revisionFeatureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->revisionHardwareGet(deviceID, revisionFeatureID, error_code);
+}
+
+unsigned short int sbapi_revision_firmware_get(long deviceID, long revisionFeatureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->revisionFirmwareGet(deviceID, revisionFeatureID, error_code);
 }
 
 
@@ -1820,13 +1934,13 @@ int sbapi_get_optical_bench_features(long deviceID, int *error_code, long *optic
     return wrapper->getOpticalBenchFeatures(deviceID, error_code, opticalBenchFeatures, max_features);
 }
 
-unsigned int sbapi_optical_bench_get_fiber_diameter_microns(long deviceID, long opticalBenchFeatureID, int *error_code) {
+unsigned short int sbapi_optical_bench_get_fiber_diameter_microns(long deviceID, long opticalBenchFeatureID, int *error_code) {
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->opticalBenchGetFiberDiameterMicrons(deviceID, opticalBenchFeatureID, error_code);
 }
 
-unsigned int sbapi_optical_bench_get_slit_width_microns(long deviceID, long opticalBenchFeatureID, int *error_code) {
+unsigned short int sbapi_optical_bench_get_slit_width_microns(long deviceID, long opticalBenchFeatureID, int *error_code) {
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->opticalBenchGetSlitWidthMicrons(deviceID, opticalBenchFeatureID, error_code);

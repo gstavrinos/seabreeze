@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    SerialNumberFeature.cpp
- * @date    February 2011
- * @author  Ocean Optics, Inc.
+ * @file    RevisionFeature.cpp
+ * @date    January 2015
+ * @author  Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Heliospetra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,9 +28,9 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
-#include "vendors/OceanOptics/protocols/interfaces/SerialNumberProtocolInterface.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
+#include "vendors/OceanOptics/features/revision/RevisionFeature.h"
+#include "vendors/OceanOptics/protocols/interfaces/RevisionProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPRevisionProtocol.h"
 #include "common/exceptions/FeatureProtocolNotFoundException.h"
 #include "common/exceptions/FeatureControlException.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
@@ -40,12 +40,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-#ifdef _WINDOWS
-#pragma warning (disable: 4101) // unreferenced local variable
-#endif
-
-SerialNumberFeature::SerialNumberFeature(vector<ProtocolHelper *> helpers) {
-
+RevisionFeature::RevisionFeature(vector<ProtocolHelper *> helpers) {
     vector<ProtocolHelper *>::iterator iter;
 
     for(iter = helpers.begin(); iter != helpers.end(); iter++) {
@@ -53,70 +48,73 @@ SerialNumberFeature::SerialNumberFeature(vector<ProtocolHelper *> helpers) {
     }
 }
 
-SerialNumberFeature::~SerialNumberFeature() {
+RevisionFeature::~RevisionFeature() {
 
 }
 
-string *SerialNumberFeature::readSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
 
-    SerialNumberProtocolInterface *serial = NULL;
+
+unsigned char RevisionFeature::readHardwareRevision(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+
+    RevisionProtocolInterface *revisionPI = NULL;
+	unsigned char hardwareRevision;
     ProtocolHelper *proto = NULL;
-    string *retval = NULL;
 
     try {
         proto = lookupProtocolImpl(protocol);
-        serial = static_cast<SerialNumberProtocolInterface *>(proto);
+        revisionPI = static_cast<RevisionProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
         string error(
-                "Could not find matching protocol implementation to get serial number.");
+                "Could not find matching protocol implementation to get temperature.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }
 
     try {
-        retval = serial->readSerialNumber(bus);
+        hardwareRevision = revisionPI->readHardwareRevision(bus);
+        return hardwareRevision;
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureControlException(error);
     }
-
-    return retval;
 }
 
-unsigned char SerialNumberFeature::readSerialNumberMaximumLength(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
 
-    SerialNumberProtocolInterface *serial = NULL;
+unsigned short int RevisionFeature::readFirmwareRevision(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+
+    RevisionProtocolInterface *revisionPI = NULL;
+	unsigned short int firmwareRevision;
     ProtocolHelper *proto = NULL;
-    unsigned char length;
 
     try {
         proto = lookupProtocolImpl(protocol);
-        serial = static_cast<SerialNumberProtocolInterface *>(proto);
+        revisionPI = static_cast<RevisionProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
         string error(
-                "Could not find matching protocol implementation to get serial number.");
+                "Could not find matching protocol implementation to get temperature.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }
 
     try {
-        length = serial->readSerialNumberMaximumLength(bus);
+        firmwareRevision = revisionPI->readFirmwareRevision(bus);
+        return firmwareRevision;
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureControlException(error);
     }
-
-    return length;
 }
 
-FeatureFamily SerialNumberFeature::getFeatureFamily() {
+
+FeatureFamily RevisionFeature::getFeatureFamily() {
     FeatureFamilies families;
 
-    return families.SERIAL_NUMBER;
+    return families.REVISION;
 }

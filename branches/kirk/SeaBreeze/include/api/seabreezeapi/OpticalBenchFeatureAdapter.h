@@ -47,8 +47,8 @@ namespace seabreeze {
                     Protocol *p, Bus *b, unsigned short instanceIndex);
             virtual ~OpticalBenchFeatureAdapter();
 
-            unsigned int readOpticalBenchFiberDiameterMicrons(int *errorCode);
-            unsigned int readOpticalBenchSlitWidthMicrons(int *errorCode);
+            unsigned short int readOpticalBenchFiberDiameterMicrons(int *errorCode);
+        	unsigned short int readOpticalBenchSlitWidthMicrons(int *errorCode);
             int readOpticalBenchID(int *errorCode, char *buffer, int buffer_length);
             int readOpticalBenchSerialNumber(int *errorCode, char *buffer, int buffer_length);
             int readOpticalBenchCoating(int *errorCode, char *buffer, int buffer_length);

@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    OBPGetTemperatureCountExchange.cpp
- * @date    February 2015
+ * @date    January 2015
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:

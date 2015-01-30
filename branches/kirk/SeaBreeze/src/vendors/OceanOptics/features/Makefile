@@ -10,6 +10,7 @@ SUBDIRS = \
     light_source        \
     nonlinearity        \
     temperature         \
+    revision            \
     optical_bench       \
     raw_bus_access      \
     serial_number       \

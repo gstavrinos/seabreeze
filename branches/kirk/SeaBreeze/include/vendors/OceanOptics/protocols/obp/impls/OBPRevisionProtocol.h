@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPTemperatureProtocol.h
+ * @file    OBPRevisionProtocol.h
  * @date    January 2015
  * @author  Kirk Clendinning, Heliospectra
  *
@@ -27,27 +27,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
-#define SEABREEZE_OBP_TEMPERATUREPROTOCOL_H
+#ifndef SEABREEZE_OBP_REVISIONPROTOCOL_H
+#define SEABREEZE_OBP_REVISIONPROTOCOL_H
 
 #include "common/SeaBreeze.h"
 #include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/TemperatureProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/interfaces/RevisionProtocolInterface.h"
 #include <vector>
 
 namespace seabreeze {
   namespace oceanBinaryProtocol {
-    class OBPTemperatureProtocol : public TemperatureProtocolInterface {
+    class OBPRevisionProtocol : public RevisionProtocolInterface {
     public:
-        OBPTemperatureProtocol();
-        virtual ~OBPTemperatureProtocol();
+        OBPRevisionProtocol();
+        virtual ~OBPRevisionProtocol();
 
-		virtual unsigned char readTemperatureCount(const Bus &bus)
-                throw (ProtocolException);
-        virtual double readTemperature(const Bus &bus, int index)
+        virtual unsigned char readHardwareRevision(const Bus &bus)
                 throw (ProtocolException);
                 
-        virtual std::vector<double> *readAllTemperatures(const Bus &bus)
+        virtual unsigned short int readFirmwareRevision(const Bus &bus)
                 throw (ProtocolException);
     };
   }

@@ -39,6 +39,7 @@
 #include "api/seabreezeapi/IrradCalFeatureAdapter.h"
 #include "api/seabreezeapi/NonlinearityCoeffsFeatureAdapter.h"
 #include "api/seabreezeapi/TemperatureFeatureAdapter.h"
+#include "api/seabreezeapi/RevisionFeatureAdapter.h"
 #include "api/seabreezeapi/OpticalBenchFeatureAdapter.h"
 #include "api/seabreezeapi/SerialNumberFeatureAdapter.h"
 #include "api/seabreezeapi/ShutterFeatureAdapter.h"
@@ -74,6 +75,7 @@ namespace seabreeze {
             int getSerialNumberFeatures(long *buffer, int maxFeatures);
             int getSerialNumber(long featureID, int *errorCode,
                     char *buffer, int bufferLength);
+            unsigned char getSerialNumberMaximumLength(long featureID, int *errorCode);
 
             /* Get one or more spectrometer acquisition features */
             int getNumberOfSpectrometerFeatures();
@@ -167,15 +169,24 @@ namespace seabreeze {
             /* Get one or more temperature features */
             int getNumberOfTemperatureFeatures();
             int getTemperatureFeatures(long *buffer, int maxFeatures);
+            unsigned char temperatureCountGet(long temperatureFeatureID, int *errorCode);
             double temperatureGet(long temperatureFeatureID, int *errorCode, int index);
             int temperatureGetAll(long temperatureFeatureID, int *errorCode,
                     double *buffer, int bufferLength);
 
+            /* Get one or more revision features */
+            int getNumberOfRevisionFeatures();
+            int getRevisionFeatures(long *buffer, int maxFeatures);
+            unsigned char revisionHardwareGet(long revisionFeatureID, int *errorCode);
+            unsigned short int revisionFirmwareGet(long revisionFeatureID, int *errorCode);
+
+                    
+                    
             /* Get one or more optical bench features */
             int getNumberOfOpticalBenchFeatures();
             int getOpticalBenchFeatures(long *buffer, int maxFeatures);
-            unsigned int opticalBenchGetFiberDiameterMicrons(long opticalBenchFeatureID, int *errorCode);
-            unsigned int opticalBenchGetSlitWidthMicrons(long opticalBenchFeatureID, int *errorCode);
+            unsigned short int opticalBenchGetFiberDiameterMicrons(long opticalBenchFeatureID, int *errorCode);
+            unsigned short int opticalBenchGetSlitWidthMicrons(long opticalBenchFeatureID, int *errorCode);
             int opticalBenchGetID(long opticalBenchFeatureID, int *errorCode, char *buffer, int bufferLength);
             int opticalBenchGetSerialNumber(long opticalBenchFeatureID, int *errorCode, char *buffer, int bufferLength);
             int opticalBenchGetCoating(long opticalBenchFeatureID, int *errorCode, char *buffer, int bufferLength);
@@ -203,6 +214,7 @@ namespace seabreeze {
             std::vector<ShutterFeatureAdapter *> shutterFeatures;
             std::vector<NonlinearityCoeffsFeatureAdapter *> nonlinearityFeatures;
             std::vector<TemperatureFeatureAdapter *> temperatureFeatures;
+            std::vector<RevisionFeatureAdapter *> revisionFeatures;
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
 
@@ -217,6 +229,7 @@ namespace seabreeze {
             ShutterFeatureAdapter *getShutterFeatureByID(long featureID);
             NonlinearityCoeffsFeatureAdapter *getNonlinearityCoeffsFeatureByID(long featureID);
             TemperatureFeatureAdapter *getTemperatureFeatureByID(long featureID);
+            RevisionFeatureAdapter *getRevisionFeatureByID(long featureID);
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
         };
