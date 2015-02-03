@@ -468,8 +468,8 @@ namespace CSharpDemo
                 {
                     if( (lastMousePositionX) == (int)spectrum.Points[i].XValue)
                     {
-                        //we've found the cooresponding index into the series that our mouse x position is on!!!!
-                        //now lets draw a cool dot on it and label it with wavelength and intensity!  like a bouse!
+                        // we've found the cooresponding index into the series that our mouse x position is on
+                        // draw a dot on it and label it with wavelength and intensity
                         System.Drawing.PointF pos = System.Drawing.Point.Empty;
                         pos.X = (float)chartGraphics.GetPositionFromAxis("ChartArea1", AxisName.X, spectrum.Points[i].XValue);
                         pos.Y = (float)chartGraphics.GetPositionFromAxis("ChartArea1", AxisName.Y, spectrum.Points[i].YValues[0]);
