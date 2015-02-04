@@ -51,6 +51,7 @@ void test_irradcal_feature(long deviceID);
 void test_tec_feature(long deviceID);
 void test_nonlinearity_coeffs_feature(long deviceID);
 void test_temperature_feature(long deviceID);
+void test_spectrum_processing_feature(long deviceID);
 void test_revision_feature(long deviceID);
 void test_optical_bench_feature(long deviceID);
 void test_stray_light_coeffs_feature(long deviceID);
@@ -76,6 +77,7 @@ static testfunc_t __test_functions[] = {
     test_tec_feature,
     test_nonlinearity_coeffs_feature,
     test_temperature_feature,
+    test_spectrum_processing_feature,
     test_stray_light_coeffs_feature,
     test_continuous_strobe_feature,
 };
@@ -200,15 +202,17 @@ void test_serial_number_feature(long deviceID) {
         printf("\t\t\tResult is %d [%s]\n", length,
             sbapi_get_error_string(error));
         
-        buffer = calloc(length, sizeof(char));
+        buffer = calloc(length+1, sizeof(char));
+        
         printf("\t\t\tAttempting to get serial number...\n");
         //memset(buffer, (int)0, sizeof(buffer));
         sbapi_get_serial_number(deviceID,
-                serial_number_ids[i], &error, buffer, 79);
+                serial_number_ids[i], &error, buffer, length);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         if(0 == error) {
             printf("\t\t\t\tSerial number: [%s]\n", buffer);
         }
+        
         free(buffer);
         printf("\t\t%d: Finished testing device 0x%02lX, serial number 0x%02lX\n",
                 i, deviceID, serial_number_ids[i]);
@@ -531,6 +535,88 @@ void test_shutter_feature(long deviceID) {
     printf("\tFinished testing shutter capabilities.\n");
 }
 
+void test_spectrum_processing_feature(long deviceID) {
+    int error = 0;
+    int number_of_sp;
+    long *sp_ids = 0;
+    int i;
+    unsigned char boxcarWidthW, boxcarWidthR, boxcarWidthR2;
+    unsigned short int scansToAverageW, scansToAverageR, scansToAverageR2;
+
+    printf("\n\tTesting spectrum processing features:\n");
+
+    printf("\t\tGetting number of spectrum processing features:\n");
+    number_of_sp = sbapi_get_number_of_spectrum_processing_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_sp,
+            sbapi_get_error_string(error));
+
+    if(0 == number_of_sp) {
+        printf("\tNo spectrum processing capabilities found.\n");
+        return;
+    }
+
+    sp_ids = (long *)calloc(number_of_sp, sizeof(long));
+    printf("\t\tGetting spectrum processing feature IDs...\n");
+    number_of_sp = sbapi_get_spectrum_processing_features(deviceID, &error,
+            sp_ids, number_of_sp);
+    printf("\t\t\tResult is %d [%s]\n", number_of_sp, sbapi_get_error_string(error));
+
+    for(i = 0; i < number_of_sp; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, spectrum processing 0x%02lX\n",
+                i, deviceID, sp_ids[i]);
+                
+        printf("\t\t\tAttempting to read boxcar filter width.\n");
+        boxcarWidthR=sbapi_spectrum_processing_boxcar_width_get(deviceID, sp_ids[i], &error);
+        printf("\t\t\t\tResult is [%s], boxcar filter width= %d\n", sbapi_get_error_string(error), boxcarWidthR);
+        
+        if(boxcarWidthR<15)
+        	boxcarWidthW=boxcarWidthR+1;
+        else
+        	boxcarWidthW=0;
+        	
+        printf("\t\t\tAttempting to write a boxcar filter width of %d.\n", boxcarWidthW);
+        sbapi_spectrum_processing_boxcar_width_set(deviceID, sp_ids[i], &error, boxcarWidthW);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        	
+        printf("\t\t\tAttempting to read boxcar filter width again.\n");
+        boxcarWidthR2=sbapi_spectrum_processing_boxcar_width_get(deviceID, sp_ids[i], &error);
+        printf("\t\t\t\tResult is [%s], boxcar filter width = %d\n", sbapi_get_error_string(error), boxcarWidthR2);
+		
+		if((boxcarWidthR2==boxcarWidthW)&&(boxcarWidthR2!=boxcarWidthR))
+			printf("\t\t\t\t...passed...\n");
+		else
+			printf("\t\t\t\t...failed...\n");
+
+        
+    	printf("\t\t\tAttempting to read scans to average.\n");
+        scansToAverageR=sbapi_spectrum_processing_scans_to_average_get(deviceID, sp_ids[i], &error);
+        printf("\t\t\t\tResult is [%s], scans to average = %d\n", sbapi_get_error_string(error), scansToAverageR);
+        
+        if((scansToAverageR>=1) && (scansToAverageR<15))
+        	scansToAverageW=scansToAverageR+1;
+        else
+        	scansToAverageW=1;
+        	
+        printf("\t\t\tAttempting to write a scans to average number of %d.\n", scansToAverageW);
+        sbapi_spectrum_processing_scans_to_average_set(deviceID, sp_ids[i], &error, scansToAverageW);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        	
+        printf("\t\t\tAttempting to read scans to average again.\n");
+        scansToAverageR2=sbapi_spectrum_processing_scans_to_average_get(deviceID, sp_ids[i], &error);
+        printf("\t\t\t\tResult is [%s], scans to average = %d\n", sbapi_get_error_string(error), scansToAverageR2);
+		
+		if((scansToAverageR2==scansToAverageW)&&(scansToAverageR2!=scansToAverageR))
+			printf("\t\t\t\t...passed...\n");
+		else
+			printf("\t\t\t\t...failed...\n");
+
+        printf("\t\t%d: Finished testing device 0x%02lX, spectrum processing feature 0x%02lX\n",
+                i, deviceID, sp_ids[i]);
+    }
+    free(sp_ids);
+
+    printf("\tFinished testing spectrum processing capabilities.\n");
+}
 
 void test_light_source_feature(long deviceID) {
     int error = 0;

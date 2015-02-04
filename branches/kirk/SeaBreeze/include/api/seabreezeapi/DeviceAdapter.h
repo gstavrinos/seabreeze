@@ -41,6 +41,7 @@
 #include "api/seabreezeapi/TemperatureFeatureAdapter.h"
 #include "api/seabreezeapi/RevisionFeatureAdapter.h"
 #include "api/seabreezeapi/OpticalBenchFeatureAdapter.h"
+#include "api/seabreezeapi/SpectrumProcessingFeatureAdapter.h"
 #include "api/seabreezeapi/SerialNumberFeatureAdapter.h"
 #include "api/seabreezeapi/ShutterFeatureAdapter.h"
 #include "api/seabreezeapi/SpectrometerFeatureAdapter.h"
@@ -180,8 +181,14 @@ namespace seabreeze {
             unsigned char revisionHardwareGet(long revisionFeatureID, int *errorCode);
             unsigned short int revisionFirmwareGet(long revisionFeatureID, int *errorCode);
 
-                    
-                    
+            /* Get one or more spectrum processing features */
+            int getNumberOfSpectrumProcessingFeatures();
+            int getSpectrumProcessingFeatures(long *buffer, int maxFeatures);
+            unsigned short int spectrumProcessingScansToAverageGet(long spectrumProcessingFeatureID, int *errorCode);
+            unsigned char spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode);
+			void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
+			void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
+                                                   
             /* Get one or more optical bench features */
             int getNumberOfOpticalBenchFeatures();
             int getOpticalBenchFeatures(long *buffer, int maxFeatures);
@@ -216,6 +223,7 @@ namespace seabreeze {
             std::vector<TemperatureFeatureAdapter *> temperatureFeatures;
             std::vector<RevisionFeatureAdapter *> revisionFeatures;
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
+            std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
 
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
@@ -231,6 +239,7 @@ namespace seabreeze {
             TemperatureFeatureAdapter *getTemperatureFeatureByID(long featureID);
             RevisionFeatureAdapter *getRevisionFeatureByID(long featureID);
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
+            SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
         };
     }

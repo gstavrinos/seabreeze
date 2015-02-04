@@ -94,6 +94,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<TemperatureFeatureAdapter>(temperatureFeatures);
     __delete_feature_adapters<RevisionFeatureAdapter>(revisionFeatures);
     __delete_feature_adapters<OpticalBenchFeatureAdapter>(opticalBenchFeatures);
+    __delete_feature_adapters<SpectrumProcessingFeatureAdapter>(spectrumProcessingFeatures);
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
 
@@ -218,6 +219,11 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<OpticalBenchFeatureInterface,
                     OpticalBenchFeatureAdapter>(this->device,
             opticalBenchFeatures, bus, featureFamilies.OPTICAL_BENCH);
+            
+     /* Create spectrum processing feature list */
+    __create_feature_adapters<SpectrumProcessingFeatureInterface,
+                    SpectrumProcessingFeatureAdapter>(this->device,
+            spectrumProcessingFeatures, bus, featureFamilies.SPECTRUM_PROCESSING);
                        
     /* Create stray light coefficients feature list */
     __create_feature_adapters<StrayLightCoeffsFeatureInterface,
@@ -976,6 +982,64 @@ int DeviceAdapter::opticalBenchGetGrating(long featureID, int *errorCode,
     return feature->readOpticalBenchGrating(errorCode, buffer, bufferLength);
 }
 
+/* Spectrum processing feature wrappers */
+int DeviceAdapter::getNumberOfSpectrumProcessingFeatures() {
+    return (int) this->spectrumProcessingFeatures.size();
+}
+
+int DeviceAdapter::getSpectrumProcessingFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<SpectrumProcessingFeatureAdapter>(
+                spectrumProcessingFeatures, buffer, maxFeatures);
+}
+
+SpectrumProcessingFeatureAdapter *DeviceAdapter::getSpectrumProcessingFeatureByID(long spectrumProcessingFeatureID) {
+    return __getFeatureByID<SpectrumProcessingFeatureAdapter>(
+               spectrumProcessingFeatures, spectrumProcessingFeatureID);
+}
+
+unsigned short int DeviceAdapter::spectrumProcessingScansToAverageGet(long spectrumProcessingFeatureID, int *errorCode) {
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(spectrumProcessingFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readSpectrumProcessingScansToAverage(errorCode);
+}
+
+unsigned char DeviceAdapter::spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode) {
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(spectrumProcessingFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readSpectrumProcessingBoxcarWidth(errorCode);
+}
+
+void DeviceAdapter::spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode,
+            unsigned char boxcarWidth) {
+
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->writeSpectrumProcessingBoxcarWidth(errorCode, boxcarWidth);
+}
+
+void DeviceAdapter::spectrumProcessingScansToAverageSet(long featureID, int *errorCode,
+            unsigned short int scansToAverage) {
+
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->writeSpectrumProcessingScansToAverage(errorCode, scansToAverage);
+}
 
 /* Stray light coefficients feature wrappers */
 int DeviceAdapter::getNumberOfStrayLightCoeffsFeatures() {

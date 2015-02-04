@@ -66,7 +66,9 @@ static const char *error_msgs[] = {
     "Error: Feature not implemented",
     "Error: No such feature on device",
     "Error: Data transfer error",
-    "Error: Invalid user buffer provided"
+    "Error: Invalid user buffer provided",
+    "Error: Input was out of bounds",
+    "Error: Spectrometer was saturated"
 };
 
 static int number_error_msgs = sizeof (error_msgs) / sizeof (char *);
@@ -1200,7 +1202,76 @@ int SeaBreezeAPI::opticalBenchGetGrating(long deviceID, long featureID, int *err
     return adapter->opticalBenchGetGrating(featureID, errorCode, buffer, bufferLength);
 }
 
+/**************************************************************************************/
+//  Spectrum Processing Features for the SeaBreeze API class
+/**************************************************************************************/
 
+int SeaBreezeAPI::getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getNumberOfSpectrumProcessingFeatures();
+}
+
+int SeaBreezeAPI::getSpectrumProcessingFeatures(long deviceID, int *errorCode,
+        long *buffer, unsigned int maxLength) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getSpectrumProcessingFeatures(buffer, maxLength);
+}
+
+unsigned short int SeaBreezeAPI::spectrumProcessingScansToAverageGet(long deviceID, long spectrumProcessingFeatureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrumProcessingScansToAverageGet(spectrumProcessingFeatureID, errorCode);
+}
+
+unsigned char SeaBreezeAPI::spectrumProcessingBoxcarWidthGet(long deviceID, long spectrumProcessingFeatureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrumProcessingBoxcarWidthGet(spectrumProcessingFeatureID, errorCode);
+}
+
+void SeaBreezeAPI::spectrumProcessingScansToAverageSet(long deviceID, long featureID,
+        int *errorCode, unsigned short int scansToAverage) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    adapter->spectrumProcessingScansToAverageSet(featureID, errorCode,
+            scansToAverage);
+}
+
+void SeaBreezeAPI::spectrumProcessingBoxcarWidthSet(long deviceID, long featureID,
+        int *errorCode, unsigned char boxcarWidth) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    adapter->spectrumProcessingBoxcarWidthSet(featureID, errorCode,
+            boxcarWidth);
+}
 
 /**************************************************************************************/
 //  stray light Features for the SeaBreeze API class
@@ -1976,6 +2047,52 @@ int sbapi_optical_bench_get_grating(long deviceID, long opticalBenchFeatureID, i
     return wrapper->opticalBenchGetGrating(deviceID, opticalBenchFeatureID, error_code, buffer, buffer_length);
 }
 
+
+/**************************************************************************************/
+//  C language wrapper for spectrum processing features
+/**************************************************************************************/
+
+int sbapi_get_number_of_spectrum_processing_features(long deviceID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getNumberOfSpectrumProcessingFeatures(deviceID, error_code);
+}
+
+int sbapi_get_spectrum_processing_features(long deviceID, int *error_code, long *spectrumProcessingFeatures, int max_features) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getSpectrumProcessingFeatures(deviceID, error_code, spectrumProcessingFeatures, max_features);
+}
+
+unsigned short int sbapi_spectrum_processing_scans_to_average_get(long deviceID, long spectrumProcessingFeatureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->spectrumProcessingScansToAverageGet(deviceID, spectrumProcessingFeatureID, error_code);
+}
+
+unsigned char sbapi_spectrum_processing_boxcar_width_get(long deviceID, long spectrumProcessingFeatureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->spectrumProcessingBoxcarWidthGet(deviceID, spectrumProcessingFeatureID, error_code);
+}
+
+void sbapi_spectrum_processing_scans_to_average_set(long deviceID, long featureID,
+        int *error_code, unsigned short int scansToAverage) {
+
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->spectrumProcessingScansToAverageSet(deviceID, featureID, error_code,
+            scansToAverage);
+}
+
+void sbapi_spectrum_processing_boxcar_width_set(long deviceID, long featureID,
+        int *error_code, unsigned char boxcarWidth) {
+
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->spectrumProcessingBoxcarWidthSet(deviceID, featureID, error_code,
+            boxcarWidth);
+}
 
 
 /**************************************************************************************/

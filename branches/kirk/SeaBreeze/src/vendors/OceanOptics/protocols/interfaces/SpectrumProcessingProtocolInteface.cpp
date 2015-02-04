@@ -1,14 +1,11 @@
 /***************************************************//**
- * @file    SeaBreezeAPIConstants.h
+ * @file    SpectrumProcessingProtocolInterface.cpp
  * @date    January 2015
- * @author  Ocean Optics, Inc.
- *
- * This file defines constants for use with SeaBreeze API
- * implementations.
+ * @author  Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Heliospectra AB
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -29,19 +26,17 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
-#ifndef SEABREEZEAPICONSTANTS_H
-#define SEABREEZEAPICONSTANTS_H
 
-/* Constants */
-#define ERROR_SUCCESS               	0
-#define ERROR_INVALID_ERROR         	1
-#define ERROR_NO_DEVICE             	2
-#define ERROR_FAILED_TO_CLOSE      		3
-#define ERROR_NOT_IMPLEMENTED       	4
-#define ERROR_FEATURE_NOT_FOUND     	5
-#define ERROR_TRANSFER_ERROR        	6
-#define ERROR_BAD_USER_BUFFER       	7
-#define ERROR_INPUT_OUT_OF_BOUNDS   	8
-#define ERROR_SPECTROMETER_SATURATED	9
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/interfaces/SpectrumProcessingProtocolInterface.h"
 
-#endif /* SEABREEZEAPICONSTANTS_H */
+using namespace seabreeze;
+
+SpectrumProcessingProtocolInterface::SpectrumProcessingProtocolInterface(Protocol *protocol)
+    : ProtocolHelper(protocol) {
+
+}
+
+SpectrumProcessingProtocolInterface::~SpectrumProcessingProtocolInterface() {
+
+}

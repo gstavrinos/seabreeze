@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    FeatureFamilies.h
- * @date    January 2015
+ * @date    February 2015
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This provides a way to get references to different kinds
@@ -128,6 +128,12 @@ namespace seabreeze {
             OpticalBenchFeatureFamily();
             virtual ~OpticalBenchFeatureFamily();
         };
+        
+        class SpectrumProcessingFeatureFamily : public FeatureFamily {
+        public:
+            SpectrumProcessingFeatureFamily();
+            virtual ~SpectrumProcessingFeatureFamily();
+        };
 
         class StrayLightCoeffsFeatureFamily : public FeatureFamily {
         public:
@@ -158,6 +164,7 @@ namespace seabreeze {
             const TemperatureFeatureFamily TEMPERATURE;
             const RevisionFeatureFamily REVISION;
             const OpticalBenchFeatureFamily OPTICAL_BENCH;
+            const SpectrumProcessingFeatureFamily SPECTRUM_PROCESSING;
             const StrayLightCoeffsFeatureFamily STRAY_LIGHT_COEFFS;
             const RawBusAccessFeatureFamily RAW_BUS_ACCESS;
 

@@ -16,6 +16,7 @@ SUBDIRS = \
     serial_number       \
     shutter             \
     spectrometer        \
+    spectrum_processing \
     stray_light         \
     thermoelectric      \
     wavecal

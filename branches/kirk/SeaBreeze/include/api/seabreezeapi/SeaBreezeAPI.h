@@ -192,6 +192,14 @@ public:
     double temperatureGet(long deviceID, long featureID, int *errorCode, int index);
     int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
 
+    /* Spectrum processing capabilities */
+    int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode);
+    int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode);
+    unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode);
+	void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
+	void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
+ 
     /* Revision capabilities */
     int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
     int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -1501,6 +1509,110 @@ extern "C" {
      * @return the number of doubles read from the device into the buffer
      */
     DLL_DECL int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code, double *buffer, int max_length);
+
+
+
+/**
+     * This function returns the total number of spectrum processing feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_spectrum_processing_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_spectrum_processing_features(
+            long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each spectrum processing
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of spectrum processing feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_spectrum_processing_features(long deviceID, int *error_code,
+            long *spectrumProcessingFeatures, int max_features);
+
+    /**
+     * This function reads out an the number of scans to average from the
+     *  device's internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of scans to average as an unsigned short integer 
+     */
+    DLL_DECL unsigned short int sbapi_spectrum_processing_scans_to_average_get(long deviceID,
+    	 long spectrumProcessingFeatureID, int *error_code);
+
+    /**
+     * This function sets the number of scans to average in the the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param scansToAverage (Input) The number of spectrum scans used to generate a less
+     *		noisy spectrum due to averaging
+     *
+     * @return void
+     */
+    DLL_DECL void sbapi_spectrum_processing_scans_to_average_set(long deviceID, 
+    	long spectrumProcessingFeatureID, int *error_code, unsigned short int scansToAverage);
+
+    /**
+     * This function reads out an the width of the boxcar filter from the
+     *  device's internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the width of the boxcar filter an unsigned char (values typically 0-15)
+     */
+    DLL_DECL unsigned char sbapi_spectrum_processing_boxcar_width_get(long deviceID,
+    	 long spectrumProcessingFeatureID, int *error_code);
+
+    /**
+     * This function sets width of the boxcar filter in the the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param boxcarWidth (Input) The width of the boxcar smoothing function to be used.
+     *			Values are typically 1 to 15.
+     *
+     * @return void
+     */
+    DLL_DECL void sbapi_spectrum_processing_boxcar_width_set(long deviceID, 
+    		long spectrumProcessingFeatureID, int *error_code, unsigned char boxcarWidth);
+   
+
 
 /**
      * This function returns the total number of revision feature

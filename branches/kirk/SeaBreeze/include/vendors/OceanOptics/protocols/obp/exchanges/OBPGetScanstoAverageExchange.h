@@ -1,10 +1,7 @@
 /***************************************************//**
- * @file    SeaBreezeAPIConstants.h
- * @date    January 2015
- * @author  Ocean Optics, Inc.
- *
- * This file defines constants for use with SeaBreeze API
- * implementations.
+ * @file    OBPGetScansToAverageExchange.h
+ * @date    February 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *
@@ -29,19 +26,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
-#ifndef SEABREEZEAPICONSTANTS_H
-#define SEABREEZEAPICONSTANTS_H
 
-/* Constants */
-#define ERROR_SUCCESS               	0
-#define ERROR_INVALID_ERROR         	1
-#define ERROR_NO_DEVICE             	2
-#define ERROR_FAILED_TO_CLOSE      		3
-#define ERROR_NOT_IMPLEMENTED       	4
-#define ERROR_FEATURE_NOT_FOUND     	5
-#define ERROR_TRANSFER_ERROR        	6
-#define ERROR_BAD_USER_BUFFER       	7
-#define ERROR_INPUT_OUT_OF_BOUNDS   	8
-#define ERROR_SPECTROMETER_SATURATED	9
+#ifndef OBPGETSCANSTOAVERAGEEXCHANGE_H
+#define OBPGETSCANSTOAVERAGEEXCHANGE_H
 
-#endif /* SEABREEZEAPICONSTANTS_H */
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
+
+namespace seabreeze {
+    namespace oceanBinaryProtocol {
+        class OBPGetScansToAverageExchange : public OBPQuery {
+        public:
+            OBPGetScansToAverageExchange();
+            virtual ~OBPGetScansToAverageExchange();
+        };
+    }
+}
+
+#endif /* OBPGETSCANSTOAVERAGEEXCHANGE_H */
