@@ -27,6 +27,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
+#include <string.h>  // for memcpy
 #include "common/globals.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetScansToAverageExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"

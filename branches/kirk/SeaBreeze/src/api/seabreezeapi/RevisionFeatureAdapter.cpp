@@ -35,7 +35,7 @@
 
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
-#include "api/seabreezeapi/REvisionFeatureAdapter.h"
+#include "api/seabreezeapi/RevisionFeatureAdapter.h"
 #include <string.h> /* for memcpy */
 #include <vector>
 
