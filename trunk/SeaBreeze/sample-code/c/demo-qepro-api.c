@@ -204,7 +204,7 @@ int opt_flowcontrol = 0;                // set h/w flow control
 int opt_reset = 0;                      // reset defaults
 
 #ifdef RS232
-const int STS_BAUD_RATE = 115200;  // any of 9600, 19200, 38400, 57600, 115,200, 230400 (AFTER configuring QEPro accordingly)
+const int STS_BAUD_RATE = 9600;  // any of 9600, 19200, 38400, 57600, 115,200, 230400 (AFTER configuring QEPro accordingly)
 const int HW_FLOW_CONTROL = 0;     // 0 or 1, must match QEPro setting (doesn't work on all systems... ie Windows)
 
 char *serial_path = NULL;               // "/dev/ttyS0" or similar
