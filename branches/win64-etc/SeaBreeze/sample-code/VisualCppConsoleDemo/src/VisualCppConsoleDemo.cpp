@@ -63,7 +63,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     cout << "Setting integration time...";
     int integrationTimeMillisec = 100;
-    wrapper->setIntegrationTime(specIndex, &errorCode, integrationTimeMillisec * MILLISEC_TO_MICROSEC);
+    wrapper->setIntegrationTimeMicrosec(specIndex, &errorCode, integrationTimeMillisec * MILLISEC_TO_MICROSEC);
     if (errorCode)
     {
         cout << "Error: problem setting integration time\n";
