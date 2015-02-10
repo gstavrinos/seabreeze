@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <xlocale.h>
 #include "common/exceptions/FeatureProtocolNotFoundException.h"
 #include "common/exceptions/FeatureControlException.h"
 
@@ -140,9 +141,9 @@ double EEPROMSlotFeatureBase::readDouble(const Protocol &protocol, const Bus &bu
     endPtr = NULL;
     errno = 0;
     /* Now parse the slot. */
-    retval = strtod(startPtr, &endPtr);
+    retval = strtod_l(startPtr, &endPtr, LC_GLOBAL_LOCALE);
     if((startPtr == endPtr) || ((errno != 0) && (0 == retval))) {
-        /* This means that strtod failed to parse anything, so the EEPROM slot
+        /* This means that strtod_l failed to parse anything, so the EEPROM slot
          * may have been unprogrammed or otherwise corrupted.  Flag an error
          * so that we can drop in some safe default values.
          */
@@ -179,9 +180,9 @@ long EEPROMSlotFeatureBase::readLong(const Protocol &protocol, const Bus &bus,
     endPtr = NULL;
     errno = 0;
     /* Now parse the slot. */
-    retval = strtol(startPtr, &endPtr, 10);
+    retval = strtol_l(startPtr, &endPtr, 10, LC_GLOBAL_LOCALE);
     if((startPtr == endPtr) || ((errno != 0) && (0 == retval))) {
-        /* This means that strtod failed to parse anything, so the EEPROM slot
+        /* This means that strtol_l failed to parse anything, so the EEPROM slot
          * may have been unprogrammed or otherwise corrupted.  Flag an error
          * so that we can drop in some safe default values.
          */
