@@ -116,7 +116,7 @@ Dependencies
 The following should work on most Cygwin environments, assuming Visual Studio is installed:
 \verbatim
     $ cd seabreeze
-    $ export VISUALSTUDIO_PROJ=VisualStudio2010    (or 2005 or 2012)
+    $ export VISUALSTUDIO_PROJ=VisualStudio2010    (or 2005, 2012, 2013)
     $ make
 \endverbatim
 
@@ -127,6 +127,12 @@ native Cygwin GCC or MinGW (submissions/solutions welcome!)
 \subsubsection errors Common Build Errors
 
 \verbatim
+Error: ../../lib/seabreeze.lib: error adding symbols: File in wrong format
+Fix:   Run the "./winlibfix.bat" batch file found in the "os-support/windows/scripts" directory
+       The batch file replaces the VisualStudio generated lib/SeaBreeze.lib with a
+	   gcc/ld compatible lib/SeaBreeze.lib.  Note: winlibfix.bat must be run every
+	   time SeaBreeze.dll is built.
+
 Error: NativeUSBWinUSB.c(26): fatal error C1083: Cannot open include file: 'Winusb.h'
 Fix:   add os-support\windows\WinDDK_Includes to your configuration's include path
        (SeaBreeze->References->Configuration Properties->VC++ Directories->Include)
