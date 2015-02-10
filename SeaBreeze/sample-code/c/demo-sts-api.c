@@ -794,7 +794,7 @@ int main(int argc, char **argv)
             if (xfer.actual_response_len == xfer.response_len)
                 printf("Hardware Revision: %02x (%u)\n", ver, ver);
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -825,7 +825,7 @@ int main(int argc, char **argv)
                 printf("Firmware Revision: %04x (%u)\n", firmware_revision, firmware_revision);
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -867,7 +867,7 @@ int main(int argc, char **argv)
                     printf("ERROR: error with get_serial_number exchange\n");
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -1019,7 +1019,7 @@ int main(int argc, char **argv)
                 }
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -1068,7 +1068,7 @@ int main(int argc, char **argv)
                 }
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
