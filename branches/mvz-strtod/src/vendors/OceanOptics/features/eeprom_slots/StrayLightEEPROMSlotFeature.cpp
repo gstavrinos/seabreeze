@@ -30,6 +30,7 @@
 #include "common/globals.h"
 #include <stdlib.h>
 #include <errno.h>
+#include <xlocale.h>
 #include "common/exceptions/FeatureControlException.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
@@ -111,9 +112,9 @@ vector<double> *StrayLightEEPROMSlotFeature::readStrayLightCoefficients(
         endPtr = NULL;
         errno = 0;
         /* Now parse the slot. */
-        temp = strtod(startPtr, &endPtr);
+        temp = strtod_l(startPtr, &endPtr, LC_GLOBAL_LOCALE);
         if((startPtr == endPtr) || ((errno != 0) && (0 == temp))) {
-            /* This means that strtod failed to parse anything.  Set to a
+            /* This means that strtod_l failed to parse anything.  Set to a
              * safe value.
              */
             temp = 0;
