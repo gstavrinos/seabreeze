@@ -49,7 +49,7 @@ const long Maya2000ProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 Maya2000ProSpectrometerFeature::Maya2000ProSpectrometerFeature() {
 
     this->numberOfPixels = 2068;
-    this->maxIntensity = 64000;
+    this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector
     int readoutLength = 2304 * 2 + 1;
 
     this->integrationTimeMinimum = Maya2000ProSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
