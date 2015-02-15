@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    DeviceAdapter.h
+ * @file    DeviceAdapter.cpp
  * @date    January 2015
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
