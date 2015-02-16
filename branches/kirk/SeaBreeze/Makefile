@@ -2,7 +2,7 @@ SEABREEZE = .
 
 all: seabreeze
 
-SUBDIRS = src test sample-code heliospectraSTSdaemon
+SUBDIRS = src test sample-code
 
 include common.mk
 
