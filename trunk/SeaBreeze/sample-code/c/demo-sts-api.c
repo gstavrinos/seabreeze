@@ -66,14 +66,20 @@
 #define OBP_MESSAGE_GET_SERIAL_NUMBER_LEN   0x00000101L
 #define OBP_MESSAGE_SET_INTEGRATION_TIME    0x00110010L
 #define OBP_MESSAGE_GET_CORRECTED_SPECTRUM  0x00101000L
+#define OBP_MESSAGE_GET_RAW_SPECTRUM        0x00101100L
 #define OBP_MESSAGE_SET_SUBSPECTRUM_SPEC    0x00102010L
+#define OBP_MESSAGE_GET_SUBSPECTRUM_SPEC    0x00102000L
 #define OBP_MESSAGE_GET_SUBSPECTRUM         0x00102080L
+#define OBP_MESSAGE_GET_BOXCAR_WIDTH        0x00121000L
+#define OBP_MESSAGE_SET_BOXCAR_WIDTH        0x00121010L
+#define OBP_MESSAGE_GET_BINNING_FACTOR      0x00110280L
+#define OBP_MESSAGE_SET_BINNING_FACTOR      0x00110290L
 #define OBP_MESSAGE_GET_WL_COEFF_COUNT      0x00180100L
 #define OBP_MESSAGE_GET_WL_COEFF            0x00180101L
 #define OBP_MESSAGE_SET_WL_COEFF            0x00180111L
 #define OBP_MESSAGE_GET_NLC_COEFF_COUNT     0x00181100L
 #define OBP_MESSAGE_GET_NLC_COEFF           0x00181101L
-#define OBP_MESSAGE_SET_NLC_COEFF           0x00181101L
+#define OBP_MESSAGE_SET_NLC_COEFF           0x00181111L
 
 // convert 2-byte LSB-MSB to native
 #define LITTLE_ENDIAN_SHORT(base) (((base)[1] << 8) | (base)[0])
@@ -120,6 +126,14 @@ typedef struct OBPHeader_s
 
 int enable_verbose_com = 0;             // debug serial comms to stdout
 int enable_verbose_obp = 0;             // debug protocol internals to stdout
+unsigned int opt_integration_time = 0;  // integration time to set
+int opt_boxcar = 0;                     // boxcar width size
+int opt_binning = 0;                    // pixel binning factor
+int opt_info = 0;                       // read-only info (don't set integration time)
+int opt_partial = 0;                    // get partial corrected spectra
+int opt_raw = 0;                        // get raw spectrum immediate
+int opt_corrected = 0;                  // get corrected spectrum immediate
+
 
 #ifdef RS232
 const int STS_BAUD_RATE = 9600;
@@ -620,18 +634,32 @@ void usage(char **argv)
 {
 #ifdef RS232
     printf("Usage:\n\n"
-           "  %s [--verbose-com] [--verbose-obp] --dev /dev/foo\n\n"
+           "  %s [--verbose-com] [--verbose-obp] --dev /dev/foo [--info | --partial N | --corrected | --raw | --boxcar N | --integration N]\n\n"
            "Options:\n"
            "  --dev /path/to/device    path to serial driver, e.g. /dev/ttyS0, /dev/tty.usbserial, etc\n"
            "  --verbose-com            debug serial communications\n"
-           "  --verbose-obp            debug Ocean Binary Protocol\n",
+           "  --verbose-obp            debug Ocean Binary Protocol\n"
+           "  --info                   read-only info\n"
+           "  --partial N              get partial corrected spectra (N=increment amount)\n"
+           "  --corrected              get corrected spectra\n"
+           "  --raw                    get raw spectra\n"
+           "  --boxcar N               set boxcar width (0-15)\n"
+           "  --binning N              set pixel binning factor (0-255)\n"
+           "  --integration N          set integration time (10+)\n",
            argv[0]);
 #else
     printf("Usage:\n\n"
-           "  %s [--verbose-com] [--verbose-obp]\n\n"
+        "  %s [--verbose-com] [--verbose-obp] [--info | --partial | --corrected | --raw | --boxcar N | --integration N]\n\n"
            "Options:\n"
            "  --verbose-com            debug serial communications\n"
-           "  --verbose-obp            debug Ocean Binary Protocol\n",
+           "  --verbose-obp            debug Ocean Binary Protocol\n"
+           "  --info                   read-only info\n"
+           "  --partial=N              get partial corrected spectra (N=increment amount)\n"
+           "  --corrected              get corrected spectra\n"
+           "  --raw                    get raw spectra\n"
+           "  --boxcar N               set boxcar width (0-15)\n"
+           "  --binning N              set pixel binning factor (0-255)\n"
+           "  --integration N          set integration time (10+)\n",
            argv[0]);
 #endif
     exit(1);
@@ -645,9 +673,17 @@ void parse_opts(int argc, char **argv)
 #endif
         { "verbose-com", no_argument,       NULL, 0 },
         { "verbose-obp", no_argument,       NULL, 0 },
-        { NULL,          no_argument,       NULL, 0 }
+        { "info",        no_argument,       NULL, 0 },
+        { "partial",     optional_argument, NULL, 0 },
+        { "corrected",   no_argument,       NULL, 0 },
+        { "raw",         no_argument,       NULL, 0 },
+        { "boxcar",      required_argument, NULL, 0 },
+        { "binning",     required_argument, NULL, 0 },
+        { "integration", required_argument, NULL, 0 },
+        { NULL, no_argument, NULL, 0 }
     };
 
+    char *endptr = NULL;
     int longIndex = 0;
     int opt = getopt_long(argc, argv, "", opts, &longIndex);
     while (opt != -1)
@@ -659,13 +695,62 @@ void parse_opts(int argc, char **argv)
                 serial_path = optarg;
             else 
 #endif
-            if (!strcmp("verbose-com", opts[longIndex].name)) 
-                enable_verbose_com = 1;
-            else 
-            if (!strcmp("verbose-obp", opts[longIndex].name)) 
-                enable_verbose_obp = 1;
-            else 
-                usage(argv);
+                if (!strcmp("verbose-com", opts[longIndex].name))
+                    enable_verbose_com = 1;
+                else if (!strcmp("verbose-obp", opts[longIndex].name))
+                    enable_verbose_obp = 1;
+                else if (!strcmp("integration", opts[longIndex].name)) {
+                    opt_integration_time = (unsigned int)strtol(optarg, &endptr, 10);
+                    if (opt_integration_time < 10) {
+                        opt_integration_time = 0;
+                        printf("Invalid integration time, must be >= 10\n");
+                        usage(argv);
+                    }
+                }
+                else if (!strcmp("boxcar", opts[longIndex].name)) {
+                    opt_boxcar = (int)strtol(optarg, &endptr, 10);
+                    if (opt_boxcar < 0 || opt_boxcar > 15) {
+                        opt_boxcar = 0;
+                        printf("Invalid boxcar size, must be 0-15\n");
+                        usage(argv);
+                    }
+                    else {
+                        opt_boxcar += 1;
+                    }
+                }
+                else if (!strcmp("binning", opts[longIndex].name)) {
+                    opt_binning = (int)strtol(optarg, &endptr, 10);
+                    if (opt_binning < 0 || opt_binning > 255) {
+                        opt_binning = 0;
+                        printf("Invalid pixel binning factor, must be 0-255\n");
+                        usage(argv);
+                    }
+                    else {
+                        opt_binning += 1;
+                    }
+                }
+                else if (!strcmp("info", opts[longIndex].name))
+                    opt_info = 1;
+                else if (!strcmp("partial", opts[longIndex].name)) {
+                    opt_partial = 1;
+                    if (optarg) {
+                        int temp_partial = (int)strtol(optarg, &endptr, 10);
+                        if (temp_partial == 0) {
+                            opt_partial = 0;
+                            printf("Invalid partial increment, can not be 0\n");
+                            usage(argv);
+                        }
+                        else {
+                            opt_partial = temp_partial;
+                        }
+                    }
+                }
+                else if (!strcmp("corrected", opts[longIndex].name))
+                    opt_corrected = 1;
+                else if (!strcmp("raw", opts[longIndex].name))
+                    opt_raw = 1;
+                else
+                    usage(argv);
         }
         else
             usage(argv);
@@ -739,6 +824,216 @@ int main(int argc, char **argv)
     // Note: following blocks are set in if(1/0) to simplify turning individual
     //       tests on or off.
 
+
+    ////////////////////////////////////////////////////////////////////////////
+    // set integration time
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1 && opt_integration_time)
+    {
+        unsigned int integration_time = opt_integration_time;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_SET_INTEGRATION_TIME;
+        xfer.request_len = sizeof(integration_time);
+        xfer.request = (unsigned char *)&integration_time;
+
+        printf("\nsetting integration time...\n");
+        if (sendOBPMessage(&xfer)) {
+            printf("ERROR: unable to execute SET_INTEGRATION_TIME transaction\n");
+            return -1;
+        }
+        return 0;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // set boxcar width
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1 && opt_boxcar)
+    {
+        unsigned char boxcar = opt_boxcar - 1;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_SET_BOXCAR_WIDTH;
+        xfer.request_len = sizeof(boxcar);
+        xfer.request = (unsigned char *)&boxcar;
+
+        printf("\nsetting boxcar width...\n");
+        if (sendOBPMessage(&xfer)) {
+            printf("ERROR: unable to execute SET_BOXCAR_WIDTH transaction\n");
+            return -1;
+        }
+        return 0;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // set pixel binning factor
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1 && opt_binning)
+    {
+        unsigned char pixel_binning = opt_binning - 1;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_SET_BINNING_FACTOR;
+        xfer.request_len = sizeof(pixel_binning);
+        xfer.request = (unsigned char *)&pixel_binning;
+
+        printf("\nsetting pixel binning factor...\n");
+        if (sendOBPMessage(&xfer)) {
+            printf("ERROR: unable to execute SET_BINNING_FACTOR transaction\n");
+            return -1;
+        }
+        return 0;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get corrected spectrum
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (opt_corrected)
+    {
+        int rtnval = 0;
+        unsigned short spectrum[1024];
+        int numSpectrum = sizeof(spectrum) / 2;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_GET_CORRECTED_SPECTRUM;
+        xfer.response_len = sizeof(spectrum);
+        xfer.response = (unsigned char *) spectrum;
+        xfer.extra_response_len = sizeof(spectrum); // entire spectrum is payload, none is immediate
+
+        printf("\ngetting corrected spectrum...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.actual_response_len == sizeof(spectrum)) {
+                printf("Retrieved corrected spectra of %u pixels\n", numSpectrum);
+                for (int i = 0; i < numSpectrum; i++) {
+                    printf("%d, %u, 0x%04X\n", i, (unsigned int) spectrum[i], (unsigned int) spectrum[i]);
+                }
+            }
+            else {
+                printf("ERROR: expected %tu bytes back from get_spectrum, received %u\n",
+                    sizeof(spectrum), xfer.actual_response_len);
+                rtnval = -1;
+            }
+        }
+        else {
+            printf("ERROR: unable to execute GET_CORRECTED_SPECTRUM transaction\n");
+            rtnval = -1;
+        }
+
+        return rtnval;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get raw spectrum
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (opt_raw)
+    {
+        int rtnval = 0;
+        unsigned short spectrum[1024];
+        int numSpectrum = sizeof(spectrum) / 2;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_GET_RAW_SPECTRUM;
+        xfer.response_len = sizeof(spectrum);
+        xfer.response = (unsigned char *)spectrum;
+        xfer.extra_response_len = sizeof(spectrum); // entire spectrum is payload, none is immediate
+
+        printf("\ngetting raw spectrum...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.actual_response_len == sizeof(spectrum)) {
+                printf("Retrieved raw spectra of %u pixels\n", numSpectrum);
+                for (int i = 0; i < numSpectrum; i++) {
+                    printf("%d, %u, 0x%04X\n", i, (unsigned int)spectrum[i], (unsigned int)spectrum[i]);
+                }
+            }
+            else {
+                printf("ERROR: expected %tu bytes back from get_spectrum, received %u\n",
+                    sizeof(spectrum), xfer.actual_response_len);
+                rtnval = -1;
+            }
+        }
+        else {
+            printf("ERROR: unable to execute GET_RAW_SPECTRUM transaction\n");
+            rtnval = -1;
+        }
+
+        return rtnval;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get partial spectrum
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (opt_partial)
+    {
+        int rtnval = 0;
+
+        // define subspectrum specification
+        unsigned short specification[] =
+        {
+            0x0001,
+            (unsigned short) opt_partial
+        };
+
+        // send subspectrum specification
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_SET_SUBSPECTRUM_SPEC;
+        xfer.request_len = sizeof(specification);
+        xfer.request = (unsigned char *)specification;
+
+        printf("\nspecifying subspectrum, mode=1, increment=%d...\n", opt_partial);
+        if (!sendOBPMessage(&xfer)) {
+            unsigned short spectrum[1024];
+            int numSpectrum = sizeof(spectrum) / 2;
+            numSpectrum /= opt_partial;
+            int spectrumSize = numSpectrum << 1;
+
+            memset(&xfer, 0, sizeof(xfer));
+            xfer.message_type = OBP_MESSAGE_GET_SUBSPECTRUM;
+            xfer.response_len = spectrumSize;
+            xfer.response = (unsigned char *)spectrum;
+            if (numSpectrum > 8) {
+                xfer.extra_response_len = spectrumSize; // entire spectrum is payload, none is immediate
+            }
+
+            printf("\ngetting partial spectrum, increment=%d...\n", opt_partial);
+            if (!sendOBPMessage(&xfer))
+            {
+                if (xfer.actual_response_len == spectrumSize) {
+                    printf("Retrieved raw spectra of %u pixels\n", numSpectrum);
+                    for (int i = 0; i < numSpectrum; i++) {
+                        printf("%d, %u, 0x%04X\n", i*opt_partial, (unsigned int)spectrum[i], (unsigned int)spectrum[i]);
+                    }
+                }
+                else {
+                    printf("ERROR: expected %tu bytes back from get_spectrum, received %u\n",
+                        sizeof(spectrum), xfer.actual_response_len);
+                    rtnval = -1;
+                }
+            }
+            else {
+                printf("ERROR: unable to execute GET_PARTIAL_SPECTRUM transaction\n");
+                rtnval = -1;
+            }
+
+        }
+        else {
+            printf("ERROR: unable to execute SET_SUBSPECTRUM_SPECIFICATION transaction\n");
+            rtnval = -1;
+        }
+
+        return rtnval;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // reset defaults
     ////////////////////////////////////////////////////////////////////////////
@@ -794,7 +1089,7 @@ int main(int argc, char **argv)
             if (xfer.actual_response_len == xfer.response_len)
                 printf("Hardware Revision: %02x (%u)\n", ver, ver);
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -825,7 +1120,7 @@ int main(int argc, char **argv)
                 printf("Firmware Revision: %04x (%u)\n", firmware_revision, firmware_revision);
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -867,7 +1162,7 @@ int main(int argc, char **argv)
                     printf("ERROR: error with get_serial_number exchange\n");
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -875,11 +1170,63 @@ int main(int argc, char **argv)
     }
 
     ////////////////////////////////////////////////////////////////////////////
+    // get boxcar width
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1)
+    {
+        unsigned char boxcar_width = 0;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_GET_BOXCAR_WIDTH;
+        xfer.response_len = sizeof(boxcar_width);
+        xfer.response = &boxcar_width;
+
+        printf("\ngetting boxcar width...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.actual_response_len == xfer.response_len)
+                printf("Boxcar Width: %u\n", (unsigned int)boxcar_width);
+            else
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
+                xfer.response_len, xfer.message_type, xfer.actual_response_len);
+        }
+        else
+            printf("ERROR: unable to execute GET_BOXCAR_WIDTH transaction\n");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // get pixel binning factor width
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1)
+    {
+        unsigned char binning_factor = 0;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type = OBP_MESSAGE_GET_BINNING_FACTOR;
+        xfer.response_len = sizeof(binning_factor);
+        xfer.response = &binning_factor;
+
+        printf("\ngetting pixel binning factor...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.actual_response_len == xfer.response_len)
+                printf("Pixel Binning Factor: %u\n", (unsigned int)binning_factor);
+            else
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
+                xfer.response_len, xfer.message_type, xfer.actual_response_len);
+        }
+        else
+            printf("ERROR: unable to execute GET_BINNING_FACTOR transaction\n");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
     // set integration time
     ////////////////////////////////////////////////////////////////////////////
 
     // STS will not take acquisition unless you first set integration time
-    if (1)
+    if (1 && !opt_info)
     {
         unsigned char integration_time[] = { 0xa0, 0x86, 0x01, 0x00 }; // 100ms -> 100,000us -> hex -> little-endian
 
@@ -897,7 +1244,7 @@ int main(int argc, char **argv)
     // get corrected spectrum
     ////////////////////////////////////////////////////////////////////////////
 
-    if (1)
+    if (1 && !opt_info)
     {
         unsigned char spectrum[2048];
 
@@ -924,7 +1271,7 @@ int main(int argc, char **argv)
     // define and get partial corrected spectrum
     ////////////////////////////////////////////////////////////////////////////
 
-    if (1)
+    if (1 && !opt_info)
     {
         // define subspectrum specification
         unsigned char specification[] =
@@ -1019,7 +1366,7 @@ int main(int argc, char **argv)
                 }
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
@@ -1068,7 +1415,7 @@ int main(int argc, char **argv)
                 }
             }
             else
-                printf("ERROR: expected %tu bytes back from 0x%08x, received %u\n",
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
                     xfer.response_len, xfer.message_type, xfer.actual_response_len);
         }
         else
