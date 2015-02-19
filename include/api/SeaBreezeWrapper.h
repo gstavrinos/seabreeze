@@ -536,6 +536,9 @@ extern "C" {
      * @param error_code (Output) A pointer to an integer that can be used for storing
      *      error codes.
      * @return int: An integer denoting the length of an unformatted spectrum in bytes
+     *
+     * The caller is expected to know the number of bytes per pixel and the endian
+     * ordering, but it will normally be 2 bytes per pixel, LSB-MSB order.
      */
     DLL_DECL int
     seabreeze_get_unformatted_spectrum_length(int index, int *error_code);
