@@ -108,7 +108,9 @@ void SendCommandList(int clientFileDescriptor, int *connectedToClient)
 	"    s 8 for the wavelength table\n"
 	"    s 9 for the calibration table\n"	
 	"i - integration time setting in milliseconds, returns: OK\n"
-	"    i time_ms, ex: s 4000\n"
+	"    i time_ms, ex: 4 seconds would be written i 4000\n"
+	"I - integration time setting in microseconds, returns: OK\n"
+	"    I time_us, ex: 4 seconds would be written I 4000000\n"
 	"b - boxcar filter width and scans to average, returns: OK\n"
 	"    b boxcarFilterWidth, scansToAverage ex: b 10 5 (boxcar filter is 0-15, scans to average 1-5000)\n"
 	"a - add waveband, returns: OK\n"
@@ -132,7 +134,8 @@ void SendCommandList(int clientFileDescriptor, int *connectedToClient)
 	"    g 2 get CPU temperature, in degrees C\n"
 	"    g 3 get boxcar filter width\n"
 	"    g 4 get the number of scans to average\n"
-	"    g 5 get integration time in milliseconds\n";
+	"    g 5 get integration time in milliseconds\n"
+	"    g 6 get integration time in microseconds\n";
 
 	SendMessage(clientFileDescriptor, connectedToClient, commandList);
 }
@@ -257,9 +260,21 @@ void SendScansToAverage(int clientFileDescriptor, int *connectedToClient)
 }
 
 /***************************************************************************/
-// Send the integration time
+// Send the integration time in microseconds
 /***************************************************************************/
-void SendIntegrationTime(int clientFileDescriptor, int *connectedToClient)
+void SendIntegrationTime_us(int clientFileDescriptor, int *connectedToClient)
+{
+	char sendBuffer[DATA_BUFFER_SIZE];
+
+	snprintf(sendBuffer, DATA_BUFFER_SIZE, "%d\nOK\n", GetIntegrationTime_us_STS());
+	SendMessage(clientFileDescriptor, connectedToClient, sendBuffer);
+
+}
+
+/***************************************************************************/
+// Send the integration time in milleseconds
+/***************************************************************************/
+void SendIntegrationTime_ms(int clientFileDescriptor, int *connectedToClient)
 {
 	char sendBuffer[DATA_BUFFER_SIZE];
 
@@ -829,6 +844,13 @@ void parseClientMessage(char *command, int tcpFileDescriptor,
 					break;
 				case 'i':
 					// 0 sets normal trigger
+					if ((stsReturnValue=SetSampleParametersSTS(0, lowNumber*1000))==noError)
+						SendOK(tcpFileDescriptor, connectedToClient);
+					else
+						SendMessageErrorSTS(tcpFileDescriptor, connectedToClient, stsReturnValue);
+					break;
+				case 'I':
+					// 0 sets normal trigger
 					if ((stsReturnValue=SetSampleParametersSTS(0, lowNumber))==noError)
 						SendOK(tcpFileDescriptor, connectedToClient);
 					else
@@ -936,7 +958,10 @@ void parseClientMessage(char *command, int tcpFileDescriptor,
 							SendScansToAverage(tcpFileDescriptor, connectedToClient);
 							break;
 						case 5:
-							SendIntegrationTime(tcpFileDescriptor, connectedToClient);
+							SendIntegrationTime_ms(tcpFileDescriptor, connectedToClient);
+							break;
+						case 6:
+							SendIntegrationTime_us(tcpFileDescriptor, connectedToClient);
 							break;
 						default:
 							SendBadCommandFormat(tcpFileDescriptor, connectedToClient);
