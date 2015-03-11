@@ -508,6 +508,13 @@ extern "C" {
      *        spectral data
      * @param buffer_length (Input) The length of the buffer in bytes (not pixels)
      * @return int: The number of bytes read into the buffer
+     * @see   sample-code/c/demo-unformatted-spectrum.c
+     *
+     * An unformatted spectrum is the raw sequence of bytes returned by the spectrometer to 
+     * the PC over USB.  The bytes have not been broken down into pixels, they're in the 
+     * original endianness, absolutely nothing has been done to them.  The caller is expected 
+     * to know how many bytes are returned by each spectrometer model, which bytes indicate 
+     * synchronization points or whatever, etc.  
      */
     DLL_DECL int
     seabreeze_get_unformatted_spectrum(int index, int *error_code,
@@ -524,6 +531,11 @@ extern "C" {
      *        spectral data
      * @param buffer_length (Input) The length of the buffer in floats (not bytes)
      * @return int: The number of floats read into the buffer
+     *
+     * A formatted spectrum returns exactly one double-precision floating-point IEEE value 
+     * per pixel, as opposed to a raw byte stream.  It has also had autonulling (gain control) 
+     * applied, meaning it has been scaled up to the spectrometer's full dynamic range using 
+     * the gain setting recorded in that spectrometer’s EEPROM.
      */
     DLL_DECL int
     seabreeze_get_formatted_spectrum(int index, int *error_code,
