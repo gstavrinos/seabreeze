@@ -69,6 +69,14 @@ sub main
     );
 
     updateProj(
+        PATHNAME         => "$SeaBreezeDir/os-support/windows/VisualStudio2013/VSProj/SeaBreeze.vcxproj",
+        INCLUDES         => $includes, 
+        SOURCES          => $sources, 
+        INCLUDE_TEMPLATE => "    <ClInclude Include=\"..\\..\\..\\..\\FILE_GOES_HERE\" />",
+        SOURCE_TEMPLATE  => "    <ClCompile Include=\"..\\..\\..\\..\\FILE_GOES_HERE\" />",
+    );
+
+    updateProj(
         PATHNAME         => "$SeaBreezeDir/os-support/windows/VisualStudio2013/VSProj/SeaBreeze.vcxproj.filters",
         INCLUDES         => $includes, 
         SOURCES          => $sources, 
