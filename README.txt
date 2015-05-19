@@ -442,6 +442,9 @@ resolved the issue.
 
 \section history Appendix A: Version History
 
+\date 2015-05-19 (version 3.0.7)
+- added seabreeze_set_logfile per customer request
+
 \date 2015-01-24 (version 3.0.6)
 - Added MinGW patch and instructions from Andras Barta
 

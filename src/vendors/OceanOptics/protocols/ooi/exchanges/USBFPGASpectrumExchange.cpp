@@ -36,6 +36,7 @@
 #include "common/UShortVector.h"
 #include "common/DoubleVector.h"
 #include "common/exceptions/ProtocolFormatException.h"
+#include "common/Log.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
@@ -54,6 +55,10 @@ USBFPGASpectrumExchange::~USBFPGASpectrumExchange() {
 
 Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
+
+    LOG(__FUNCTION__);
+    logger.debug("starting USBFPGASpectrumExchange::transfer");
+
     unsigned int i;
     Data *xfer;
     double maxIntensity;
@@ -65,6 +70,7 @@ Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
         string error("Expected FPGASpectrumExchange::transfer to produce a non-null result "
                 "containing raw spectral data.  Without this data, it is not possible to "
                 "generate a valid formatted spectrum.");
+        logger.error(error.c_str());
         throw ProtocolException(error);
     }
 
@@ -97,6 +103,8 @@ Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
     DoubleVector *retval = new DoubleVector(adjusted);
 
     delete xfer;
+
+    logger.debug("done");
 
     return retval;
 }

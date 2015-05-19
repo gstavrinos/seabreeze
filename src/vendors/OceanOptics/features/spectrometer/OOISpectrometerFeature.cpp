@@ -35,6 +35,7 @@
 #include "common/exceptions/FeatureControlException.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOISpectrometerProtocol.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
+#include "common/Log.h"
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -59,6 +60,9 @@ OOISpectrometerFeature::~OOISpectrometerFeature() {
 
 vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
 
+    LOG(__FUNCTION__);
+    logger.debug("starting OOISpectrometerFeature::getSpectrum");
+
     ProtocolHelper *proto;
     SpectrometerProtocolInterface *spec;
 
@@ -71,11 +75,13 @@ vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, co
         throw FeatureProtocolNotFoundException(error);
     }
 
+    logger.debug("writing requestSpectrum");
     writeRequestSpectrum(protocol, bus);
 
     vector<double> *retval = NULL;
 
     try {
+        logger.debug("reading spectrum");
         retval = spec->readSpectrum(bus);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
@@ -84,6 +90,7 @@ vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, co
         throw FeatureControlException(error);
     }
 
+    logger.debug("done");
     return retval;
 }
 
@@ -97,6 +104,9 @@ vector<byte> *OOISpectrometerFeature::getUnformattedSpectrum(
 void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
 
+    LOG(__FUNCTION__);
+    logger.debug("starting OOISpectrometerFeature::writeRequestSpectrum");
+
     ProtocolHelper *proto;
     SpectrometerProtocolInterface *spec;
 
@@ -106,6 +116,7 @@ void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
     } catch (FeatureProtocolNotFoundException &e) {
         string error("Could not find matching protocol implementation to get raw spectrum.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
+        logger.error(error.c_str());
         throw FeatureProtocolNotFoundException(error);
     }
 
@@ -115,8 +126,11 @@ void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
+        logger.error(error.c_str());
         throw FeatureControlException(error);
     }
+    
+    logger.debug("done");
 }
 
 vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &protocol,
