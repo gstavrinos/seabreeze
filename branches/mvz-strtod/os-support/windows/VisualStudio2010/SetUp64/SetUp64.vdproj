@@ -171,6 +171,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4567EF70E8A1410DA25A58DD3A086C39"
+        "OwnerKey" = "8:_9CE1C5E561814195B89C2CF3B51C5993"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_45C39A1601814AEA8695B490D812F768"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2870,15 +2876,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SeaBreeze"
-        "ProductCode" = "8:{B7E54BA8-D58D-4072-A51B-94D741DF8210}"
-        "PackageCode" = "8:{CA9AE8FD-CF50-4452-BC3F-127DBAFE3FAC}"
+        "ProductCode" = "8:{091DEC7E-7B69-4FEC-99AA-E96578CBB17F}"
+        "PackageCode" = "8:{B78AD95F-CF5C-4B94-8383-8D319DED22E5}"
         "UpgradeCode" = "8:{5C008FE7-8489-4986-91CB-2D64834BBFB6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.0.2"
+        "ProductVersion" = "8:3.0.7"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.oceanoptics.com"
@@ -3387,6 +3393,20 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4567EF70E8A1410DA25A58DD3A086C39"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:Microsoft_VC100_DebugCRT_x64.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {
