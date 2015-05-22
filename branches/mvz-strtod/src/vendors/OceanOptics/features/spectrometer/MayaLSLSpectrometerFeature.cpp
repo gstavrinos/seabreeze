@@ -79,6 +79,7 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature() {
 
     this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
     this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SOFTWARE));
+    this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SYNCHRONIZATION));
     this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_HARDWARE));
 }
 
