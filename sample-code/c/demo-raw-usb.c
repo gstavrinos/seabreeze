@@ -135,6 +135,7 @@ void dump_fpga_registers()
 
 int main(int argc, char **argv)
 {
+    seabreeze_set_verbose(1);
     seabreeze_open_spectrometer(spec_index, &error);
     if (check_error(spec_index, &error, "seabreeze_open_spectrometer(0)"))
         return 1;

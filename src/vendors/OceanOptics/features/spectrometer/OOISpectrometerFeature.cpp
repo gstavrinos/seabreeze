@@ -96,7 +96,7 @@ vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, co
 
 vector<byte> *OOISpectrometerFeature::getUnformattedSpectrum(
         const Protocol &protocol, const Bus &bus) throw (FeatureException) {
-
+    LOG(__FUNCTION__);
     writeRequestSpectrum(protocol, bus);
     return readUnformattedSpectrum(protocol, bus);
 }
@@ -135,6 +135,8 @@ void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
 
 vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
+    LOG(__FUNCTION__);
+    logger.debug("starting OOISpectrometerFeature::readUnformattedSpectrum");
 
     ProtocolHelper *proto;
     SpectrometerProtocolInterface *spec;
@@ -144,6 +146,7 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
         spec = static_cast<SpectrometerProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
         string error("Could not find matching protocol implementation to get raw spectrum.");
+        logger.error(error.c_str());
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }
@@ -155,10 +158,12 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
+        logger.error(error.c_str());
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureControlException(error);
     }
 
+    logger.debug("done");
     return retval;
 }
 

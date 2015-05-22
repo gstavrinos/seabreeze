@@ -66,12 +66,16 @@ OOISpectrometerProtocol::~OOISpectrometerProtocol() {
 
 vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
         throw (ProtocolException) {
+    LOG(__FUNCTION__);
+    logger.debug("starting OOISpectrometerProtocol::readUnformattedSpectrum");
+
     Data *result;
     TransferHelper *helper;
 
     helper = bus.getHelper(this->unformattedSpectrumExchange->getHints());
     if (NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
+        logger.error(error.c_str());
         throw ProtocolBusMismatchException(error);
     }
 
@@ -80,6 +84,7 @@ vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
 
     if (NULL == result) {
         string error("Got NULL when expecting spectral data which was unexpected.");
+        logger.error(error.c_str());
         throw ProtocolException(error);
     }
 
@@ -94,6 +99,9 @@ vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
      * the above result without any additional work.  The current
      * implementation has an extra allocate/copy/destroy overhead.
      */
+
+    logger.debug("done");
+
     return retval;
 }
 
