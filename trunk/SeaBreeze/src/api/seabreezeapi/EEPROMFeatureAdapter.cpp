@@ -76,6 +76,9 @@ int EEPROMFeatureAdapter::readEEPROMSlot(int *errorCode, int slotNumber,
     } catch (FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
+    } catch (IllegalArgumentException &iae) {
+        SET_ERROR_CODE(ERROR_INVALID_ERROR);
+        return 0;
     }
 
     return bytesCopied;

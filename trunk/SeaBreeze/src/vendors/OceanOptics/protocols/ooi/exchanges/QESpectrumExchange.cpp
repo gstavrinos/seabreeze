@@ -32,6 +32,7 @@
 #include "vendors/OceanOptics/protocols/ooi/exchanges/QESpectrumExchange.h"
 #include "common/UShortVector.h"
 #include "common/exceptions/ProtocolFormatException.h"
+#include "common/Log.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
@@ -49,6 +50,10 @@ QESpectrumExchange::~QESpectrumExchange() {
 
 Data *QESpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
+
+    LOG(__FUNCTION__);
+    // logger.debug("starting QESpectrumExchange::transfer");
+
     unsigned int i;
     Data *xfer;
     byte lsb;
@@ -61,9 +66,9 @@ Data *QESpectrumExchange::transfer(TransferHelper *helper)
         string error("Expected Transfer::transfer to produce a non-null result "
                 "containing raw spectral data.  Without this data, it is not possible to "
                 "generate a valid formatted spectrum.");
+        logger.error(error.c_str());
         throw ProtocolException(error);
     }
-
 
     /* xfer is just a copy of what is already stored in this, so delete it. */
     delete xfer;
@@ -77,10 +82,12 @@ Data *QESpectrumExchange::transfer(TransferHelper *helper)
                 "transfer.  This suggests that the data stream is now out of synchronization, "
                 "or possibly that an underlying read operation failed prematurely due to bus "
                 "issues.");
+        logger.error(synchError.c_str());
         throw ProtocolFormatException(synchError);
     }
 
     /* Get a local variable by reference to point to that buffer */
+    logger.debug("demarshalling");
     vector<unsigned short> formatted(this->numberOfPixels);
     for(i = 0; i < this->numberOfPixels; i++) {
         lsb = (*(this->buffer))[i * 2];
