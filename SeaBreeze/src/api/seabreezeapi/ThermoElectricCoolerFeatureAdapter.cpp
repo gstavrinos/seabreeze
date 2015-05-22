@@ -80,6 +80,9 @@ void ThermoElectricCoolerFeatureAdapter::setTECTemperature(int *errorCode,
     } catch (FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
+    } catch (IllegalArgumentException &iae) {
+        SET_ERROR_CODE(ERROR_INVALID_ERROR);
+        return;
     }
 
     return;

@@ -49,7 +49,7 @@ const long Maya2000ProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 Maya2000ProSpectrometerFeature::Maya2000ProSpectrometerFeature() {
 
     this->numberOfPixels = 2068;
-    this->maxIntensity = 64000;
+    this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector
     int readoutLength = 2304 * 2 + 1;
 
     this->integrationTimeMinimum = Maya2000ProSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -83,12 +83,10 @@ Maya2000ProSpectrometerFeature::Maya2000ProSpectrometerFeature() {
 
     this->protocols.push_back(ooiProtocol);
 
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SOFTWARE));
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_HARDWARE));
+    this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
+    this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SOFTWARE));
+    this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SYNCHRONIZATION));
+    this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_HARDWARE));
 }
 
 Maya2000ProSpectrometerFeature::~Maya2000ProSpectrometerFeature() {

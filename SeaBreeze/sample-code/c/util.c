@@ -174,16 +174,16 @@ void graph(const char *type, const char *label, double *spectrum, int pixels)
     }
 
     // normalize heights
-    double min = MAXFLOAT;
-    double max = -1 * MAXFLOAT;
-    for (int i = 0; i < GRAPH_WIDTH; i++)
+    double min = histogram[0];
+    double max = histogram[0];
+    for (int i = 1; i < GRAPH_WIDTH; i++)
     {
         min = histogram[i] < min ? histogram[i] : min;
         max = histogram[i] > max ? histogram[i] : max;
     }
 
     // display graph
-    printf("[%s] %s (%le, %le)\n", type, label, min, max);
+    printf("[%s] %s (%d histogrammed bins range from min %.2lf, max %.2lf)\n", type, label, GRAPH_WIDTH, min, max);
     for(int row = GRAPH_HEIGHT; row; row--)
     {
         printf("  | ");

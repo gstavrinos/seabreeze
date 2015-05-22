@@ -52,7 +52,7 @@ const long QEProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 QEProSpectrometerFeature::QEProSpectrometerFeature() {
 
     this->numberOfPixels = 1044;
-    this->maxIntensity = (1 << 18) - 1;
+    this->maxIntensity = 200000; // technically 18-bit, but internally limited
 
     this->integrationTimeMinimum = QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
     this->integrationTimeMaximum = QEProSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;

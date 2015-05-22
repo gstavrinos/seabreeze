@@ -405,12 +405,16 @@ For support with SeaBreeze issues, please contact oem@oceanoptics.com.
 - \ref tickets
 - \ref backlog
 
-\subsection vstmod vstmod conflict
+\subsection vst_modules VST Module Conflicts
 
 Under Ubuntu 10.04 LTS and other Linux versions, you may have trouble claiming
 certain spectrometers, including the USB4000, due to a conflict with the vstmod
 kernel module. Try running "sudo rmmod vstmod", then re-running your SeaBreeze
 application.
+
+A similar problem was found between HR4000, Debian 6, and the "vstusb" module.
+Again, adding "blacklist vstusb" to /etc/modprobe.d/blacklist.conf and rebooting
+resolved the issue. 
 
 \subsection tickets Open Tickets
 
@@ -437,6 +441,10 @@ application.
 - provide bindings for Python, Ruby, Perl, etc
 
 \section history Appendix A: Version History
+
+\date 2015-05-22 (version 3.0.7)
+- added seabreeze_set_logfile per customer request
+- added EXTERNAL_SYNCHRONIZED trigger mode to Maya2000Pro and Maya-LSL
 
 \date 2015-01-24 (version 3.0.6)
 - Added MinGW patch and instructions from Andras Barta

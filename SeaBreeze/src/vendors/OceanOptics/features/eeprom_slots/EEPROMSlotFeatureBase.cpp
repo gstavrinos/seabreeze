@@ -37,6 +37,10 @@
 #include "common/exceptions/FeatureProtocolNotFoundException.h"
 #include "common/exceptions/FeatureControlException.h"
 
+#ifndef _WINDOWS
+#include <xlocale.h>
+#endif
+
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 using namespace std;
@@ -133,16 +137,22 @@ double EEPROMSlotFeatureBase::readDouble(const Protocol &protocol, const Bus &bu
     /* Convert the ASCII string in the slot to a double in a way where we can
      * catch format/parse errors.
      */
+
     /* First, guarantee that the string we parse is null-terminated. 20 bytes is overkill. */
     strncpy(buffer, ((char *)&((*slot)[0])), 19);
     buffer[19] = '\0';
     startPtr = buffer;
     endPtr = NULL;
     errno = 0;
+
     /* Now parse the slot. */
+#ifdef _WINDOWS
     retval = strtod(startPtr, &endPtr);
+#else
+    retval = strtod_l(startPtr, &endPtr, LC_GLOBAL_LOCALE);
+#endif
     if((startPtr == endPtr) || ((errno != 0) && (0 == retval))) {
-        /* This means that strtod failed to parse anything, so the EEPROM slot
+        /* This means that strtod_l failed to parse anything, so the EEPROM slot
          * may have been unprogrammed or otherwise corrupted.  Flag an error
          * so that we can drop in some safe default values.
          */
@@ -172,16 +182,22 @@ long EEPROMSlotFeatureBase::readLong(const Protocol &protocol, const Bus &bus,
     /* Convert the ASCII string in the slot to a long in a way where we can
      * catch format/parse errors.
      */
+
     /* First, guarantee that the string we parse is null-terminated. 20 bytes is overkill. */
     strncpy(buffer, ((char *)&((*slot)[0])), 19);
     buffer[19] = '\0';
     startPtr = buffer;
     endPtr = NULL;
     errno = 0;
+
     /* Now parse the slot. */
+#ifdef _WINDOWS
     retval = strtol(startPtr, &endPtr, 10);
+#else
+    retval = strtol_l(startPtr, &endPtr, 10, LC_GLOBAL_LOCALE);
+#endif
     if((startPtr == endPtr) || ((errno != 0) && (0 == retval))) {
-        /* This means that strtod failed to parse anything, so the EEPROM slot
+        /* This means that strtol_l failed to parse anything, so the EEPROM slot
          * may have been unprogrammed or otherwise corrupted.  Flag an error
          * so that we can drop in some safe default values.
          */
