@@ -392,6 +392,7 @@ int SeaBreezeWrapper::getModel(int index, int *errorCode,
 
 
 void SeaBreezeWrapper::setTriggerMode(int index, int *errorCode, int mode) {
+    LOG(__FUNCTION__);
 
     SpectrometerTriggerMode triggerMode(mode);
 
@@ -413,10 +414,10 @@ void SeaBreezeWrapper::setTriggerMode(int index, int *errorCode, int mode) {
             SET_ERROR_CODE(ERROR_SUCCESS);
         } catch (FeatureException &fe) {
             SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            logger.error("transfer error");
             return;
         }
     }
-
 }
 
 
@@ -1028,7 +1029,6 @@ int SeaBreezeWrapper::getFormattedSpectrum(int index, int *errorCode,
         double* buffer, int buffer_length) {
 
     LOG(__FUNCTION__);
-    logger.debug("starting SeaBreezeWrapper::getFormattedSpectrum");
 
     vector<double> *spectrum;
     int doublesCopied = 0;
@@ -1063,7 +1063,6 @@ int SeaBreezeWrapper::getFormattedSpectrum(int index, int *errorCode,
         }
     }
 
-    logger.debug("done");
     return doublesCopied;
 }
 

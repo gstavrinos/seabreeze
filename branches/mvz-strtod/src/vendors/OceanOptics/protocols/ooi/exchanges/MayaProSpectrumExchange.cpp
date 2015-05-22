@@ -52,7 +52,6 @@ MayaProSpectrumExchange::~MayaProSpectrumExchange() {
 Data *MayaProSpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
     LOG(__FUNCTION__);
-    logger.debug("starting MayaProSpectrumExchange::transfer");
 
     unsigned int i;
     Data *xfer;
@@ -125,8 +124,6 @@ Data *MayaProSpectrumExchange::transfer(TransferHelper *helper)
         // logger.debug("MayaProSpectrumExchange::transfer: autonulling changed pixel %4u from %8u to %8.2lf (%5.2lf%%)", i, pixel, formatted[i], 100.0 * formatted[i] / pixel);
     }
     DoubleVector *retval = new DoubleVector(formatted);
-
-    logger.debug("done");
 
     return retval;
 }

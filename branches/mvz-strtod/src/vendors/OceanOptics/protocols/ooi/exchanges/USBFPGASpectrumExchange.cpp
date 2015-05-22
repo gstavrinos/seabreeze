@@ -57,7 +57,6 @@ Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
 
     LOG(__FUNCTION__);
-    logger.debug("starting USBFPGASpectrumExchange::transfer");
 
     unsigned int i;
     Data *xfer;
@@ -104,8 +103,6 @@ Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
     DoubleVector *retval = new DoubleVector(adjusted);
 
     delete xfer;
-
-    logger.debug("done");
 
     return retval;
 }
