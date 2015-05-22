@@ -1081,6 +1081,9 @@ int SeaBreezeWrapper::getUnformattedSpectrumLength(int index, int *errorCode) {
      * possible lengths based on the device type.  I am opting for
      * the former, even though it could have unpleasant side-effects.
      */
+
+    LOG(__FUNCTION__);
+
     vector<byte> *spectrum;
 
     if(NULL == this->devices[index]) {
@@ -1409,6 +1412,7 @@ void SeaBreezeWrapper::setLogfile(char *pathname, int len) {
     char path[256];
     memset(path, 0, sizeof(path));
     strncpy(path, pathname, len);
+    logger.debug("setting logfile to %s", path);
 
     // open output file
     FILE *f = fopen(path, "a");
@@ -1418,6 +1422,7 @@ void SeaBreezeWrapper::setLogfile(char *pathname, int len) {
     {
         logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
         logger.setLogFile(f);
+        logger.debug("logfile set to %s", path);
     }
 }
 

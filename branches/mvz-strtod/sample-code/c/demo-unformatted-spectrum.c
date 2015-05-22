@@ -79,7 +79,9 @@ int get_unformatted_spectrum_doubles(int index, int raw_length, double *buffer) 
     for (int j = 0; j < pixels; j++) {
         unsigned char lsb = bSpectrum[j*2];
         unsigned char msb = bSpectrum[j*2 + 1];
-        buffer[j] = (msb << 8) + lsb;
+        unsigned counts = (msb << 8) + lsb;
+        buffer[j] = counts;
+        logger("[%02d] Unformatted pixel %4d: 0x%02x 0x%02x = 0x%04x = %8u dec = %8.2lf", index, j, lsb, msb, counts, counts, buffer[j]);
     }
     free((void*) bSpectrum);
     return 0;
@@ -90,6 +92,8 @@ int main(int argc, char **argv) {
     int device_count = 0;
 
     logger_header("Output from %s", argv[0]);
+
+    seabreeze_set_verbose(1);
 
     logger("Finding connected spectrometers...");
     for(int i = 0; i < SEABREEZE_MAX_DEVICES; i++)
@@ -179,11 +183,17 @@ int main(int argc, char **argv) {
                 break;
             }
 
-            // weight each scan with a sinusoid, shifting each by a distinct phase
-            float phi = M_PI + j * M_PI / SCAN_COUNT;
-            for (unsigned k = 0; k < pixels; k++) {
-                float a = k * 2 * M_PI / pixels;
-                scans[j][k] *= 1 + cos( a + phi );
+            // MZ: I no longer recall why this was considered useful, other than
+            // proving that multiple, DIFFERENT spectra are in fact being read, such
+            // that the averaged result will demonstrably vary from the source data.
+            if (0)
+            {
+                // weight each scan with a sinusoid, shifting each by a distinct phase
+                float phi = M_PI + j * M_PI / SCAN_COUNT;
+                for (unsigned k = 0; k < pixels; k++) {
+                    float a = k * 2 * M_PI / pixels;
+                    scans[j][k] *= 1 + cos( a + phi );
+                }
             }
 
             snprintf(label, sizeof(label), "RAW #%d", j + 1);
