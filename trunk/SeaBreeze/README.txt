@@ -418,6 +418,8 @@ resolved the issue.
 
 \subsection tickets Open Tickets
 
+- EDC pixels for Flame-S and Flame-T need updated to distinguish from USB2000+/USB4000
+  via USB Descriptor
 - [oem-2306] SeaBreezeWrapper::getInstance() returns before fully initialized
 
 \section backlog Product Backlog
