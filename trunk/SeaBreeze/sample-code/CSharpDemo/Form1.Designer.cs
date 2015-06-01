@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.chartSpectrum = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnScan = new System.Windows.Forms.Button();
@@ -42,6 +42,8 @@
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonSaveDark = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numericUpDownTriggerMode = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.checkBoxSubtractDark = new System.Windows.Forms.CheckBox();
             this.numericUpDownScansToAverage = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -71,6 +73,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartSpectrum)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTriggerMode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScansToAverage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBoxcarHalfWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIntegrationTimeMillisec)).BeginInit();
@@ -85,39 +88,39 @@
             this.chartSpectrum.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea7.AxisX.LabelStyle.Format = "F0";
-            chartArea7.AxisX.Title = "Wavelength (nm)";
-            chartArea7.AxisY.Title = "Intensity (Counts)";
-            chartArea7.AxisY2.Title = "µWatts / cm² / nm";
-            chartArea7.CursorX.IsUserEnabled = true;
-            chartArea7.CursorX.IsUserSelectionEnabled = true;
-            chartArea7.CursorX.LineColor = System.Drawing.Color.Transparent;
-            chartArea7.CursorY.IsUserEnabled = true;
-            chartArea7.CursorY.IsUserSelectionEnabled = true;
-            chartArea7.CursorY.LineColor = System.Drawing.Color.Transparent;
-            chartArea7.Name = "ChartArea1";
-            this.chartSpectrum.ChartAreas.Add(chartArea7);
-            legend7.Alignment = System.Drawing.StringAlignment.Center;
-            legend7.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend7.Name = "Legend1";
-            this.chartSpectrum.Legends.Add(legend7);
+            chartArea1.AxisX.LabelStyle.Format = "F0";
+            chartArea1.AxisX.Title = "Wavelength (nm)";
+            chartArea1.AxisY.Title = "Intensity (Counts)";
+            chartArea1.AxisY2.Title = "µWatts / cm² / nm";
+            chartArea1.CursorX.IsUserEnabled = true;
+            chartArea1.CursorX.IsUserSelectionEnabled = true;
+            chartArea1.CursorX.LineColor = System.Drawing.Color.Transparent;
+            chartArea1.CursorY.IsUserEnabled = true;
+            chartArea1.CursorY.IsUserSelectionEnabled = true;
+            chartArea1.CursorY.LineColor = System.Drawing.Color.Transparent;
+            chartArea1.Name = "ChartArea1";
+            this.chartSpectrum.ChartAreas.Add(chartArea1);
+            legend1.Alignment = System.Drawing.StringAlignment.Center;
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend1.Name = "Legend1";
+            this.chartSpectrum.Legends.Add(legend1);
             this.chartSpectrum.Location = new System.Drawing.Point(9, 12);
             this.chartSpectrum.Name = "chartSpectrum";
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Color = System.Drawing.Color.Red;
-            series13.Legend = "Legend1";
-            series13.LegendText = "Spectrum";
-            series13.Name = "seriesSpectrum";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series14.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            series14.Legend = "Legend1";
-            series14.LegendText = "Irradiance";
-            series14.Name = "seriesIrradiance";
-            series14.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.chartSpectrum.Series.Add(series13);
-            this.chartSpectrum.Series.Add(series14);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Color = System.Drawing.Color.Red;
+            series1.Legend = "Legend1";
+            series1.LegendText = "Spectrum";
+            series1.Name = "seriesSpectrum";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            series2.Legend = "Legend1";
+            series2.LegendText = "Irradiance";
+            series2.Name = "seriesIrradiance";
+            series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            this.chartSpectrum.Series.Add(series1);
+            this.chartSpectrum.Series.Add(series2);
             this.chartSpectrum.Size = new System.Drawing.Size(688, 377);
             this.chartSpectrum.TabIndex = 0;
             this.chartSpectrum.Text = "Spectrum";
@@ -136,7 +139,7 @@
             // 
             this.checkBoxEnableIrradiance.AutoSize = true;
             this.checkBoxEnableIrradiance.Enabled = false;
-            this.checkBoxEnableIrradiance.Location = new System.Drawing.Point(8, 249);
+            this.checkBoxEnableIrradiance.Location = new System.Drawing.Point(8, 256);
             this.checkBoxEnableIrradiance.Name = "checkBoxEnableIrradiance";
             this.checkBoxEnableIrradiance.Size = new System.Drawing.Size(73, 17);
             this.checkBoxEnableIrradiance.TabIndex = 2;
@@ -194,6 +197,8 @@
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.numericUpDownTriggerMode);
+            this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.checkBoxSubtractDark);
             this.groupBox2.Controls.Add(this.numericUpDownScansToAverage);
             this.groupBox2.Controls.Add(this.label5);
@@ -212,16 +217,39 @@
             this.groupBox2.Controls.Add(this.labelSerialNumber);
             this.groupBox2.Location = new System.Drawing.Point(703, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(133, 272);
+            this.groupBox2.Size = new System.Drawing.Size(133, 279);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Spectrometer";
+            // 
+            // numericUpDownTriggerMode
+            // 
+            this.numericUpDownTriggerMode.Location = new System.Drawing.Point(6, 181);
+            this.numericUpDownTriggerMode.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericUpDownTriggerMode.Name = "numericUpDownTriggerMode";
+            this.numericUpDownTriggerMode.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDownTriggerMode.TabIndex = 15;
+            this.numericUpDownTriggerMode.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownTriggerMode.ValueChanged += new System.EventHandler(this.numericUpDownTriggerMode_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(57, 183);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Trigger Mode";
             // 
             // checkBoxSubtractDark
             // 
             this.checkBoxSubtractDark.AutoSize = true;
             this.checkBoxSubtractDark.Enabled = false;
-            this.checkBoxSubtractDark.Location = new System.Drawing.Point(8, 227);
+            this.checkBoxSubtractDark.Location = new System.Drawing.Point(8, 234);
             this.checkBoxSubtractDark.Name = "checkBoxSubtractDark";
             this.checkBoxSubtractDark.Size = new System.Drawing.Size(92, 17);
             this.checkBoxSubtractDark.TabIndex = 14;
@@ -281,7 +309,7 @@
             // checkBoxEnableNLC
             // 
             this.checkBoxEnableNLC.AutoSize = true;
-            this.checkBoxEnableNLC.Location = new System.Drawing.Point(8, 204);
+            this.checkBoxEnableNLC.Location = new System.Drawing.Point(60, 211);
             this.checkBoxEnableNLC.Name = "checkBoxEnableNLC";
             this.checkBoxEnableNLC.Size = new System.Drawing.Size(47, 17);
             this.checkBoxEnableNLC.TabIndex = 9;
@@ -291,7 +319,7 @@
             // checkBoxEnableEDC
             // 
             this.checkBoxEnableEDC.AutoSize = true;
-            this.checkBoxEnableEDC.Location = new System.Drawing.Point(8, 181);
+            this.checkBoxEnableEDC.Location = new System.Drawing.Point(8, 211);
             this.checkBoxEnableEDC.Name = "checkBoxEnableEDC";
             this.checkBoxEnableEDC.Size = new System.Drawing.Size(48, 17);
             this.checkBoxEnableEDC.TabIndex = 8;
@@ -525,7 +553,7 @@
             this.groupBox4.Controls.Add(this.IntensityUpDown);
             this.groupBox4.Controls.Add(this.PersistenceUpDown);
             this.groupBox4.Controls.Add(this.label6);
-            this.groupBox4.Location = new System.Drawing.Point(704, 291);
+            this.groupBox4.Location = new System.Drawing.Point(705, 297);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(131, 98);
             this.groupBox4.TabIndex = 20;
@@ -548,6 +576,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTriggerMode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScansToAverage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBoxcarHalfWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIntegrationTimeMillisec)).EndInit();
@@ -597,6 +626,8 @@
         private System.Windows.Forms.NumericUpDown PersistenceUpDown;
         private System.Windows.Forms.CheckBox PeakFindCheckBox;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.NumericUpDown numericUpDownTriggerMode;
+        private System.Windows.Forms.Label label8;
     }
 }
 
