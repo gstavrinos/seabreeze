@@ -55,7 +55,7 @@ USB4000SpectrometerFeature::USB4000SpectrometerFeature() {
     this->integrationTimeBase = USB4000SpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = USB4000SpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 2; i < 13; i++) {
+    for(int i = 5; i < 17; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
 
