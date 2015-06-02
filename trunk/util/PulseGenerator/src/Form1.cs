@@ -142,7 +142,7 @@ namespace PulseGenerator
 
         int getPulseWidthFromView(int i)
         {
-            if (dataGridViewPulses.RowCount == 0 || i + 1 >= dataGridViewPulses.RowCount)
+            if (dataGridViewPulses.RowCount == 0 || i + 1 > dataGridViewPulses.RowCount)
                 return 0;
             if (dataGridViewPulses.ColumnCount == 0 || PULSE_WIDTH_COL + 1 > dataGridViewPulses.ColumnCount)
                 return 0;
@@ -152,7 +152,7 @@ namespace PulseGenerator
 
         int getPulseOffsetFromView(int i)
         {
-            if (dataGridViewPulses.RowCount == 0 || i + 1 >= dataGridViewPulses.RowCount)
+            if (dataGridViewPulses.RowCount == 0 || i + 1 > dataGridViewPulses.RowCount)
                 return 0;
             if (dataGridViewPulses.ColumnCount == 0 || PULSE_OFFSET_COL + 1 > dataGridViewPulses.ColumnCount)
                 return 0;
