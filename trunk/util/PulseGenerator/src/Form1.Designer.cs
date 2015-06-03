@@ -34,6 +34,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainerSequenceVsChannels = new System.Windows.Forms.SplitContainer();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.buttonInit = new System.Windows.Forms.Button();
+            this.checkBoxLoop = new System.Windows.Forms.CheckBox();
             this.buttonStart = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridViewPulses = new System.Windows.Forms.DataGridView();
@@ -45,9 +47,7 @@
             this.splitContainerControlsGraphVsLog = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
-            this.checkBoxLoop = new System.Windows.Forms.CheckBox();
             this.backgroundWorkerSequence = new System.ComponentModel.BackgroundWorker();
-            this.buttonInit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlsVsGraph)).BeginInit();
             this.splitContainerControlsVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlsVsGraph.Panel2.SuspendLayout();
@@ -127,6 +127,27 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sequence";
             // 
+            // buttonInit
+            // 
+            this.buttonInit.Location = new System.Drawing.Point(9, 19);
+            this.buttonInit.Name = "buttonInit";
+            this.buttonInit.Size = new System.Drawing.Size(75, 23);
+            this.buttonInit.TabIndex = 2;
+            this.buttonInit.Text = "Init";
+            this.buttonInit.UseVisualStyleBackColor = true;
+            this.buttonInit.Click += new System.EventHandler(this.buttonInit_Click);
+            // 
+            // checkBoxLoop
+            // 
+            this.checkBoxLoop.AutoSize = true;
+            this.checkBoxLoop.Location = new System.Drawing.Point(90, 52);
+            this.checkBoxLoop.Name = "checkBoxLoop";
+            this.checkBoxLoop.Size = new System.Drawing.Size(50, 17);
+            this.checkBoxLoop.TabIndex = 1;
+            this.checkBoxLoop.Text = "Loop";
+            this.checkBoxLoop.UseVisualStyleBackColor = true;
+            this.checkBoxLoop.CheckedChanged += new System.EventHandler(this.checkBoxLoop_CheckedChanged);
+            // 
             // buttonStart
             // 
             this.buttonStart.Enabled = false;
@@ -193,6 +214,7 @@
             // 
             // chartPulses
             // 
+            chartArea1.AxisX.Title = "Time (ms)";
             chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chartArea1.AxisY.MajorGrid.Enabled = false;
             chartArea1.Name = "ChartArea1";
@@ -246,17 +268,6 @@
             this.textBoxEventLog.Size = new System.Drawing.Size(999, 125);
             this.textBoxEventLog.TabIndex = 0;
             // 
-            // checkBoxLoop
-            // 
-            this.checkBoxLoop.AutoSize = true;
-            this.checkBoxLoop.Location = new System.Drawing.Point(90, 52);
-            this.checkBoxLoop.Name = "checkBoxLoop";
-            this.checkBoxLoop.Size = new System.Drawing.Size(50, 17);
-            this.checkBoxLoop.TabIndex = 1;
-            this.checkBoxLoop.Text = "Loop";
-            this.checkBoxLoop.UseVisualStyleBackColor = true;
-            this.checkBoxLoop.CheckedChanged += new System.EventHandler(this.checkBoxLoop_CheckedChanged);
-            // 
             // backgroundWorkerSequence
             // 
             this.backgroundWorkerSequence.WorkerReportsProgress = true;
@@ -264,16 +275,6 @@
             this.backgroundWorkerSequence.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerSequence_DoWork);
             this.backgroundWorkerSequence.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerSequence_ProgressChanged);
             this.backgroundWorkerSequence.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerSequence_RunWorkerCompleted);
-            // 
-            // buttonInit
-            // 
-            this.buttonInit.Location = new System.Drawing.Point(9, 19);
-            this.buttonInit.Name = "buttonInit";
-            this.buttonInit.Size = new System.Drawing.Size(75, 23);
-            this.buttonInit.TabIndex = 2;
-            this.buttonInit.Text = "Init";
-            this.buttonInit.UseVisualStyleBackColor = true;
-            this.buttonInit.Click += new System.EventHandler(this.buttonInit_Click);
             // 
             // Form1
             // 
