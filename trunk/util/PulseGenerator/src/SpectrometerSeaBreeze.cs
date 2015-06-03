@@ -378,7 +378,7 @@ namespace PulseGenerator
             ////////////////////////////////////////////////////////////////////
             // set all GPIO pins to "GPIO" mode (not "alt")
             ////////////////////////////////////////////////////////////////////
-            logger.queue("setting all GPIO pins to GPIO mode (not alt)");
+            logger.queue("setting all GPIO pins to GPIO mode");
 
             // read current MUX state
             uint value = 0;
