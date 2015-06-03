@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading;
+using System.Globalization;
 
 public class Logger
 {
@@ -55,7 +56,7 @@ public class Logger
         if (!mut.WaitOne(2))
             return;
 
-        string msg = String.Format(fmt, obj) +Environment.NewLine;
+        string msg = getTimestamp() + String.Format(fmt, obj) + Environment.NewLine;
         Console.Write("DISPLAY: {0}", msg);
         if (textBox != null)
             textBox.AppendText(msg);
@@ -77,13 +78,22 @@ public class Logger
         }
     }
 
+    string getTimestamp()
+    {
+        return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff: ", CultureInfo.InvariantCulture);
+    }
+
     public void flush()
     {
         if (!mut.WaitOne(10))
             return;
 
         foreach (string s in buffer)
-            display(s);
+        {
+            Console.Write("DISPLAY: {0}", s);
+            if (textBox != null)
+                textBox.AppendText(s);
+        }
         buffer.Clear();
 
         mut.ReleaseMutex();
@@ -93,7 +103,7 @@ public class Logger
     {
         if (!mut.WaitOne(2))
             return;
-        string msg = String.Format(fmt, obj);
+        string msg = getTimestamp() + String.Format(fmt, obj) + Environment.NewLine;
         buffer.Add(msg);
         mut.ReleaseMutex();
     }
