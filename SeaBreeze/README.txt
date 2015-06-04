@@ -279,6 +279,14 @@ rule nomenclature; the provided file uses the newer "ATTR" standard.
 
 \section test Testing SeaBreeze
 
+A number of test programs and sample-code demonstrations are provided with
+SeaBreeze.  Note that many of them (the VisualCppConsoleDemo for instance)
+are intended for use with a locally-built copy of SeaBreeze, meaning that 
+you're expected to compile SeaBreeze first.  Other programs (the CSharpDemo)
+should work with a "runtime / redistributable" copy of SeaBreeze installed
+through .msi installers.  However, the expectation remains that users would
+normally compile SeaBreeze locally.
+
 - \ref test_win
 - \ref test_linux
 - \ref test_macos
@@ -307,11 +315,14 @@ the provided tests and sample_code files:
 To test SeaBreeze from a Windows GUI, build and run the "CSharpDemo" provided
 in sample-code.
 
-To debug SeaBreeze.dll from the "CSharpDemo" edit "SeaBreezeWrapper.cs" to
-load your debug build of SeaBreeze.dll.
-Change the following line in "SeaBreezeWrapper.cs":
+To debug SeaBreeze.dll from the "CSharpDemo", edit "SeaBreezeWrapper.cs" to
+load your debug build of SeaBreeze.dll, then change the following line in 
+"SeaBreezeWrapper.cs":
+
     const string DLL = @"SeaBreeze.dll";
-To the path of your debug SeaBreeze.dll such as:
+
+To the path of your debug SeaBreeze.dll, i.e.:
+
     const string DLL = @"C:\Code\seabreeze-code\trunk\SeaBreeze\os-support\windows\VisualStudio2013\x64\Debug\SeaBreeze.dll";
 
 \subsection test_linux Linux
