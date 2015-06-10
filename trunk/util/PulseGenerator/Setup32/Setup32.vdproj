@@ -43,6 +43,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -59,6 +67,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -166,15 +182,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pulse Generator"
-        "ProductCode" = "8:{64CD9B75-7B47-4EDA-BC05-56B69B1C24FE}"
-        "PackageCode" = "8:{D96B48F5-C9B2-46A3-8D14-009461B396E1}"
+        "ProductCode" = "8:{034879B3-B168-4D1A-AAC2-E66D21DC0985}"
+        "PackageCode" = "8:{CCE4B3B0-CCCF-4774-816B-ECA7FB7D9B41}"
         "UpgradeCode" = "8:{C970C540-359F-4BB9-9CAD-38213033A30A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://oceanoptics.com"
@@ -702,7 +718,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D709259EAB09410D819A424302F59FA1"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\src\\obj\\x64\\Debug\\PulseGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C788BBD0B20481A82C1DA8DB660F37D"

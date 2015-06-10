@@ -37,6 +37,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -53,6 +61,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -160,15 +176,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pulse Generator"
-        "ProductCode" = "8:{06A3B617-FB98-40BB-8936-531D2C19A6C5}"
-        "PackageCode" = "8:{D2C414F6-3BFC-447E-81C8-82DF1661CC1F}"
+        "ProductCode" = "8:{D1C09F5F-D6DF-4F5F-9EA2-F7D4C4EB65EF}"
+        "PackageCode" = "8:{E331AB25-AD05-4706-B160-E66D10B424BD}"
         "UpgradeCode" = "8:{67AE2BC7-BDF8-45C8-BE7C-DF81ACA39EF7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://oceanoptics.com"
@@ -696,7 +712,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_63E3E8C9C8FC44FCBE49557C73099106"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\util\\PulseGenerator\\src\\obj\\x86\\Debug\\PulseGenerator.exe"
+            "SourcePath" = "8:..\\src\\obj\\x64\\Debug\\PulseGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_66229D83923747B785A04D509E18D613"

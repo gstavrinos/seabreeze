@@ -43,11 +43,13 @@
             this.ChannelEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ChannelOffsetMS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ChannelPulseWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.intraPulseDelayMS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chartPulses = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.splitContainerControlsGraphVsLog = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
             this.backgroundWorkerSequence = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerGraph = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlsVsGraph)).BeginInit();
             this.splitContainerControlsVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlsVsGraph.Panel2.SuspendLayout();
@@ -82,7 +84,7 @@
             // 
             this.splitContainerControlsVsGraph.Panel2.Controls.Add(this.chartPulses);
             this.splitContainerControlsVsGraph.Size = new System.Drawing.Size(1005, 388);
-            this.splitContainerControlsVsGraph.SplitterDistance = 337;
+            this.splitContainerControlsVsGraph.SplitterDistance = 283;
             this.splitContainerControlsVsGraph.TabIndex = 0;
             // 
             // groupBox2
@@ -91,7 +93,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(337, 388);
+            this.groupBox2.Size = new System.Drawing.Size(283, 388);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Controls";
@@ -110,8 +112,8 @@
             // splitContainerSequenceVsChannels.Panel2
             // 
             this.splitContainerSequenceVsChannels.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainerSequenceVsChannels.Size = new System.Drawing.Size(331, 369);
-            this.splitContainerSequenceVsChannels.SplitterDistance = 125;
+            this.splitContainerSequenceVsChannels.Size = new System.Drawing.Size(277, 369);
+            this.splitContainerSequenceVsChannels.SplitterDistance = 100;
             this.splitContainerSequenceVsChannels.TabIndex = 2;
             // 
             // groupBox4
@@ -122,7 +124,7 @@
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(0, 0);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(331, 125);
+            this.groupBox4.Size = new System.Drawing.Size(277, 100);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sequence";
@@ -165,7 +167,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(331, 240);
+            this.groupBox3.Size = new System.Drawing.Size(277, 265);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Channels";
@@ -181,11 +183,13 @@
             this.ChannelID,
             this.ChannelEnable,
             this.ChannelOffsetMS,
-            this.ChannelPulseWidth});
+            this.ChannelPulseWidth,
+            this.intraPulseDelayMS});
             this.dataGridViewPulses.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewPulses.Location = new System.Drawing.Point(3, 16);
             this.dataGridViewPulses.Name = "dataGridViewPulses";
-            this.dataGridViewPulses.Size = new System.Drawing.Size(325, 221);
+            this.dataGridViewPulses.RowHeadersVisible = false;
+            this.dataGridViewPulses.Size = new System.Drawing.Size(271, 246);
             this.dataGridViewPulses.TabIndex = 2;
             this.dataGridViewPulses.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPulses_CellValueChanged);
             // 
@@ -204,17 +208,25 @@
             // 
             // ChannelOffsetMS
             // 
-            this.ChannelOffsetMS.HeaderText = "Offset (ms)";
+            this.ChannelOffsetMS.HeaderText = "Initial Offset (ms)";
             this.ChannelOffsetMS.Name = "ChannelOffsetMS";
+            this.ChannelOffsetMS.Width = 60;
             // 
             // ChannelPulseWidth
             // 
             this.ChannelPulseWidth.HeaderText = "Pulse Width (ms)";
             this.ChannelPulseWidth.Name = "ChannelPulseWidth";
+            this.ChannelPulseWidth.Width = 60;
+            // 
+            // intraPulseDelayMS
+            // 
+            this.intraPulseDelayMS.HeaderText = "Intra Pulse Delay (ms)";
+            this.intraPulseDelayMS.Name = "intraPulseDelayMS";
+            this.intraPulseDelayMS.Width = 60;
             // 
             // chartPulses
             // 
-            chartArea1.AxisX.Title = "Time (ms)";
+            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chartArea1.AxisY.MajorGrid.Enabled = false;
             chartArea1.Name = "ChartArea1";
@@ -225,7 +237,7 @@
             this.chartPulses.Legends.Add(legend1);
             this.chartPulses.Location = new System.Drawing.Point(0, 0);
             this.chartPulses.Name = "chartPulses";
-            this.chartPulses.Size = new System.Drawing.Size(664, 388);
+            this.chartPulses.Size = new System.Drawing.Size(718, 388);
             this.chartPulses.TabIndex = 0;
             this.chartPulses.Text = "chart1";
             // 
@@ -270,11 +282,18 @@
             // 
             // backgroundWorkerSequence
             // 
-            this.backgroundWorkerSequence.WorkerReportsProgress = true;
             this.backgroundWorkerSequence.WorkerSupportsCancellation = true;
             this.backgroundWorkerSequence.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerSequence_DoWork);
             this.backgroundWorkerSequence.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerSequence_ProgressChanged);
             this.backgroundWorkerSequence.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerSequence_RunWorkerCompleted);
+            // 
+            // backgroundWorkerGraph
+            // 
+            this.backgroundWorkerGraph.WorkerReportsProgress = true;
+            this.backgroundWorkerGraph.WorkerSupportsCancellation = true;
+            this.backgroundWorkerGraph.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerGraph_DoWork);
+            this.backgroundWorkerGraph.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerGraph_ProgressChanged);
+            this.backgroundWorkerGraph.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerGraph_RunWorkerCompleted);
             // 
             // Form1
             // 
@@ -321,13 +340,15 @@
         private System.Windows.Forms.SplitContainer splitContainerControlsGraphVsLog;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBoxEventLog;
+        private System.Windows.Forms.CheckBox checkBoxLoop;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerSequence;
+        private System.Windows.Forms.Button buttonInit;
         private System.Windows.Forms.DataGridViewTextBoxColumn ChannelID;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ChannelEnable;
         private System.Windows.Forms.DataGridViewTextBoxColumn ChannelOffsetMS;
         private System.Windows.Forms.DataGridViewTextBoxColumn ChannelPulseWidth;
-        private System.Windows.Forms.CheckBox checkBoxLoop;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerSequence;
-        private System.Windows.Forms.Button buttonInit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn intraPulseDelayMS;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerGraph;
     }
 }
 

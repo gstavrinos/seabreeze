@@ -10,18 +10,10 @@ numerous nice-to-have features, but gives a quick idea of what can be done (and
 solved an actual problem in my test lab this evening).  Some obvious points to
 improve:
 
-- support parallel pulses (current implementation fires them sequentially, not
-  overlapping), probably via one BackgroundWorker per channel
-
-- precision event-based timing
-
-- in addition to "initial offset", add "post-pulse delay" to each channel so that
-  each channel can loop at its own rate
+- precision event-based timing instead of Thread.Sleep()
 
 - automatically infer the supported number of GPIO pins for a given spectrometer
   (really requires a new SeaBreeze function, getNumberOfGPIOPins())
-
-- provide real-time GUI update of all 8 pulse levels, like an oscilloscope
 
 - better handling of FormClosing and other events
 
@@ -32,4 +24,4 @@ improve:
 
 Note that this becomes way more convenient when coupled with an HR4-BREAKOUT:
 
-http://oceanoptics.com/product/hr4-breakout-breakout-box/
+    http://oceanoptics.com/product/hr4-breakout-breakout-box/

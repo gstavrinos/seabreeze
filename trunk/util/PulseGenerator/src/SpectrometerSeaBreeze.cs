@@ -238,7 +238,7 @@ namespace PulseGenerator
             if (gpio == null)
                 return false;
 
-            bool ok = mut.WaitOne(2);
+            bool ok = mut.WaitOne(5);
             if (!ok)
                 return false;
 
