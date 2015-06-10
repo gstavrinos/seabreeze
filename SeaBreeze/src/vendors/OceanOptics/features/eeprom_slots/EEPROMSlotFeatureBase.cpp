@@ -124,8 +124,6 @@ double EEPROMSlotFeatureBase::readDouble(const Protocol &protocol, const Bus &bu
         unsigned int slotNumber) throw (FeatureException, NumberFormatException) {
     LOG(__FUNCTION__);
 
-    logger.debug("starting on slot %u", slotNumber);
-
     char buffer[20];
     double retval = 0.0;
 

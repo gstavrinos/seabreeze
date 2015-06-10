@@ -109,7 +109,6 @@ vector<double> *StrayLightEEPROMSlotFeature::readStrayLightCoefficients(
         /* buffer should be set up with the other term.  Read it out in a way
          * that allows for error checking.
          */
-        logger.debug("calling istringstream to convert [%s] to double", buffer);
         try
         {
             std::istringstream istr(buffer);
@@ -120,7 +119,6 @@ vector<double> *StrayLightEEPROMSlotFeature::readStrayLightCoefficients(
             logger.error("Error converting NLC coefficient [%s] to double", buffer);
             temp = 0;
         }
-        logger.debug("back from istringstream");
         (*retval)[1] = temp;
     }
 
