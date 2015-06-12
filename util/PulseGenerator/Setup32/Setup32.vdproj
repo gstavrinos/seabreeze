@@ -50,6 +50,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -74,6 +87,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -182,15 +208,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pulse Generator"
-        "ProductCode" = "8:{034879B3-B168-4D1A-AAC2-E66D21DC0985}"
-        "PackageCode" = "8:{CCE4B3B0-CCCF-4774-816B-ECA7FB7D9B41}"
+        "ProductCode" = "8:{36894333-D4F9-4565-BF35-13C921EBC31C}"
+        "PackageCode" = "8:{E28845AE-B1DE-4FCF-9950-6E905546F9F0}"
         "UpgradeCode" = "8:{C970C540-359F-4BB9-9CAD-38213033A30A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.2"
+        "ProductVersion" = "8:1.0.3"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://oceanoptics.com"
@@ -718,7 +744,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D709259EAB09410D819A424302F59FA1"
             {
-            "SourcePath" = "8:..\\src\\obj\\x64\\Debug\\PulseGenerator.exe"
+            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\util\\PulseGenerator\\src\\obj\\x64\\Debug\\PulseGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C788BBD0B20481A82C1DA8DB660F37D"

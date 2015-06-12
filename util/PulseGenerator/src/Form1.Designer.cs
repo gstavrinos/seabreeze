@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.splitContainerControlsVsGraph = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainerSequenceVsChannels = new System.Windows.Forms.SplitContainer();
@@ -73,6 +73,7 @@
             // splitContainerControlsVsGraph
             // 
             this.splitContainerControlsVsGraph.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerControlsVsGraph.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainerControlsVsGraph.Location = new System.Drawing.Point(0, 0);
             this.splitContainerControlsVsGraph.Name = "splitContainerControlsVsGraph";
             // 
@@ -84,7 +85,7 @@
             // 
             this.splitContainerControlsVsGraph.Panel2.Controls.Add(this.chartPulses);
             this.splitContainerControlsVsGraph.Size = new System.Drawing.Size(1005, 388);
-            this.splitContainerControlsVsGraph.SplitterDistance = 283;
+            this.splitContainerControlsVsGraph.SplitterDistance = 277;
             this.splitContainerControlsVsGraph.TabIndex = 0;
             // 
             // groupBox2
@@ -93,7 +94,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(283, 388);
+            this.groupBox2.Size = new System.Drawing.Size(277, 388);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Controls";
@@ -112,7 +113,7 @@
             // splitContainerSequenceVsChannels.Panel2
             // 
             this.splitContainerSequenceVsChannels.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainerSequenceVsChannels.Size = new System.Drawing.Size(277, 369);
+            this.splitContainerSequenceVsChannels.Size = new System.Drawing.Size(271, 369);
             this.splitContainerSequenceVsChannels.SplitterDistance = 100;
             this.splitContainerSequenceVsChannels.TabIndex = 2;
             // 
@@ -124,7 +125,7 @@
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(0, 0);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(277, 100);
+            this.groupBox4.Size = new System.Drawing.Size(271, 100);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sequence";
@@ -142,6 +143,8 @@
             // checkBoxLoop
             // 
             this.checkBoxLoop.AutoSize = true;
+            this.checkBoxLoop.Checked = true;
+            this.checkBoxLoop.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxLoop.Location = new System.Drawing.Point(90, 52);
             this.checkBoxLoop.Name = "checkBoxLoop";
             this.checkBoxLoop.Size = new System.Drawing.Size(50, 17);
@@ -167,7 +170,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(277, 265);
+            this.groupBox3.Size = new System.Drawing.Size(271, 265);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Channels";
@@ -189,7 +192,7 @@
             this.dataGridViewPulses.Location = new System.Drawing.Point(3, 16);
             this.dataGridViewPulses.Name = "dataGridViewPulses";
             this.dataGridViewPulses.RowHeadersVisible = false;
-            this.dataGridViewPulses.Size = new System.Drawing.Size(271, 246);
+            this.dataGridViewPulses.Size = new System.Drawing.Size(265, 246);
             this.dataGridViewPulses.TabIndex = 2;
             this.dataGridViewPulses.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPulses_CellValueChanged);
             // 
@@ -226,18 +229,18 @@
             // 
             // chartPulses
             // 
-            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.Name = "ChartArea1";
-            this.chartPulses.ChartAreas.Add(chartArea1);
+            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY.MajorGrid.Enabled = false;
+            chartArea2.Name = "ChartArea1";
+            this.chartPulses.ChartAreas.Add(chartArea2);
             this.chartPulses.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend1.Name = "Legend1";
-            this.chartPulses.Legends.Add(legend1);
+            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend2.Name = "Legend1";
+            this.chartPulses.Legends.Add(legend2);
             this.chartPulses.Location = new System.Drawing.Point(0, 0);
             this.chartPulses.Name = "chartPulses";
-            this.chartPulses.Size = new System.Drawing.Size(718, 388);
+            this.chartPulses.Size = new System.Drawing.Size(724, 388);
             this.chartPulses.TabIndex = 0;
             this.chartPulses.Text = "chart1";
             // 
