@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    FeatureFamilies.cpp
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    February 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This provides a way to get references to different kinds
  * of features (e.g. spectrometer, TEC) generically.
@@ -34,20 +34,24 @@
 #include "api/seabreezeapi/FeatureFamilies.h"
 
 /* Constants */
-#define FEATURE_FAMILY_ID_UNDEFINED          0
-#define FEATURE_FAMILY_ID_SERIAL_NUMBER      1
-#define FEATURE_FAMILY_ID_SPECTROMETER       2
-#define FEATURE_FAMILY_ID_THERMOELECTRIC     3
-#define FEATURE_FAMILY_ID_IRRADCAL           4
-#define FEATURE_FAMILY_ID_EEPROM             5
-#define FEATURE_FAMILY_ID_STROBE_LAMP        6
-#define FEATURE_FAMILY_ID_SHUTTER            7
-#define FEATURE_FAMILY_ID_WAVECAL            8
-#define FEATURE_FAMILY_ID_NONLINEARITYCAL    9
-#define FEATURE_FAMILY_ID_STRAYLIGHTCAL     10
-#define FEATURE_FAMILY_ID_RAW_BUS_ACCESS    11
-#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 12
-#define FEATURE_FAMILY_ID_LIGHT_SOURCE      13
+#define FEATURE_FAMILY_ID_UNDEFINED          	0
+#define FEATURE_FAMILY_ID_SERIAL_NUMBER      	1
+#define FEATURE_FAMILY_ID_SPECTROMETER       	2
+#define FEATURE_FAMILY_ID_THERMOELECTRIC    	3
+#define FEATURE_FAMILY_ID_IRRADCAL          	4
+#define FEATURE_FAMILY_ID_EEPROM             	5
+#define FEATURE_FAMILY_ID_STROBE_LAMP       	6
+#define FEATURE_FAMILY_ID_SHUTTER            	7
+#define FEATURE_FAMILY_ID_WAVECAL            	8
+#define FEATURE_FAMILY_ID_NONLINEARITYCAL    	9
+#define FEATURE_FAMILY_ID_STRAYLIGHTCAL     	10
+#define FEATURE_FAMILY_ID_RAW_BUS_ACCESS    	11
+#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 	12
+#define FEATURE_FAMILY_ID_LIGHT_SOURCE      	13
+#define FEATURE_FAMILY_ID_TEMPERATURE    		14
+#define FEATURE_FAMILY_ID_OPTICAL_BENCH    		15
+#define FEATURE_FAMILY_ID_REVISION	    		16
+#define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING	17
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -186,6 +190,42 @@ seabreeze::api::RawBusAccessFeatureFamily::~RawBusAccessFeatureFamily() {
 
 }
 
+seabreeze::api::TemperatureFeatureFamily::TemperatureFeatureFamily()
+        : FeatureFamily("Temperature", FEATURE_FAMILY_ID_TEMPERATURE) {
+
+}
+
+seabreeze::api::TemperatureFeatureFamily::~TemperatureFeatureFamily() {
+
+}
+
+seabreeze::api::RevisionFeatureFamily::RevisionFeatureFamily()
+        : FeatureFamily("Revision", FEATURE_FAMILY_ID_REVISION) {
+
+}
+
+seabreeze::api::RevisionFeatureFamily::~RevisionFeatureFamily() {
+
+}
+
+seabreeze::api::OpticalBenchFeatureFamily::OpticalBenchFeatureFamily()
+        : FeatureFamily("OpticalBench", FEATURE_FAMILY_ID_OPTICAL_BENCH) {
+
+}
+
+seabreeze::api::OpticalBenchFeatureFamily::~OpticalBenchFeatureFamily() {
+
+}
+
+seabreeze::api::SpectrumProcessingFeatureFamily::SpectrumProcessingFeatureFamily()
+        : FeatureFamily("SpectrumProcessing", FEATURE_FAMILY_ID_SPECTRUM_PROCESSING) {
+
+}
+
+seabreeze::api::SpectrumProcessingFeatureFamily::~SpectrumProcessingFeatureFamily() {
+
+}
+
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
     /* This creates new instances of these so the class-wide fields do not risk
@@ -204,6 +244,9 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new StrayLightCoeffsFeatureFamily());
     retval.push_back(new RawBusAccessFeatureFamily());
     retval.push_back(new LightSourceFeatureFamily());
-
+    retval.push_back(new TemperatureFeatureFamily());
+	retval.push_back(new OpticalBenchFeatureFamily());
+	retval.push_back(new SpectrumProcessingFeatureFamily());
+	
     return retval;
 }

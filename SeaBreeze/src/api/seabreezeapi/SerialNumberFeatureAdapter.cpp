@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SerialNumberFeatureAdapter.h
+ * @file    SerialNumberFeatureAdapter.cpp
  * @date    February 2012
  * @author  Ocean Optics, Inc.
  *
@@ -58,6 +58,7 @@ SerialNumberFeatureAdapter::~SerialNumberFeatureAdapter() {
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
+
 int SerialNumberFeatureAdapter::getSerialNumber(int *errorCode,
             char *buffer, int buffer_length) {
 
@@ -88,3 +89,20 @@ int SerialNumberFeatureAdapter::getSerialNumber(int *errorCode,
     SET_ERROR_CODE(ERROR_SUCCESS);
     return i;
 }
+
+unsigned char SerialNumberFeatureAdapter::getSerialNumberMaximumLength(int *errorCode) {
+
+    unsigned char length;
+
+    try {
+        length = this->feature->readSerialNumberMaximumLength(
+            *this->protocol, *this->bus);
+    } catch (FeatureException &fe) {
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return length;
+}
+

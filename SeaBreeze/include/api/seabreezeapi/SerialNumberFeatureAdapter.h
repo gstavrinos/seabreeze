@@ -48,6 +48,8 @@ namespace seabreeze {
             virtual ~SerialNumberFeatureAdapter();
 
             int getSerialNumber(int *errorCode, char *buffer, int buffer_length);
+            unsigned char getSerialNumberMaximumLength(int *errorCode);
+
         };
 
     }

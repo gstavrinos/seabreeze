@@ -1,7 +1,7 @@
 /***************************************************//**
- * @file    DeviceAdapter.h
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @file    DeviceAdapter.cpp
+ * @date    January 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is a wrapper that allows
  * access to SeaBreeze DeviceInterface instances.
@@ -91,6 +91,10 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ContinuousStrobeFeatureAdapter>(continuousStrobeFeatures);
     __delete_feature_adapters<ShutterFeatureAdapter>(shutterFeatures);
     __delete_feature_adapters<NonlinearityCoeffsFeatureAdapter>(nonlinearityFeatures);
+    __delete_feature_adapters<TemperatureFeatureAdapter>(temperatureFeatures);
+    __delete_feature_adapters<RevisionFeatureAdapter>(revisionFeatures);
+    __delete_feature_adapters<OpticalBenchFeatureAdapter>(opticalBenchFeatures);
+    __delete_feature_adapters<SpectrumProcessingFeatureAdapter>(spectrumProcessingFeatures);
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
 
@@ -201,6 +205,26 @@ int DeviceAdapter::open(int *errorCode) {
                     NonlinearityCoeffsFeatureAdapter>(this->device,
             nonlinearityFeatures, bus, featureFamilies.NONLINEARITY_COEFFS);
 
+    /* Create temperature feature list */
+    __create_feature_adapters<TemperatureFeatureInterface,
+                    TemperatureFeatureAdapter>(this->device,
+            temperatureFeatures, bus, featureFamilies.TEMPERATURE);
+
+    /* Create revision feature list */
+    __create_feature_adapters<RevisionFeatureInterface,
+                    RevisionFeatureAdapter>(this->device,
+            revisionFeatures, bus, featureFamilies.REVISION);
+             
+     /* Create optical bench feature list */
+    __create_feature_adapters<OpticalBenchFeatureInterface,
+                    OpticalBenchFeatureAdapter>(this->device,
+            opticalBenchFeatures, bus, featureFamilies.OPTICAL_BENCH);
+            
+     /* Create spectrum processing feature list */
+    __create_feature_adapters<SpectrumProcessingFeatureInterface,
+                    SpectrumProcessingFeatureAdapter>(this->device,
+            spectrumProcessingFeatures, bus, featureFamilies.SPECTRUM_PROCESSING);
+                       
     /* Create stray light coefficients feature list */
     __create_feature_adapters<StrayLightCoeffsFeatureInterface,
                     StrayLightCoeffsFeatureAdapter>(this->device,
@@ -297,6 +321,16 @@ int DeviceAdapter::getSerialNumber(long featureID, int *errorCode,
     }
 
     return feature->getSerialNumber(errorCode, buffer, bufferLength);
+}
+
+unsigned char DeviceAdapter::getSerialNumberMaximumLength(long featureID, int *errorCode) {
+    SerialNumberFeatureAdapter *feature = getSerialNumberFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getSerialNumberMaximumLength(errorCode);
 }
 
 /* Spectrometer feature wrappers */
@@ -778,6 +812,234 @@ int DeviceAdapter::nonlinearityCoeffsGet(long featureID, int *errorCode,
     return feature->readNonlinearityCoeffs(errorCode, buffer, bufferLength);
 }
 
+/* Temperature feature wrappers */
+int DeviceAdapter::getNumberOfTemperatureFeatures() {
+    return (int) this->temperatureFeatures.size();
+}
+
+int DeviceAdapter::getTemperatureFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<TemperatureFeatureAdapter>(
+                temperatureFeatures, buffer, maxFeatures);
+}
+
+TemperatureFeatureAdapter *DeviceAdapter::getTemperatureFeatureByID(long temperatureFeatureID) {
+    return __getFeatureByID<TemperatureFeatureAdapter>(
+                temperatureFeatures, temperatureFeatureID);
+}
+
+unsigned char DeviceAdapter::temperatureCountGet(long temperatureFeatureID, int *errorCode) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readTemperatureCount(errorCode);
+}
+
+double DeviceAdapter::temperatureGet(long temperatureFeatureID, int *errorCode, int index) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readTemperature(errorCode, index);
+}
+
+int DeviceAdapter::temperatureGetAll(long temperatureFeatureID, int *errorCode,
+        double *buffer, int bufferLength) {
+    TemperatureFeatureAdapter *feature = getTemperatureFeatureByID(temperatureFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readAllTemperatures(errorCode, buffer, bufferLength);
+}
+
+/* Revision feature wrappers */
+int DeviceAdapter::getNumberOfRevisionFeatures() {
+    return (int) this->revisionFeatures.size();
+}
+
+int DeviceAdapter::getRevisionFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<RevisionFeatureAdapter>(
+                revisionFeatures, buffer, maxFeatures);
+}
+
+RevisionFeatureAdapter *DeviceAdapter::getRevisionFeatureByID(long revisionFeatureID) {
+    return __getFeatureByID<RevisionFeatureAdapter>(
+                revisionFeatures, revisionFeatureID);
+}
+
+unsigned char DeviceAdapter::revisionHardwareGet(long revisionFeatureID, int *errorCode) {
+    RevisionFeatureAdapter *feature = getRevisionFeatureByID(revisionFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readHardwareRevision(errorCode);
+}
+
+unsigned short int DeviceAdapter::revisionFirmwareGet(long revisionFeatureID, int *errorCode) {
+    RevisionFeatureAdapter *feature = getRevisionFeatureByID(revisionFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readFirmwareRevision(errorCode);
+}
+
+/* Optical Bench feature wrappers */
+int DeviceAdapter::getNumberOfOpticalBenchFeatures() {
+    return (int) this->opticalBenchFeatures.size();
+}
+
+int DeviceAdapter::getOpticalBenchFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<OpticalBenchFeatureAdapter>(
+                opticalBenchFeatures, buffer, maxFeatures);
+}
+
+OpticalBenchFeatureAdapter *DeviceAdapter::getOpticalBenchFeatureByID(long opticalBenchFeatureID) {
+    return __getFeatureByID<OpticalBenchFeatureAdapter>(
+               opticalBenchFeatures, opticalBenchFeatureID);
+}
+
+unsigned short int DeviceAdapter::opticalBenchGetFiberDiameterMicrons(long opticalBenchFeatureID, int *errorCode) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(opticalBenchFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchFiberDiameterMicrons(errorCode);
+}
+
+unsigned short int DeviceAdapter::opticalBenchGetSlitWidthMicrons(long opticalBenchFeatureID, int *errorCode) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(opticalBenchFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchSlitWidthMicrons(errorCode);
+}
+
+int DeviceAdapter::opticalBenchGetID(long featureID, int *errorCode,
+        char *buffer, int bufferLength) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+    return feature->readOpticalBenchID(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::opticalBenchGetSerialNumber(long featureID, int *errorCode,
+        char *buffer, int bufferLength) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchSerialNumber(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::opticalBenchGetCoating(long featureID, int *errorCode,
+        char *buffer, int bufferLength) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchCoating(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::opticalBenchGetFilter(long featureID, int *errorCode,
+        char *buffer, int bufferLength) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchFilter(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::opticalBenchGetGrating(long featureID, int *errorCode,
+        char *buffer, int bufferLength) {
+    OpticalBenchFeatureAdapter *feature = getOpticalBenchFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readOpticalBenchGrating(errorCode, buffer, bufferLength);
+}
+
+/* Spectrum processing feature wrappers */
+int DeviceAdapter::getNumberOfSpectrumProcessingFeatures() {
+    return (int) this->spectrumProcessingFeatures.size();
+}
+
+int DeviceAdapter::getSpectrumProcessingFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<SpectrumProcessingFeatureAdapter>(
+                spectrumProcessingFeatures, buffer, maxFeatures);
+}
+
+SpectrumProcessingFeatureAdapter *DeviceAdapter::getSpectrumProcessingFeatureByID(long spectrumProcessingFeatureID) {
+    return __getFeatureByID<SpectrumProcessingFeatureAdapter>(
+               spectrumProcessingFeatures, spectrumProcessingFeatureID);
+}
+
+unsigned short int DeviceAdapter::spectrumProcessingScansToAverageGet(long spectrumProcessingFeatureID, int *errorCode) {
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(spectrumProcessingFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readSpectrumProcessingScansToAverage(errorCode);
+}
+
+unsigned char DeviceAdapter::spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode) {
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(spectrumProcessingFeatureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readSpectrumProcessingBoxcarWidth(errorCode);
+}
+
+void DeviceAdapter::spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode,
+            unsigned char boxcarWidth) {
+
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->writeSpectrumProcessingBoxcarWidth(errorCode, boxcarWidth);
+}
+
+void DeviceAdapter::spectrumProcessingScansToAverageSet(long featureID, int *errorCode,
+            unsigned short int scansToAverage) {
+
+    SpectrumProcessingFeatureAdapter *feature = getSpectrumProcessingFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->writeSpectrumProcessingScansToAverage(errorCode, scansToAverage);
+}
 
 /* Stray light coefficients feature wrappers */
 int DeviceAdapter::getNumberOfStrayLightCoeffsFeatures() {

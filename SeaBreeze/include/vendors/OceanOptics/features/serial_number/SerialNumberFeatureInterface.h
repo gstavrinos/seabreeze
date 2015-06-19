@@ -40,6 +40,8 @@ namespace seabreeze {
     class SerialNumberFeatureInterface {
     public:
         virtual ~SerialNumberFeatureInterface() = 0;
+        virtual unsigned char readSerialNumberMaximumLength(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
         virtual std::string *readSerialNumber(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;
     };

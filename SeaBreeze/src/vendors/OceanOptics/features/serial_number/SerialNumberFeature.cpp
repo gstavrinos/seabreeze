@@ -86,6 +86,35 @@ string *SerialNumberFeature::readSerialNumber(const Protocol &protocol,
     return retval;
 }
 
+unsigned char SerialNumberFeature::readSerialNumberMaximumLength(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) {
+
+    SerialNumberProtocolInterface *serial = NULL;
+    ProtocolHelper *proto = NULL;
+    unsigned char length;
+
+    try {
+        proto = lookupProtocolImpl(protocol);
+        serial = static_cast<SerialNumberProtocolInterface *>(proto);
+    } catch (FeatureProtocolNotFoundException &e) {
+        string error(
+                "Could not find matching protocol implementation to get serial number.");
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureProtocolNotFoundException(error);
+    }
+
+    try {
+        length = serial->readSerialNumberMaximumLength(bus);
+    } catch (ProtocolException &pe) {
+        string error("Caught protocol exception: ");
+        error += pe.what();
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureControlException(error);
+    }
+
+    return length;
+}
+
 FeatureFamily SerialNumberFeature::getFeatureFamily() {
     FeatureFamilies families;
 
