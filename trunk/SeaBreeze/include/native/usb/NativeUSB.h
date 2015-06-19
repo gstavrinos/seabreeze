@@ -41,17 +41,18 @@
 extern "C" {
 #endif /* cplusplus */
 
-#define OPEN_OK          0
-#define NO_DEVICE_FOUND -1
-#define NO_DEVICE_MATCH -2
-#define CLOSE_OK         0
-#define CLOSE_ERROR     -1
-#define WRITE_FAILED    -1
-#define READ_FAILED     -1
-#define ABORT_OK         0
-#define ABORT_FAILED    -1
-#define RESET_OK         0
-#define RESET_FAILED    -1
+#define OPEN_OK          		0
+#define NO_DEVICE_FOUND 		-1
+#define NO_DEVICE_MATCH 		-2
+#define CLAIM_INTERFACE_FAILED 	-3
+#define CLOSE_OK         		0
+#define CLOSE_ERROR     		-1
+#define WRITE_FAILED    		-1
+#define READ_FAILED     		-1
+#define ABORT_OK         		0
+#define ABORT_FAILED    		-1
+#define RESET_OK         		0
+#define RESET_FAILED    		-1
 
 struct USBConfigurationDescriptor {
     unsigned char bLength;

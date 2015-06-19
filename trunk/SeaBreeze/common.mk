@@ -28,7 +28,8 @@ ifeq ($(UNAME), Darwin)
                   -dynamiclib \
                   -framework Carbon \
                   -framework CoreFoundation \
-                  -framework IOKit
+                  -framework IOKit 
+                                    
     CFLAGS_BASE = -I${SEABREEZE}/include \
                   -c \
                   -Wall \
@@ -84,6 +85,16 @@ CFLAGS_BASE += -DOOI_DEBUG
 # these are for the .o files making up libseabreeze
 CPPFLAGS     = $(CFLAGS_BASE)
 CFLAGS       = $(CFLAGS_BASE) -std=gnu99
+
+	# allow for a 32 bit build
+ifdef wordwidth
+ifeq ($(wordwidth),32)
+	CPPFLAGS += -arch i386
+	CFLAGS += -arch i386
+	LFLAGS_APP += -arch i386
+	LFLAGS_LIB += -arch i386
+endif
+endif
 
 export LIBNAME=$(LIBBASENAME).$(SUFFIX)
 

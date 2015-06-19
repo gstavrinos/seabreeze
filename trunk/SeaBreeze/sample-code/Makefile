@@ -2,6 +2,6 @@ SEABREEZE = ..
 
 all: deps objs
 
-SUBDIRS = c cpp heliospectraSTSdaemon
+SUBDIRS = c cpp
 
 include $(SEABREEZE)/common.mk

@@ -99,10 +99,10 @@ namespace seabreeze {
             virtual ~ShutterFeatureFamily();
         };
 
-        class WaveCalFeatureFamily : public FeatureFamily {
+        class WaveCalCoeffsEEPromFeatureFamily : public FeatureFamily {
         public:
-            WaveCalFeatureFamily();
-            virtual ~WaveCalFeatureFamily();
+            WaveCalCoeffsEEPromFeatureFamily();
+            virtual ~WaveCalCoeffsEEPromFeatureFamily();
         };
 
         class NonlinearityCoeffsFeatureFamily : public FeatureFamily {
@@ -159,7 +159,7 @@ namespace seabreeze {
             const StrobeLampFeatureFamily STROBE_LAMP_ENABLE;
             const ContinuousStrobeFeatureFamily CONTINUOUS_STROBE;
             const ShutterFeatureFamily SHUTTER;
-            const WaveCalFeatureFamily WAVELENGTH_CAL;
+            const WaveCalCoeffsEEPromFeatureFamily WAVELENGTH_CAL;
             const NonlinearityCoeffsFeatureFamily NONLINEARITY_COEFFS;
             const TemperatureFeatureFamily TEMPERATURE;
             const RevisionFeatureFamily REVISION;
