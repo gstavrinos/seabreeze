@@ -403,6 +403,7 @@ USBOpen(unsigned long deviceID, int *errorCode) {
                 if(NULL == retval) {
                     usb_close(deviceHandle);
                     /* Could not allocate memory */
+                    SET_ERROR_CODE(CLAIM_INTERFACE_FAILED);
                     return 0;
                 }
                 retval->dev = deviceHandle;

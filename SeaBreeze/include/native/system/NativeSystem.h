@@ -42,7 +42,6 @@ extern "C" {
 
 void sleepMilliseconds(unsigned int msecs);
 
-
 /* End of C prototypes */
 
 

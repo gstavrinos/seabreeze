@@ -490,7 +490,7 @@ USBOpen(unsigned long deviceID, int *errorCode) {
     CFMutableDictionaryRef matchingDictionary=0;
     SInt32 idVendor;
     SInt32 idProduct;
-    int score;
+    SInt32 score;  // was int... but is SInt32 in other calls
     CFNumberRef numberRef;
     UInt8 numConf;
     io_iterator_t iterator = 0;
@@ -810,7 +810,7 @@ int
 USBRead(void *deviceHandle, unsigned char endpoint, char * data, int numberOfBytes) {
     IOReturn flag;
     __usb_interface_t *usb;
-    unsigned int bytesRead = numberOfBytes;
+    UInt32 bytesRead = numberOfBytes;  // ReadPipe uses UInt32 for bytesRead.
     unsigned char pipe;
 
     if(NULL == deviceHandle) {

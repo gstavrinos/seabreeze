@@ -70,7 +70,7 @@ The following is list of the changes required to add a USB command for
 	    retval.push_back(new StrobeLampFeatureFamily());\
 	    retval.push_back(new ContinuousStrobeFeatureFamily());\
 	    retval.push_back(new ShutterFeatureFamily());\
-	    retval.push_back(new WaveCalFeatureFamily());\
+	    retval.push_back(new WaveCalCoeffsEEPromFeatureFamily());\
 	    retval.push_back(new NonlinearityCoeffsFeatureFamily());\
 	    retval.push_back(new StrayLightCoeffsFeatureFamily());\
 	    retval.push_back(new RawBusAccessFeatureFamily());\
@@ -108,7 +108,7 @@ The following is list of the changes required to add a USB command for
             const StrobeLampFeatureFamily STROBE_LAMP_ENABLE;\
             const ContinuousStrobeFeatureFamily CONTINUOUS_STROBE;\
             const ShutterFeatureFamily SHUTTER;\
-            const WaveCalFeatureFamily WAVELENGTH_CAL;\
+            const WaveCalCoeffsEEPromFeatureFamily WAVELENGTH_CAL;\
             const NonlinearityCoeffsFeatureFamily NONLINEARITY_COEFFS;\
             const TemperatureFeatureFamily TEMPERATURE;\
             const RevisionFeatureFamily REVISION;\
@@ -1018,7 +1018,7 @@ SUBDIRS = \\\
 \cf3     spectrum_processing \\\
 \cf0     stray_light         \\\
     thermoelectric      \\\
-    wavecal\
+    wavecalcoeffseeprom\
 \
 include $(SEABREEZE)/common.mk\
 \

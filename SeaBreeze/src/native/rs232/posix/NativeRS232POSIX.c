@@ -111,10 +111,18 @@ int __rs232_get_closest_baud_index(unsigned int target_baud) {
         return -1;
     }
 
-    best_delta = ABS(target_baud - __rs232_baud_table[0].bps);
+    //best_delta = ABS(target_baud - __rs232_baud_table[0].bps);
+
+	// the compiler flags and error for abs(unsigned var1- unsigned var2)
+    best_delta = target_baud - __rs232_baud_table[0].bps;
+    best_delta= abs(best_delta);
+
     best_index = 0;
     for(i = 1; i < __rs232_baud_table_length; i++) {
-        delta = ABS(target_baud - __rs232_baud_table[i].bps);
+        //delta = ABS(target_baud - __rs232_baud_table[i].bps);
+        delta = target_baud - __rs232_baud_table[i].bps;
+        delta= abs(delta);
+
         if(delta < best_delta) {
             best_index = i;
             best_delta = delta;

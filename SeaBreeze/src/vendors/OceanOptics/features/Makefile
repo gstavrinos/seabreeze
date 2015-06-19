@@ -19,6 +19,6 @@ SUBDIRS = \
     spectrum_processing \
     stray_light         \
     thermoelectric      \
-    wavecal
+    wavecalcoeffseeprom
 
 include $(SEABREEZE)/common.mk
