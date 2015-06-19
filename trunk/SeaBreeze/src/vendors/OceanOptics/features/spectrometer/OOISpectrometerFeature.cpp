@@ -285,3 +285,4 @@ FeatureFamily OOISpectrometerFeature::getFeatureFamily() {
 
     return families.SPECTROMETER;
 }
+

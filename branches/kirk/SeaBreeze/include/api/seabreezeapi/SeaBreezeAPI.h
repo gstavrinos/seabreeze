@@ -247,6 +247,7 @@ extern "C" {
      * this is called first.  This should be called synchronously -- a single
      * thread should call this.
      */
+
     DLL_DECL void sbapi_initialize();
 
     /**
@@ -990,8 +991,11 @@ extern "C" {
      * @return the number of strobe/lamp features that will be returned
      *      by a call to sbapi_get_strobe_lamp_features().
      */
-    DLL_DECL int
-    sbapi_get_number_of_strobe_lamp_features(long deviceID, int *error_code);
+     
+     // There is not code in seabreezeAPI.cpp for this function. Perhaps it was not finished
+     
+    //DLL_DECL int
+    //sbapi_get_number_of_strobe_lamp_features(long deviceID, int *error_code);
 
     /**
      * This function returns IDs for accessing each strobe/lamp instance for this
@@ -1006,9 +1010,12 @@ extern "C" {
      *
      * @return the number of strobe/lamp feature IDs that were copied.
      */
-    DLL_DECL int
-    sbapi_get_strobe_lamp_features(long deviceID, int *error_code, long *features,
-            int max_features);
+     
+      // There is not code in seabreezeAPI.cpp for this function. Perhaps it was not finished.
+    
+    //DLL_DECL int
+    //sbapi_get_strobe_lamp_features(long deviceID, int *error_code, long *features,
+    //        int max_features);
 
     /**
      * This function returns the total number of lamp instances available

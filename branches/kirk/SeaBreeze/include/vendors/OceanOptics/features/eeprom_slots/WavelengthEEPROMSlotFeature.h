@@ -31,7 +31,7 @@
 #define WAVELENGTHEEPROMSLOTFEATURE_H
 
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeatureBase.h"
-#include "vendors/OceanOptics/features/wavecal/WaveCalFeatureInterface.h"
+#include "vendors/OceanOptics/features/wavecalcoeffseeprom/WaveCalCoeffsEEPromFeatureInterface.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include <vector>
@@ -39,7 +39,7 @@
 namespace seabreeze {
 
     class WavelengthEEPROMSlotFeature
-        : public WaveCalFeatureInterface, public EEPROMSlotFeatureBase {
+        : public WaveCalCoeffsEEPromFeatureInterface, public EEPROMSlotFeatureBase {
     public:
         WavelengthEEPROMSlotFeature(unsigned int numberOfPixels);
         virtual ~WavelengthEEPROMSlotFeature();

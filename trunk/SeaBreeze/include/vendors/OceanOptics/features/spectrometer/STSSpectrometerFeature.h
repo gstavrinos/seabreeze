@@ -30,7 +30,14 @@
 #ifndef STSSPECTROMETERFEATURE_H
 #define STSSPECTROMETERFEATURE_H
 
+#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
+
+
+#define STS_TEMPERATURE_DETECTOR_INDEX 0
+#define STS_TEMPERATURE_RESERVED_INDEX 1
+#define	STS_TEMPERATURE_CPU_INDEX 2
 
 namespace seabreeze {
 
@@ -41,7 +48,7 @@ namespace seabreeze {
 
         /* The STS gets wavelengths a bit differently */
         virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);
+            const Bus &bus) throw (FeatureException);       
 
     private:
         static const long INTEGRATION_TIME_MINIMUM;

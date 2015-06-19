@@ -358,8 +358,8 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\ThermoElectricFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecal\WaveCalFeature.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecal\WaveCalFeatureInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\FPGARegisterProtocolInterface.h"></File>
@@ -372,7 +372,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\StrayLightCoeffsProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\StrobeLampProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ThermoElectricProtocolInterface.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\WaveCalProtocolInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\WaveCalCoeffsEEPromProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\constants\OBPMessageTypes.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPCommand.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.h"></File>
@@ -385,7 +385,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffsCountExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalCoeffsEEPromExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.h"></File>
@@ -418,7 +418,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalCoeffsEEPromProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OceanBinaryProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\constants\FPGARegisterCodes.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\constants\OpCodes.h"></File>
@@ -614,7 +614,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricFeatureBase.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\wavecal\WaveCalFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\FPGARegisterProtocolInterface.cpp"></File>
@@ -627,7 +627,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\StrayLightCoeffsProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\StrobeLampProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ThermoElectricProtocolInterface.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\WaveCalProtocolInterface.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\WaveCalCoeffsEEPromProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPCommand.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobePeriodExchange.cpp"></File>
@@ -639,7 +639,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffsCountExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalCoeffsEEPromExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.cpp"></File>
@@ -672,7 +672,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalCoeffsEEPromProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OceanBinaryProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\constants\FPGARegisterCodes.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\constants\OpCodes.cpp"></File>

@@ -177,8 +177,8 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\ThermoElectricFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecal\WaveCalFeature.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecal\WaveCalFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\FPGARegisterProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
@@ -191,7 +191,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\StrayLightCoeffsProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\StrobeLampProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ThermoElectricProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\WaveCalProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\WaveCalCoeffsEEPromProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\constants\OBPMessageTypes.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPCommand.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.h"><Filter>Headers</Filter></ClInclude>
@@ -204,7 +204,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffsCountExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalCoeffsEEPromExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.h"><Filter>Headers</Filter></ClInclude>
@@ -237,7 +237,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalCoeffsEEPromProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OceanBinaryProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\constants\FPGARegisterCodes.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\constants\OpCodes.h"><Filter>Headers</Filter></ClInclude>
@@ -434,7 +434,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricFeatureBase.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\wavecal\WaveCalFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\FPGARegisterProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
@@ -447,7 +447,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\StrayLightCoeffsProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\StrobeLampProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ThermoElectricProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\WaveCalProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\WaveCalCoeffsEEPromProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPCommand.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobePeriodExchange.cpp"><Filter>Sources</Filter></ClCompile>
@@ -459,7 +459,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetStrayLightCoeffsCountExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalCoeffsEEPromExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.cpp"><Filter>Sources</Filter></ClCompile>
@@ -492,7 +492,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalCoeffsEEPromProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OceanBinaryProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\constants\FPGARegisterCodes.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\constants\OpCodes.cpp"><Filter>Sources</Filter></ClCompile>

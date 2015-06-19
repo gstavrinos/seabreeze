@@ -14,6 +14,7 @@ CFLAGS_BASE = -I${SEABREEZE}/include \
               -fpic \
               -fno-stack-protector \
               -shared
+ 
 
 export UNAME = $(shell uname)
 

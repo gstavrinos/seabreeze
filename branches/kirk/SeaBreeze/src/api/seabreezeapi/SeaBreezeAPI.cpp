@@ -1318,6 +1318,7 @@ int SeaBreezeAPI::strayLightCoeffsGet(long deviceID, long featureID,
 //  C language wrapper for Device control 
 /**************************************************************************************/
 
+
 void sbapi_initialize() {
     /* Force the API to allocate an instance if it has not already. */
     SeaBreezeAPI::getInstance();
@@ -1379,7 +1380,13 @@ sbapi_get_error_string(int error_code) {
 	if((error_code>-99999) && (error_code<0))
 	{ 
 	// assume these are system errors, show the error code
-		snprintf(__messageBuffer, MESSAGE_BUFFER_SIZE, "System Error: %d", error_code); 
+		#ifdef _WIN32 // work around Windows not supportings snprintf in c99
+		// supported in C++11
+		_snprintf(__messageBuffer, MESSAGE_BUFFER_SIZE, "System Error: %d", error_code); 
+		#else
+		snprintf(__messageBuffer, MESSAGE_BUFFER_SIZE, "System Error: %d", error_code);
+		#endif
+		
 		returnMessage=__messageBuffer;
 	}
     else if(error_code >= number_error_msgs)

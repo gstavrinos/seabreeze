@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    NonlinearityCoeffsFeatureAdapter.h
+ * @file    NonlinearityCoeffsFeatureAdapter.cpp
  * @date    February 2012
  * @author  Ocean Optics, Inc.
  *

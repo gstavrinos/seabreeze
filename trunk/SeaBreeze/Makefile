@@ -69,16 +69,16 @@ doc-init:
 	@( cd doc && $(RM) -rf html man rtf *.err *.out )
 
 doc-user: 
-	@echo generating user docs...
+	@echo $(DOXYGEN_BASE)doxygen is generating the user docs...
 	@( cd doc && doxygen Doxyfile > doxygen-user.out && mv rtf/refman.rtf rtf/SeaBreezeWrapper_User_Manual.rtf )
 
 doc-dev: 
-	@echo generating developer docs...
+	@echo $(DOXYGEN_BASE)doxygen is generating the developer docs...
 	@( cd doc && doxygen Doxyfile-dev > doxygen-dev.out && mv rtf/refman.rtf rtf/SeaBreeze_Developer_Manual.rtf )
 
 doc: doc-init doc-user doc-dev
 	@echo
-	@echo Rendered documentation can be found in doc/, especially:
+	@echo The doxygen rendered documentation can be found in doc/. Please note:
 	@echo
 	@ls -lah doc/rtf/*Manual.rtf
 	@echo

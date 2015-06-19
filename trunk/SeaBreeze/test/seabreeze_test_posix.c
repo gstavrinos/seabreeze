@@ -73,9 +73,9 @@ int main() {
     int i;
 
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
-        printf("Opening spectrometer %d.\n", i);
+        printf("\nOpening spectrometer %d.\n", i);
         flag = seabreeze_open_spectrometer(i, &error);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
         if(0 == flag) {
             device_count++;
         } else {
@@ -84,19 +84,20 @@ int main() {
     }
 
     for(i = 0; i < device_count; i++) {
-        printf("Getting device %d name.\n", i);
+        printf("\nGetting device %d name.\n", i);
         seabreeze_get_model(i, &error, type, sizeof(type));
-        printf("Result is (%s) [%s]\n", type, get_error_string(error));
+        printf("...Result is (%s) [%s]\n", type, get_error_string(error));
     }
 
     for(i = 0; i < device_count; i++) {
-        printf("Setting device %d integration time to 100ms.\n", i);
+        printf("\nSetting device %d integration time to 100ms.\n", i);
         seabreeze_set_integration_time_microsec(i, &error, 100000);
-        printf("Result is [%s]\n", get_error_string(error));
+        printf("...Result is [%s]\n", get_error_string(error));
     }
 
     for(i = 0; i < device_count; i++) {
-        printf("Beginning test suite for device %d\n", i);
+        printf("\n\nBeginning test suite for device %d\n", i);
+        read_serial_number_test(i);  // done twice to workaround lockup bug FIXME
         read_serial_number_test(i);
         tec_test(i);
         strobe_enable_test(i);
@@ -113,9 +114,9 @@ int main() {
     }
 
     for(i = 0; i < device_count; i++) {
-        printf("Closing spectrometer %d.\n", i);
+        printf("\nClosing spectrometer %d.\n", i);
         flag = seabreeze_close_spectrometer(i, &error);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
     }
 
     seabreeze_shutdown();
@@ -129,33 +130,33 @@ void tec_test(int index) {
     int error;
     double temp;
 
-    printf("Setting TEC enable to false\n");
+    printf("\n\nSetting TEC enable to false\n");
     seabreeze_set_tec_enable(index, &error, 0);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
     if(0 != error) {
-        printf("Bailing out of lengthy TEC test since not supported.\n");
+        printf("\tBailing out of lengthy TEC test since not supported.\n");
         return;
     }
 
     usleep(1000000);
 
-    printf("Setting TEC temperature to -5C\n");
+    printf("\nSetting TEC temperature to -5C\n");
     seabreeze_set_tec_temperature(index, &error, -5);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
-    printf("Setting TEC enable to true\n");
+    printf("\nSetting TEC enable to true\n");
     seabreeze_set_tec_enable(index, &error, 1);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
-    printf("Getting TEC temperature\n");
+    printf("\nGetting TEC temperature\n");
     temp = seabreeze_read_tec_temperature(index, &error);
-    printf("Result is %1.2f C [%s]\n", temp, get_error_string(error));
+    printf("...Result is %1.2f C [%s]\n", temp, get_error_string(error));
 
     usleep(1000000);
-    printf("Getting TEC temperature\n");
+    printf("\nGetting TEC temperature\n");
     temp = seabreeze_read_tec_temperature(index, &error);
-    printf("Result is %1.2f C [%s]\n", temp, get_error_string(error));
+    printf("...Result is %1.2f C [%s]\n", temp, get_error_string(error));
 
 }
 
@@ -163,13 +164,13 @@ void strobe_enable_test(int index) {
 
     int error;
 
-    printf("Setting strobe/lamp enable to true\n");
+    printf("\n\nSetting strobe/lamp enable to true\n");
     seabreeze_set_strobe_enable(index, &error, 1);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
     usleep(500000);
-    printf("Setting strobe/lamp enable to false\n");
+    printf("\nSetting strobe/lamp enable to false\n");
     seabreeze_set_strobe_enable(index, &error, 0);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
 }
 
@@ -178,13 +179,13 @@ void trigger_mode_test(int index) {
 
     int error;
 
-    printf("Setting trigger mode to 1\n");
+    printf("\n\nSetting trigger mode to 1\n");
     seabreeze_set_trigger_mode(index, &error, 1);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
     usleep(500000);
-    printf("Setting trigger mode to 0\n");
+    printf("\nSetting trigger mode to 0\n");
     seabreeze_set_trigger_mode(index, &error, 0);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
 }
 
@@ -193,12 +194,12 @@ void read_serial_number_test(int index) {
     int flag;
     int error;
 
-    printf("Getting serial number.\n");
+    printf("\n\nGetting serial number.\n");
     flag = seabreeze_get_serial_number(index, &error, serial_number, 32);
-    printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
     serial_number[31] = '\0';
     if(flag > 0) {
-        printf("Serial number: [%s]\n", serial_number);
+        printf("\tSerial number: [%s]\n", serial_number);
     }
 }
 
@@ -207,12 +208,12 @@ void read_eeprom_test(int index) {
     int flag;
     int error;
 
-    printf("Getting EEPROM slot 1.\n");
+    printf("\n\nGetting EEPROM slot 1.\n");
     flag = seabreeze_read_eeprom_slot(index, &error, 1, serial_number, 17);
-    printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
     serial_number[16] = '\0';
     if(flag > 0) {
-        printf("From slot 1: %s\n", serial_number);
+        printf("\tFrom slot 1: %s\n", serial_number);
     }
 }
 
@@ -222,11 +223,11 @@ void test_irrad_cal(int index) {
     int error;
     float area;
 
-    printf("Getting irradiance calibration.\n");
+    printf("\n\nGetting irradiance calibration.\n");
     flag = seabreeze_read_irrad_calibration(index, &error, calibration, 4096);
-    printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
     if(flag > 100) {
-        printf("Cal factor 100: %1.4e\n", calibration[100]);
+        printf("\tCal factor 100: %1.4e\n", calibration[100]);
     }
 
 /* This is optional because it may alter the device.  This can be
@@ -236,40 +237,40 @@ void test_irrad_cal(int index) {
 //#define __TEST_WRITE_IRRAD_CALIBRATION
 #ifdef __TEST_WRITE_IRRAD_CALIBRATION
     if(0 != flag && 0 == error) {
-        printf("Writing back irradiance calibration.\n");
+        printf("\nWriting back irradiance calibration.\n");
         /* Attempt to write back the calibration */
         flag = seabreeze_write_irrad_calibration(index, &error, calibration, flag);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Reading back calibration:\n");
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\nReading back calibration:\n");
         flag = seabreeze_read_irrad_calibration(index, &error, calibration, 4096);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
         if(flag > 100) {
-            printf("Cal factor 100: %1.4e\n", calibration[100]);
+            printf("\tCal factor 100: %1.4e\n", calibration[100]);
         }
     }
 #endif /* __TEST_WRITE_IRRAD_CALIBRATION */
 
-    printf("Checking whether device has irradiance collection area stored.\n");
+    printf("\nChecking whether device has irradiance collection area stored.\n");
     flag = seabreeze_has_irrad_collection_area(index, &error);
-    printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
 
-    printf("Attempting to read irradiance collection area.\n");
+    printf("\nAttempting to read irradiance collection area.\n");
     area = seabreeze_read_irrad_collection_area(index, &error);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
     if(0 == error) {
-        printf("Reported collection area is [%f]\n", area);
+        printf("\tReported collection area is [%f]\n", area);
     }
 
 #ifdef __TEST_WRITE_IRRAD_CALIBRATION
     if(0 == error) {
-        printf("Attempting to write back collection area.\n");
+        printf("\nAttempting to write back collection area.\n");
         seabreeze_write_irrad_collection_area(index, &error, area);
-        printf("Result is [%s]\n", get_error_string(error));
-        printf("Reading back collection area:\n");
+        printf("...Result is [%s]\n", get_error_string(error));
+        printf("\nReading back collection area:\n");
         area = seabreeze_read_irrad_collection_area(index, &error);
-        printf("Result is [%s]\n", get_error_string(error));
+        printf("...Result is [%s]\n", get_error_string(error));
         if(0 == error) {
-            printf("Reported collection area is [%f]\n", area);
+            printf("\tReported collection area is [%f]\n", area);
         }
     }
 #endif /* __TEST_WRITE_IRRAD_CALIBRATION */
@@ -283,44 +284,74 @@ void get_spectrum_test(int index) {
     int spec_length;
     double *spectrum = 0;
 
-    printf("Getting formatted spectrum length.\n");
+    printf("\n\nGetting formatted spectrum length.\n");
     spec_length = seabreeze_get_formatted_spectrum_length(index, &error);
-    printf("Result is (%d) [%s]\n", spec_length, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", spec_length, get_error_string(error));
 
     if(spec_length > 0) {
         spectrum = (double *)calloc((size_t)spec_length, sizeof(double));
 
-        printf("Getting a formatted spectrum.\n");
+        printf("\nGetting a formatted spectrum.\n");
         flag = seabreeze_get_formatted_spectrum(index, &error, spectrum, spec_length);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Pixel value 20 is %1.2f\n", spectrum[20]);
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\tPixel value 20 is %1.2f\n", spectrum[20]);
 
         free(spectrum);
     }
 }
 
 void shutter_test(int index) {
-    int error;
-    int spec_length;
-    double *spectrum = 0;
-
-    printf("Attempting to close shutter.\n");
+    int 	i, error, spec_length;
+    int 	darkCount=0;
+    double *spectrum = NULL;
+	double *darkSpectrum = NULL;
+	
+	printf("\n\nTesting the shutter\n");
+	seabreeze_set_trigger_mode(index, &error, 0); // trigger to normal
+	seabreeze_set_integration_time_microsec (index, &error, (unsigned long)4000000);
+	printf("\nSetting device %d integration time to 4s and trigger mode to normal.\n", index);
+    seabreeze_set_integration_time_microsec(index, &error, 100000);
+    printf("\nAttempting to close shutter.\n");
     seabreeze_set_shutter_open(index, &error, 0);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Command recognized, is [%s]\n", get_error_string(error));
+    printf("...Taking dark spectrum.\n");
     spec_length = seabreeze_get_formatted_spectrum_length(index, &error);
     if(spec_length > 0) {
-        spectrum = (double *)calloc((size_t)spec_length, sizeof(double));
-        seabreeze_get_formatted_spectrum(index, &error, spectrum, spec_length);
-        free(spectrum);
+        darkSpectrum = (double *)calloc((size_t)spec_length, sizeof(double));
+        seabreeze_get_formatted_spectrum(index, &error, darkSpectrum, spec_length);
     }
-    printf("Attempting to open shutter.\n");
+    
+    printf("\nAttempting to open shutter.\n");
     seabreeze_set_shutter_open(index, &error, 1);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Command recognized, is [%s]\n", get_error_string(error));
+    printf("...Taking sample spectrum.\n");
     if(spec_length > 0) {
         spectrum = (double *)calloc((size_t)spec_length, sizeof(double));
         seabreeze_get_formatted_spectrum(index, &error, spectrum, spec_length);
-        free(spectrum);
     }
+    
+   
+    
+    // to actually test the shutter the spectra should be compared. The optical port
+    //  should obviously be exposed to light. This could be done by comparing dark pixels
+    //  but for now a comparison of the dark and light spectra can be done.
+    for(i=0; i<spec_length; i++) {
+    	// are there too few spectrum pixels with values larger than the dark
+    	//  spectrum? If so, either there is no light, the source is a laser,
+    	//  the integration time is too low, the shutter isn't working or 
+    	//  there is no shutter.  
+
+    	if(spectrum[i]>darkSpectrum[i]*1.02){
+    		darkCount++;
+    	}    	
+    }
+    if((float)darkCount/spec_length>0.01)
+    	printf("\tThe shutter appears to be working.\n");
+    else
+    	printf("\tThe shutter does not appear to be working. Confirm that there is "
+    		"enough light in the optical port that a spectrum would register.\n");
+    free(darkSpectrum);
+    free(spectrum);
 }
 
 void light_source_test(int index) {
@@ -328,20 +359,20 @@ void light_source_test(int index) {
     int light_source_count;
     int i;
 
-    printf("Attempting to get number of light sources.\n");
+    printf("\n\nAttempting to get number of light sources.\n");
     light_source_count = seabreeze_get_light_source_count(index, &error);
-    printf("Result is %d [%s]\n", light_source_count, get_error_string(error));
+    printf("...Result is %d [%s]\n", light_source_count, get_error_string(error));
 
     for(i = 0; i < light_source_count; i++) {
-        printf("Attempting to enable light source %d\n", i);
+        printf("\nAttempting to enable light source %d\n", i);
         seabreeze_set_light_source_enable(index, &error, i, 1);
-        printf("Result is [%s]\n", get_error_string(error));
-        printf("Attempting to set light source %d intensity to 50%%\n", i);
+        printf("...Result is [%s]\n", get_error_string(error));
+        printf("\nAttempting to set light source %d intensity to 50%%\n", i);
         seabreeze_set_light_source_intensity(index, &error, i, 0.5);
-        printf("Result is [%s]\n", get_error_string(error));
-        printf("Attempting to disable light source %d\n", i);
+        printf("...Result is [%s]\n", get_error_string(error));
+        printf("\nAttempting to disable light source %d\n", i);
         seabreeze_set_light_source_enable(index, &error, i, 0);
-        printf("Result is [%s]\n", get_error_string(error));
+        printf("...Result is [%s]\n", get_error_string(error));
     }
 }
 
@@ -352,17 +383,17 @@ void get_raw_spectrum_test(int index) {
     int raw_length;
     unsigned char *raw_spectrum;
 
-    printf("Getting unformatted spectrum length.\n");
+    printf("\n\nGetting unformatted spectrum length.\n");
     raw_length = seabreeze_get_unformatted_spectrum_length(index, &error);
-    printf("Result is (%d) [%s]\n", raw_length, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", raw_length, get_error_string(error));
 
     if(raw_length > 0) {
         raw_spectrum = (unsigned char *)calloc((size_t)raw_length, sizeof(unsigned char));
 
-        printf("Getting an unformatted spectrum.\n");
+        printf("\nGetting an unformatted spectrum.\n");
         flag = seabreeze_get_unformatted_spectrum(index, &error, raw_spectrum, raw_length);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Buffer values 19 and 20 are 0x%02X%02X\n", raw_spectrum[19], raw_spectrum[20]);
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\tBuffer values 19 and 20 are 0x%02X%02X\n", raw_spectrum[19], raw_spectrum[20]);
 
         free(raw_spectrum);
     }
@@ -375,17 +406,17 @@ void get_wavelengths_test(int index) {
     int spec_length;
     double *wls = 0;
 
-    printf("Getting formatted spectrum length.\n");
+    printf("\n\nGetting formatted spectrum length.\n");
     spec_length = seabreeze_get_formatted_spectrum_length(index, &error);
-    printf("Result is (%d) [%s]\n", spec_length, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", spec_length, get_error_string(error));
 
     if(spec_length > 0) {
         wls = (double *)calloc((size_t)spec_length, sizeof(double));
 
-        printf("Getting wavelengths.\n");
+        printf("\nGetting wavelengths.\n");
         flag = seabreeze_get_wavelengths(index, &error, wls, spec_length);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Pixel 20 is wavelength %1.2f nm\n", wls[20]);
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\tPixel 20 is wavelength %1.2f nm\n", wls[20]);
 
         free(wls);
     }
@@ -397,28 +428,28 @@ void test_corrections(int index) {
     int spec_length;
     double *spectrum = 0;
 
-    printf("Testing electric dark and nonlinearity correction.\n");
+    printf("\n\nTesting electric dark and nonlinearity correction.\n");
     if(0 == is_electric_dark_supported(index, &error)) {
-        printf("Electric dark correction is not supported for this device.\n");
+        printf("...Electric dark correction is not supported for this device.\n");
         return;
     }
 
-    printf("Getting formatted spectrum length.\n");
+    printf("\nGetting formatted spectrum length.\n");
     spec_length = seabreeze_get_formatted_spectrum_length(index, &error);
-    printf("Result is (%d) [%s]\n", spec_length, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", spec_length, get_error_string(error));
 
     if(spec_length > 0) {
         spectrum = (double *)calloc((size_t)spec_length, sizeof(double));
 
-        printf("Getting a spectrum corrected for electrical dark.\n");
+        printf("\nGetting a spectrum corrected for electrical dark.\n");
         flag = get_edark_corrected_spectrum(index, &error, spectrum, spec_length);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Pixel value 20 is %1.2f\n", spectrum[20]);
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\tPixel value 20 is %1.2f\n", spectrum[20]);
 
-        printf("Applying nonlinearity correction\n");
+        printf("\nApplying nonlinearity correction\n");
         flag = do_nonlinearity_correction(index, &error, spectrum, spec_length);
-        printf("Result is (%d) [%s]\n", flag, get_error_string(error));
-        printf("Pixel value 20 is %1.2f\n", spectrum[20]);
+        printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
+        printf("\tPixel value 20 is %1.2f\n", spectrum[20]);
 
         free(spectrum);
     }
@@ -435,17 +466,17 @@ void speed_test(int index) {
     int flag;
     long minimum_time;
 
-    printf("Getting minimum integration time from device.\n");
+    printf("\n\nGetting minimum integration time from device.\n");
     minimum_time = seabreeze_get_min_integration_time_microsec(index, &error);
-    printf("Minimum is %ld microseconds, result is [%s]\n", minimum_time, get_error_string(error));
+    printf("...Minimum is %ld microseconds, result is [%s]\n", minimum_time, get_error_string(error));
     if(minimum_time < 0) {
         /* If there was an error, reset to a time that is supported widely. */
         minimum_time = 15000;
     }
 
-    printf("Setting integration time to %ld usec.\n", minimum_time);
+    printf("\nSetting integration time to %ld usec.\n", minimum_time);
     seabreeze_set_integration_time_microsec(index, &error, minimum_time);
-    printf("Result is [%s]\n", get_error_string(error));
+    printf("...Result is [%s]\n", get_error_string(error));
 
     printf("Starting speed test with %d scans.\n", scans);
 
@@ -453,7 +484,7 @@ void speed_test(int index) {
     for(i = 0; i < scans; i++) {
         flag = seabreeze_get_unformatted_spectrum(index, &error, &c, 1);
         if(error != 0) {
-            printf("Read error (%s) on speed test at iteration %d\n", get_error_string(error), i);
+            printf("\tRead error (%s) on speed test at iteration %d\n", get_error_string(error), i);
             break;
         }
     }
@@ -463,8 +494,8 @@ void speed_test(int index) {
     usec = (long)(end.tv_usec - start.tv_usec);  /* This may be negative */
     usec += secDiff * 1e6;
 
-    printf("Result is (%d) [%s]\n", flag, get_error_string(error));
+    printf("...Result is (%d) [%s]\n", flag, get_error_string(error));
 
-    printf("Average acquisition time (msec) over %d scans: %1.3f\n", scans, usec/(1.0 * scans * 1000));
-    printf("Total time elapsed: %1.2f seconds\n", usec/1e6);
+    printf("\tAverage acquisition time (msec) over %d scans: %1.3f\n", scans, usec/(1.0 * scans * 1000));
+    printf("\tTotal time elapsed: %1.2f seconds\n", usec/1e6);
 }

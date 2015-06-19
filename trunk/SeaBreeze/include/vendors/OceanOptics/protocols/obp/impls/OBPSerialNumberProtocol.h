@@ -44,6 +44,8 @@ namespace seabreeze {
 
         virtual std::string *readSerialNumber(const Bus &bus)
                 throw (ProtocolException);
+        virtual unsigned char readSerialNumberMaximumLength(const Bus &bus)
+                throw (ProtocolException);
     };
   }
 }

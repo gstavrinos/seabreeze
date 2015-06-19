@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.h
- * @date    February 2012
- * @author  Ocean Optics, Inc.
+ * @date    February 2015
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is an interface to SeaBreeze that allows
  * the user to connect to devices over USB and other buses.
@@ -116,21 +116,22 @@ public:
     int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode);
     int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int getSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    unsigned char getSerialNumberMaximumLength(long deviceID, long featureID, int *errorCode);
 
     /* Spectrometer capabilities */
     int getNumberOfSpectrometerFeatures(long id, int *errorCode);
     int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void spectrometerSetTriggerMode(long deviceID, long featureID, int *errorCode, int mode);
-    void spectrometerSetIntegrationTimeMicros(long deviceID, long featureID, int *errorCode, unsigned long integrationTimeMicros);
-    unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrumLength(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrum(long deviceID, long featureID, int *errorCode, unsigned char *buffer, int bufferLength);
-    int spectrometerGetFormattedSpectrumLength(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetFormattedSpectrum(long deviceID, long featureID, int *errorCode, double *buffer, int bufferLength);
-    int spectrometerGetWavelengths(long deviceID, long featureID, int *errorCode, double *wavelengths, int length);
-    int spectrometerGetElectricDarkPixelCount(long deviceID, long featureID, int *errorCode);
-    int spectrometerGetElectricDarkPixelIndices(long deviceID, long featureID, int *errorCode, int *indices, int length);
-
+    void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
+    void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
+    unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
+    int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength);
+    int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
+    int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
+    int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
+        
     /* TEC capabilities */
     int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
     int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -183,6 +184,38 @@ public:
     int getNumberOfNonlinearityCoeffsFeatures(long deviceID, int *errorCode);
     int getNonlinearityCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+
+    /* Temperature capabilities */
+    int getNumberOfTemperatureFeatures(long deviceID, int *errorCode);
+    int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode);
+    double temperatureGet(long deviceID, long featureID, int *errorCode, int index);
+    int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+
+    /* Spectrum processing capabilities */
+    int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode);
+    int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode);
+    unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode);
+	void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
+	void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
+ 
+    /* Revision capabilities */
+    int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
+    int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode);
+    unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode);
+
+    /* Optical Bench capabilities */
+    int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode);
+    int getOpticalBenchFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode);
+    unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode);
+    int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
 
     /* Stray light coefficient capabilities */
     int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
@@ -431,6 +464,22 @@ extern "C" {
     sbapi_get_serial_number(long deviceID, long featureID, int *error_code,
             char *buffer, int buffer_length);
 
+    /**
+     * This reads the possible maximum length of the device's serial number 
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_serial_number_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the length of the serial number in an unsigned character byte
+     */
+    DLL_DECL unsigned char
+    sbapi_get_serial_number_maximum_length(long deviceID, long featureID, int *error_code);
+            
     /**
      * This function returns the total number of spectrometer instances available
      * in the indicated device.  Each instance refers to a single optical bench.
@@ -1381,7 +1430,422 @@ extern "C" {
     DLL_DECL int sbapi_nonlinearity_coeffs_get(long deviceID, long featureID,
             int *error_code, double *buffer, int max_length);
 
+/**
+     * This function returns the total number of temperature feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_temperature_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_temperature_features(
+            long deviceID, int *error_code);
 
+    /**
+     * This function returns IDs for accessing each temperature
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of temperature feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_temperature_features(long deviceID, int *error_code,
+            long *temperatureFeatures, int max_features);
+
+    /**
+     * This function reads out an the number of indexed temperatures available from the
+     *  device's internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_temperature_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of temperatures available as an unsigned char 
+     */
+    DLL_DECL unsigned char sbapi_temperature_count_get(long deviceID, long temperatureFeatureID, int *error_code);
+
+    /**
+     * This function reads out an indexed temperature from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_temperature_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param index (Input) An index for the device's temperature sensors
+     *
+     * @return the temperature as a double
+     */
+    DLL_DECL double sbapi_temperature_get(long deviceID, long temperatureFeatureID, int *error_code, int index);
+
+    /**
+     * This function reads out all temperatures from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_temperature_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param buffer (Output) preallocated buffer to store temperatures
+     * @param max_length (Input) size of preallocated buffer
+     *
+     * @return the number of doubles read from the device into the buffer
+     */
+    DLL_DECL int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code, double *buffer, int max_length);
+
+
+
+/**
+     * This function returns the total number of spectrum processing feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_spectrum_processing_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_spectrum_processing_features(
+            long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each spectrum processing
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of spectrum processing feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_spectrum_processing_features(long deviceID, int *error_code,
+            long *spectrumProcessingFeatures, int max_features);
+
+    /**
+     * This function reads out an the number of scans to average from the
+     *  device's internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of scans to average as an unsigned short integer 
+     */
+    DLL_DECL unsigned short int sbapi_spectrum_processing_scans_to_average_get(long deviceID,
+    	 long spectrumProcessingFeatureID, int *error_code);
+
+    /**
+     * This function sets the number of scans to average in the the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param scansToAverage (Input) The number of spectrum scans used to generate a less
+     *		noisy spectrum due to averaging
+     *
+     * @return void
+     */
+    DLL_DECL void sbapi_spectrum_processing_scans_to_average_set(long deviceID, 
+    	long spectrumProcessingFeatureID, int *error_code, unsigned short int scansToAverage);
+
+    /**
+     * This function reads out an the width of the boxcar filter from the
+     *  device's internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the width of the boxcar filter an unsigned char (values typically 0-15)
+     */
+    DLL_DECL unsigned char sbapi_spectrum_processing_boxcar_width_get(long deviceID,
+    	 long spectrumProcessingFeatureID, int *error_code);
+
+    /**
+     * This function sets width of the boxcar filter in the the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a spectrum processing
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_spectrum_processing_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param boxcarWidth (Input) The width of the boxcar smoothing function to be used.
+     *			Values are typically 1 to 15.
+     *
+     * @return void
+     */
+    DLL_DECL void sbapi_spectrum_processing_boxcar_width_set(long deviceID, 
+    		long spectrumProcessingFeatureID, int *error_code, unsigned char boxcarWidth);
+   
+
+
+/**
+     * This function returns the total number of revision feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_revision_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_revision_features(
+            long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each revision
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of revision feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_revision_features(long deviceID, int *error_code,
+            long *revisionFeatures, int max_features);
+
+    /**
+     * This function reads out the hardware revision from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_revision_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the hardware revision as one unsigned char byte. (Note that both Ocean View and SpectraSuite display the hex value.)
+     */
+    DLL_DECL unsigned char sbapi_revision_hardware_get(long deviceID, long revisionFeatureID, int *error_code);
+
+    /**
+     * This function reads out the firmware revision from the device's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a temperature
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_revision_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the firmware revision as two unsigned short int bytes (Note that both Ocean View and SpectraSuite display the hex value.)
+     */
+    DLL_DECL unsigned short int sbapi_revision_firmware_get(long deviceID, long revisionFeatureID, int *error_code);
+
+/**
+     * This function returns the total number of optical bench feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_optical_bench_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_optical_bench_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each optical bench
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated array to hold returned feature handles
+     * @param max_features (Input) size of preallocated array
+     *
+     * @return the number of optical bench feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_optical_bench_features(long deviceID, int *error_code, long *opticalBenchFeatures, int max_features);
+
+    /**
+     * This function reads out the optical bench fiber diameter in microns
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a optical
+     *        bench feature.  Valid IDs can be found with the
+     *        sbapi_get_optical_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the fiber diameter in microns
+     */
+    DLL_DECL unsigned short int sbapi_optical_bench_get_fiber_diameter_microns(long deviceID, long opticalBenchFeatureID, int *error_code);
+
+    /**
+     * This function reads out the optical bench slit width in microns
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a optical
+     *        bench feature.  Valid IDs can be found with the
+     *        sbapi_get_optical_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the slit width in microns
+     */
+    DLL_DECL unsigned short int sbapi_optical_bench_get_slit_width_microns(long deviceID, long opticalBenchFeatureID, int *error_code);
+
+    /**
+     * This reads the optical bench ID and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_id(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+ 
+     /**
+     * This reads the optical bench Serial Number and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_serial_number(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+
+
+    /**
+     * This reads the optical bench Coating and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_coating(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+     /**
+     * This reads the optical bench filter and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_filter(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+    /**
+     * This reads the optical bench grating and fills the
+     * provided array (up to the given length) with it.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param opticalBenchFeatureID (Input) The ID of a particular instance of a serial
+     *      number feature.  Valid IDs can be found with the
+     *      sbapi_get_optical_bench_features() function.
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @param buffer (Output)  A pre-allocated array of characters that the
+     *      serial number will be copied into
+     * @param buffer_length (Input) The number of values to copy into the buffer
+     *      (this should be no larger than the number of chars allocated in
+     *      the buffer)
+     *
+     * @return the number of bytes written into the buffer
+     */
+    DLL_DECL int
+    sbapi_optical_bench_get_grating(long deviceID, long featureID, int *error_code, char *buffer, int buffer_length);
+    
+                 
     /**
      * This function returns the total number of stray light coefficient feature
      * instances available in the indicated device.
