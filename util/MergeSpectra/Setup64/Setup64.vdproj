@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_43CEF103F53704CEE2B21D2FABDC6185"
+        "MsmKey" = "8:_930B53BEEBD70AFD39AA9F5ACDF0B6AC"
         "OwnerKey" = "8:_A3E10F270A494A41B320A814DA7BE69B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -28,13 +28,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A3E10F270A494A41B320A814DA7BE69B"
+        "OwnerKey" = "8:_930B53BEEBD70AFD39AA9F5ACDF0B6AC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_43CEF103F53704CEE2B21D2FABDC6185"
+        "OwnerKey" = "8:_A3E10F270A494A41B320A814DA7BE69B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -142,14 +142,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_43CEF103F53704CEE2B21D2FABDC6185"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_930B53BEEBD70AFD39AA9F5ACDF0B6AC"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:SpamSharp, Version=1.0.5509.21715, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_43CEF103F53704CEE2B21D2FABDC6185"
+                    "_930B53BEEBD70AFD39AA9F5ACDF0B6AC"
                     {
                     "Name" = "8:SpamSharp.dll"
                     "Attributes" = "3:512"
@@ -240,15 +240,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MergeSpectra"
-        "ProductCode" = "8:{1476F001-89C4-4678-9ED0-F7B97A3DC3CD}"
-        "PackageCode" = "8:{5585B009-E8C0-46BF-8B3D-5E38B091D681}"
+        "ProductCode" = "8:{00781F5E-3355-49E4-89A8-A74A3AA683D9}"
+        "PackageCode" = "8:{AE343E10-3E94-4734-B664-1731F5D6C545}"
         "UpgradeCode" = "8:{F749A6CA-7A57-4A96-8E25-146DAEE4AF8E}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -776,7 +776,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A3E10F270A494A41B320A814DA7BE69B"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\oem-support\\MergeSpectra\\src\\obj\\x64\\Debug\\MergeSpectra.exe"
+            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\util\\MergeSpectra\\src\\obj\\x64\\Debug\\MergeSpectra.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9007817AE0AB4539A8D64E9C9CD311B0"
