@@ -63,6 +63,7 @@ distclean: clean doc-init
                   os-support/windows/$$VS/VSProj/x64 \
                   os-support/windows/$$VS/VSProj/*.bak \
                   os-support/windows/$$VS/x64 \
+                  os-support/windows/$$VS/Set*/*.bak \
                   os-support/windows/$$VS/Set*/Debug \
                   os-support/windows/$$VS/Set*/Release ; \
      done 
