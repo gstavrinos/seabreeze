@@ -110,7 +110,8 @@ OBJS_C   := $(patsubst %.c,%.o,$(SRCS_C))
 
 VISUALSTUDIO_PROJECTS = VisualStudio2005 \
                         VisualStudio2010 \
-                        VisualStudio2012
+                        VisualStudio2012 \
+                        VisualStudio2013
 
 ifneq ($(MAKECMDGOALS),clean)
     -include $(DEPFILES)

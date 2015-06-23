@@ -1,14 +1,27 @@
-SEABREEZE = ../..
+# Keep the makefile compatible with SeaBreeze so this can be built with seabreeze
 
-APPS = $(APP) heliospectraSTSdaemon 
+SEABREEZE = ../../SeaBreeze
+
+APPS = heliospectraSTSdaemon
 OBJS = $(addsuffix .o,$(APPS))
-ELOOP = heliospectraSTSdaemon_eventLoop.o
-STS= heliospectraSTSdaemon_support.o
+SUBDIRS=
 
-all: $(APPS)
+all: deps objs $(APPS)
+
+
+.PHONY:  help
+
+help:
+	@echo "Supported targets include:"
+	@echo
+	@echo "  make                   Build library, tests and samples (best with -j)"
+	@echo "  make clean             Remove most build artifacts"
+	@echo "  make help              This screen"
+	
 
 include $(SEABREEZE)/common.mk
 
-$(APPS) : $(OBJS) $(ELOOP) $(STS)
+$(APPS) : $(OBJS)
 	@echo linking $@
-	$(CC) -o $@ $@.o $(ELOOP) $(STS) -lseabreeze $(LFLAGS_APP)
+	$(CC) -o $@  ${OBJS_C} -lseabreeze $(LFLAGS_APP)
+
