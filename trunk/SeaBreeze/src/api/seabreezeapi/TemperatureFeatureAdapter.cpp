@@ -63,7 +63,7 @@ TemperatureFeatureAdapter::~TemperatureFeatureAdapter() {
 //  that data flow is easier to see. The function need no free()
 
 unsigned char TemperatureFeatureAdapter::readTemperatureCount(int *errorCode) {
-	double returnValue;
+	unsigned char returnValue;
 	
 	// no memory allocated, just pass it through
 	try {
