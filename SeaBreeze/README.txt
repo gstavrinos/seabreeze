@@ -460,6 +460,13 @@ resolved the issue.
 - fixed EDC pixel locations in USB2000+ and USB4000
 - added setTriggerMode to CSharpDemo
 - added --eeprom-value-ascii in seabreeze-util
+- added read temperature feature
+- added read the optical bench parameters feature
+- added read firmware and hardware revisions feature
+- added read serial numbers features
+- added a spectrum protocol feature that sets and reads scans to average and boxcar filter
+- renamed wavecal to WaveCalCoeffsEEProm to better describe its functionality
+- revised test_api to include the newly added functionality
 
 \date 2015-05-22 (version 3.0.7)
 - added seabreeze_set_logfile per customer request
