@@ -37,6 +37,7 @@
 #include "common/buses/DeviceLocatorInterface.h"
 #include "api/seabreezeapi/EEPROMFeatureAdapter.h"
 #include "api/seabreezeapi/IrradCalFeatureAdapter.h"
+#include "api/seabreezeapi/RawUSBBusAccessFeatureAdapter.h"
 #include "api/seabreezeapi/NonlinearityCoeffsFeatureAdapter.h"
 #include "api/seabreezeapi/TemperatureFeatureAdapter.h"
 #include "api/seabreezeapi/RevisionFeatureAdapter.h"
@@ -70,7 +71,19 @@ namespace seabreeze {
 
             /* Get a string that describes the type of device */
             int getDeviceType(int *errorCode, char *buffer, unsigned int maxLength);
+            
+            /* Get a usb endpoint for the device according to the enumerator */
+            /*  endpointType. A 0 is returned if the endpoint requested is not in use. */
+            unsigned char getDeviceEndpoint(int *errorCode, usbEndpointType anEndpointType);
 
+		/* Get one or more raw USB access features */
+            int getNumberOfRawUSBBusAccessFeatures();
+            int getRawUSBBusAccessFeatures(long *buffer, int maxFeatures);
+            int rawUSBBusAccessRead(long featureID,
+                    int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
+            int rawUSBBusAccessWrite(long featureID,
+                    int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
+                    
             /* Get one or more serial number features */
             int getNumberOfSerialNumberFeatures();
             int getSerialNumberFeatures(long *buffer, int maxFeatures);
@@ -210,6 +223,7 @@ namespace seabreeze {
         protected:
             unsigned long instanceID;
             seabreeze::Device *device;
+            std::vector<RawUSBBusAccessFeatureAdapter *> rawUSBBusAccessFeatures;
             std::vector<SerialNumberFeatureAdapter *> serialNumberFeatures;
             std::vector<SpectrometerFeatureAdapter *> spectrometerFeatures;
             std::vector<ThermoElectricCoolerFeatureAdapter *> tecFeatures;
@@ -225,7 +239,8 @@ namespace seabreeze {
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
-
+			
+			RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
             SpectrometerFeatureAdapter *getSpectrometerFeatureByID(long featureID);
             ThermoElectricCoolerFeatureAdapter *getTECFeatureByID(long featureID);

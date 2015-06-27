@@ -73,7 +73,7 @@ The following is list of the changes required to add a USB command for
 	    retval.push_back(new WaveCalCoeffsEEPromFeatureFamily());\
 	    retval.push_back(new NonlinearityCoeffsFeatureFamily());\
 	    retval.push_back(new StrayLightCoeffsFeatureFamily());\
-	    retval.push_back(new RawBusAccessFeatureFamily());\
+	    retval.push_back(new RawUSBBusAccessFeatureFamily());\
  	    retval.push_back(new LightSourceFeatureFamily());\
 	    retval.push_back(new TemperatureFeatureFamily());\
  	    retval.push_back(new OpticalBenchFeatureFamily());\
@@ -115,7 +115,7 @@ The following is list of the changes required to add a USB command for
             const OpticalBenchFeatureFamily OPTICAL_BENCH;\
 \cf3             const SpectrumProcessingFeatureFamily SPECTRUM_PROCESSING;\
 \cf0             const StrayLightCoeffsFeatureFamily STRAY_LIGHT_COEFFS;\
-            const RawBusAccessFeatureFamily RAW_BUS_ACCESS;\
+            const RawUSBBusAccessFeatureFamily RAW_USB_BUS_ACCESS;\
 \
             FeatureFamilies();\
             ~FeatureFamilies();\

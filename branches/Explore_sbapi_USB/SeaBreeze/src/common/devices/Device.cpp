@@ -80,6 +80,36 @@ string &Device::getName() {
     return (this->name);
 }
 
+unsigned char Device::getEndpoint(int *errorCode, usbEndpointType endpointType)
+{
+    unsigned char endpoint;
+    
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	
+	switch (endpointType)
+	{
+		case kEndpointTypePrimaryOut:
+			endpoint = this->usbEndpoint_primary_out;
+			break;
+		case kEndpointTypePrimaryIn:
+			endpoint = this->usbEndpoint_primary_in;
+			break;
+		case kEndpointTypeSecondaryOut:
+			endpoint = this->usbEndpoint_secondary_out;
+			break;
+		case kEndpointTypeSecondaryIn:
+			endpoint = this->usbEndpoint_secondary_in;
+			break;
+		case kEndpointTypeSecondaryIn2:
+			endpoint = this->usbEndpoint_secondary_in2;
+			break;
+		default:
+			SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			break;
+	}
+	return endpoint;
+}
+
 
 DeviceLocatorInterface *Device::getLocation() {
     return this->location;

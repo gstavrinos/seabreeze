@@ -44,12 +44,11 @@
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/usb/IOUSBLib.h>
 #include <IOKit/usb/usb.h>
-
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "native/usb/NativeUSB.h"
 
 /* Constants and macro definitions */
 #define MAX_USB_DEVICES                127  /* As per USB spec */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
 
 typedef IOUSBDeviceInterface197 cIOUSBDeviceInterface;
 

@@ -45,7 +45,7 @@
 #define FEATURE_FAMILY_ID_WAVECAL            	8
 #define FEATURE_FAMILY_ID_NONLINEARITYCAL    	9
 #define FEATURE_FAMILY_ID_STRAYLIGHTCAL     	10
-#define FEATURE_FAMILY_ID_RAW_BUS_ACCESS    	11
+#define FEATURE_FAMILY_ID_RAW_USB_BUS_ACCESS    11
 #define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 	12
 #define FEATURE_FAMILY_ID_LIGHT_SOURCE      	13
 #define FEATURE_FAMILY_ID_TEMPERATURE    		14
@@ -181,12 +181,12 @@ seabreeze::api::StrayLightCoeffsFeatureFamily::~StrayLightCoeffsFeatureFamily() 
 
 }
 
-seabreeze::api::RawBusAccessFeatureFamily::RawBusAccessFeatureFamily()
-        : FeatureFamily("RawBusAccess", FEATURE_FAMILY_ID_RAW_BUS_ACCESS) {
+seabreeze::api::RawUSBBusAccessFeatureFamily::RawUSBBusAccessFeatureFamily()
+        : FeatureFamily("RawUSBBusAccess", FEATURE_FAMILY_ID_RAW_USB_BUS_ACCESS) {
 
 }
 
-seabreeze::api::RawBusAccessFeatureFamily::~RawBusAccessFeatureFamily() {
+seabreeze::api::RawUSBBusAccessFeatureFamily::~RawUSBBusAccessFeatureFamily() {
 
 }
 
@@ -242,7 +242,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new WaveCalCoeffsEEPromFeatureFamily());
     retval.push_back(new NonlinearityCoeffsFeatureFamily());
     retval.push_back(new StrayLightCoeffsFeatureFamily());
-    retval.push_back(new RawBusAccessFeatureFamily());
+    retval.push_back(new RawUSBBusAccessFeatureFamily());
     retval.push_back(new LightSourceFeatureFamily());
     retval.push_back(new TemperatureFeatureFamily());
 	retval.push_back(new OpticalBenchFeatureFamily());

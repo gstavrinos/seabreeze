@@ -85,5 +85,5 @@ int RawUSBBusAccessFeature::writeUSB(const USBInterface *bus, int endpoint,
 
 FeatureFamily RawUSBBusAccessFeature::getFeatureFamily() {
     FeatureFamilies families;
-    return families.RAW_BUS_ACCESS;
+    return families.RAW_USB_BUS_ACCESS;
 }
