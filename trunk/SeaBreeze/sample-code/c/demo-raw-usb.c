@@ -110,7 +110,7 @@ void dump_fpga_registers()
     unsigned i = 0;
     while (addresses[i] != 0xff)
     {
-        unsigned char address = addresses[i];
+        unsigned char address = addresses[i++];
 
         request[0] = 0x6b;
         request[1] = address;
@@ -129,7 +129,6 @@ void dump_fpga_registers()
 
         printf("  Register 0x%02x: hex 0x%04x dec %5hu (%s)\n", address, value, value, labels[i]);
 
-        i++;
     }
 }
 

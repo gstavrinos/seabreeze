@@ -50,8 +50,6 @@
  */
 #define UNUSED(x)  UNUSED_ ## x __attribute__((unused))
 
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
-
 /* struct definitions */
 typedef struct {
     long deviceID;  /* Unique ID for device.  Assigned by this driver */

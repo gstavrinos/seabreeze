@@ -59,6 +59,12 @@ using namespace std;
 Ventana::Ventana() {
 
     this->name = "Ventana";
+        // 0 is the control address, since it is not valid in this context, means not used
+    this->usbEndpoint_primary_out = 0x01;
+    this->usbEndpoint_primary_in = 0x82;
+    this->usbEndpoint_secondary_out = 0;
+    this->usbEndpoint_secondary_in = 0;
+    this->usbEndpoint_secondary_in2 = 0;
 
     /* Set up the available buses on this device */
     this->buses.push_back(new VentanaUSB());

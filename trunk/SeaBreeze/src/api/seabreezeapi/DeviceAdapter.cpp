@@ -30,11 +30,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-/* Macros and constants */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
-
 #include "common/globals.h"
-#include "api/seabreezeapi/DeviceAdapter.h"
+#include "api/seabreezeapi/DeviceAdapter.h"  // references device.h
 #include "api/seabreezeapi/FeatureFamilies.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include <string>
@@ -82,6 +79,7 @@ template <class T> void __delete_feature_adapters(vector<T *> &features) {
 }
 
 DeviceAdapter::~DeviceAdapter() {
+	__delete_feature_adapters<RawUSBBusAccessFeatureAdapter>(rawUSBBusAccessFeatures);
     __delete_feature_adapters<SerialNumberFeatureAdapter>(serialNumberFeatures);
     __delete_feature_adapters<SpectrometerFeatureAdapter>(spectrometerFeatures);
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
@@ -154,6 +152,11 @@ int DeviceAdapter::open(int *errorCode) {
      * set of Feature instances based on what is detected.
      */
     this->device->initialize(*bus);
+    
+    /* Create raw usb access feature list */
+    __create_feature_adapters<RawUSBBusAccessFeatureInterface,
+    	            RawUSBBusAccessFeatureAdapter>(this->device,
+            rawUSBBusAccessFeatures, bus, featureFamilies.RAW_USB_BUS_ACCESS);
 
     /* Create serial number feature list */
     __create_feature_adapters<SerialNumberFeatureInterface,
@@ -275,6 +278,7 @@ int DeviceAdapter::getDeviceType(int *errorCode, char *buffer, unsigned int maxL
     return i;
 }
 
+
 template <class T> int __getFeatureIDs(vector<T *> features, long *buffer, unsigned int max) {
     unsigned int i;
 
@@ -296,6 +300,53 @@ template <class T> T *__getFeatureByID(vector<T *> features, long id) {
 
     return NULL;
 }
+
+
+/* returns a USB endpoint from the device as specified by the enumerator endpointType */
+/*  if the endpoint type is not supported, a 0 is returned. */
+unsigned char DeviceAdapter::getDeviceEndpoint(int *errorCode, usbEndpointType endpointType) 
+{
+    return this->device->getEndpoint(errorCode, endpointType);
+}
+
+/* Raw USB Access  feature wrappers */
+int DeviceAdapter::getNumberOfRawUSBBusAccessFeatures() {
+    return (int) this->rawUSBBusAccessFeatures.size();
+}
+
+int DeviceAdapter::getRawUSBBusAccessFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<RawUSBBusAccessFeatureAdapter>(
+                rawUSBBusAccessFeatures, buffer, maxFeatures);
+}
+
+RawUSBBusAccessFeatureAdapter *DeviceAdapter::getRawUSBBusAccessFeatureByID(long featureID) {
+    return __getFeatureByID<RawUSBBusAccessFeatureAdapter>(
+                rawUSBBusAccessFeatures, featureID);
+}
+
+
+int DeviceAdapter::rawUSBBusAccessRead(long featureID,
+        int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) {
+    RawUSBBusAccessFeatureAdapter *feature = getRawUSBBusAccessFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->readUSB(errorCode, buffer, bufferLength, endpoint);
+}
+
+int DeviceAdapter::rawUSBBusAccessWrite(long featureID,
+        int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) {
+    RawUSBBusAccessFeatureAdapter *feature = getRawUSBBusAccessFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->writeUSB(errorCode, buffer, bufferLength, endpoint);
+}
+
 
 /* Serial number feature wrappers */
 int DeviceAdapter::getNumberOfSerialNumberFeatures() {

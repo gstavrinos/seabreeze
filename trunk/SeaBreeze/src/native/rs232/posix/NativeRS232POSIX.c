@@ -31,9 +31,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-/* Macros and constants */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
-
 #include "common/globals.h"
 #include <unistd.h>
 #include <fcntl.h>
@@ -43,6 +40,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include "native/rs232/NativeRS232.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 /* Local struct definitions */
 struct __rs232_handle {

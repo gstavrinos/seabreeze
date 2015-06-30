@@ -160,6 +160,8 @@ int main() {
         printf("\tAttempting to open:\n");
         flag = sbapi_open_device(device_ids[i], &error);
         printf("\t\tResult is (%d) [%s]\n", flag, sbapi_get_error_string(error));
+        
+        // jump to the next iteration if there was a problem
         if(flag != 0) {
             continue;
         }

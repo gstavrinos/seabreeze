@@ -38,13 +38,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-/* Constants and macros */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
-
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
-#include "api/DeviceFactory.h"
+#include "api/DeviceFactory.h"  // references device.h
 #include "common/buses/rs232/RS232DeviceLocator.h"
 #include "common/buses/DeviceLocationProberInterface.h"
 
@@ -328,6 +325,75 @@ int SeaBreezeAPI::getDeviceType(long id, int *errorCode,
 
     return adapter->getDeviceType(errorCode, buffer, length);
 }
+
+
+/**************************************************************************************/
+//  USB endpoints are tied to the device, but facilitate raw usb access
+/**************************************************************************************/
+
+unsigned char SeaBreezeAPI::getDeviceEndpoint(long id, int *errorCode, usbEndpointType endpoint) 
+{
+    DeviceAdapter *adapter = getDeviceByID(id);
+    if(NULL == adapter) 
+    {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->getDeviceEndpoint(errorCode, endpoint);
+}
+
+/**************************************************************************************/
+//  raw USB access Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI::getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getNumberOfRawUSBBusAccessFeatures();
+}
+
+int SeaBreezeAPI::getRawUSBBusAccessFeatures(long deviceID, int *errorCode,
+            long *buffer, unsigned int maxLength) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getRawUSBBusAccessFeatures(buffer, maxLength);
+}
+
+int SeaBreezeAPI::rawUSBBusAccessRead(long deviceID, long featureID,
+        int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->rawUSBBusAccessRead(featureID, errorCode, buffer, bufferLength, endpoint);
+}
+
+int SeaBreezeAPI::rawUSBBusAccessWrite(long deviceID, long featureID,
+        int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->rawUSBBusAccessWrite(featureID, errorCode, buffer, bufferLength, endpoint);
+}
+
+
+
 
 /**************************************************************************************/
 //  Serial Number Features for the SeaBreeze API class
@@ -1407,6 +1473,94 @@ sbapi_get_device_type(long deviceID, int *error_code,
 
     return wrapper->getDeviceType(deviceID, error_code, buffer, length);
 }
+
+
+/**************************************************************************************/
+//  C language wrapper to retrieve usb endpoints from the device
+/**************************************************************************************/
+
+
+unsigned char
+sbapi_get_device_usb_endpoint_primary_out(long deviceID, int *error_code) 
+{
+	usbEndpointType ept=kEndpointTypePrimaryOut;
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDeviceEndpoint(deviceID, error_code, ept);
+}
+
+unsigned char
+sbapi_get_device_usb_endpoint_primary_in(long deviceID, int *error_code) 
+{
+	usbEndpointType ept=kEndpointTypePrimaryIn;
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDeviceEndpoint(deviceID, error_code, ept);
+}
+
+unsigned char
+sbapi_get_device_usb_endpoint_secondary_out(long deviceID, int *error_code) 
+{
+	usbEndpointType ept=kEndpointTypeSecondaryOut;
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDeviceEndpoint(deviceID, error_code, ept);
+}
+
+unsigned char
+sbapi_get_device_usb_endpoint_secondary_in(long deviceID, int *error_code) 
+{
+	usbEndpointType ept=kEndpointTypeSecondaryIn;
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDeviceEndpoint(deviceID, error_code, ept);
+}
+
+unsigned char
+sbapi_get_device_usb_endpoint_secondary_in2(long deviceID, int *error_code) 
+{
+	usbEndpointType ept=kEndpointTypeSecondaryIn2;
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDeviceEndpoint(deviceID, error_code, ept);
+}
+
+
+/**************************************************************************************/
+//  C language wrapper for raw usb access
+/**************************************************************************************/
+int
+sbapi_get_number_of_raw_usb_bus_access_features(long deviceID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getNumberOfRawUSBBusAccessFeatures(deviceID, error_code);
+}
+
+int
+sbapi_get_raw_usb_bus_access_features(long deviceID, int *error_code, long *features,
+        int max_features) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getRawUSBBusAccessFeatures(deviceID, error_code,
+            features, max_features);
+}
+
+int
+sbapi_raw_usb_bus_access_read(long deviceID, long featureID,
+        int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->rawUSBBusAccessRead(deviceID, featureID, error_code, buffer, buffer_length, endpoint);
+}
+
+int
+sbapi_raw_usb_bus_access_write(long deviceID, long featureID,
+        int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->rawUSBBusAccessWrite(deviceID, featureID, error_code, buffer, buffer_length, endpoint);
+}
+
 
 /**************************************************************************************/
 //  C language wrapper for Serial Number Features

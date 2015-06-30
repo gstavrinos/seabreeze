@@ -88,8 +88,6 @@ static const char *error_msgs[] = {
 
 static int number_error_msgs = sizeof (error_msgs) / sizeof (char *);
 
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
-
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //                          C++ Class Implementation                          //
@@ -146,6 +144,8 @@ OOIUSBInterface *__seabreeze_getUSB(Device *dev, int *errorCode) {
     vector<Bus *>::iterator iter;
     vector<Bus *> buses = dev->getBuses();
 
+	// FIXME: This interates through all of the buses for this device and apparently
+	//         picks the first one. Most of the time this would be USB... 
     for(iter = buses.begin(); iter != buses.end(); iter++) {
         OOIUSBInterface *usb = dynamic_cast<OOIUSBInterface *>(*iter);
         if(NULL != usb) {

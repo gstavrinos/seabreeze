@@ -44,7 +44,6 @@
 #include "native/usb/winusb/WindowsGUID.h"
 
 /* Macro and constant definitions */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
 #define MISSING_IMPL() {}
 #define MAX_USB_DEVICES     127
 #define DEVICE_PATH_SIZE    1024

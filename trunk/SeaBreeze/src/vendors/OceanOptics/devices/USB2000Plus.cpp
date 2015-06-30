@@ -54,6 +54,13 @@ using namespace std;
 USB2000Plus::USB2000Plus() {
 
     this->name = "USB2000+";
+        
+    // 0 is the control address, since it is not valid in this context, means not used
+    this->usbEndpoint_primary_out = 0x01;
+    this->usbEndpoint_primary_in = 0x81;
+    this->usbEndpoint_secondary_out = 0;
+    this->usbEndpoint_secondary_in = 0x82;
+    this->usbEndpoint_secondary_in2 = 0x86;
 
     /* Set up the available buses on this device */
     this->buses.push_back(new USB2000PlusUSB());
