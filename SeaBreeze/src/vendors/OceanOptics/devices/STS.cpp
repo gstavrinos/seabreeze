@@ -65,6 +65,13 @@ using namespace std;
 STS::STS() {
 
     this->name = "STS";
+    
+    // 0 is the control address, since it is not valid in this context, means not used
+    this->usbEndpoint_primary_out = 0x01;
+    this->usbEndpoint_primary_in = 0x81;
+    this->usbEndpoint_secondary_out = 0x02;
+    this->usbEndpoint_secondary_in = 0x82;
+    this->usbEndpoint_secondary_in2 = 0;
 
     /* Set up the available buses on this device */
     this->buses.push_back(new STSUSB());

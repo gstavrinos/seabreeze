@@ -111,7 +111,16 @@ public:
 
     /* Get a string that describes the type of device */
     int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length);
+    
+    /* Get the usb endpoint address for a specified type of endpoint */
+   	unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType);
 
+	/* get raw usb access capabilities */
+    int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode);
+    int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
+    int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
+    
     /* Serial number capabilities */
     int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode);
     int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -410,6 +419,151 @@ extern "C" {
     DLL_DECL int
     sbapi_get_device_type(long id, int *error_code,
             char *buffer, unsigned int length);
+
+    /**
+     * This function returns the usb endpoint for the type specified.
+     * If the type is not supported by the device, a zero is returned.
+     * 0 is normally the control endpoint. That value is not valid in this context.
+     *
+     * @param deviceID (Input)  The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @return the usb endpoint address.
+     */
+    DLL_DECL unsigned char
+    sbapi_get_device_usb_endpoint_primary_out(long id, int *error_code);
+
+    /**
+     * This function returns the usb endpoint for the type specified.
+     * If the type is not supported by the device, a zero is returned.
+     * 0 is normally the control endpoint. That value is not valid in this context.
+     *
+     * @param deviceID (Input)  The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @return the usb endpoint address.
+     */
+    DLL_DECL unsigned char
+    sbapi_get_device_usb_endpoint_primary_in(long id, int *error_code);
+    
+    /**
+     * This function returns the usb endpoint for the type specified.
+     * If the type is not supported by the device, a zero is returned.
+     * 0 is normally the control endpoint. That value is not valid in this context.
+     *
+     * @param deviceID (Input)  The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @return the usb endpoint address.
+     */
+    DLL_DECL unsigned char
+    sbapi_get_device_usb_endpoint_secondary_out(long id, int *error_code);
+
+    /**
+     * This function returns the usb endpoint for the type specified.
+     * If the type is not supported by the device, a zero is returned.
+     * 0 is normally the control endpoint. That value is not valid in this context.
+     *
+     * @param deviceID (Input)  The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @return the usb endpoint address.
+     */
+    DLL_DECL unsigned char
+    sbapi_get_device_usb_endpoint_secondary_in(long id, int *error_code);
+
+    /**
+     * This function returns the usb endpoint for the type specified.
+     * If the type is not supported by the device, a zero is returned.
+     * 0 is normally the control endpoint. That value is not valid in this context.
+     *
+     * @param deviceID (Input)  The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     * @return the usb endpoint address.
+     */
+    DLL_DECL unsigned char
+    sbapi_get_device_usb_endpoint_secondary_in2(long id, int *error_code);
+
+
+    /**
+     * This function returns the total number of raw usb bus access feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of raw usb bus access features that will be
+     *      returned by a call to sbapi_get_raw_usb_bus_access_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_raw_usb_bus_access_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each raw usb bus access feature
+     * instance for this device.  The IDs are only valid when used with the
+     * deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) a preallocated array to hold returned feature handles
+     * @param max_features (Input) length of the preallocated buffer
+     *
+     * @return the number of raw usb bus access feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_raw_usb_bus_access_features(long deviceID, int *error_code, long *features,
+            int max_features);
+
+    /**
+     * This function reads out a raw usb access from the spectrometer's
+     * internal memory if that feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of an irradiance calibration
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_raw_usb_access_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param buffer (Output) preallocated array to hold an unsigned char buffer
+     * @param buffer_length (Input) size of the preallocated buffer (should equal pixel count)
+     * @param endpoint (Input) a USB endpoint gotten from one of the
+     *         sbapi_get_device_usb_endpoint_xxx_xxx() type calls.
+     *
+     * @return the number of floats read from the device into the buffer
+     */
+    DLL_DECL int
+    sbapi_raw_usb_bus_access_read(long deviceID, long featureID,
+            int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint);
+
+    /**
+     * This function writes a buffer of unsigned chars to the specified USB endpoint
+     * if the feature is supported.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of an raw usb bus access
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_raw_usb_bus_access_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param buffer (Output) a pointer to unsigned char values to send to the usb endpoint
+     * @param buffer_length (Input) number of calibration factors to write
+     * @param endpoint (Input) a USB endpoint gotten from one of the
+     *         sbapi_get_device_usb_endpoint_xxx_xxx() type calls.
+     *
+     * @return the number of floats written from the buffer to the device
+     */
+    DLL_DECL int
+    sbapi_raw_usb_bus_access_write(long deviceID, long featureID,
+            int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint);
+
 
     /**
      * This function returns the total number of serial number instances available

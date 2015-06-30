@@ -58,7 +58,7 @@ STSSpectrometerFeature::STSSpectrometerFeature() {
     this->integrationTimeMaximum = STSSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = STSSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = STSSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-
+    
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             STSSpectrometerFeature::INTEGRATION_TIME_BASE);
 

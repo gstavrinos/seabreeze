@@ -32,7 +32,6 @@
 #include "native/rs232/windows/NativeRS232Windows.h"
 
 /* Macro and constant definitions */
-#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
 #ifndef MIN
 #define MIN(x, y) (x < y ? x : y)
 #endif

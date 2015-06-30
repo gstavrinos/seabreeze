@@ -54,7 +54,6 @@ NIRQuestSpectrometerFeature::NIRQuestSpectrometerFeature() {
     this->integrationTimeBase = NIRQuestSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = NIRQuestSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-
     this->triggerModes.push_back(
         new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
     this->triggerModes.push_back(

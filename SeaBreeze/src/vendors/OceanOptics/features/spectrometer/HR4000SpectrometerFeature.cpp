@@ -54,7 +54,7 @@ HR4000SpectrometerFeature::HR4000SpectrometerFeature() {
     this->integrationTimeMaximum = HR4000SpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = HR4000SpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = HR4000SpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-
+    
     for(int i = 2; i < 13; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }

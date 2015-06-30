@@ -47,7 +47,19 @@
 #include "common/features/Feature.h"
 #include "common/features/FeatureFamily.h"
 #include "common/protocols/Protocol.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
+
+// usb endpoints are associated with a particular device.
+typedef enum usbEndpointType 
+{ 
+	kEndpointTypePrimaryOut, // slow speed
+	kEndpointTypePrimaryIn,  // slow speed
+	kEndpointTypeSecondaryOut, // could be high speed
+	kEndpointTypeSecondaryIn,  // could be high speed
+	kEndpointTypeSecondaryIn2  // generally high speed
+} usbEndpointType;
+        	
 namespace seabreeze {
 
     class Device {
@@ -58,6 +70,10 @@ namespace seabreeze {
         std::vector<Feature *> &getFeatures();
         std::vector<Protocol *> &getProtocols();
         std::string &getName();
+        
+        // get the usb endpoints, according to the endpointType enumerator, 
+        //  if the endpoint type is not used, a 0 is returned
+        unsigned char getEndpoint(int *errorCode, usbEndpointType endpointType);
 
         /* This will allow the driver to probe the device and initialize itself
          * based on what it finds there.  This should be called shortly after
@@ -96,6 +112,12 @@ namespace seabreeze {
         std::vector<Protocol *> protocols;
 
         std::string name;
+        unsigned char usbEndpoint_primary_out;
+    	unsigned char usbEndpoint_primary_in;
+    	unsigned char usbEndpoint_secondary_out;
+    	unsigned char usbEndpoint_secondary_in;
+    	unsigned char usbEndpoint_secondary_in2; 
+    	
 
         DeviceLocatorInterface *location;
         Bus *openedBus;

@@ -53,7 +53,7 @@ HR2000PlusSpectrometerFeature::HR2000PlusSpectrometerFeature() {
     this->integrationTimeMaximum = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-
+    
     for(int i = 2; i < 24; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
