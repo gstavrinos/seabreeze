@@ -208,15 +208,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pulse Generator"
-        "ProductCode" = "8:{36894333-D4F9-4565-BF35-13C921EBC31C}"
-        "PackageCode" = "8:{E28845AE-B1DE-4FCF-9950-6E905546F9F0}"
+        "ProductCode" = "8:{1243C081-853A-4968-AFDD-8DEF7E10DE9C}"
+        "PackageCode" = "8:{6997F809-04A5-444B-A453-F92E4B7D3D01}"
         "UpgradeCode" = "8:{C970C540-359F-4BB9-9CAD-38213033A30A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://oceanoptics.com"
@@ -744,7 +744,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D709259EAB09410D819A424302F59FA1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\util\\PulseGenerator\\src\\obj\\x64\\Debug\\PulseGenerator.exe"
+            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\util\\PulseGenerator\\src\\obj\\x86\\Debug\\PulseGenerator.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C788BBD0B20481A82C1DA8DB660F37D"

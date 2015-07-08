@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.splitContainerControlsVsGraph = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainerSequenceVsChannels = new System.Windows.Forms.SplitContainer();
@@ -50,6 +50,7 @@
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
             this.backgroundWorkerSequence = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerGraph = new System.ComponentModel.BackgroundWorker();
+            this.checkBoxSingleThread = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlsVsGraph)).BeginInit();
             this.splitContainerControlsVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlsVsGraph.Panel2.SuspendLayout();
@@ -119,6 +120,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.checkBoxSingleThread);
             this.groupBox4.Controls.Add(this.buttonInit);
             this.groupBox4.Controls.Add(this.checkBoxLoop);
             this.groupBox4.Controls.Add(this.buttonStart);
@@ -229,15 +231,15 @@
             // 
             // chartPulses
             // 
-            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.AxisY.MajorGrid.Enabled = false;
-            chartArea2.Name = "ChartArea1";
-            this.chartPulses.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.Name = "ChartArea1";
+            this.chartPulses.ChartAreas.Add(chartArea1);
             this.chartPulses.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend2.Name = "Legend1";
-            this.chartPulses.Legends.Add(legend2);
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend1.Name = "Legend1";
+            this.chartPulses.Legends.Add(legend1);
             this.chartPulses.Location = new System.Drawing.Point(0, 0);
             this.chartPulses.Name = "chartPulses";
             this.chartPulses.Size = new System.Drawing.Size(724, 388);
@@ -298,6 +300,17 @@
             this.backgroundWorkerGraph.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerGraph_ProgressChanged);
             this.backgroundWorkerGraph.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerGraph_RunWorkerCompleted);
             // 
+            // checkBoxSingleThread
+            // 
+            this.checkBoxSingleThread.AutoSize = true;
+            this.checkBoxSingleThread.Location = new System.Drawing.Point(146, 52);
+            this.checkBoxSingleThread.Name = "checkBoxSingleThread";
+            this.checkBoxSingleThread.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxSingleThread.TabIndex = 3;
+            this.checkBoxSingleThread.Text = "Single Threaded";
+            this.checkBoxSingleThread.UseVisualStyleBackColor = true;
+            this.checkBoxSingleThread.CheckedChanged += new System.EventHandler(this.checkBoxSingleThread_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,6 +365,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ChannelPulseWidth;
         private System.Windows.Forms.DataGridViewTextBoxColumn intraPulseDelayMS;
         private System.ComponentModel.BackgroundWorker backgroundWorkerGraph;
+        private System.Windows.Forms.CheckBox checkBoxSingleThread;
     }
 }
 
