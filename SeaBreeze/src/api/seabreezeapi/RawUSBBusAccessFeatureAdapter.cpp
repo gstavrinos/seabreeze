@@ -69,7 +69,7 @@ int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer
     	//        in SeaBreezeWrapper, but still, it takes the first bus and assumes
     	//        it is USB. This should do a search by family on the bus and then cast it.
         data = this->feature->readUSB(dynamic_cast<USBInterface *>(this->bus), endpoint, bufferLength);
-        int characters = (int) data.size();
+        unsigned int characters = (unsigned int) data.size();
         charactersCopied = (characters < bufferLength) ? characters : bufferLength;
         memcpy(buffer, &((data)[0]), characters * sizeof(unsigned char));
 
