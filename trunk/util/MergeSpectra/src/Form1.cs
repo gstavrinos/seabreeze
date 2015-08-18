@@ -328,7 +328,7 @@ namespace MergeSpectra
                                 file.Write(",{0:f2}", peak.Value.Item1);
                             file.WriteLine();
 
-                            file.Write("fwhm");
+                            file.Write("fwhm(nm)");
                             foreach (KeyValuePair<int, Tuple<double, double, double>> peak in peaks[filename])
                                 file.Write(",{0:f2}", peak.Value.Item2);
                             file.WriteLine();
