@@ -235,14 +235,10 @@ namespace CSharpDemo
             procSpectrum = new double[pixels];
             Array.Copy(rawSpectrum, procSpectrum, pixels);
 
-            // perform ODC if requested
-            if (checkBoxSubtractDark.Checked && dark != null)
-            {
-                for (int i = 0; i < pixels; i++)
-                    procSpectrum[i] -= dark[i];
-            }
-
-            // perform EDC if requested
+            // perform EDC if requested 
+            // Note that this should be done BEFORE ODC, if both EDC and ODC are
+            // used, and that EDC should be applied to BOTH the dark and sample
+            // measurements (or to neither).
             if (checkBoxEnableEDC.Checked)
             {
                 double value = 0.0;
@@ -264,7 +260,14 @@ namespace CSharpDemo
                 }
             }
 
-            // perform NLC if requested
+            // perform ODC if requested
+            if (checkBoxSubtractDark.Checked && dark != null)
+            {
+                for (int i = 0; i < pixels; i++)
+                    procSpectrum[i] -= dark[i];
+            }
+
+            // perform NLC if requested (should be done after EDC and ODC)
             if (checkBoxEnableNLC.Checked && nlcCoeffs != null)
             {   
                 for (int i = 0; i < pixels; i++) 
@@ -285,7 +288,7 @@ namespace CSharpDemo
                 }   
             }   
 
-            // perform boxcar if requested
+            // perform boxcar if requested (should be done after NLC)
             if (numericUpDownBoxcarHalfWidth.Value > 0)
             {
                 int boxcar = (int) numericUpDownBoxcarHalfWidth.Value;
@@ -650,6 +653,12 @@ namespace CSharpDemo
 
         private void buttonSaveDark_Click(object sender, EventArgs e)
         {
+            // Note that we use "processed" spectrum as the Dark, meaning that
+            // EDC has already been applied (if enabled).  It would be bad practice
+            // to use different EDC settings on the dark and sample measurements,
+            // but this demo does not enforce that both must be generated the same
+            // way.
+
             if (procSpectrum != null && procSpectrum.Length > 0)
             {
                 dark = new double[pixels];
