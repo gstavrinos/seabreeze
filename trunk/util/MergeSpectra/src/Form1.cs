@@ -262,21 +262,29 @@ namespace MergeSpectra
             return wavelengths;
         }
 
+        // This method is passed a spectrum (implemented as a SortedDictionary of (wavelength, intensity) pairs)
+        // and a list of DESIRED wavelengths.  It returns a list of interpolated intensities, one per requested
+        // wavelength.
         List<double> generateIntensities(ref List<double> wavelengths, ref SortedDictionary<double, double> spectrum)
         {
             List<double> values = new List<double>();
+
+            // has the user indicated that they wish to interpolate the spectrom?
             if (enableInterpolation)
             {
+                // yes, we've been asked to interpolate new intensities from the passed spectrum,
+                // generating one per requested wavelength
                 Interpolator interp = new Interpolator(spectrum);
                 foreach (double wavelength in wavelengths)
                 {
-                    double interpolatedValue = interp.interpolateSequential(wavelength);
+                    double interpolatedValue = interp.interpolate(wavelength);
                     values.Add(interpolatedValue);
                 }
             }
             else
             {
-                // no-op...just copy over the raw y-values
+                // no-op...just copy over the raw y-values (note: we're not even looking at
+                // the "wavelengths" argument in this use-case)
                 foreach (KeyValuePair<double, double> pair in spectrum)
                     values.Add(pair.Value);
             }
