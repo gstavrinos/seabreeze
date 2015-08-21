@@ -255,6 +255,9 @@ following procedure instead:
 6. Ensure "include subfolders" is checked
 7. Browse to C:/Program Files/Ocean Optics/SeaBreeze/Drivers and click "Okay"
 
+You will know that the drivers have been installed correctly if the Device
+Manager adds the string "(WinUSB)" at the end of the spectrometer name.
+
 Finally, you can "pre-load" the drivers using Microsoft's 
 <a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff544775%28v=vs.85%29.aspx">dpinst.exe</a>
 utility (included), where $ARCH is i386 or amd64 as 
