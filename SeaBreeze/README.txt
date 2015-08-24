@@ -458,11 +458,9 @@ resolved the issue.
 
 \section history Appendix A: Version History
 
-\date 2015-08-17 (version 3.0.9)
+\date 2015-08-24 (version 3.0.8)
 - updated EDC pixel indices for Flame-S/T and USB2000+/4000
 - tweaked order of post-processing operations in CSharpDemo
-
-\date 2015-06-10 (version 3.0.8)
 - fixed internationalization in EEPROM reads
 - fixed EDC pixel locations in USB2000+ and USB4000
 - added setTriggerMode to CSharpDemo
