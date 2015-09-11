@@ -342,7 +342,7 @@ void USB::describeTransfer(const char *label, int length, void *data, int endpoi
             label, length, endpoint);
     if (hexdump)
     {
-        for (unsigned int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             if (i % 16 == 0)
                 fprintf(stderr, "\n%s    %04x:", label, i);
