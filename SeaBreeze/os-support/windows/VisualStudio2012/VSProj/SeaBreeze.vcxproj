@@ -393,6 +393,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\OpticalBenchFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\ProtocolFamilies.h" />
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\RevisionFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPI.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPIConstants.h" />
@@ -715,6 +716,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\OpticalBenchFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\ProtocolFamilies.cpp" />
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\RevisionFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\SeaBreezeAPI.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\SerialNumberFeatureAdapter.cpp" />

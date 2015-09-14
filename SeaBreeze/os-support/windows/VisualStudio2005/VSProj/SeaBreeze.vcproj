@@ -197,6 +197,7 @@
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\OpticalBenchFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\ProtocolFamilies.h"></File>
+			<File RelativePath="..\..\..\..\include\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\RevisionFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPI.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPIConstants.h"></File>
@@ -511,6 +512,7 @@
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\OpticalBenchFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\ProtocolFamilies.cpp"></File>
+			<File RelativePath="..\..\..\..\src\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\RevisionFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\SeaBreezeAPI.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\SerialNumberFeatureAdapter.cpp"></File>

@@ -16,6 +16,7 @@
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\OpticalBenchFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\ProtocolFamilies.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\RevisionFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPI.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPIConstants.h"><Filter>Headers</Filter></ClInclude>
@@ -331,6 +332,7 @@
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\NonlinearityCoeffsFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\OpticalBenchFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\ProtocolFamilies.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\RawUSBBusAccessFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\RevisionFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\SeaBreezeAPI.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\SerialNumberFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
