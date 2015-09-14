@@ -36,9 +36,9 @@ ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1028", SYMLINK+="nirquest256-%n", MO
 # Ocean Optics Inc. NIRQuest-512 spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1026", SYMLINK+="nirquest512-%n", MODE:="0666"
 # Ocean Optics Inc. Maya 2000 spectrometer
-ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102C", SYMLINK+="maya2000-%n", MODE:="0666"
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102c", SYMLINK+="maya2000-%n", MODE:="0666"
 # Ocean Optics Inc. Maya Pro 2000 spectrometer
-ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102A", SYMLINK+="mayapro2000-%n", MODE:="0666"
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102a", SYMLINK+="mayapro2000-%n", MODE:="0666"
 # Ocean Optics Inc. Maya LSL spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1046", SYMLINK+="mayalsl-%n", MODE:="0666"
 # Ocean Optics Inc. Torus spectrometer
