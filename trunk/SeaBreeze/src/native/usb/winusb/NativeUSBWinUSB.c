@@ -42,6 +42,7 @@
 
 #include "native/usb/NativeUSB.h"
 #include "native/usb/winusb/WindowsGUID.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h" // for SET_ERROR_CODE
 
 /* Macro and constant definitions */
 #define MISSING_IMPL() {}

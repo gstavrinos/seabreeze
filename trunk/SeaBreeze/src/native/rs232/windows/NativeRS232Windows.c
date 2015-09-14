@@ -30,6 +30,7 @@
 #include "common/globals.h"
 #include "native/rs232/NativeRS232.h"
 #include "native/rs232/windows/NativeRS232Windows.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h" // for SET_ERROR_CODE
 
 /* Macro and constant definitions */
 #ifndef MIN
