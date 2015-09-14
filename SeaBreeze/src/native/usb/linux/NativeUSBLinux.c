@@ -393,9 +393,12 @@ USBOpen(unsigned long deviceID, int *errorCode) {
                     return 0;
                 }
                 interface = device->config->interface->altsetting->bInterfaceNumber;
-                if(usb_claim_interface(deviceHandle, interface) != 0) {
+                int claim_err = usb_claim_interface(deviceHandle, interface);
+                if(claim_err != 0) {
                     /* Could not claim interface */
-                    perror( "usb_claim_interface() - add rules from SeaBreeze/os-support/linux/10-oceanoptics.rules to /etc/udev/rules.d for USB device" );
+                    fprintf(stderr, "usb_claim_interface() returned %d - did you copy "
+                                    "os-support/linux/10-oceanoptics.rules to /etc/udev/rules.d?\n", 
+                                    claim_err);
                     return 0;
                 }
 
