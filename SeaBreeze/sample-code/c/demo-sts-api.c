@@ -808,7 +808,7 @@ int main(int argc, char **argv)
         printf("Error getting model\n");
         return 1;
     }
-    if (strncmp(model, "STS", 3) && strncmp(model, "Spark", 5))
+    if (strncmp(model, "STS", 3) && strncmp(model, "SPARK", 5))
     {
         printf("WARNING: This program is only designed to test Ocean Optics STS and Spark spectrometers!\n");
         printf("         Proceed at your own risk...\n\n");

@@ -237,7 +237,7 @@ int main(int argc, char **argv)
     if (check_error(spec_index, &error, "seabreeze_get_model"))
         return 1;
 
-    if (strncmp(spec_type, "STS", 3) && strncmp(spec_type, "Spark", 5))
+    if (strncmp(spec_type, "STS", 3) && strncmp(spec_type, "SPARK", 5))
     {
         printf("WARNING: This program is only designed to test Ocean Optics STS or Spark spectrometers!\n");
         printf("         Proceed at your own risk...\n\n");
