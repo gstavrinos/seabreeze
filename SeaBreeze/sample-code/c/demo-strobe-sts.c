@@ -226,7 +226,7 @@ int main(int argc, char **argv)
     seabreeze_get_api_version_string(ver, sizeof(ver));
     printf("SeaBreeze API Version: %s\n", ver);
 
-    printf("Testing STS lamp features.\n\n");
+    printf("Testing STS/Spark lamp features.\n\n");
 
     seabreeze_open_spectrometer(spec_index, &error);
     if (check_error(spec_index, &error, "seabreeze_open_spectrometer"))
@@ -237,9 +237,9 @@ int main(int argc, char **argv)
     if (check_error(spec_index, &error, "seabreeze_get_model"))
         return 1;
 
-    if (strncmp(spec_type, "STS", 3))
+    if (strncmp(spec_type, "STS", 3) && strncmp(spec_type, "Spark", 5))
     {
-        printf("WARNING: This program is only designed to test Ocean Optics STS spectrometers!\n");
+        printf("WARNING: This program is only designed to test Ocean Optics STS or Spark spectrometers!\n");
         printf("         Proceed at your own risk...\n\n");
     }
 

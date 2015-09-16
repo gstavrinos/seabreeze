@@ -440,6 +440,7 @@ resolved the issue.
 
 \subsection backlog_high High
 
+- add Spark *.inf files to other Visual Studio installer projects besides 2010
 - enable SeaBreezeAPI from binary-only distribution (provide missing headers, etc)
 - generate Feature Matrix showing which features are (N)ot-possible, (P)ossible,
   (I)mplemented or (W)orkaround-available for each spectrometer, for both 
@@ -457,6 +458,9 @@ resolved the issue.
 - provide bindings for Python, Ruby, Perl, etc
 
 \section history Appendix A: Version History
+
+\date 2015-09-16 (version 3.0.10)
+- added Spark (tested under MacOS, VS2010)
 
 \date 2015-09-14 (version 3.0.9)
 - fixed Maya under Linux
