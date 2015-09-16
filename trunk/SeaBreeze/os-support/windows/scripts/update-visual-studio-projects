@@ -30,6 +30,7 @@ sub main
     # infer SeaBreeze root from script path
     my $SeaBreezeDir = `cd $scriptDir/../../.. && echo \$PWD`;
     chomp $SeaBreezeDir;
+    printf("Using SeaBreezeDir = $SeaBreezeDir (scriptDir = $scriptDir)\n");
 
     # find current includes and sources
     my $includes = readFiles($SeaBreezeDir, "include");
@@ -86,25 +87,25 @@ sub main
 
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2010/SetUp32/SetUp32.vdproj",
-        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
         NEW      => "..\\\\..\\\\..\\\\.."
     );
 
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2010/SetUp64/SetUp64.vdproj",
-        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
         NEW      => "..\\\\..\\\\..\\\\.."
     );
 	
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2013/SetUp32/SetUp32.vdproj",
-        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
         NEW      => "..\\\\..\\\\..\\\\.."
     );
 
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2013/SetUp64/SetUp64.vdproj",
-        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
         NEW      => "..\\\\..\\\\..\\\\.."
     );
 }

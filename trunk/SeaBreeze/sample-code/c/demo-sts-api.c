@@ -9,7 +9,7 @@
 * Serial functions borrowed from:
 * http://stackoverflow.com/questions/6947413/how-to-open-read-and-write-from-serial-port-in-c
 *
-* Please see STS Data Sheet for Ocean Binary Protocol API:
+* Please see STS and Spark Data Sheets for Ocean Binary Protocol API:
 * http://oceanoptics.com//wp-content/uploads/STS-Data-Sheet.pdf
 *
 * LICENSE:
@@ -136,12 +136,12 @@ int opt_corrected = 0;                  // get corrected spectrum immediate
 
 
 #ifdef RS232
-const int STS_BAUD_RATE = 9600;
+const int BAUD_RATE = 9600;
 char *serial_path = NULL;               // "/dev/ttyS0" or similar
 int serial_fd = -1;                     // result of open()
 #else
-const unsigned char STS_REQUEST_ENDPOINT  = 0x01;
-const unsigned char STS_RESPONSE_ENDPOINT = 0x81;
+const unsigned char REQUEST_ENDPOINT  = 0x01;
+const unsigned char RESPONSE_ENDPOINT = 0x81;
 const int spec_index = 0;
 int error = 0;
 #endif
@@ -217,7 +217,7 @@ void set_blocking(int fd, int should_block)
 // computers run faster than 9600 baud, so wait for comms or FIFOs may overflow
 void waitForTransmission(int bytesToTransfer)
 {
-    const double MICROSEC_PER_BIT = 1000000L / STS_BAUD_RATE;
+    const double MICROSEC_PER_BIT = 1000000L / BAUD_RATE;
 
     int bitsToTransfer = 10 * bytesToTransfer; // 8-N-1 = startBit + octet + stopBit
     unsigned long microsecToSleep = (unsigned long) (bitsToTransfer * MICROSEC_PER_BIT + 0.5);
@@ -266,7 +266,7 @@ void dumpHex(const char *label, const char *prefix, unsigned char *msg, size_t l
     } while (offset < len);
 }
 
-// send a buffer to the STS
+// send a buffer to the spectrometer
 void write_buffer(unsigned char *request, size_t len)
 {
     if (enable_verbose_obp)
@@ -279,11 +279,11 @@ void write_buffer(unsigned char *request, size_t len)
     write(serial_fd, request, len);
     waitForTransmission(len);
 #else
-    seabreeze_write_usb(spec_index, &error, STS_REQUEST_ENDPOINT, request, len);
+    seabreeze_write_usb(spec_index, &error, REQUEST_ENDPOINT, request, len);
 #endif
 }
 
-// read a buffer from the STS
+// read a buffer from the spectrometer
 int read_buffer(unsigned char *response, size_t len)
 {
     int total_bytes_read = 0;
@@ -304,7 +304,7 @@ int read_buffer(unsigned char *response, size_t len)
     if (bytes_left_to_read != 0)
         printf("%s: bytes_left_to_read = %d\n", __FUNCTION__, bytes_left_to_read);
 #else
-    total_bytes_read = seabreeze_read_usb(spec_index, &error, STS_RESPONSE_ENDPOINT, response, len);
+    total_bytes_read = seabreeze_read_usb(spec_index, &error, RESPONSE_ENDPOINT, response, len);
     if (enable_verbose_com)
         dumpHex("reading", "  [COM] <<", response, total_bytes_read);
 #endif
@@ -573,7 +573,7 @@ int sendOBPMessage(OBPExchange *xfer)
         OBPHeader *response_header = (OBPHeader*) response;
         if (0 != response_header->err_no)
         {
-            printf("%s: STS response contained error: %s\n",
+            printf("%s: response contained error: %s\n",
                 __FUNCTION__, getOBPError(response_header->err_no));
             return -1;
         }
@@ -773,7 +773,7 @@ int main(int argc, char **argv)
 
     parse_opts(argc, argv);
 
-    printf("Testing STS Serial API.\n");
+    printf("Testing STS/Spark Serial API.\n");
 
     ////////////////////////////////////////////////////////////////////////////
     // initialization
@@ -808,9 +808,9 @@ int main(int argc, char **argv)
         printf("Error getting model\n");
         return 1;
     }
-    if (strncmp(model, "STS", 3))
+    if (strncmp(model, "STS", 3) && strncmp(model, "Spark", 5))
     {
-        printf("WARNING: This program is only designed to test Ocean Optics STS spectrometers!\n");
+        printf("WARNING: This program is only designed to test Ocean Optics STS and Spark spectrometers!\n");
         printf("         Proceed at your own risk...\n\n");
     }
 #endif

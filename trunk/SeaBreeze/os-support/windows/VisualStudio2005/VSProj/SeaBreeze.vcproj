@@ -283,6 +283,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\QE65000USB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\QEProUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\STSUSB.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\SparkUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\TorusUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB2000PlusUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB2000USB.h"></File>
@@ -301,6 +302,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\QE65000.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\QEPro.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\STS.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Spark.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Torus.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\USB2000.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\USB2000Plus.h"></File>
@@ -356,6 +358,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\SparkSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\SpectrometerTriggerMode.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\USB2000PlusSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\USB2000SpectrometerFeature.h"></File>
@@ -591,6 +594,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\QE65000USB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\QEProUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\STSUSB.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\SparkUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\TorusUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB2000PlusUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB2000USB.cpp"></File>
@@ -609,6 +613,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\QE65000.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\QEPro.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\STS.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Spark.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Torus.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\USB2000.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\USB2000Plus.cpp"></File>
@@ -651,6 +656,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\SparkSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\SpectrometerTriggerMode.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\USB2000PlusSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\USB2000SpectrometerFeature.cpp"></File>

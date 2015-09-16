@@ -355,6 +355,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\QE65000USB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\QEProUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\STSUSB.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\SparkUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\TorusUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB2000PlusUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB2000USB.h" />
@@ -373,6 +374,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\QE65000.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\QEPro.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\STS.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Spark.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Torus.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\USB2000.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\USB2000Plus.h" />
@@ -428,6 +430,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\SparkSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\SpectrometerTriggerMode.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\USB2000PlusSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\USB2000SpectrometerFeature.h" />
@@ -671,6 +674,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\QE65000USB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\QEProUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\STSUSB.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\SparkUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\TorusUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB2000PlusUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB2000USB.cpp" />
@@ -689,6 +693,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\QE65000.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\QEPro.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\STS.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Spark.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Torus.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\USB2000.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\USB2000Plus.cpp" />
@@ -731,6 +736,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\SparkSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\SpectrometerTriggerMode.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\USB2000PlusSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\USB2000SpectrometerFeature.cpp" />

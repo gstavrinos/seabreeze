@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0A30666AB7FB4E4CB8EF04642DAFA4B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0A7B7C794D40469593392D8D6BEADD3E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -101,12 +107,6 @@
         {
         "MsmKey" = "8:_249FF28D4E2246A4BF367CFFC35977F5"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_24E7012A39144963B0CDB978566D78E3"
-        "OwnerKey" = "8:_9CE1C5E561814195B89C2CF3B51C5993"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -293,6 +293,12 @@
         {
         "MsmKey" = "8:_704F1CB4F87DCE52F36FD2FACB176365"
         "OwnerKey" = "8:_9CE1C5E561814195B89C2CF3B51C5993"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70B83C84BE7F4265A4F5AB6B7423180E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -716,7 +722,7 @@
         {
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0226876EB6824F5082C0CA968552928F"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000.inf"
             "TargetName" = "8:OOI_Maya2000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -736,7 +742,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_04ACAF14FBD34EC19908827DA8D89924"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256.inf"
             "TargetName" = "8:OOI_NIRQuest256.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -756,7 +762,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_08DE15606BA8458D87F677DACE927234"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\include\\api\\DllDecl.h"
+            "SourcePath" = "8:..\\..\\..\\..\\include\\api\\DllDecl.h"
             "TargetName" = "8:DllDecl.h"
             "Tag" = "8:"
             "Folder" = "8:_77CB722D46914C3ABCEA115DE99BFDA1"
@@ -774,9 +780,29 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0A30666AB7FB4E4CB8EF04642DAFA4B4"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Spark.inf"
+            "TargetName" = "8:OOI_Spark.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0A7B7C794D40469593392D8D6BEADD3E"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz.inf"
             "TargetName" = "8:OOI_Jaz.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -796,7 +822,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0C9F0667C0324F1B934A0D6150E1C9DA"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325_XP.cat"
             "TargetName" = "8:OOI_USB325_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -816,7 +842,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D1A686BAFA94923A83823B67D331A53"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.frm"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.frm"
             "TargetName" = "8:sample.frm"
             "Tag" = "8:"
             "Folder" = "8:_88D6D7A7ADB9487AB84C40A6C4833677"
@@ -836,7 +862,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F1D2A90FF84423DA85358AC252D63DA"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325_XP.inf"
             "TargetName" = "8:OOI_USB325_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -856,7 +882,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F49411139F64543A0025CF6662B39B1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro.cat"
             "TargetName" = "8:OOI_Maya2000Pro.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -876,7 +902,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_104D488FD3BC47DCA1A77F1C0791A066"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus_XP.inf"
             "TargetName" = "8:OOI_USB2000Plus_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -896,7 +922,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18DAD20D05104AFEAD54BBEA20F5E5E8"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000.cat"
             "TargetName" = "8:OOI_USB4000.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -916,7 +942,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C34273E04794F3E9FA9198E0E6F1C92"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000.cat"
             "TargetName" = "8:OOI_HR4000.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -936,7 +962,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1DF17F6B4FBC488DB3574C2EA4613AF9"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000_XP.cat"
             "TargetName" = "8:OOI_QE65000_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -956,7 +982,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_20603A7C7EAC495290833666FD111E60"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250.inf"
             "TargetName" = "8:OOI_USB250.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -976,7 +1002,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23908BCFA55C455C9A7D90A9C1323F26"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000.cat"
             "TargetName" = "8:OOI_USB2000.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -996,7 +1022,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_249FF28D4E2246A4BF367CFFC35977F5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QEPRO.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QEPRO.inf"
             "TargetName" = "8:OOI_QEPRO.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1016,7 +1042,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2AA9590EF6D14CA7B1E6DA134537939B"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\README.TXT"
+            "SourcePath" = "8:..\\..\\..\\..\\README.TXT"
             "TargetName" = "8:README.TXT"
             "Tag" = "8:"
             "Folder" = "8:_5D82E696AA1D4B21AE001D5575CEF0C8"
@@ -1036,7 +1062,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2CD5D0CA42ED405BB46CE0A2071228F7"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz_XP.inf"
             "TargetName" = "8:OOI_Jaz_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1056,7 +1082,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3142C5DE3A2C4BD48039BFA9F13B9A5E"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000.inf"
             "TargetName" = "8:OOI_HR4000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1076,7 +1102,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3233F0ADBF1C4B108639658692EC949C"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\lib\\SeaBreeze.lib"
+            "SourcePath" = "8:..\\..\\..\\..\\lib\\SeaBreeze.lib"
             "TargetName" = "8:SeaBreeze.lib"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"
@@ -1096,7 +1122,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3647349077F443F2AE587E92E6841C85"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus.inf"
             "TargetName" = "8:OOI_HR2000Plus.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1116,7 +1142,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38E7F4AE320C47E381B5D6A61C00D84D"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.vbp"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.vbp"
             "TargetName" = "8:sample.vbp"
             "Tag" = "8:"
             "Folder" = "8:_88D6D7A7ADB9487AB84C40A6C4833677"
@@ -1136,7 +1162,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3AD8BAFE762D444EB7ADC07E1418DD95"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_ADC1000USB.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_ADC1000USB.inf"
             "TargetName" = "8:OOI_ADC1000USB.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1156,7 +1182,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3AEF903E13404129BF5C8DC9F5F0E28F"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus.cat"
             "TargetName" = "8:OOI_Torus.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1176,7 +1202,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3BC3D833F87B44199925030015D37494"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000_XP.inf"
             "TargetName" = "8:OOI_USB2000_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1196,7 +1222,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3D6B38EBD14444C9A706C9AC48BCE003"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz.cat"
             "TargetName" = "8:OOI_Jaz.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1216,7 +1242,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_44B51D80A9CC478F85DA0EDD8FA2D9A2"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WdfCoInstaller01007.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WdfCoInstaller01007.dll"
             "TargetName" = "8:WdfCoInstaller01007.dll"
             "Tag" = "8:"
             "Folder" = "8:_42456759244C423085BD8AD941498470"
@@ -1236,7 +1262,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_45C39A1601814AEA8695B490D812F768"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QEPRO_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QEPRO_XP.inf"
             "TargetName" = "8:OOI_QEPRO_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1256,7 +1282,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_499FEA3551DF4DC895B38FFD4362876E"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500_XP.inf"
             "TargetName" = "8:OOI_USB500_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1276,7 +1302,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A5925CE1375437289C2012595E85645"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256.cat"
             "TargetName" = "8:OOI_NIRQuest256.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1296,7 +1322,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4AF635B678A44360A3CDDEBC9E937D0B"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325.cat"
             "TargetName" = "8:OOI_USB325.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1316,7 +1342,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4E92AF911BFF4833B210AECD46C90FFE"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\lib\\SeaBreeze.exp"
+            "SourcePath" = "8:..\\..\\..\\..\\lib\\SeaBreeze.exp"
             "TargetName" = "8:SeaBreeze.exp"
             "Tag" = "8:"
             "Folder" = "8:_6FD1917BA50C40B59C0E8F5219D917DE"
@@ -1336,7 +1362,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_501DEFDA679045939CB3ABF57EDEA82D"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\lib\\SeaBreeze.exp"
+            "SourcePath" = "8:..\\..\\..\\..\\lib\\SeaBreeze.exp"
             "TargetName" = "8:SeaBreeze.exp"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"
@@ -1356,7 +1382,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52DA852C8A474DAA9137987D73CA8FA5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650.cat"
             "TargetName" = "8:OOI_USB650.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1376,7 +1402,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_533E65AFBAE94E518CD6EC1665A587DC"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS_XP.inf"
             "TargetName" = "8:OOI_STS_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1396,7 +1422,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_54E7484917BB429FBC716926CF4F533C"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus.cat"
             "TargetName" = "8:OOI_USB2000Plus.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1416,7 +1442,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5500D9A948224630B848EA4299641A63"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250_XP.cat"
             "TargetName" = "8:OOI_USB250_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1436,7 +1462,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_591BFFD0C0474DF89E6B53CCF3205687"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\lib\\SeaBreeze.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\lib\\SeaBreeze.dll"
             "TargetName" = "8:SeaBreeze.dll"
             "Tag" = "8:"
             "Folder" = "8:_6FD1917BA50C40B59C0E8F5219D917DE"
@@ -1456,7 +1482,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_594F22B35B6543D18EC4CD21C3209DB6"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.vbw"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.vbw"
             "TargetName" = "8:sample.vbw"
             "Tag" = "8:"
             "Folder" = "8:_88D6D7A7ADB9487AB84C40A6C4833677"
@@ -1476,7 +1502,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F9F8E5809FB46FC8AAB16E0E948D3A1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_SAS.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_SAS.inf"
             "TargetName" = "8:OOI_SAS.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1496,7 +1522,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6081CEAD12934823B8BA0289638A1613"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Ventana.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Ventana.inf"
             "TargetName" = "8:OOI_Ventana.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1516,7 +1542,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_62114A15D31D40E39185DDE2D8C485E6"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro_XP.inf"
             "TargetName" = "8:OOI_Maya2000Pro_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1536,7 +1562,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_62787F4E72DE45BBB3F0B3F4FEE874B0"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000.inf"
             "TargetName" = "8:OOI_HR2000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1556,7 +1582,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A1970DA710D4B81B7B64CAFBEAC9A53"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650.inf"
             "TargetName" = "8:OOI_USB650.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1576,7 +1602,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A786A7B552E44EC89A59888BF02214B"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WinUSBCoInstaller.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WinUSBCoInstaller.dll"
             "TargetName" = "8:WinUSBCoInstaller.dll"
             "Tag" = "8:"
             "Folder" = "8:_DB4425BB8AC24C47A705C9AD701F188A"
@@ -1596,7 +1622,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6ADF60916E0F4DBE988D8394F96BC2D5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus_XP.cat"
             "TargetName" = "8:OOI_HR2000Plus_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1634,9 +1660,29 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_70B83C84BE7F4265A4F5AB6B7423180E"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Spark_XP.inf"
+            "TargetName" = "8:OOI_Spark_XP.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_735119DAB3154C63B886AB508D8D35F1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000_XP.inf"
             "TargetName" = "8:OOI_QE65000_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1656,7 +1702,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_739D4DEDA2894EA3A717E7799D961174"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650_XP.cat"
             "TargetName" = "8:OOI_USB650_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1676,7 +1722,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74266F7BFFAD4C18A1941AD31D9A2D0A"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.cat"
             "TargetName" = "8:OOI_MayaLSL.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1696,7 +1742,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77073A3228564F8AB6B8B7925E014F03"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB650_XP.inf"
             "TargetName" = "8:OOI_USB650_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1716,7 +1762,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_80845B589AE845509EC029C763FAA70D"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000_XP.inf"
             "TargetName" = "8:OOI_USB4000_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1736,7 +1782,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_80FDC7CC575B49A1A0DD0AC7D521F730"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000.inf"
             "TargetName" = "8:OOI_USB4000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1756,7 +1802,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_840A4406EC5249CFBD32833E2AA0FA54"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000.inf"
             "TargetName" = "8:OOI_USB2000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1776,7 +1822,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8550445774CF4BF7A518EC9BDD5E0BAE"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus_XP.cat"
             "TargetName" = "8:OOI_Torus_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1796,7 +1842,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85D07878B4A9438C881D7B63AC98CDCB"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\lib\\SeaBreeze.lib"
+            "SourcePath" = "8:..\\..\\..\\..\\lib\\SeaBreeze.lib"
             "TargetName" = "8:SeaBreeze.lib"
             "Tag" = "8:"
             "Folder" = "8:_6FD1917BA50C40B59C0E8F5219D917DE"
@@ -1816,7 +1862,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_86902EB1F293477F8C2CE86BB28D8368"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\sample-code\\CSharpDemo\\SeaBreezeWrapper.cs"
+            "SourcePath" = "8:..\\..\\..\\..\\sample-code\\CSharpDemo\\SeaBreezeWrapper.cs"
             "TargetName" = "8:SeaBreezeWrapper.cs"
             "Tag" = "8:"
             "Folder" = "8:_77CB722D46914C3ABCEA115DE99BFDA1"
@@ -1836,7 +1882,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_88652887E0E946068184C5535039997F"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\include\\api\\SeaBreezeWrapper.h"
+            "SourcePath" = "8:..\\..\\..\\..\\include\\api\\SeaBreezeWrapper.h"
             "TargetName" = "8:SeaBreezeWrapper.h"
             "Tag" = "8:"
             "Folder" = "8:_77CB722D46914C3ABCEA115DE99BFDA1"
@@ -1856,7 +1902,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8CB56BC3E9644F8E81C3AE0D2FCB54BD"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS.inf"
             "TargetName" = "8:OOI_STS.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1876,7 +1922,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_93D13CE0A0C94FCDA2166CE9CCD20CA1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512_XP.inf"
             "TargetName" = "8:OOI_NIRQuest512_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1896,7 +1942,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_962929A6B0924A0E8795AD86C3716FB8"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.frx"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\vb6sample_seabreezewin32\\sample.frx"
             "TargetName" = "8:sample.frx"
             "Tag" = "8:"
             "Folder" = "8:_88D6D7A7ADB9487AB84C40A6C4833677"
@@ -1916,7 +1962,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_96659B308CAE4D6BB34A0C14890751D8"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250_XP.inf"
             "TargetName" = "8:OOI_USB250_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1936,7 +1982,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9994F379C7664C22B8A8957AD371683B"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIR512.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIR512.inf"
             "TargetName" = "8:OOI_NIR512.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1956,7 +2002,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B2333AA1C044C95A54070AB888379D5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000_XP.inf"
             "TargetName" = "8:OOI_HR4000_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -1976,7 +2022,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C0E12B82E064B8B838DC31010B44B80"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WUDFUpdate_01007.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WUDFUpdate_01007.dll"
             "TargetName" = "8:WUDFUpdate_01007.dll"
             "Tag" = "8:"
             "Folder" = "8:_42456759244C423085BD8AD941498470"
@@ -1996,7 +2042,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A03F5A3BE5BC4D65A5670A3777331753"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Apex.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Apex.inf"
             "TargetName" = "8:OOI_Apex.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2016,7 +2062,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A0CF76E2D67642EAADE7AF35D8A8AAB7"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256_XP.cat"
             "TargetName" = "8:OOI_NIRQuest256_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2036,7 +2082,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A0DF5FAD712B4E49BA9FBA577EFD1EA4"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500_XP.cat"
             "TargetName" = "8:OOI_USB500_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2056,7 +2102,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A6DB42D40AFC4E5696A2E05AF99A810F"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus.inf"
             "TargetName" = "8:OOI_Torus.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2076,7 +2122,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A8F9C3EEDC4C4939ADB4E1BFC7E453C2"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WdfCoInstaller01007.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WdfCoInstaller01007.dll"
             "TargetName" = "8:WdfCoInstaller01007.dll"
             "Tag" = "8:"
             "Folder" = "8:_DB4425BB8AC24C47A705C9AD701F188A"
@@ -2096,7 +2142,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A9FBF8CDBF7A4B09911C1D256B013B04"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB250.cat"
             "TargetName" = "8:OOI_USB250.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2116,7 +2162,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABFBACDE7DB94674848FEC52AD5362E0"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest256_XP.inf"
             "TargetName" = "8:OOI_NIRQuest256_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2136,7 +2182,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B27F8FD1C1BD448081C363CC3D88D071"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\dpinst.exe"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\dpinst.exe"
             "TargetName" = "8:dpinst.exe"
             "Tag" = "8:"
             "Folder" = "8:_DB4425BB8AC24C47A705C9AD701F188A"
@@ -2156,7 +2202,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B2C2467A149D4C879573CE4D99976012"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR4000_XP.cat"
             "TargetName" = "8:OOI_HR4000_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2176,7 +2222,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B470D4DF23DA40ED86DA36614844EA85"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\dpinst.exe"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\dpinst.exe"
             "TargetName" = "8:dpinst.exe"
             "Tag" = "8:"
             "Folder" = "8:_42456759244C423085BD8AD941498470"
@@ -2196,7 +2242,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBC99A02E8724E1F8632DAFBB228F9D5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Apex_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Apex_XP.inf"
             "TargetName" = "8:OOI_Apex_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2216,7 +2262,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BE77F3DEA6C3474891BE4E9CC6B9DD87"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB4000_XP.cat"
             "TargetName" = "8:OOI_USB4000_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2236,7 +2282,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BEC6EA65DD674CB8AFBD1F0D0B6A19F1"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus.inf"
             "TargetName" = "8:OOI_USB2000Plus.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2256,7 +2302,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C7EA11D11E904F6CA3834ECE58F5E6DE"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz_XP.cat"
             "TargetName" = "8:OOI_Jaz_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2276,7 +2322,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB5C1F09C4E0488DBB95600CDAF0E901"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Ventana_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Ventana_XP.inf"
             "TargetName" = "8:OOI_Ventana_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2296,7 +2342,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE6670BA296A40FDA9FA80CE5C48E725"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000_XP.cat"
             "TargetName" = "8:OOI_USB2000_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2316,7 +2362,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D02540E54D5F457394BFD827E22B00DC"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Torus_XP.inf"
             "TargetName" = "8:OOI_Torus_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2336,7 +2382,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0AFFD69CB56441593D0DCA9A10BC964"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB325.inf"
             "TargetName" = "8:OOI_USB325.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2356,7 +2402,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D13C9D33EC254BACA21F6B0C93EF75BD"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus_XP.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus_XP.inf"
             "TargetName" = "8:OOI_HR2000Plus_XP.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2376,7 +2422,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3ABABE1CAB645AC90EE7508C328BA19"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500.inf"
             "TargetName" = "8:OOI_USB500.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2396,7 +2442,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D59228B73FA1440D8AB43C7A410ABDBA"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512.inf"
             "TargetName" = "8:OOI_NIRQuest512.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2416,7 +2462,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D75EF4EAA1DC4B11BA0C3396CF3DDD9E"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIR256.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIR256.inf"
             "TargetName" = "8:OOI_NIR256.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2436,7 +2482,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DF2E0A8E2E77452BAD06C6A6B42DD2E0"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WUDFUpdate_01007.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\i386\\WUDFUpdate_01007.dll"
             "TargetName" = "8:WUDFUpdate_01007.dll"
             "Tag" = "8:"
             "Folder" = "8:_DB4425BB8AC24C47A705C9AD701F188A"
@@ -2456,7 +2502,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E0FA1E022E6D47B9AE68AB814BC767D5"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_HR2000Plus.cat"
             "TargetName" = "8:OOI_HR2000Plus.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2476,7 +2522,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1C195E850C14F9196C6E03B40970F89"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS_XP.cat"
             "TargetName" = "8:OOI_STS_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2496,7 +2542,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E29FE3DC7C004A81BA430BA15A7F65F6"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512_XP.cat"
             "TargetName" = "8:OOI_NIRQuest512_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2516,7 +2562,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E3686A935802479BAB868512EF7EA9EB"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro.inf"
             "TargetName" = "8:OOI_Maya2000Pro.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2536,7 +2582,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E6C561024391460B8E5E7ECA7BDA3854"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Maya2000Pro_XP.cat"
             "TargetName" = "8:OOI_Maya2000Pro_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2556,7 +2602,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E7AA534BF1C04275ABCE8C260E306368"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_STS.cat"
             "TargetName" = "8:OOI_STS.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2576,7 +2622,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8B5B78D60A546D19116A813289BEE37"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000.inf"
             "TargetName" = "8:OOI_QE65000.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2596,7 +2642,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA947A30E6A049958CE3EBCBF797A50C"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WinUSBCoInstaller.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\amd64\\WinUSBCoInstaller.dll"
             "TargetName" = "8:WinUSBCoInstaller.dll"
             "Tag" = "8:"
             "Folder" = "8:_42456759244C423085BD8AD941498470"
@@ -2616,7 +2662,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F25A3D265113472384FA2B57331468D3"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_NIRQuest512.cat"
             "TargetName" = "8:OOI_NIRQuest512.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2636,7 +2682,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5E64A4ADD3D4E1B95FE7FC513CB3164"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus_XP.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB2000Plus_XP.cat"
             "TargetName" = "8:OOI_USB2000Plus_XP.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2656,7 +2702,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F7561D1217DF4E3794F2F95B49641494"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MayaLSL.inf"
             "TargetName" = "8:OOI_MayaLSL.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2676,7 +2722,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F75C0C5270274F59BB07111CFA71BD8F"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MMSRaman.inf"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_MMSRaman.inf"
             "TargetName" = "8:OOI_MMSRaman.inf"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2696,7 +2742,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FED8963D894044C0802E1399B86BCFE7"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000.cat"
             "TargetName" = "8:OOI_QE65000.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2716,7 +2762,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FFC9FA130ED542C99371FFDDA0D2D075"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500.cat"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_USB500.cat"
             "TargetName" = "8:OOI_USB500.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
@@ -2876,15 +2922,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SeaBreeze"
-        "ProductCode" = "8:{2481E72E-100A-4E7B-A726-3001E70434C2}"
-        "PackageCode" = "8:{D6671100-BEC4-4397-BBA7-B1682418EF66}"
+        "ProductCode" = "8:{9EC85098-87C3-4A33-A77E-7A300C6202BE}"
+        "PackageCode" = "8:{8BDE61C9-54F0-46FF-AF75-F84EADF81602}"
         "UpgradeCode" = "8:{5C008FE7-8489-4986-91CB-2D64834BBFB6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.0.9"
+        "ProductVersion" = "8:3.0.10"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.oceanoptics.com"
@@ -3393,26 +3439,12 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_24E7012A39144963B0CDB978566D78E3"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:Microsoft_VC100_DebugCRT_x64.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
         }
         "ProjectOutput"
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9CE1C5E561814195B89C2CF3B51C5993"
             {
-            "SourcePath" = "8:\\\\vmware-host\\Shared Folders\\work\\gforge\\seabreeze\\SeaBreeze\\os-support\\windows\\VisualStudio2010\\x64\\Debug\\SeaBreeze.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\Debug\\SeaBreeze.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"
