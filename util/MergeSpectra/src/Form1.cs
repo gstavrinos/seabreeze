@@ -14,18 +14,44 @@ namespace MergeSpectra
     public partial class Form1 : Form
     {
         ////////////////////////////////////////////////////////////////////////
+        // Data Types
+        ////////////////////////////////////////////////////////////////////////
+
+        class PeakInfo
+        {
+            public double wavelength;
+            public double intensity;
+            public double fwhm;
+
+            public PeakInfo(double wavelength_in, double intensity_in, double fwhm_in)
+            {
+                wavelength = wavelength_in;
+                intensity = intensity_in;
+                fwhm = fwhm_in;
+            }
+        };
+
+        enum PeakFindingAlgos { SPAM_ALGO, SOLVER_ALGO };
+
+        ////////////////////////////////////////////////////////////////////////
         // Attributes
         ////////////////////////////////////////////////////////////////////////
 
+        // merging
         int pixels;
-
         List<double> wavelengths;
         SortedDictionary<string, List<double>> spectra;
-
-        bool enableInterpolation;
         bool enableGraph = true;
+        bool enableInterpolation;
+        uint mergeColumn = 1;  // zero-indexed, so zero is x-axis
 
-        SortedDictionary<string, SortedDictionary<int, Tuple<double, double, double>>> peaks; // filename to pixel to (wavelength, resolution, height)
+        // peakfinding
+        bool enablePeakFinding = false;
+        int minIndicesBetweenPeaks = 1;
+        double baseline = 0;
+        int gaussianHalfWidth = 5;
+        PeakFindingAlgos peakFindingAlgo = PeakFindingAlgos.SPAM_ALGO;
+        SortedDictionary<string, SortedDictionary<int, PeakInfo>> peaks; 
 
         Logger logger = Logger.getInstance();
 
@@ -40,6 +66,10 @@ namespace MergeSpectra
             logger.setTextBox(textBoxEventLog);
             checkBoxInterpolate_CheckedChanged(null, null);
             Text = String.Format("MergeSpectra v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            // update defaults from GUI
+            numericUpDownBaseline_ValueChanged(null, null);
+            numericUpDownGaussianHalfWidth_ValueChanged(null, null);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -106,32 +136,6 @@ namespace MergeSpectra
             saveAll();
         }
 
-        void generatePeaks(string filename)
-        {
-            if (peaks == null)
-                peaks = new SortedDictionary<string, SortedDictionary<int, Tuple<double, double, double>>>();
-
-            // initialize PeakFinder
-            com.oceanoptics.spam.advancedprocessing.AdvancedPeakFinding peakFinder = 
-                new com.oceanoptics.spam.advancedprocessing.AdvancedPeakFinding();
-
-            com.oceanoptics.spam.advancedprocessing.SpectrumPeak[] results = 
-                peakFinder.getAllPeaks(wavelengths.ToArray(), spectra[filename].ToArray(), minIndicesBetweenPeaks, baseline);
-
-            SortedDictionary<int, Tuple<double, double, double>> thesePeaks = new SortedDictionary<int, Tuple<double, double, double>>();
-            foreach (com.oceanoptics.spam.advancedprocessing.SpectrumPeak peak in results)
-            {
-                int index = peak.PixelNumber;
-                double wavelength = peak.Centroid;
-                double resolution = peak.WavelengthFWHM;
-                double intensity = spectra[filename][index];
-
-                thesePeaks.Add(index, new Tuple<double, double, double>(wavelength, resolution, intensity));
-            }
-
-            peaks.Add(filename, thesePeaks);
-        }
-
         private void checkBoxInterpolate_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxInterpolate.Checked)
@@ -155,8 +159,51 @@ namespace MergeSpectra
             enableGraph = checkBoxGraph.Checked;
         }
 
+        private void checkBoxEnablePeakFinding_CheckedChanged(object sender, EventArgs e)
+        {
+            enablePeakFinding = checkBoxEnablePeakFinding.Checked;
+
+            groupBoxSPAM.Enabled =
+               groupBoxPeakFindingAlgo.Enabled = 
+                enablePeakFinding;
+
+            groupBoxSolver.Enabled = enablePeakFinding && peakFindingAlgo == PeakFindingAlgos.SOLVER_ALGO;
+        }
+
+        private void numericUpDownMinIndicesBetweenPeaks_ValueChanged(object sender, EventArgs e)
+        {
+            minIndicesBetweenPeaks = (int) numericUpDownMinIndicesBetweenPeaks.Value;
+        }
+
+        private void numericUpDownBaseline_ValueChanged(object sender, EventArgs e)
+        {
+            baseline = (double) numericUpDownBaseline.Value;
+        }
+
+        private void numericUpDownYAxisColumn_ValueChanged(object sender, EventArgs e)
+        {
+            mergeColumn = (uint)(numericUpDownYAxisColumn.Value - 1);
+        }
+
+        private void radioButtonLibrarySPAM_CheckedChanged(object sender, EventArgs e)
+        {
+            peakFindingAlgo = PeakFindingAlgos.SPAM_ALGO;
+            groupBoxSolver.Enabled = false;
+        }
+
+        private void radioButtonLibrarySolver_CheckedChanged(object sender, EventArgs e)
+        {
+            peakFindingAlgo = PeakFindingAlgos.SOLVER_ALGO;
+            groupBoxSolver.Enabled = true;
+        }
+
+        private void numericUpDownGaussianHalfWidth_ValueChanged(object sender, EventArgs e)
+        {
+            gaussianHalfWidth = (int) numericUpDownGaussianHalfWidth.Value;
+        }
+
         ////////////////////////////////////////////////////////////////////////
-        // Methods
+        // Merging
         ////////////////////////////////////////////////////////////////////////
 
         void graphFile(string filename)
@@ -327,23 +374,23 @@ namespace MergeSpectra
                             file.WriteLine("{0}", filename);
 
                             file.Write("pixel");
-                            foreach (KeyValuePair<int, Tuple<double, double, double>> peak in peaks[filename])
+                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
                                 file.Write(",{0}", peak.Key);
                             file.WriteLine();
 
                             file.Write("wavelength");
-                            foreach (KeyValuePair<int, Tuple<double, double, double>> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.Item1);
+                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                                file.Write(",{0:f2}", peak.Value.wavelength);
                             file.WriteLine();
 
                             file.Write("fwhm(nm)");
-                            foreach (KeyValuePair<int, Tuple<double, double, double>> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.Item2);
+                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                                file.Write(",{0:f2}", peak.Value.fwhm);
                             file.WriteLine();
 
                             file.Write("intensity");
-                            foreach (KeyValuePair<int, Tuple<double, double, double>> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.Item3);
+                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                                file.Write(",{0:f2}", peak.Value.intensity);
                             file.WriteLine();
 
                             file.WriteLine();
@@ -355,28 +402,105 @@ namespace MergeSpectra
             logger.display("done");
         }
 
-        bool enablePeakFinding = false;
-        private void checkBoxEnablePeakFinding_CheckedChanged(object sender, EventArgs e)
+        ////////////////////////////////////////////////////////////////////////
+        // Peakfinding
+        ////////////////////////////////////////////////////////////////////////
+
+        void generatePeaks(string filename)
         {
-            enablePeakFinding = checkBoxEnablePeakFinding.Checked;
+            if (peaks == null)
+                peaks = new SortedDictionary<string, SortedDictionary<int, PeakInfo>>();
+            
+            // yes, this should be subclassed
+            if (peakFindingAlgo == PeakFindingAlgos.SPAM_ALGO)
+                generatePeaksSPAM(filename);
+            else if (peakFindingAlgo == PeakFindingAlgos.SOLVER_ALGO)
+                generatePeaksSolver(filename);
         }
 
-        int minIndicesBetweenPeaks = 1;
-        private void numericUpDownMinIndicesBetweenPeaks_ValueChanged(object sender, EventArgs e)
+        // both SPAM and Solver resolution-calculation algorithms use SPAM to find the peaks,
+        // so break this out separately
+        SortedDictionary<int, PeakInfo> findPeaksSPAM(string filename)
         {
-            minIndicesBetweenPeaks = (int) numericUpDownMinIndicesBetweenPeaks.Value;
+            com.oceanoptics.spam.advancedprocessing.AdvancedPeakFinding peakFinder = 
+                new com.oceanoptics.spam.advancedprocessing.AdvancedPeakFinding();
+
+            com.oceanoptics.spam.advancedprocessing.SpectrumPeak[] results = 
+                peakFinder.getAllPeaks(wavelengths.ToArray(), spectra[filename].ToArray(), minIndicesBetweenPeaks, baseline);
+
+            SortedDictionary<int, PeakInfo> thesePeaks = new SortedDictionary<int, PeakInfo>();
+            foreach (com.oceanoptics.spam.advancedprocessing.SpectrumPeak peak in results)
+            {
+                int pixel = peak.PixelNumber;
+                double wavelength = peak.Centroid;
+                double intensity = spectra[filename][pixel];
+                double fwhm = peak.WavelengthFWHM;
+
+                thesePeaks.Add(pixel, new PeakInfo(wavelength, intensity, fwhm));
+            }
+            return thesePeaks;
         }
 
-        double baseline = 0;
-        private void numericUpDownBaseline_ValueChanged(object sender, EventArgs e)
+        void generatePeaksSPAM(string filename)
         {
-            baseline = (double) numericUpDownBaseline.Value;
+            SortedDictionary<int, PeakInfo> thesePeaks = findPeaksSPAM(filename);
+            peaks.Add(filename, thesePeaks);
         }
 
-        uint mergeColumn = 1;  // zero-indexed, so zero is x-axis
-        private void numericUpDownYAxisColumn_ValueChanged(object sender, EventArgs e)
+        void generatePeaksSolver(string filename)
         {
-            mergeColumn = (uint)(numericUpDownYAxisColumn.Value - 1);
+            SortedDictionary<int, PeakInfo> thesePeaks = findPeaksSPAM(filename);
+
+            foreach (KeyValuePair<int, PeakInfo> peak in thesePeaks)
+            {
+                int centerPixel = peak.Key;
+                PeakInfo pi = peak.Value;
+
+                // grab one half-width's worth pixels to either side of centroid 
+                if (centerPixel < gaussianHalfWidth || centerPixel + gaussianHalfWidth >= pixels)
+                {
+                    logger.display("Warning: can't create {0}-pixel gaussian on peak centered at {1}", gaussianHalfWidth * 2 + 1, centerPixel);
+                    continue; // leave SPAM resolution
+                }
+
+                // determine initial guesses
+                double guessIntensity = spectra[filename][centerPixel];
+                double guessWavelength = pi.wavelength;
+                double guessWidth = 1.0;    // MZ: in Excel this converged fine (don't use zero)
+                double guessBaseline = 0.0; // MZ: in Excel this worked fine
+
+                GaussianSolver solver = new GaussianSolver(guessIntensity, guessWavelength, guessWidth, guessBaseline);
+
+                // Load the peak's local spectrum into the Solver.
+                //
+                // Note: the choice of which peaks to load into the Solver is significant in 
+                // the Guassian curve generated, and therefore the calculated FWHM.  We could:
+                // 
+                // 1. Simply hard-code a half-width of 'n' pixels (fast, deterministic, simple, but may
+                //    not reach all the way to the true baseline and therefore understates resolution).
+                // 2. Do something clever like stop where slope crosses 0.5 or 0.
+                //
+                // For now, just let user pick a half-width.
+                //
+                for (int i = 0; i < gaussianHalfWidth * 2 + 1; i++)
+                {
+                    int pixel = centerPixel - gaussianHalfWidth + i;
+                    solver.addPoint(wavelengths[pixel], spectra[filename][pixel]);
+                }
+
+                double resolution = solver.computeFWHM();
+                if (resolution < pi.fwhm * 2)
+                {
+                    logger.display("replacing SPAM fwhm {0:f4} with gaussian {1:f4}", pi.fwhm, resolution);
+                    pi.fwhm = resolution;
+                }
+                else
+                {
+                    logger.display("NOT replacing SPAM fwhm {0:f4} with gaussian {1:f4} (something seems wonky)", pi.fwhm, resolution);
+                }
+            }
+
+            peaks.Add(filename, thesePeaks);
         }
     }
 }

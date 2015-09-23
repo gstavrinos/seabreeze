@@ -21,3 +21,9 @@ Assumptions:
 
 - assumes that input files are in X, Y format and either comma- or tab-delimited
 - ignores lines that don't start with a digit or sign character
+
+History:
+
+1.0.8 - added Gaussian peak fit using Microsoft Solver Foundation
+        (https://msdn.microsoft.com/en-us/devlabs/hh145003)
+

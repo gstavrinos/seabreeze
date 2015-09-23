@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B5487AB6250AECF8E906060D9881741A"
+        "OwnerKey" = "8:_A3E10F270A494A41B320A814DA7BE69B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_930B53BEEBD70AFD39AA9F5ACDF0B6AC"
         "MsmSig" = "8:_UNDEFINED"
@@ -35,6 +41,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A3E10F270A494A41B320A814DA7BE69B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B5487AB6250AECF8E906060D9881741A"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -64,10 +76,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -173,6 +185,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B5487AB6250AECF8E906060D9881741A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Solver.Foundation, Version=3.0.2.10889, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_B5487AB6250AECF8E906060D9881741A"
+                    {
+                    "Name" = "8:Microsoft.Solver.Foundation.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Solver.Foundation.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_9007817AE0AB4539A8D64E9C9CD311B0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -240,15 +283,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MergeSpectra"
-        "ProductCode" = "8:{39A21283-47D3-4E10-8CB1-5D08FB25285C}"
-        "PackageCode" = "8:{5DE36B20-9E6B-44CF-AFAA-4923EABCD4AB}"
+        "ProductCode" = "8:{7454EC97-9D7A-4D37-BA87-95A1CC8A32FA}"
+        "PackageCode" = "8:{4E134986-457B-4F09-9C99-DA1AEB314EF0}"
         "UpgradeCode" = "8:{F749A6CA-7A57-4A96-8E25-146DAEE4AF8E}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.7"
+        "ProductVersion" = "8:1.0.8"
         "Manufacturer" = "8:Ocean Optics"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
