@@ -32,7 +32,7 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.splitContainerControlVsGraph = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBoxSPAM = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownBaseline = new System.Windows.Forms.NumericUpDown();
@@ -52,6 +52,8 @@
             this.checkBoxInterpolate = new System.Windows.Forms.CheckBox();
             this.buttonMerge = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numericUpDownYAxisColumn = new System.Windows.Forms.NumericUpDown();
             this.checkBoxDelimComma = new System.Windows.Forms.CheckBox();
             this.checkBoxDelimTabs = new System.Windows.Forms.CheckBox();
             this.listBoxInputFiles = new System.Windows.Forms.ListBox();
@@ -62,14 +64,19 @@
             this.splitContainerControlsGraphVsLog = new System.Windows.Forms.SplitContainer();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
-            this.numericUpDownYAxisColumn = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
+            this.groupBoxPeakfinding = new System.Windows.Forms.GroupBox();
+            this.groupBoxPeakFindingAlgo = new System.Windows.Forms.GroupBox();
+            this.radioButtonLibrarySPAM = new System.Windows.Forms.RadioButton();
+            this.radioButtonLibrarySolver = new System.Windows.Forms.RadioButton();
+            this.groupBoxSolver = new System.Windows.Forms.GroupBox();
+            this.numericUpDownGaussianHalfWidth = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlVsGraph)).BeginInit();
             this.splitContainerControlVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlVsGraph.Panel2.SuspendLayout();
             this.splitContainerControlVsGraph.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            this.groupBoxSPAM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBaseline)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinIndicesBetweenPeaks)).BeginInit();
             this.groupBox4.SuspendLayout();
@@ -78,13 +85,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateStart)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMerge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlsGraphVsLog)).BeginInit();
             this.splitContainerControlsGraphVsLog.Panel1.SuspendLayout();
             this.splitContainerControlsGraphVsLog.Panel2.SuspendLayout();
             this.splitContainerControlsGraphVsLog.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).BeginInit();
+            this.groupBoxPeakfinding.SuspendLayout();
+            this.groupBoxPeakFindingAlgo.SuspendLayout();
+            this.groupBoxSolver.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainerControlVsGraph
@@ -101,7 +112,7 @@
             // splitContainerControlVsGraph.Panel2
             // 
             this.splitContainerControlVsGraph.Panel2.Controls.Add(this.chartMerge);
-            this.splitContainerControlVsGraph.Size = new System.Drawing.Size(1094, 372);
+            this.splitContainerControlVsGraph.Size = new System.Drawing.Size(1094, 440);
             this.splitContainerControlVsGraph.SplitterDistance = 507;
             this.splitContainerControlVsGraph.TabIndex = 0;
             // 
@@ -109,37 +120,37 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.groupBox6);
+            this.groupBox2.Controls.Add(this.groupBoxPeakfinding);
             this.groupBox2.Controls.Add(this.checkBoxGraph);
             this.groupBox2.Controls.Add(this.labelFileCount);
             this.groupBox2.Controls.Add(this.groupBox4);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.buttonMerge);
-            this.groupBox2.Location = new System.Drawing.Point(6, 180);
+            this.groupBox2.Location = new System.Drawing.Point(6, 192);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(493, 180);
+            this.groupBox2.Size = new System.Drawing.Size(493, 245);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Transforms";
             // 
-            // groupBox6
+            // groupBoxSPAM
             // 
-            this.groupBox6.Controls.Add(this.label5);
-            this.groupBox6.Controls.Add(this.label4);
-            this.groupBox6.Controls.Add(this.numericUpDownBaseline);
-            this.groupBox6.Controls.Add(this.numericUpDownMinIndicesBetweenPeaks);
-            this.groupBox6.Controls.Add(this.checkBoxEnablePeakFinding);
-            this.groupBox6.Location = new System.Drawing.Point(165, 73);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(263, 69);
-            this.groupBox6.TabIndex = 5;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "SPAM";
+            this.groupBoxSPAM.Controls.Add(this.label5);
+            this.groupBoxSPAM.Controls.Add(this.label4);
+            this.groupBoxSPAM.Controls.Add(this.numericUpDownBaseline);
+            this.groupBoxSPAM.Controls.Add(this.numericUpDownMinIndicesBetweenPeaks);
+            this.groupBoxSPAM.Enabled = false;
+            this.groupBoxSPAM.Location = new System.Drawing.Point(7, 68);
+            this.groupBoxSPAM.Name = "groupBoxSPAM";
+            this.groupBoxSPAM.Size = new System.Drawing.Size(116, 69);
+            this.groupBoxSPAM.TabIndex = 5;
+            this.groupBoxSPAM.TabStop = false;
+            this.groupBoxSPAM.Text = "SPAM";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(166, 43);
+            this.label5.Location = new System.Drawing.Point(60, 44);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(46, 13);
             this.label5.TabIndex = 5;
@@ -148,15 +159,15 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(166, 20);
+            this.label4.Location = new System.Drawing.Point(60, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 13);
+            this.label4.Size = new System.Drawing.Size(52, 26);
             this.label4.TabIndex = 4;
-            this.label4.Text = "min pixels between";
+            this.label4.Text = "min pixels\r\nbetween";
             // 
             // numericUpDownBaseline
             // 
-            this.numericUpDownBaseline.Location = new System.Drawing.Point(107, 40);
+            this.numericUpDownBaseline.Location = new System.Drawing.Point(6, 41);
             this.numericUpDownBaseline.Maximum = new decimal(new int[] {
             50000,
             0,
@@ -167,7 +178,7 @@
             this.numericUpDownBaseline.TabIndex = 3;
             this.numericUpDownBaseline.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownBaseline.Value = new decimal(new int[] {
-            500,
+            5000,
             0,
             0,
             0});
@@ -175,7 +186,7 @@
             // 
             // numericUpDownMinIndicesBetweenPeaks
             // 
-            this.numericUpDownMinIndicesBetweenPeaks.Location = new System.Drawing.Point(107, 18);
+            this.numericUpDownMinIndicesBetweenPeaks.Location = new System.Drawing.Point(6, 19);
             this.numericUpDownMinIndicesBetweenPeaks.Minimum = new decimal(new int[] {
             1,
             0,
@@ -195,11 +206,11 @@
             // checkBoxEnablePeakFinding
             // 
             this.checkBoxEnablePeakFinding.AutoSize = true;
-            this.checkBoxEnablePeakFinding.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxEnablePeakFinding.Location = new System.Drawing.Point(6, 31);
             this.checkBoxEnablePeakFinding.Name = "checkBoxEnablePeakFinding";
-            this.checkBoxEnablePeakFinding.Size = new System.Drawing.Size(85, 17);
+            this.checkBoxEnablePeakFinding.Size = new System.Drawing.Size(117, 17);
             this.checkBoxEnablePeakFinding.TabIndex = 0;
-            this.checkBoxEnablePeakFinding.Text = "PeakFinding";
+            this.checkBoxEnablePeakFinding.Text = "Enable peakfinding";
             this.checkBoxEnablePeakFinding.UseVisualStyleBackColor = true;
             this.checkBoxEnablePeakFinding.CheckedChanged += new System.EventHandler(this.checkBoxEnablePeakFinding_CheckedChanged);
             // 
@@ -208,7 +219,7 @@
             this.checkBoxGraph.AutoSize = true;
             this.checkBoxGraph.Checked = true;
             this.checkBoxGraph.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxGraph.Location = new System.Drawing.Point(165, 152);
+            this.checkBoxGraph.Location = new System.Drawing.Point(165, 220);
             this.checkBoxGraph.Name = "checkBoxGraph";
             this.checkBoxGraph.Size = new System.Drawing.Size(55, 17);
             this.checkBoxGraph.TabIndex = 4;
@@ -219,7 +230,7 @@
             // labelFileCount
             // 
             this.labelFileCount.AutoSize = true;
-            this.labelFileCount.Location = new System.Drawing.Point(88, 153);
+            this.labelFileCount.Location = new System.Drawing.Point(88, 221);
             this.labelFileCount.Name = "labelFileCount";
             this.labelFileCount.Size = new System.Drawing.Size(25, 13);
             this.labelFileCount.TabIndex = 4;
@@ -229,9 +240,9 @@
             // 
             this.groupBox4.Controls.Add(this.checkBoxExcelTabs);
             this.groupBox4.Enabled = false;
-            this.groupBox4.Location = new System.Drawing.Point(165, 19);
+            this.groupBox4.Location = new System.Drawing.Point(6, 148);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(104, 48);
+            this.groupBox4.Size = new System.Drawing.Size(153, 48);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Excel";
@@ -357,7 +368,7 @@
             // 
             // buttonMerge
             // 
-            this.buttonMerge.Location = new System.Drawing.Point(6, 148);
+            this.buttonMerge.Location = new System.Drawing.Point(6, 216);
             this.buttonMerge.Name = "buttonMerge";
             this.buttonMerge.Size = new System.Drawing.Size(75, 23);
             this.buttonMerge.TabIndex = 0;
@@ -378,10 +389,38 @@
             this.groupBox1.Controls.Add(this.buttonSelectInputFiles);
             this.groupBox1.Location = new System.Drawing.Point(6, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(493, 171);
+            this.groupBox1.Size = new System.Drawing.Size(493, 183);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inputs";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(349, 24);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(107, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Merge Y-Axis Column";
+            // 
+            // numericUpDownYAxisColumn
+            // 
+            this.numericUpDownYAxisColumn.Location = new System.Drawing.Point(294, 22);
+            this.numericUpDownYAxisColumn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownYAxisColumn.Name = "numericUpDownYAxisColumn";
+            this.numericUpDownYAxisColumn.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownYAxisColumn.TabIndex = 4;
+            this.numericUpDownYAxisColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownYAxisColumn.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownYAxisColumn.ValueChanged += new System.EventHandler(this.numericUpDownYAxisColumn_ValueChanged);
             // 
             // checkBoxDelimComma
             // 
@@ -415,7 +454,7 @@
             this.listBoxInputFiles.FormattingEnabled = true;
             this.listBoxInputFiles.Location = new System.Drawing.Point(6, 48);
             this.listBoxInputFiles.Name = "listBoxInputFiles";
-            this.listBoxInputFiles.Size = new System.Drawing.Size(481, 95);
+            this.listBoxInputFiles.Size = new System.Drawing.Size(481, 121);
             this.listBoxInputFiles.TabIndex = 1;
             // 
             // buttonSelectInputFiles
@@ -437,11 +476,13 @@
             chartArea3.Name = "ChartArea1";
             this.chartMerge.ChartAreas.Add(chartArea3);
             this.chartMerge.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend3.Alignment = System.Drawing.StringAlignment.Center;
+            legend3.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend3.Name = "Legend1";
             this.chartMerge.Legends.Add(legend3);
             this.chartMerge.Location = new System.Drawing.Point(0, 0);
             this.chartMerge.Name = "chartMerge";
-            this.chartMerge.Size = new System.Drawing.Size(583, 372);
+            this.chartMerge.Size = new System.Drawing.Size(583, 440);
             this.chartMerge.TabIndex = 0;
             this.chartMerge.Text = "chart1";
             // 
@@ -473,8 +514,8 @@
             // splitContainerControlsGraphVsLog.Panel2
             // 
             this.splitContainerControlsGraphVsLog.Panel2.Controls.Add(this.groupBox5);
-            this.splitContainerControlsGraphVsLog.Size = new System.Drawing.Size(1094, 484);
-            this.splitContainerControlsGraphVsLog.SplitterDistance = 372;
+            this.splitContainerControlsGraphVsLog.Size = new System.Drawing.Size(1094, 573);
+            this.splitContainerControlsGraphVsLog.SplitterDistance = 440;
             this.splitContainerControlsGraphVsLog.TabIndex = 1;
             // 
             // groupBox5
@@ -483,7 +524,7 @@
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox5.Location = new System.Drawing.Point(0, 0);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1094, 108);
+            this.groupBox5.Size = new System.Drawing.Size(1094, 129);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Event Log";
@@ -495,43 +536,104 @@
             this.textBoxEventLog.Multiline = true;
             this.textBoxEventLog.Name = "textBoxEventLog";
             this.textBoxEventLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxEventLog.Size = new System.Drawing.Size(1088, 89);
+            this.textBoxEventLog.Size = new System.Drawing.Size(1088, 110);
             this.textBoxEventLog.TabIndex = 0;
             this.textBoxEventLog.WordWrap = false;
             // 
-            // numericUpDownYAxisColumn
+            // groupBoxPeakfinding
             // 
-            this.numericUpDownYAxisColumn.Location = new System.Drawing.Point(294, 22);
-            this.numericUpDownYAxisColumn.Minimum = new decimal(new int[] {
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSolver);
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxPeakFindingAlgo);
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSPAM);
+            this.groupBoxPeakfinding.Controls.Add(this.checkBoxEnablePeakFinding);
+            this.groupBoxPeakfinding.Location = new System.Drawing.Point(165, 19);
+            this.groupBoxPeakfinding.Name = "groupBoxPeakfinding";
+            this.groupBoxPeakfinding.Size = new System.Drawing.Size(322, 177);
+            this.groupBoxPeakfinding.TabIndex = 6;
+            this.groupBoxPeakfinding.TabStop = false;
+            this.groupBoxPeakfinding.Text = "Peakfinding";
+            // 
+            // groupBoxPeakFindingAlgo
+            // 
+            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySolver);
+            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySPAM);
+            this.groupBoxPeakFindingAlgo.Enabled = false;
+            this.groupBoxPeakFindingAlgo.Location = new System.Drawing.Point(129, 12);
+            this.groupBoxPeakFindingAlgo.Name = "groupBoxPeakFindingAlgo";
+            this.groupBoxPeakFindingAlgo.Size = new System.Drawing.Size(139, 50);
+            this.groupBoxPeakFindingAlgo.TabIndex = 6;
+            this.groupBoxPeakFindingAlgo.TabStop = false;
+            this.groupBoxPeakFindingAlgo.Text = "Algorithm";
+            // 
+            // radioButtonLibrarySPAM
+            // 
+            this.radioButtonLibrarySPAM.AutoSize = true;
+            this.radioButtonLibrarySPAM.Checked = true;
+            this.radioButtonLibrarySPAM.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonLibrarySPAM.Name = "radioButtonLibrarySPAM";
+            this.radioButtonLibrarySPAM.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonLibrarySPAM.TabIndex = 0;
+            this.radioButtonLibrarySPAM.TabStop = true;
+            this.radioButtonLibrarySPAM.Text = "SPAM";
+            this.radioButtonLibrarySPAM.UseVisualStyleBackColor = true;
+            this.radioButtonLibrarySPAM.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySPAM_CheckedChanged);
+            // 
+            // radioButtonLibrarySolver
+            // 
+            this.radioButtonLibrarySolver.AutoSize = true;
+            this.radioButtonLibrarySolver.Location = new System.Drawing.Point(67, 19);
+            this.radioButtonLibrarySolver.Name = "radioButtonLibrarySolver";
+            this.radioButtonLibrarySolver.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonLibrarySolver.TabIndex = 1;
+            this.radioButtonLibrarySolver.Text = "Solver";
+            this.radioButtonLibrarySolver.UseVisualStyleBackColor = true;
+            this.radioButtonLibrarySolver.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySolver_CheckedChanged);
+            // 
+            // groupBoxSolver
+            // 
+            this.groupBoxSolver.Controls.Add(this.label7);
+            this.groupBoxSolver.Controls.Add(this.numericUpDownGaussianHalfWidth);
+            this.groupBoxSolver.Enabled = false;
+            this.groupBoxSolver.Location = new System.Drawing.Point(129, 68);
+            this.groupBoxSolver.Name = "groupBoxSolver";
+            this.groupBoxSolver.Size = new System.Drawing.Size(145, 69);
+            this.groupBoxSolver.TabIndex = 7;
+            this.groupBoxSolver.TabStop = false;
+            this.groupBoxSolver.Text = "Gaussian Solver";
+            // 
+            // numericUpDownGaussianHalfWidth
+            // 
+            this.numericUpDownGaussianHalfWidth.Location = new System.Drawing.Point(6, 19);
+            this.numericUpDownGaussianHalfWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDownYAxisColumn.Name = "numericUpDownYAxisColumn";
-            this.numericUpDownYAxisColumn.Size = new System.Drawing.Size(49, 20);
-            this.numericUpDownYAxisColumn.TabIndex = 4;
-            this.numericUpDownYAxisColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDownYAxisColumn.Value = new decimal(new int[] {
-            2,
+            this.numericUpDownGaussianHalfWidth.Name = "numericUpDownGaussianHalfWidth";
+            this.numericUpDownGaussianHalfWidth.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownGaussianHalfWidth.TabIndex = 0;
+            this.numericUpDownGaussianHalfWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownGaussianHalfWidth.Value = new decimal(new int[] {
+            10,
             0,
             0,
             0});
-            this.numericUpDownYAxisColumn.ValueChanged += new System.EventHandler(this.numericUpDownYAxisColumn_ValueChanged);
+            this.numericUpDownGaussianHalfWidth.ValueChanged += new System.EventHandler(this.numericUpDownGaussianHalfWidth_ValueChanged);
             // 
-            // label6
+            // label7
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(349, 24);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 13);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Merge Y-Axis Column";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(51, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(87, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "half-width (pixels)";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1094, 484);
+            this.ClientSize = new System.Drawing.Size(1094, 573);
             this.Controls.Add(this.splitContainerControlsGraphVsLog);
             this.Name = "Form1";
             this.Text = "Merge Spectra";
@@ -541,8 +643,8 @@
             this.splitContainerControlVsGraph.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
+            this.groupBoxSPAM.ResumeLayout(false);
+            this.groupBoxSPAM.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBaseline)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinIndicesBetweenPeaks)).EndInit();
             this.groupBox4.ResumeLayout(false);
@@ -554,6 +656,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateStart)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMerge)).EndInit();
             this.splitContainerControlsGraphVsLog.Panel1.ResumeLayout(false);
             this.splitContainerControlsGraphVsLog.Panel2.ResumeLayout(false);
@@ -561,7 +664,13 @@
             this.splitContainerControlsGraphVsLog.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).EndInit();
+            this.groupBoxPeakfinding.ResumeLayout(false);
+            this.groupBoxPeakfinding.PerformLayout();
+            this.groupBoxPeakFindingAlgo.ResumeLayout(false);
+            this.groupBoxPeakFindingAlgo.PerformLayout();
+            this.groupBoxSolver.ResumeLayout(false);
+            this.groupBoxSolver.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -594,7 +703,7 @@
         private System.Windows.Forms.TextBox textBoxEventLog;
         private System.Windows.Forms.CheckBox checkBoxGraph;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMerge;
-        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBoxSPAM;
         private System.Windows.Forms.CheckBox checkBoxEnablePeakFinding;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
@@ -602,6 +711,13 @@
         private System.Windows.Forms.NumericUpDown numericUpDownMinIndicesBetweenPeaks;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericUpDownYAxisColumn;
+        private System.Windows.Forms.GroupBox groupBoxPeakfinding;
+        private System.Windows.Forms.GroupBox groupBoxSolver;
+        private System.Windows.Forms.GroupBox groupBoxPeakFindingAlgo;
+        private System.Windows.Forms.RadioButton radioButtonLibrarySolver;
+        private System.Windows.Forms.RadioButton radioButtonLibrarySPAM;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numericUpDownGaussianHalfWidth;
     }
 }
 
