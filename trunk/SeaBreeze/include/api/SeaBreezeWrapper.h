@@ -43,6 +43,9 @@
 
 #ifdef __cplusplus
 
+/**
+* @brief Encapsulates all SeaBreeze classes
+*/
 namespace seabreeze {
 	class Device;
 }
