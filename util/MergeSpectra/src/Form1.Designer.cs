@@ -28,10 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.splitContainerControlVsGraph = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxPeakfinding = new System.Windows.Forms.GroupBox();
+            this.groupBoxSolver = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDownGaussianHalfWidth = new System.Windows.Forms.NumericUpDown();
+            this.groupBoxPeakFindingAlgo = new System.Windows.Forms.GroupBox();
+            this.radioButtonLibrarySolver = new System.Windows.Forms.RadioButton();
+            this.radioButtonLibrarySPAM = new System.Windows.Forms.RadioButton();
             this.groupBoxSPAM = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -64,18 +71,15 @@
             this.splitContainerControlsGraphVsLog = new System.Windows.Forms.SplitContainer();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
-            this.groupBoxPeakfinding = new System.Windows.Forms.GroupBox();
-            this.groupBoxPeakFindingAlgo = new System.Windows.Forms.GroupBox();
-            this.radioButtonLibrarySPAM = new System.Windows.Forms.RadioButton();
-            this.radioButtonLibrarySolver = new System.Windows.Forms.RadioButton();
-            this.groupBoxSolver = new System.Windows.Forms.GroupBox();
-            this.numericUpDownGaussianHalfWidth = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlVsGraph)).BeginInit();
             this.splitContainerControlVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlVsGraph.Panel2.SuspendLayout();
             this.splitContainerControlVsGraph.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBoxPeakfinding.SuspendLayout();
+            this.groupBoxSolver.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).BeginInit();
+            this.groupBoxPeakFindingAlgo.SuspendLayout();
             this.groupBoxSPAM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBaseline)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinIndicesBetweenPeaks)).BeginInit();
@@ -92,10 +96,6 @@
             this.splitContainerControlsGraphVsLog.Panel2.SuspendLayout();
             this.splitContainerControlsGraphVsLog.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBoxPeakfinding.SuspendLayout();
-            this.groupBoxPeakFindingAlgo.SuspendLayout();
-            this.groupBoxSolver.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainerControlVsGraph
@@ -118,8 +118,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.groupBoxPeakfinding);
             this.groupBox2.Controls.Add(this.checkBoxGraph);
             this.groupBox2.Controls.Add(this.labelFileCount);
@@ -132,6 +131,95 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Transforms";
+            // 
+            // groupBoxPeakfinding
+            // 
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSolver);
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxPeakFindingAlgo);
+            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSPAM);
+            this.groupBoxPeakfinding.Controls.Add(this.checkBoxEnablePeakFinding);
+            this.groupBoxPeakfinding.Location = new System.Drawing.Point(165, 19);
+            this.groupBoxPeakfinding.Name = "groupBoxPeakfinding";
+            this.groupBoxPeakfinding.Size = new System.Drawing.Size(322, 177);
+            this.groupBoxPeakfinding.TabIndex = 6;
+            this.groupBoxPeakfinding.TabStop = false;
+            this.groupBoxPeakfinding.Text = "Peakfinding";
+            // 
+            // groupBoxSolver
+            // 
+            this.groupBoxSolver.Controls.Add(this.label7);
+            this.groupBoxSolver.Controls.Add(this.numericUpDownGaussianHalfWidth);
+            this.groupBoxSolver.Enabled = false;
+            this.groupBoxSolver.Location = new System.Drawing.Point(129, 68);
+            this.groupBoxSolver.Name = "groupBoxSolver";
+            this.groupBoxSolver.Size = new System.Drawing.Size(145, 69);
+            this.groupBoxSolver.TabIndex = 7;
+            this.groupBoxSolver.TabStop = false;
+            this.groupBoxSolver.Text = "Gaussian Solver";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(51, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(87, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "half-width (pixels)";
+            // 
+            // numericUpDownGaussianHalfWidth
+            // 
+            this.numericUpDownGaussianHalfWidth.Location = new System.Drawing.Point(6, 19);
+            this.numericUpDownGaussianHalfWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownGaussianHalfWidth.Name = "numericUpDownGaussianHalfWidth";
+            this.numericUpDownGaussianHalfWidth.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownGaussianHalfWidth.TabIndex = 0;
+            this.numericUpDownGaussianHalfWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownGaussianHalfWidth.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownGaussianHalfWidth.ValueChanged += new System.EventHandler(this.numericUpDownGaussianHalfWidth_ValueChanged);
+            // 
+            // groupBoxPeakFindingAlgo
+            // 
+            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySolver);
+            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySPAM);
+            this.groupBoxPeakFindingAlgo.Enabled = false;
+            this.groupBoxPeakFindingAlgo.Location = new System.Drawing.Point(129, 12);
+            this.groupBoxPeakFindingAlgo.Name = "groupBoxPeakFindingAlgo";
+            this.groupBoxPeakFindingAlgo.Size = new System.Drawing.Size(139, 50);
+            this.groupBoxPeakFindingAlgo.TabIndex = 6;
+            this.groupBoxPeakFindingAlgo.TabStop = false;
+            this.groupBoxPeakFindingAlgo.Text = "Algorithm";
+            // 
+            // radioButtonLibrarySolver
+            // 
+            this.radioButtonLibrarySolver.AutoSize = true;
+            this.radioButtonLibrarySolver.Location = new System.Drawing.Point(67, 19);
+            this.radioButtonLibrarySolver.Name = "radioButtonLibrarySolver";
+            this.radioButtonLibrarySolver.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonLibrarySolver.TabIndex = 1;
+            this.radioButtonLibrarySolver.Text = "Solver";
+            this.radioButtonLibrarySolver.UseVisualStyleBackColor = true;
+            this.radioButtonLibrarySolver.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySolver_CheckedChanged);
+            // 
+            // radioButtonLibrarySPAM
+            // 
+            this.radioButtonLibrarySPAM.AutoSize = true;
+            this.radioButtonLibrarySPAM.Checked = true;
+            this.radioButtonLibrarySPAM.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonLibrarySPAM.Name = "radioButtonLibrarySPAM";
+            this.radioButtonLibrarySPAM.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonLibrarySPAM.TabIndex = 0;
+            this.radioButtonLibrarySPAM.TabStop = true;
+            this.radioButtonLibrarySPAM.Text = "SPAM";
+            this.radioButtonLibrarySPAM.UseVisualStyleBackColor = true;
+            this.radioButtonLibrarySPAM.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySPAM_CheckedChanged);
             // 
             // groupBoxSPAM
             // 
@@ -378,8 +466,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.numericUpDownYAxisColumn);
@@ -469,17 +556,17 @@
             // 
             // chartMerge
             // 
-            chartArea3.CursorX.IsUserEnabled = true;
-            chartArea3.CursorX.IsUserSelectionEnabled = true;
-            chartArea3.CursorY.IsUserEnabled = true;
-            chartArea3.CursorY.IsUserSelectionEnabled = true;
-            chartArea3.Name = "ChartArea1";
-            this.chartMerge.ChartAreas.Add(chartArea3);
+            chartArea1.CursorX.IsUserEnabled = true;
+            chartArea1.CursorX.IsUserSelectionEnabled = true;
+            chartArea1.CursorY.IsUserEnabled = true;
+            chartArea1.CursorY.IsUserSelectionEnabled = true;
+            chartArea1.Name = "ChartArea1";
+            this.chartMerge.ChartAreas.Add(chartArea1);
             this.chartMerge.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Alignment = System.Drawing.StringAlignment.Center;
-            legend3.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend3.Name = "Legend1";
-            this.chartMerge.Legends.Add(legend3);
+            legend1.Alignment = System.Drawing.StringAlignment.Center;
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend1.Name = "Legend1";
+            this.chartMerge.Legends.Add(legend1);
             this.chartMerge.Location = new System.Drawing.Point(0, 0);
             this.chartMerge.Name = "chartMerge";
             this.chartMerge.Size = new System.Drawing.Size(583, 440);
@@ -540,95 +627,6 @@
             this.textBoxEventLog.TabIndex = 0;
             this.textBoxEventLog.WordWrap = false;
             // 
-            // groupBoxPeakfinding
-            // 
-            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSolver);
-            this.groupBoxPeakfinding.Controls.Add(this.groupBoxPeakFindingAlgo);
-            this.groupBoxPeakfinding.Controls.Add(this.groupBoxSPAM);
-            this.groupBoxPeakfinding.Controls.Add(this.checkBoxEnablePeakFinding);
-            this.groupBoxPeakfinding.Location = new System.Drawing.Point(165, 19);
-            this.groupBoxPeakfinding.Name = "groupBoxPeakfinding";
-            this.groupBoxPeakfinding.Size = new System.Drawing.Size(322, 177);
-            this.groupBoxPeakfinding.TabIndex = 6;
-            this.groupBoxPeakfinding.TabStop = false;
-            this.groupBoxPeakfinding.Text = "Peakfinding";
-            // 
-            // groupBoxPeakFindingAlgo
-            // 
-            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySolver);
-            this.groupBoxPeakFindingAlgo.Controls.Add(this.radioButtonLibrarySPAM);
-            this.groupBoxPeakFindingAlgo.Enabled = false;
-            this.groupBoxPeakFindingAlgo.Location = new System.Drawing.Point(129, 12);
-            this.groupBoxPeakFindingAlgo.Name = "groupBoxPeakFindingAlgo";
-            this.groupBoxPeakFindingAlgo.Size = new System.Drawing.Size(139, 50);
-            this.groupBoxPeakFindingAlgo.TabIndex = 6;
-            this.groupBoxPeakFindingAlgo.TabStop = false;
-            this.groupBoxPeakFindingAlgo.Text = "Algorithm";
-            // 
-            // radioButtonLibrarySPAM
-            // 
-            this.radioButtonLibrarySPAM.AutoSize = true;
-            this.radioButtonLibrarySPAM.Checked = true;
-            this.radioButtonLibrarySPAM.Location = new System.Drawing.Point(6, 19);
-            this.radioButtonLibrarySPAM.Name = "radioButtonLibrarySPAM";
-            this.radioButtonLibrarySPAM.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonLibrarySPAM.TabIndex = 0;
-            this.radioButtonLibrarySPAM.TabStop = true;
-            this.radioButtonLibrarySPAM.Text = "SPAM";
-            this.radioButtonLibrarySPAM.UseVisualStyleBackColor = true;
-            this.radioButtonLibrarySPAM.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySPAM_CheckedChanged);
-            // 
-            // radioButtonLibrarySolver
-            // 
-            this.radioButtonLibrarySolver.AutoSize = true;
-            this.radioButtonLibrarySolver.Location = new System.Drawing.Point(67, 19);
-            this.radioButtonLibrarySolver.Name = "radioButtonLibrarySolver";
-            this.radioButtonLibrarySolver.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonLibrarySolver.TabIndex = 1;
-            this.radioButtonLibrarySolver.Text = "Solver";
-            this.radioButtonLibrarySolver.UseVisualStyleBackColor = true;
-            this.radioButtonLibrarySolver.CheckedChanged += new System.EventHandler(this.radioButtonLibrarySolver_CheckedChanged);
-            // 
-            // groupBoxSolver
-            // 
-            this.groupBoxSolver.Controls.Add(this.label7);
-            this.groupBoxSolver.Controls.Add(this.numericUpDownGaussianHalfWidth);
-            this.groupBoxSolver.Enabled = false;
-            this.groupBoxSolver.Location = new System.Drawing.Point(129, 68);
-            this.groupBoxSolver.Name = "groupBoxSolver";
-            this.groupBoxSolver.Size = new System.Drawing.Size(145, 69);
-            this.groupBoxSolver.TabIndex = 7;
-            this.groupBoxSolver.TabStop = false;
-            this.groupBoxSolver.Text = "Gaussian Solver";
-            // 
-            // numericUpDownGaussianHalfWidth
-            // 
-            this.numericUpDownGaussianHalfWidth.Location = new System.Drawing.Point(6, 19);
-            this.numericUpDownGaussianHalfWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownGaussianHalfWidth.Name = "numericUpDownGaussianHalfWidth";
-            this.numericUpDownGaussianHalfWidth.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDownGaussianHalfWidth.TabIndex = 0;
-            this.numericUpDownGaussianHalfWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDownGaussianHalfWidth.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDownGaussianHalfWidth.ValueChanged += new System.EventHandler(this.numericUpDownGaussianHalfWidth_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(51, 21);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(87, 13);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "half-width (pixels)";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -643,6 +641,13 @@
             this.splitContainerControlVsGraph.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBoxPeakfinding.ResumeLayout(false);
+            this.groupBoxPeakfinding.PerformLayout();
+            this.groupBoxSolver.ResumeLayout(false);
+            this.groupBoxSolver.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).EndInit();
+            this.groupBoxPeakFindingAlgo.ResumeLayout(false);
+            this.groupBoxPeakFindingAlgo.PerformLayout();
             this.groupBoxSPAM.ResumeLayout(false);
             this.groupBoxSPAM.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBaseline)).EndInit();
@@ -664,13 +669,6 @@
             this.splitContainerControlsGraphVsLog.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            this.groupBoxPeakfinding.ResumeLayout(false);
-            this.groupBoxPeakfinding.PerformLayout();
-            this.groupBoxPeakFindingAlgo.ResumeLayout(false);
-            this.groupBoxPeakFindingAlgo.PerformLayout();
-            this.groupBoxSolver.ResumeLayout(false);
-            this.groupBoxSolver.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGaussianHalfWidth)).EndInit();
             this.ResumeLayout(false);
 
         }
