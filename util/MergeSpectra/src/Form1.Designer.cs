@@ -59,6 +59,8 @@
             this.checkBoxInterpolate = new System.Windows.Forms.CheckBox();
             this.buttonMerge = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownXAxisColumn = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDownYAxisColumn = new System.Windows.Forms.NumericUpDown();
             this.checkBoxDelimComma = new System.Windows.Forms.CheckBox();
@@ -71,6 +73,11 @@
             this.splitContainerControlsGraphVsLog = new System.Windows.Forms.SplitContainer();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBoxEventLog = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.buttonPreview = new System.Windows.Forms.Button();
+            this.comboBoxXUnit = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlVsGraph)).BeginInit();
             this.splitContainerControlVsGraph.Panel1.SuspendLayout();
             this.splitContainerControlVsGraph.Panel2.SuspendLayout();
@@ -89,6 +96,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateStart)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownXAxisColumn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMerge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControlsGraphVsLog)).BeginInit();
@@ -96,6 +104,8 @@
             this.splitContainerControlsGraphVsLog.Panel2.SuspendLayout();
             this.splitContainerControlsGraphVsLog.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerControlVsGraph
@@ -134,6 +144,7 @@
             // 
             // groupBoxPeakfinding
             // 
+            this.groupBoxPeakfinding.Controls.Add(this.buttonPreview);
             this.groupBoxPeakfinding.Controls.Add(this.groupBoxSolver);
             this.groupBoxPeakfinding.Controls.Add(this.groupBoxPeakFindingAlgo);
             this.groupBoxPeakfinding.Controls.Add(this.groupBoxSPAM);
@@ -468,10 +479,8 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.numericUpDownYAxisColumn);
-            this.groupBox1.Controls.Add(this.checkBoxDelimComma);
-            this.groupBox1.Controls.Add(this.checkBoxDelimTabs);
+            this.groupBox1.Controls.Add(this.groupBox7);
+            this.groupBox1.Controls.Add(this.groupBox6);
             this.groupBox1.Controls.Add(this.listBoxInputFiles);
             this.groupBox1.Controls.Add(this.buttonSelectInputFiles);
             this.groupBox1.Location = new System.Drawing.Point(6, 3);
@@ -481,18 +490,46 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inputs";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(62, 21);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(73, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Shared X-Axis";
+            // 
+            // numericUpDownXAxisColumn
+            // 
+            this.numericUpDownXAxisColumn.Location = new System.Drawing.Point(7, 19);
+            this.numericUpDownXAxisColumn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownXAxisColumn.Name = "numericUpDownXAxisColumn";
+            this.numericUpDownXAxisColumn.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDownXAxisColumn.TabIndex = 6;
+            this.numericUpDownXAxisColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownXAxisColumn.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownXAxisColumn.ValueChanged += new System.EventHandler(this.numericUpDownXAxisColumn_ValueChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(349, 24);
+            this.label6.Location = new System.Drawing.Point(62, 47);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 13);
+            this.label6.Size = new System.Drawing.Size(69, 13);
             this.label6.TabIndex = 5;
-            this.label6.Text = "Merge Y-Axis Column";
+            this.label6.Text = "Merge Y-Axis";
             // 
             // numericUpDownYAxisColumn
             // 
-            this.numericUpDownYAxisColumn.Location = new System.Drawing.Point(294, 22);
+            this.numericUpDownYAxisColumn.Location = new System.Drawing.Point(7, 45);
             this.numericUpDownYAxisColumn.Minimum = new decimal(new int[] {
             1,
             0,
@@ -514,7 +551,7 @@
             this.checkBoxDelimComma.AutoSize = true;
             this.checkBoxDelimComma.Checked = true;
             this.checkBoxDelimComma.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxDelimComma.Location = new System.Drawing.Point(212, 23);
+            this.checkBoxDelimComma.Location = new System.Drawing.Point(6, 42);
             this.checkBoxDelimComma.Name = "checkBoxDelimComma";
             this.checkBoxDelimComma.Size = new System.Drawing.Size(66, 17);
             this.checkBoxDelimComma.TabIndex = 3;
@@ -526,7 +563,7 @@
             this.checkBoxDelimTabs.AutoSize = true;
             this.checkBoxDelimTabs.Checked = true;
             this.checkBoxDelimTabs.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxDelimTabs.Location = new System.Drawing.Point(156, 23);
+            this.checkBoxDelimTabs.Location = new System.Drawing.Point(6, 19);
             this.checkBoxDelimTabs.Name = "checkBoxDelimTabs";
             this.checkBoxDelimTabs.Size = new System.Drawing.Size(50, 17);
             this.checkBoxDelimTabs.TabIndex = 2;
@@ -539,9 +576,9 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxInputFiles.FormattingEnabled = true;
-            this.listBoxInputFiles.Location = new System.Drawing.Point(6, 48);
+            this.listBoxInputFiles.Location = new System.Drawing.Point(6, 100);
             this.listBoxInputFiles.Name = "listBoxInputFiles";
-            this.listBoxInputFiles.Size = new System.Drawing.Size(481, 121);
+            this.listBoxInputFiles.Size = new System.Drawing.Size(481, 69);
             this.listBoxInputFiles.TabIndex = 1;
             // 
             // buttonSelectInputFiles
@@ -627,6 +664,64 @@
             this.textBoxEventLog.TabIndex = 0;
             this.textBoxEventLog.WordWrap = false;
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.checkBoxDelimTabs);
+            this.groupBox6.Controls.Add(this.checkBoxDelimComma);
+            this.groupBox6.Location = new System.Drawing.Point(129, 19);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(74, 73);
+            this.groupBox6.TabIndex = 8;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Delimiters";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label9);
+            this.groupBox7.Controls.Add(this.comboBoxXUnit);
+            this.groupBox7.Controls.Add(this.numericUpDownXAxisColumn);
+            this.groupBox7.Controls.Add(this.numericUpDownYAxisColumn);
+            this.groupBox7.Controls.Add(this.label8);
+            this.groupBox7.Controls.Add(this.label6);
+            this.groupBox7.Location = new System.Drawing.Point(209, 19);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(230, 73);
+            this.groupBox7.TabIndex = 9;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Input Columns";
+            // 
+            // buttonPreview
+            // 
+            this.buttonPreview.Location = new System.Drawing.Point(7, 143);
+            this.buttonPreview.Name = "buttonPreview";
+            this.buttonPreview.Size = new System.Drawing.Size(75, 23);
+            this.buttonPreview.TabIndex = 8;
+            this.buttonPreview.Text = "Preview";
+            this.buttonPreview.UseVisualStyleBackColor = true;
+            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
+            // 
+            // comboBoxXUnit
+            // 
+            this.comboBoxXUnit.FormattingEnabled = true;
+            this.comboBoxXUnit.Items.AddRange(new object[] {
+            "nm",
+            "cm⁻¹",
+            "px"});
+            this.comboBoxXUnit.Location = new System.Drawing.Point(141, 17);
+            this.comboBoxXUnit.Name = "comboBoxXUnit";
+            this.comboBoxXUnit.Size = new System.Drawing.Size(48, 21);
+            this.comboBoxXUnit.TabIndex = 8;
+            this.comboBoxXUnit.Text = "nm";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(195, 21);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(36, 13);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "X Unit";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -660,7 +755,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateIncrement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterpolateStart)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownXAxisColumn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYAxisColumn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMerge)).EndInit();
             this.splitContainerControlsGraphVsLog.Panel1.ResumeLayout(false);
@@ -669,6 +764,10 @@
             this.splitContainerControlsGraphVsLog.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -716,6 +815,13 @@
         private System.Windows.Forms.RadioButton radioButtonLibrarySPAM;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericUpDownGaussianHalfWidth;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDownXAxisColumn;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button buttonPreview;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox comboBoxXUnit;
     }
 }
 
