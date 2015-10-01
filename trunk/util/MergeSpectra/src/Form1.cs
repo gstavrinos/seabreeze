@@ -43,7 +43,9 @@ namespace MergeSpectra
         SortedDictionary<string, List<double>> spectra;
         bool enableGraph = true;
         bool enableInterpolation;
-        uint mergeColumn = 1;  // zero-indexed, so zero is x-axis
+
+        uint xaxisColumn = 0;
+        uint yaxisColumn = 1;  // zero-indexed, so zero is x-axis
 
         // peakfinding
         bool enablePeakFinding = false;
@@ -70,6 +72,8 @@ namespace MergeSpectra
             // update defaults from GUI
             numericUpDownBaseline_ValueChanged(null, null);
             numericUpDownGaussianHalfWidth_ValueChanged(null, null);
+            numericUpDownXAxisColumn_ValueChanged(null, null);
+            numericUpDownYAxisColumn_ValueChanged(null, null);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -95,45 +99,20 @@ namespace MergeSpectra
             if (result != DialogResult.OK)
                 return;
 
-            // init merge
-            pixels = 0;
-            spectra = new SortedDictionary<string, List<double>>();
-            wavelengths = null;
-            peaks = null;
-            foreach (Series s in chartMerge.Series)
-                s.Points.Clear();
-            Refresh();
-
-            // load and optionally graph each file
-            foreach (string pathname in openFileDialogSelectInputFiles.FileNames)
-            {
-                string filename = Path.GetFileName(pathname);
-
-                // read the raw file as-is
-                SortedDictionary<double, double> spectrum = readFile(pathname);
-
-                // generate the wavelengths (for ALL files) from the first file read
-                if (wavelengths == null)
-                {
-                    wavelengths = generateWavelengths(ref spectrum);
-                    pixels = wavelengths.Count;
-                }
-
-                // use the (possibly-interpolated) wavelengths to generate the actual intensities
-                List<double> intensities = generateIntensities(ref wavelengths, ref spectrum);
-                spectra.Add(filename, intensities);
-
-                // peak-finding if requested
-                if (enablePeakFinding)
-                    generatePeaks(filename);
-    
-                // graph if requested
-                if (enableGraph)
-                    graphFile(filename);
-            }
+            doMerge();
 
             // save result
             saveAll();
+        }
+
+        // need to increase code re-use with buttonMerge
+        private void buttonPreview_Click(object sender, EventArgs e)
+        {
+            doMerge();
+
+            PreviewForm preview = new PreviewForm();
+            preview.Show();
+            preview.textBoxSummary.Text = generatePeakSummary();
         }
 
         private void checkBoxInterpolate_CheckedChanged(object sender, EventArgs e)
@@ -180,9 +159,16 @@ namespace MergeSpectra
             baseline = (double) numericUpDownBaseline.Value;
         }
 
+        private void numericUpDownXAxisColumn_ValueChanged(object sender, EventArgs e)
+        {
+            xaxisColumn = (uint)(numericUpDownXAxisColumn.Value - 1);
+            buttonMerge.Enabled = xaxisColumn != yaxisColumn && listBoxInputFiles.Items.Count > 0;
+        }
+
         private void numericUpDownYAxisColumn_ValueChanged(object sender, EventArgs e)
         {
-            mergeColumn = (uint)(numericUpDownYAxisColumn.Value - 1);
+            yaxisColumn = (uint)(numericUpDownYAxisColumn.Value - 1);
+            buttonMerge.Enabled = xaxisColumn != yaxisColumn && listBoxInputFiles.Items.Count > 0;
         }
 
         private void radioButtonLibrarySPAM_CheckedChanged(object sender, EventArgs e)
@@ -205,6 +191,82 @@ namespace MergeSpectra
         ////////////////////////////////////////////////////////////////////////
         // Merging
         ////////////////////////////////////////////////////////////////////////
+
+        string generatePeakSummary()
+        {
+            string s = "";
+            if (peaks != null)
+            {
+                foreach (string filename in spectra.Keys)
+                {
+                    if (peaks.ContainsKey(filename))
+                    {
+                        s += "Filename" + Environment.NewLine;
+                        s += "pixel";
+                        foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                            s += String.Format(",{0}", peak.Key);
+                        s += Environment.NewLine;
+
+                        s += String.Format("x-value({0})", comboBoxXUnit.Text);
+                        foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                            s += String.Format(",{0:f2}", peak.Value.wavelength);
+                        s += Environment.NewLine;
+
+                        s += String.Format("FWHM({0})", comboBoxXUnit.Text);
+                        foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                            s += String.Format(",{0:f2}", peak.Value.fwhm);
+                        s += Environment.NewLine;
+
+                        s += "intensity";
+                        foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
+                            s += String.Format(",{0:f2}", peak.Value.intensity);
+                        s += Environment.NewLine;
+                        s += Environment.NewLine;
+                    }
+                }
+            }
+            return s;
+        }
+
+        void doMerge()
+        {
+            // init merge
+            pixels = 0;
+            spectra = new SortedDictionary<string, List<double>>();
+            wavelengths = null;
+            peaks = null;
+            foreach (Series s in chartMerge.Series)
+                s.Points.Clear();
+            Refresh();
+
+            // load and optionally graph each file
+            foreach (string pathname in openFileDialogSelectInputFiles.FileNames)
+            {
+                string filename = Path.GetFileName(pathname);
+
+                // read the raw file as-is
+                SortedDictionary<double, double> spectrum = readFile(pathname);
+
+                // generate the wavelengths (for ALL files) from the first file read
+                if (wavelengths == null)
+                {
+                    wavelengths = generateWavelengths(ref spectrum);
+                    pixels = wavelengths.Count;
+                }
+
+                // use the (possibly-interpolated) wavelengths to generate the actual intensities
+                List<double> intensities = generateIntensities(ref wavelengths, ref spectrum);
+                spectra.Add(filename, intensities);
+
+                // peak-finding if requested
+                if (enablePeakFinding)
+                    generatePeaks(filename);
+
+                // graph if requested
+                if (enableGraph)
+                    graphFile(filename);
+            }
+        }
 
         void graphFile(string filename)
         {
@@ -269,13 +331,13 @@ namespace MergeSpectra
                         string[] tokens = line.Split(delimArray);
 
                         // typically first value is key (here called wavelength, could be wavenumber), 
-                        // second is value (assumed intensity, could be absorbance etc).  Assume x-axis
-                        // is column 0, and use mergeColumn for the Y-axis
-                        if (tokens.Length < mergeColumn + 1)
+                        // second is value (assumed intensity, could be absorbance etc).  
+                        if (tokens.Length < xaxisColumn + 1 ||
+                            tokens.Length < yaxisColumn + 1)
                             continue;
 
-                        double wavelength = Convert.ToDouble(tokens[0]);
-                        double value = Convert.ToDouble(tokens[mergeColumn]);
+                        double wavelength = Convert.ToDouble(tokens[xaxisColumn]);
+                        double value = Convert.ToDouble(tokens[yaxisColumn]);
 
                         spectrum.Add(wavelength, value);
                     }
@@ -365,37 +427,10 @@ namespace MergeSpectra
 
                 if (peaks != null)
                 {
+                    string summary = generatePeakSummary();
                     file.WriteLine();
                     file.WriteLine("Peaks (files by row rather than column)");
-                    foreach (string filename in filenames)
-                    {
-                        if (peaks.ContainsKey(filename))
-                        {
-                            file.WriteLine("{0}", filename);
-
-                            file.Write("pixel");
-                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                                file.Write(",{0}", peak.Key);
-                            file.WriteLine();
-
-                            file.Write("wavelength");
-                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.wavelength);
-                            file.WriteLine();
-
-                            file.Write("fwhm(nm)");
-                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.fwhm);
-                            file.WriteLine();
-
-                            file.Write("intensity");
-                            foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                                file.Write(",{0:f2}", peak.Value.intensity);
-                            file.WriteLine();
-
-                            file.WriteLine();
-                        }
-                    }
+                    file.WriteLine(summary);
                 }
             }
 
@@ -432,7 +467,9 @@ namespace MergeSpectra
             foreach (com.oceanoptics.spam.advancedprocessing.SpectrumPeak peak in results)
             {
                 int pixel = peak.PixelNumber;
-                double wavelength = peak.Centroid;
+
+                // Centroid is problematic...tail must drop below 5% of peak height INCLUDING baseline, hard to achieve on closely-spaced peaks.
+                double wavelength = peak.CenterWavelength; 
                 double intensity = spectra[filename][pixel];
                 double fwhm = peak.WavelengthFWHM;
 
@@ -502,5 +539,6 @@ namespace MergeSpectra
 
             peaks.Add(filename, thesePeaks);
         }
+
     }
 }
