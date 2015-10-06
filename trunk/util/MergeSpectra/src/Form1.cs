@@ -91,6 +91,8 @@ namespace MergeSpectra
                 listBoxInputFiles.Items.Add(pathname);
 
             labelFileCount.Text = String.Format("{0} files", listBoxInputFiles.Items.Count);
+
+            updateMergeAllowed();
         }
 
         private void buttonMerge_Click(object sender, EventArgs e)
@@ -162,13 +164,12 @@ namespace MergeSpectra
         private void numericUpDownXAxisColumn_ValueChanged(object sender, EventArgs e)
         {
             xaxisColumn = (uint)(numericUpDownXAxisColumn.Value - 1);
-            buttonMerge.Enabled = xaxisColumn != yaxisColumn && listBoxInputFiles.Items.Count > 0;
+            updateMergeAllowed();
         }
 
         private void numericUpDownYAxisColumn_ValueChanged(object sender, EventArgs e)
         {
             yaxisColumn = (uint)(numericUpDownYAxisColumn.Value - 1);
-            buttonMerge.Enabled = xaxisColumn != yaxisColumn && listBoxInputFiles.Items.Count > 0;
         }
 
         private void radioButtonLibrarySPAM_CheckedChanged(object sender, EventArgs e)
@@ -192,6 +193,11 @@ namespace MergeSpectra
         // Merging
         ////////////////////////////////////////////////////////////////////////
 
+        void updateMergeAllowed()
+        {
+            buttonMerge.Enabled = xaxisColumn != yaxisColumn && listBoxInputFiles.Items.Count > 0;
+        }
+
         string generatePeakSummary()
         {
             string s = "";
@@ -201,25 +207,25 @@ namespace MergeSpectra
                 {
                     if (peaks.ContainsKey(filename))
                     {
-                        s += "Filename" + Environment.NewLine;
+                        s += filename + Environment.NewLine;
                         s += "pixel";
                         foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                            s += String.Format(",{0}", peak.Key);
+                            s += String.Format(", {0}", peak.Key);
                         s += Environment.NewLine;
 
                         s += String.Format("x-value({0})", comboBoxXUnit.Text);
                         foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                            s += String.Format(",{0:f2}", peak.Value.wavelength);
+                            s += String.Format(", {0:f2}", peak.Value.wavelength);
                         s += Environment.NewLine;
 
                         s += String.Format("FWHM({0})", comboBoxXUnit.Text);
                         foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                            s += String.Format(",{0:f2}", peak.Value.fwhm);
+                            s += String.Format(", {0:f2}", peak.Value.fwhm);
                         s += Environment.NewLine;
 
                         s += "intensity";
                         foreach (KeyValuePair<int, PeakInfo> peak in peaks[filename])
-                            s += String.Format(",{0:f2}", peak.Value.intensity);
+                            s += String.Format(", {0:f2}", peak.Value.intensity);
                         s += Environment.NewLine;
                         s += Environment.NewLine;
                     }
@@ -235,8 +241,9 @@ namespace MergeSpectra
             spectra = new SortedDictionary<string, List<double>>();
             wavelengths = null;
             peaks = null;
-            foreach (Series s in chartMerge.Series)
-                s.Points.Clear();
+            chartMerge.Series.Clear();
+            chartMerge.Legends.Clear();
+            chartMerge.Legends.Add(new Legend("Default"));
             Refresh();
 
             // load and optionally graph each file
