@@ -45,7 +45,7 @@ SpectrometerFeatureAdapter::SpectrometerFeatureAdapter(
         OOISpectrometerFeatureInterface *spec, const FeatureFamily &f,
         seabreeze::Protocol *p, seabreeze::Bus *b, unsigned short instanceID)
             : FeatureAdapterTemplate<OOISpectrometerFeatureInterface>(spec,
-                family, p, b, instanceID) {
+                f, p, b, instanceID) {
 
 }
 
