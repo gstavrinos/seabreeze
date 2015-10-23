@@ -75,7 +75,7 @@ bool NIRQuestSpectrometerFeature::initialize(const Protocol &proto, const Bus &b
      * because the saturation level is stored in a different location.
      */
 
-    unsigned int saturation;
+    long saturation;
 
     EEPROMSlotFeature eeprom(18);
     vector<byte> *slot = eeprom.readEEPROMSlot(proto, bus, 0x0011);
@@ -85,8 +85,8 @@ bool NIRQuestSpectrometerFeature::initialize(const Protocol &proto, const Bus &b
                  | (((*slot)[6] & 0x00FF) << 16)
                  | (((*slot)[7] & 0x00FF) << 24);
 
-    if(0 == saturation) {
-        /* May not be initialized right, but could cause division by zero */
+    if((saturation <= 0) || (saturation > this->maxIntensity)) {
+        /* May not be initialized right, or EEPROM may be unprogrammed */
         saturation = this->maxIntensity;
     }
 
