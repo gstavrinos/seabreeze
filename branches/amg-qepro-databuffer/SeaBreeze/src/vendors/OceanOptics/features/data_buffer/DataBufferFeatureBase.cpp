@@ -37,8 +37,9 @@
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureBase.h"
 #include "vendors/OceanOptics/protocols/interfaces/DataBufferProtocolInterface.h"
-#include "vendors/OceanOptics/protocols/impls/OBPDataBufferProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPDataBufferProtocol.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
+#include "common/exceptions/FeatureControlException.h"
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -52,7 +53,7 @@ DataBufferFeatureBase::~DataBufferFeatureBase() {
 
 }
 
-DataBufferFeatureBase::DataBufferCount_t getNumberOfBuffers() {
+DataBufferCount_t DataBufferFeatureBase::getNumberOfBuffers() {
     return this->numberOfBuffers;
 }
 
@@ -164,7 +165,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
     DataBufferElementCount_t retval = 0;
 
     try {
-        retval = buffer->getBufferMinimumCapacity(bus, bufferIndex);
+        retval = buffer->getBufferCapacityMinimum(bus, bufferIndex);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -194,7 +195,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMaximum(
     DataBufferElementCount_t retval = 0;
 
     try {
-        retval = buffer->getBufferMaximumCapacity(bus, bufferIndex);
+        retval = buffer->getBufferCapacityMaximum(bus, bufferIndex);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -232,7 +233,7 @@ void DataBufferFeatureBase::setBufferCapacity(const Protocol &protocol,
 }
 
 
-DataBufferFeatureBase::FeatureFamily getFeatureFamily() {
+FeatureFamily DataBufferFeatureBase::getFeatureFamily() {
     FeatureFamilies families;
 
     return families.DATA_BUFFER;

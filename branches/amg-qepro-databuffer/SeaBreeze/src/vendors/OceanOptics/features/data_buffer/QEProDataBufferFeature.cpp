@@ -37,11 +37,12 @@
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/data_buffer/QEProDataBufferFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/DataBufferProtocolInterface.h"
-#include "vendors/OceanOptics/protocols/impls/OBPDataBufferProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPDataBufferProtocol.h"
 #include "common/exceptions/FeatureControlException.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
 
 using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
