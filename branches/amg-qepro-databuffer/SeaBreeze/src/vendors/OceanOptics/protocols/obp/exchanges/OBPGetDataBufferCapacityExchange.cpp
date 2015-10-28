@@ -47,7 +47,7 @@ OBPGetDataBufferCapacityExchange::~OBPGetDataBufferCapacityExchange() {
 }
 
 unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
-        ProtocolHelper *helper) throw (ProtocolException) {
+        TransferHelper *helper) throw (ProtocolException) {
 
     unsigned long capacity;
     vector<byte> *result;
@@ -57,10 +57,10 @@ unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
         throw ProtocolException("Got a short read when querying capacity.");
     }
             
-    capacity = (       (result[0] & 0x00FF)
-                    || ((result[1] & 0x00FF) << 8)
-                    || ((result[2] & 0x00FF) << 16)
-                    || ((result[3] & 0x00FF) << 24));
+    capacity = (       ((*result)[0] & 0x00FF)
+                    || (((*result)[1] & 0x00FF) << 8)
+                    || (((*result)[2] & 0x00FF) << 16)
+                    || (((*result)[3] & 0x00FF) << 24));
 
     delete result;
 

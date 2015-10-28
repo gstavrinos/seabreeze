@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPGetDataBufferCapacityExchange.h
+ * @file    OBPDataBufferClearExchange.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
@@ -27,23 +27,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPGETDATABUFFERCAPACITYEXCHANGE_H
-#define OBPGETDATABUFFERCAPACITYEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferClearExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace oceanBinaryProtocol {
-        class OBPGetDataBufferCapacityExchange : public OBPQuery {
-        public:
-            OBPGetDataBufferCapacityExchange();
-            virtual ~OBPGetDataBufferCapacityExchange();
+OBPDataBufferClearExchange::OBPDataBufferClearExchange() {
+    this->hints->push_back(new OBPControlHint());
 
-            unsigned long queryBufferCapacity(TransferHelper *helper)
-                    throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol */
-} /* end namespace seabreeze */
+    this->messageType = OBPMessageTypes::OBP_CLEAR_BUFFER_ALL;
+}
 
-#endif /* OBPGETDATABUFFERCAPACITYEXCHANGE_H */
+OBPDataBufferClearExchange::~OBPDataBufferClearExchange() {
+
+}
 

@@ -35,10 +35,13 @@
 namespace seabreeze {
     namespace oceanBinaryProtocol {
         class OBPSetDataBufferCapacityExchange : public OBPCommand {
+        public:
             OBPSetDataBufferCapacityExchange();
             virtual ~OBPSetDataBufferCapacityExchange();
+
+            void setBufferCapacity(unsigned long capacity);
         };
-    } /* end namespace oceanBinaryProtocol
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
 #endif /* OBPSETDATABUFFERCAPACITYEXCHANGE_H */

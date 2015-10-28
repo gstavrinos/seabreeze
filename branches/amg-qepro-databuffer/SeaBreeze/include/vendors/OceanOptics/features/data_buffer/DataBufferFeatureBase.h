@@ -68,11 +68,6 @@ namespace seabreeze {
                 throw (FeatureException);
 
         /* Overriding from Feature */
-        /* initialize is still abstract in case the device needs
-         * to probe anything with regards to device capabilities
-         */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus,
-                throw (FeatureException) = 0;
         virtual FeatureFamily getFeatureFamily();
 
     protected:

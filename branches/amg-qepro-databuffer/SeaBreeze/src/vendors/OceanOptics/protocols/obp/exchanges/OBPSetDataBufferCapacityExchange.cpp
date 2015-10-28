@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPSetBufferBufferCapacityExchange.cpp
+ * @file    OBPSetDataBufferCapacityExchange.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetBufferBufferCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 #include <vector>
@@ -37,7 +37,7 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-OBPSetBufferBufferCapacityExchange::OBPSetBufferBufferCapacityExchange() {
+OBPSetDataBufferCapacityExchange::OBPSetDataBufferCapacityExchange() {
     this->hints->push_back(new OBPControlHint());
 
     this->messageType = OBPMessageTypes::OBP_SET_BUFFER_SIZE_ACTIVE;
@@ -45,11 +45,11 @@ OBPSetBufferBufferCapacityExchange::OBPSetBufferBufferCapacityExchange() {
     this->payload.resize(4);
 }
 
-OBPSetBufferBufferCapacityExchange::~OBPSetBufferBufferCapacityExchange() {
+OBPSetDataBufferCapacityExchange::~OBPSetDataBufferCapacityExchange() {
 
 }
 
-void OBPSetBufferBufferCapacityExchange::setBufferCapacity(
+void OBPSetDataBufferCapacityExchange::setBufferCapacity(
         unsigned long capacity) {
 
     unsigned char *cptr;

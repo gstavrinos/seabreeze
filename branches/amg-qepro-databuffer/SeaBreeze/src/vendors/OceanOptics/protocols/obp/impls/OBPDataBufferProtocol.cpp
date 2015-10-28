@@ -33,6 +33,7 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferElementCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferMaximumCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 #include "common/exceptions/ProtocolBusMismatchException.h"
 
@@ -45,7 +46,7 @@ OBPDataBufferProtocol::OBPDataBufferProtocol()
 
 }
 
-~OBPDataBufferProtocol() {
+OBPDataBufferProtocol::~OBPDataBufferProtocol() {
 
 }
 
@@ -93,7 +94,7 @@ unsigned long OBPDataBufferProtocol::getNumberOfElements(const Bus &bus,
         throw ProtocolException(error);
     }
         
-    TransferHelper *helper = bus.getHelper(xchange.getHints());
+    TransferHelper *helper = bus.getHelper(exchange.getHints());
     if(NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
@@ -119,7 +120,7 @@ unsigned long OBPDataBufferProtocol::getBufferCapacity(const Bus &bus,
         throw ProtocolException(error);
     }
 
-    TransferHelper *helper = bus.getHelper(xchange.getHints());
+    TransferHelper *helper = bus.getHelper(exchange.getHints());
     if(NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
@@ -167,7 +168,7 @@ unsigned long OBPDataBufferProtocol::getBufferCapacityMaximum(const Bus &bus,
         throw ProtocolException(error);
     }   
 
-    TransferHelper *helper = bus.getHelper(xchange.getHints());
+    TransferHelper *helper = bus.getHelper(exchange.getHints());
     if(NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);

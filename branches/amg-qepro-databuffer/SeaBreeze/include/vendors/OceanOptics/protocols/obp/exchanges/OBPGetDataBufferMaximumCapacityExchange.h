@@ -35,13 +35,14 @@
 namespace seabreeze {
     namespace oceanBinaryProtocol {
         class OBPGetDataBufferMaximumCapacityExchange : public OBPQuery {
+        public:
             OBPGetDataBufferMaximumCapacityExchange();
             virtual ~OBPGetDataBufferMaximumCapacityExchange();
 
             unsigned long queryBufferMaximumCapacity(
-                ProtocolHelper *helper) throw (ProtocolException);
+                TransferHelper *helper) throw (ProtocolException);
         };
-    } /* end namespace oceanBinaryProtocol
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
 #endif /* OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H */

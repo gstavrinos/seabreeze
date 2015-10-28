@@ -41,10 +41,6 @@ namespace seabreeze {
     public:
         QEProDataBufferFeature();
         virtual ~QEProDataBufferFeature();
-
-        /* initialize is pure virtual in the parent class */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus,
-                throw (FeatureException);
     };
 
 } /* end namespace */

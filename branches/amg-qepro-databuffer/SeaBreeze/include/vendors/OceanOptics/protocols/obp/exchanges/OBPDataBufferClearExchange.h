@@ -35,10 +35,11 @@
 namespace seabreeze {
     namespace oceanBinaryProtocol {
         class OBPDataBufferClearExchange : public OBPCommand {
+        public:
             OBPDataBufferClearExchange();
             virtual ~OBPDataBufferClearExchange();
         };
-    } /* end namespace oceanBinaryProtocol
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
 #endif /* OBPDATABUFFERCLEAREXCHANGE_H */

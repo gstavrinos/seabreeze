@@ -47,7 +47,7 @@ OBPGetDataBufferElementCountExchange::~OBPGetDataBufferElementCountExchange() {
 }
 
 unsigned long OBPGetDataBufferElementCountExchange::queryNumberOfElements(
-        ProtocolHelper *helper) throw (ProtocolException) {
+        TransferHelper *helper) throw (ProtocolException) {
 
     unsigned long elementCount;
     vector<byte> *result;
@@ -57,10 +57,10 @@ unsigned long OBPGetDataBufferElementCountExchange::queryNumberOfElements(
         throw ProtocolException("Got a short read when querying element count.");
     }
             
-    elementCount = (    (result[0] & 0x00FF)
-                    || ((result[1] & 0x00FF) << 8)
-                    || ((result[2] & 0x00FF) << 16)
-                    || ((result[3] & 0x00FF) << 24));
+    elementCount = (    ((*result)[0] & 0x00FF)
+                    || (((*result)[1] & 0x00FF) << 8)
+                    || (((*result)[2] & 0x00FF) << 16)
+                    || (((*result)[3] & 0x00FF) << 24));
 
     delete result;
 
