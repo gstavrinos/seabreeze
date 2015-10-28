@@ -1,10 +1,14 @@
 /***************************************************//**
- * @file    QEProDataBufferFeature.h
+ * @file    QEProDataBufferFeature.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
- * This feature provides an interface to the spectral 
- * data buffer in the QE-PRO.
+ * This feature provides an interface to the thermo-
+ * electric unit for devices with a clean
+ * protocol implementation.  This is an abstract base
+ * class but it does much of the work needed for most
+ * implementations that can delegate almost everything
+ * to the protocol layer.
  *
  * LICENSE:
  *
@@ -30,24 +34,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef QEPRODATABUFFERFEATURE_H
-#define QEPRODATABUFFERFEATURE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/features/data_buffer/QEProDataBufferFeature.h"
+#include "vendors/OceanOptics/protocols/interfaces/DataBufferProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/impls/OBPDataBufferProtocol.h"
+#include "common/exceptions/FeatureControlException.h"
+#include "api/seabreezeapi/FeatureFamilies.h"
 
-#include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureBase.h"
+using namespace seabreeze;
+using namespace seabreeze::api;
+using namespace std;
 
-namespace seabreeze {
+QEProDataBufferFeature::QEProDataBufferFeature() {
+    this->numberOfBuffers = 1;
 
-    class QEProDataBufferFeature : public DataBufferFeatureBase {
-    public:
-        QEProDataBufferFeature();
-        virtual ~QEProDataBufferFeature();
+    this->protocols.push_back(new OBPDataBufferProtocol());
+}
 
-        /* initialize is pure virtual in the parent class */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus,
-                throw (FeatureException);
-    };
+QEProDataBufferFeature::~QEProDataBufferFeature() {
 
-} /* end namespace */
+}
 
-#endif /* QEPRODATABUFFERFEATURE_H */
+bool QEProDataBufferFeature::initialize(const Protocol &protocol,
+        const Bus &bus) throw (FeatureException) {
+    /* This doesn't need to probe anything ahead of time */
+    return true;
+}
 
