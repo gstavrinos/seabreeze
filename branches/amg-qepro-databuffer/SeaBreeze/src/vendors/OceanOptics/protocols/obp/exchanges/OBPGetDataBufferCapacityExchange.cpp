@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPGetDataBufferMaximumCapacityExchange.h
+ * @file    OBPGetDataBufferCapacityExchange.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
@@ -27,22 +27,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
-#define OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace oceanBinaryProtocol {
-        class OBPGetDataBufferMaximumCapacityExchange : public OBPQuery {
-            OBPGetDataBufferMaximumCapacityExchange();
-            virtual ~OBPGetDataBufferMaximumCapacityExchange();
+OBPGetDataBufferCapacityExchange::OBPGetDataBufferCapacityExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_BUFFER_SIZE_ACTIVE;
+}
 
-            unsigned long queryBufferMaximumCapacity(
-                ProtocolHelper *helper) throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol
-} /* end namespace seabreeze */
+OBPGetDataBufferCapacityExchange::~OBPGetDataBufferCapacityExchange() {
 
-#endif /* OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H */
+}
+
+unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
+        ProtocolHelper *helper) throw (ProtocolException) {
+
+    unsigned long capacity;
+    vector<byte> *result;
+
+    result = this->queryDevice(helper);
+    if(NULL == result || result->size() < 4) {
+        throw ProtocolException("Got a short read when querying capacity.");
+    }
+            
+    capacity = (       (result[0] & 0x00FF)
+                    || ((result[1] & 0x00FF) << 8)
+                    || ((result[2] & 0x00FF) << 16)
+                    || ((result[3] & 0x00FF) << 24));
+
+    delete result;
+
+    return capacity;
+}
 

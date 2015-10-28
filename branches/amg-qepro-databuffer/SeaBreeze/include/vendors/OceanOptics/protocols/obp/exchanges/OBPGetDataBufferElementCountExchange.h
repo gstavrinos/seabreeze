@@ -30,15 +30,18 @@
 #ifndef OBPGETDATABUFFERELEMENTCOUNTEXCHANGE_H
 #define OBPGETDATABUFFERELEMENTCOUNTEXCHANGE_H
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPCommand.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
     namespace oceanBinaryProtocol {
-        class OBPGetDataBufferElementCountExchange : public OBPCommand {
+        class OBPGetDataBufferElementCountExchange : public OBPQuery {
             OBPGetDataBufferElementCountExchange();
             virtual ~OBPGetDataBufferElementCountExchange();
+
+            unsigned long queryNumberOfElements(ProtocolHelper *helper)
+                    throw (ProtocolException);
         };
-    } /* end namespace oceanBinaryProtocol
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
 #endif /* OBPGETDATABUFFERELEMENTCOUNTEXCHANGE_H */

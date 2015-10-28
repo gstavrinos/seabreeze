@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPGetDataBufferMaximumCapacityExchange.h
+ * @file    OBPSetBufferBufferCapacityExchange.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
@@ -27,22 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
-#define OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetBufferBufferCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace oceanBinaryProtocol {
-        class OBPGetDataBufferMaximumCapacityExchange : public OBPQuery {
-            OBPGetDataBufferMaximumCapacityExchange();
-            virtual ~OBPGetDataBufferMaximumCapacityExchange();
+OBPSetBufferBufferCapacityExchange::OBPSetBufferBufferCapacityExchange() {
+    this->hints->push_back(new OBPControlHint());
 
-            unsigned long queryBufferMaximumCapacity(
-                ProtocolHelper *helper) throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol
-} /* end namespace seabreeze */
+    this->messageType = OBPMessageTypes::OBP_SET_BUFFER_SIZE_ACTIVE;
 
-#endif /* OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H */
+    this->payload.resize(4);
+}
+
+OBPSetBufferBufferCapacityExchange::~OBPSetBufferBufferCapacityExchange() {
+
+}
+
+void OBPSetBufferBufferCapacityExchange::setBufferCapacity(
+        unsigned long capacity) {
+
+    unsigned char *cptr;
+    int i;
+
+    cptr = (unsigned char *)&capacity;
+
+    for(i = 0; i < 4; i++) {
+        this->payload[i] = cptr[i];
+    }
+}
 

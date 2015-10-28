@@ -30,13 +30,16 @@
 #ifndef OBPGETDATABUFFERCAPACITYEXCHANGE_H
 #define OBPGETDATABUFFERCAPACITYEXCHANGE_H
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPCommand.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
     namespace oceanBinaryProtocol {
-        class OBPGetDataBufferCapacityExchange : public OBPCommand {
+        class OBPGetDataBufferCapacityExchange : public OBPQuery {
             OBPGetDataBufferCapacityExchange();
             virtual ~OBPGetDataBufferCapacityExchange();
+
+            unsigned long queryBufferCapacity(ProtocolHelper *helper)
+                    throw (ProtocolException);
         };
     } /* end namespace oceanBinaryProtocol
 } /* end namespace seabreeze */

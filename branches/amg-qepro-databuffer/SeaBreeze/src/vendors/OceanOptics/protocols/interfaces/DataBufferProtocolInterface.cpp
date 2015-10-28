@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPGetDataBufferMaximumCapacityExchange.h
+ * @file    DataBufferProtocolInterface.cpp
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
@@ -27,22 +27,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
-#define OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/interfaces/DataBufferProtocolInterface.h"
 
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
+using namespace seabreeze;
 
-namespace seabreeze {
-    namespace oceanBinaryProtocol {
-        class OBPGetDataBufferMaximumCapacityExchange : public OBPQuery {
-            OBPGetDataBufferMaximumCapacityExchange();
-            virtual ~OBPGetDataBufferMaximumCapacityExchange();
+DataBufferProtocolInterface::DataBufferProtocolInterface(Protocol *protocol)
+    : ProtocolHelper(protocol) {
 
-            unsigned long queryBufferMaximumCapacity(
-                ProtocolHelper *helper) throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol
-} /* end namespace seabreeze */
+}
 
-#endif /* OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H */
+DataBufferProtocolInterface::~DataBufferProtocolInterface() {
+
+}
 
