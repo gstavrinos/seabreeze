@@ -45,6 +45,7 @@ void read_eeprom_test(int index);
 void strobe_enable_test(int index);
 void trigger_mode_test(int index);
 void tec_test(int index);
+void data_buffer_test(int index);
 
 const char* get_error_string(int error) {
     static char buffer[32];
@@ -93,6 +94,7 @@ int run_all_tests() {
         get_wavelengths_test(i);
         get_spectrum_test(i);
         get_raw_spectrum_test(i);
+        data_buffer_test(i);
         speed_test(i);
     }
 
@@ -204,6 +206,74 @@ void get_spectrum_test(int index) {
 
         free(spectrum);
     }
+}
+
+void data_buffer_test(int index) {
+    int error = 0;
+    long oldCapacity;
+    long capacity;
+    long maxCapacity;
+
+    printf("\n\nTesting data buffering capabilities.\n");
+
+    printf("\nAttempting to get data buffer minimum capacity\n");
+    capacity = seabreeze_get_buffer_capacity_minimum(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    if(0 != error) {
+        printf("Device does not appear to support data buffer feature.\n");
+        return;
+    }
+    printf("Minimum capacity: %ld\n", capacity);
+    
+    printf("\nAttempting to get data buffer maximum capacity\n");
+    maxCapacity = seabreeze_get_buffer_capacity_maximum(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Maximum capacity: %ld\n", maxCapacity);
+    
+    printf("\nAttempting to get current data buffer capacity\n");
+    oldCapacity = seabreeze_get_buffer_capacity(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Current capacity: %ld\n", oldCapacity);
+
+    printf("\nAttempting to set data buffer capacity to %ld\n", maxCapacity);
+    seabreeze_set_buffer_capacity(index, &error, maxCapacity);
+    printf("...Result is [%s]\n", get_error_string(error));
+    
+    printf("\nAttempting to get current data buffer capacity\n");
+    capacity = seabreeze_get_buffer_capacity(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Current capacity: %ld\n", capacity);
+    
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    capacity = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", capacity);
+
+    printf("\nWaiting for more data to be buffered...\n");
+    Sleep(2000);
+    
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    capacity = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", capacity);
+
+    printf("\nAttempting to clear the buffer:\n");
+    seabreeze_clear_buffer(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    capacity = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", capacity);
+
+    printf("\nAttempting to set data buffer capacity back to %ld\n", oldCapacity);
+    seabreeze_set_buffer_capacity(index, &error, oldCapacity);
+    printf("...Result is [%s]\n", get_error_string(error));
+    
+    printf("\nAttempting to get current data buffer capacity\n");
+    capacity = seabreeze_get_buffer_capacity(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Current capacity: %ld\n", capacity);
 }
 
 void get_raw_spectrum_test(int index) {
