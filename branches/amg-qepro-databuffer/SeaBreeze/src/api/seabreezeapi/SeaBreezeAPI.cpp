@@ -2369,3 +2369,64 @@ int sbapi_stray_light_coeffs_get(long deviceID, long featureID, int *error_code,
     return wrapper->strayLightCoeffsGet(deviceID, featureID, error_code,
             buffer, max_length);
 }
+
+
+/**************************************************************************************/
+//  C language wrapper for data buffer features
+/**************************************************************************************/
+
+int sbapi_get_number_of_data_buffer_features(long deviceID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getNumberOfDataBufferFeatures(deviceID, error_code);
+}
+
+int sbapi_get_data_buffer_features(long deviceID, int *error_code,
+            long *features, unsigned int max_features) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getDataBufferFeatures(deviceID, error_code,
+            features, max_features);
+}
+
+void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->dataBufferClear(deviceID, featureID, error_code);
+}
+
+unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->dataBufferGetNumberOfElements(deviceID, featureID, error_code);
+}
+
+unsigned long sbapi_data_buffer_get_buffer_capacity(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->dataBufferGetBufferCapacity(deviceID, featureID, error_code);
+}
+
+unsigned long sbapi_data_buffer_get_buffer_capacity_maximum(
+            long deviceID, long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->dataBufferGetBufferCapacityMaximum(deviceID, featureID, error_code);
+}
+
+unsigned long sbapi_data_buffer_get_buffer_capacity_minimum(
+            long deviceID, long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->dataBufferGetBufferCapacityMinimum(deviceID, featureID, error_code);
+}
+
+void sbapi_data_buffer_set_buffer_capacity(long deviceID,
+            long featureID, int *error_code, unsigned long capacity) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->dataBufferSetBufferCapacity(deviceID, featureID, error_code, capacity);
+}
+
