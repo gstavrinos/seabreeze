@@ -1402,23 +1402,10 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
         tallyErrors(error, testFailureCount);
 
         printf("\t\t\tAttempting to get current buffer size...\n");
-        tempCapacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
+        capacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         if(0 == error) {
-            printf("\t\t\t\tCurrent buffer size: %ld\n", tempCapacity);
-        }
-        tallyErrors(error, testFailureCount);
-
-        printf("\t\t\tAttempting to set buffer size back to %ld...\n", tempCapacity);
-        sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_ids[i], &error, tempCapacity);
-        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-        tallyErrors(error, testFailureCount);
-
-        printf("\t\t\tAttempting to get current buffer size...\n");
-        tempCapacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
-        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-        if(0 == error) {
-            printf("\t\t\t\tCurrent buffer size: %ld\n", tempCapacity);
+            printf("\t\t\t\tCurrent buffer size: %ld\n", capacity);
         }
         tallyErrors(error, testFailureCount);
 
@@ -1451,6 +1438,19 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         if(0 == error) {
             printf("\t\t\t\tNumber of items ready for retrieval: %ld\n", capacity);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to set buffer size back to %ld...\n", tempCapacity);
+        sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_ids[i], &error, tempCapacity);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get current buffer size...\n");
+        tempCapacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tCurrent buffer size: %ld\n", tempCapacity);
         }
         tallyErrors(error, testFailureCount);
         
