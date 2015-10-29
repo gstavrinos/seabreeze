@@ -51,6 +51,7 @@
 #include "api/seabreezeapi/ContinuousStrobeFeatureAdapter.h"
 #include "api/seabreezeapi/ThermoElectricCoolerFeatureAdapter.h"
 #include "api/seabreezeapi/LightSourceFeatureAdapter.h"
+#include "api/seabreezeapi/DataBufferFeatureAdapter.h"
 #include <vector>
 
 namespace seabreeze {
@@ -199,8 +200,8 @@ namespace seabreeze {
             int getSpectrumProcessingFeatures(long *buffer, int maxFeatures);
             unsigned short int spectrumProcessingScansToAverageGet(long spectrumProcessingFeatureID, int *errorCode);
             unsigned char spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode);
-			void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
-			void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
+            void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
+            void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
                                                    
             /* Get one or more optical bench features */
             int getNumberOfOpticalBenchFeatures();
@@ -250,8 +251,8 @@ namespace seabreeze {
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
             std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
-			
-			RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
+            
+            RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
             SpectrometerFeatureAdapter *getSpectrometerFeatureByID(long featureID);
             ThermoElectricCoolerFeatureAdapter *getTECFeatureByID(long featureID);
@@ -267,7 +268,7 @@ namespace seabreeze {
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
             SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
-            DataBufferFeatureAdapter *getDataBufferAdapterFeatureByID(long featureID);
+            DataBufferFeatureAdapter *getDataBufferFeatureByID(long featureID);
         };
     }
 }

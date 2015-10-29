@@ -79,7 +79,7 @@ template <class T> void __delete_feature_adapters(vector<T *> &features) {
 }
 
 DeviceAdapter::~DeviceAdapter() {
-	__delete_feature_adapters<RawUSBBusAccessFeatureAdapter>(rawUSBBusAccessFeatures);
+    __delete_feature_adapters<RawUSBBusAccessFeatureAdapter>(rawUSBBusAccessFeatures);
     __delete_feature_adapters<SerialNumberFeatureAdapter>(serialNumberFeatures);
     __delete_feature_adapters<SpectrometerFeatureAdapter>(spectrometerFeatures);
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
@@ -95,6 +95,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<SpectrumProcessingFeatureAdapter>(spectrumProcessingFeatures);
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
+    __delete_feature_adapters<DataBufferFeatureAdapter>(dataBufferFeatures);
 
     delete this->device;
 }
@@ -232,6 +233,10 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<StrayLightCoeffsFeatureInterface,
                     StrayLightCoeffsFeatureAdapter>(this->device,
             strayLightFeatures, bus, featureFamilies.STRAY_LIGHT_COEFFS);
+
+    __create_feature_adapters<DataBufferFeatureInterface,
+                    DataBufferFeatureAdapter>(this->device,
+            dataBufferFeatures, bus, featureFamilies.DATA_BUFFER);
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return 0;
@@ -1118,3 +1123,80 @@ int DeviceAdapter::strayLightCoeffsGet(long featureID, int *errorCode,
 
     return feature->readStrayLightCoeffs(errorCode, buffer, bufferLength);
 }
+
+/* Data buffer feature wrappers */
+int DeviceAdapter::getNumberOfDataBufferFeatures() {
+    return (int) this->dataBufferFeatures.size();
+}
+
+int DeviceAdapter::getDataBufferFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<DataBufferFeatureAdapter>(
+                dataBufferFeatures, buffer, maxFeatures);
+}
+
+DataBufferFeatureAdapter *DeviceAdapter::getDataBufferFeatureByID(long featureID) {
+    return __getFeatureByID<DataBufferFeatureAdapter>(
+                dataBufferFeatures, featureID);
+}
+
+void DeviceAdapter::dataBufferClear(long featureID, int *errorCode) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->clearBuffer(errorCode);
+}
+
+unsigned long DeviceAdapter::dataBufferGetNumberOfElements(long featureID, int *errorCode) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getNumberOfElements(errorCode);
+}
+
+unsigned long DeviceAdapter::dataBufferGetBufferCapacity(long featureID, int *errorCode) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getBufferCapacity(errorCode);
+}
+
+unsigned long DeviceAdapter::dataBufferGetBufferCapacityMaximum(long featureID, int *errorCode) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getBufferCapacityMaximum(errorCode);
+}
+
+unsigned long DeviceAdapter::dataBufferGetBufferCapacityMinimum(long featureID, int *errorCode) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getBufferCapacityMinimum(errorCode);
+}
+
+void DeviceAdapter::dataBufferSetBufferCapacity(long featureID, int *errorCode, unsigned long capacity) {
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->setBufferCapacity(errorCode, capacity);
+}
+
+
