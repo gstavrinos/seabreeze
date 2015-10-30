@@ -3,12 +3,11 @@
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
- * This feature provides an interface to the thermo-
- * electric unit for devices with a clean
- * protocol implementation.  This is an abstract base
- * class but it does much of the work needed for most
- * implementations that can delegate almost everything
- * to the protocol layer.
+ * This feature provides an interface to the data buffer
+ * for devices with a clean protocol implementation.
+ * This is an abstract base class but it does much of
+ * the work needed for most implementations that can
+ * delegate almost everything to the protocol layer.
  *
  * LICENSE:
  *
@@ -59,7 +58,7 @@ DataBufferCount_t DataBufferFeatureBase::getNumberOfBuffers() {
 
 void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
         const Bus &bus, const DataBufferIndex_t bufferIndex)
-    	throw (FeatureException) {
+        throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -86,8 +85,8 @@ void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
 }
 
 DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
-    	const Protocol &protocol, const Bus &bus,
-    	const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+    const Protocol &protocol, const Bus &bus,
+    const DataBufferIndex_t bufferIndex) throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -116,7 +115,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
 }
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
-    	const Protocol &protocol, const Bus &bus,
+        const Protocol &protocol, const Bus &bus,
         const DataBufferIndex_t bufferIndex) throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;   
@@ -146,8 +145,8 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
 }
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
-    	const Protocol &protocol, const Bus &bus,
-    	const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus,
+        const DataBufferIndex_t bufferIndex) throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -176,8 +175,8 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
 }
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMaximum(
-    	const Protocol &protocol, const Bus &bus,
-    	const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus,
+        const DataBufferIndex_t bufferIndex) throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -207,7 +206,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMaximum(
 
 void DataBufferFeatureBase::setBufferCapacity(const Protocol &protocol,
         const Bus &bus, const DataBufferIndex_t bufferIndex,
-    	const DataBufferElementCount_t bufferSize) throw (FeatureException) {
+        const DataBufferElementCount_t bufferSize) throw (FeatureException) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;

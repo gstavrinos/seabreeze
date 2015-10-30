@@ -93,7 +93,7 @@ unsigned long OBPDataBufferProtocol::getNumberOfElements(const Bus &bus,
                      "index should be zero.");
         throw ProtocolException(error);
     }
-        
+
     TransferHelper *helper = bus.getHelper(exchange.getHints());
     if(NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
@@ -166,13 +166,13 @@ unsigned long OBPDataBufferProtocol::getBufferCapacityMaximum(const Bus &bus,
         string error("This protocol only supports a single buffer.  The buffer "
                      "index should be zero.");
         throw ProtocolException(error);
-    }   
+    }
 
     TransferHelper *helper = bus.getHelper(exchange.getHints());
     if(NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
-    }   
+    }
 
     maximumCapacity = exchange.queryBufferMaximumCapacity(helper);
 

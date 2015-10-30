@@ -34,7 +34,7 @@
 #include "api/seabreezeapi/FeatureFamilies.h"
 
 /* Constants */
-#define FEATURE_FAMILY_ID_UNDEFINED           	0
+#define FEATURE_FAMILY_ID_UNDEFINED             0
 #define FEATURE_FAMILY_ID_SERIAL_NUMBER         1
 #define FEATURE_FAMILY_ID_SPECTROMETER          2
 #define FEATURE_FAMILY_ID_THERMOELECTRIC        3

@@ -93,7 +93,7 @@ public:
     unsigned long getBufferCapacity  (int index, int *errorCode);
     unsigned long getBufferCapacityMaximum(int index, int *errorCode);
     unsigned long getBufferCapacityMinimum(int index, int *errorCode);
-    void   setBufferCapacity           (int index, int *errorCode, unsigned long capacity);
+    void   setBufferCapacity         (int index, int *errorCode, unsigned long capacity);
 
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);

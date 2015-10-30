@@ -345,7 +345,7 @@ void shutter_test(int index) {
 
         if(spectrum[i]>darkSpectrum[i]*1.02){
             darkCount++;
-        }        
+        }
     }
     if((float)darkCount/spec_length>0.01)
         printf("\tThe shutter appears to be working.\n");
