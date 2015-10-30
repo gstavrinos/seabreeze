@@ -1498,6 +1498,8 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
         printf("\t\t%d: Finished testing device 0x%02lX, data buffer 0x%02lX\n",
                 i, deviceID, data_buffer_ids[i]);
     }
+    free(data_buffer_ids);
 
+    printf("\tFinished testing data buffer capabilities.\n");
 }
 
