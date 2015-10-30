@@ -1,0 +1,24 @@
+SEABREEZE = ../../../..
+
+all: deps objs
+
+SUBDIRS = \
+    continuous_strobe   \
+    eeprom_slots        \
+    fpga_register       \
+    irradcal            \
+    light_source        \
+    nonlinearity        \
+    temperature         \
+    revision            \
+    optical_bench       \
+    raw_bus_access      \
+    serial_number       \
+    shutter             \
+    spectrometer        \
+    spectrum_processing \
+    stray_light         \
+    thermoelectric      \
+    wavecalcoeffseeprom
+
+include $(SEABREEZE)/common.mk
