@@ -52,6 +52,7 @@
 #define FEATURE_FAMILY_ID_OPTICAL_BENCH    		15
 #define FEATURE_FAMILY_ID_REVISION	    		16
 #define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING	17
+#define FEATURE_FAMILY_ID_PIXEL_BINNING         18
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -224,6 +225,13 @@ seabreeze::api::SpectrumProcessingFeatureFamily::SpectrumProcessingFeatureFamily
 
 seabreeze::api::SpectrumProcessingFeatureFamily::~SpectrumProcessingFeatureFamily() {
 
+}
+
+seabreeze::api::PixelBinningFeatureFamily::PixelBinningFeatureFamily()
+    : FeatureFamily("PixelBinning", FEATURE_FAMILY_ID_PIXEL_BINNING) {
+}
+
+seabreeze::api::PixelBinningFeatureFamily::~PixelBinningFeatureFamily() {
 }
 
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {

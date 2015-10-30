@@ -46,16 +46,20 @@ OBPReadRawSpectrumExchange::OBPReadRawSpectrumExchange(
         unsigned int readoutLength, unsigned int numPixels) {
 
     this->hints->push_back(new OBPSpectrumHint());
-    this->buffer->resize(readoutLength);
-    this->length = readoutLength;
     this->direction = Transfer::FROM_DEVICE;
-    checkBufferSize();
-
-    this->numberOfPixels = numPixels;
+    setNumberOfPixels(readoutLength, numPixels);
 }
 
 OBPReadRawSpectrumExchange::~OBPReadRawSpectrumExchange() {
 
+}
+
+void OBPReadRawSpectrumExchange::setNumberOfPixels(unsigned int readoutLength, unsigned int numPixels) {
+    buffer->resize(readoutLength);
+    length = readoutLength;
+    checkBufferSize();
+
+    numberOfPixels = numPixels;
 }
 
 unsigned int OBPReadRawSpectrumExchange::isLegalMessageType(unsigned int t) {

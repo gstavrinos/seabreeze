@@ -147,6 +147,12 @@ namespace seabreeze {
             virtual ~RawUSBBusAccessFeatureFamily();
         };
 
+        class PixelBinningFeatureFamily : public FeatureFamily {
+        public:
+            PixelBinningFeatureFamily();
+            virtual ~PixelBinningFeatureFamily();
+        };
+
         class FeatureFamilies {
         public:
             const UndefinedFeatureFamily UNDEFINED;
@@ -167,6 +173,7 @@ namespace seabreeze {
             const SpectrumProcessingFeatureFamily SPECTRUM_PROCESSING;
             const StrayLightCoeffsFeatureFamily STRAY_LIGHT_COEFFS;
             const RawUSBBusAccessFeatureFamily RAW_USB_BUS_ACCESS;
+            const PixelBinningFeatureFamily PIXEL_BINNING;
 
             FeatureFamilies();
             ~FeatureFamilies();

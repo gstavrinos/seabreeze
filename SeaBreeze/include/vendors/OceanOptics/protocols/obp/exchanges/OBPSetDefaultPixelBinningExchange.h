@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPReadRawSpectrumExchange.h
- * @date    January 2011
+ * @file    OBPSetDefaultPixelBinningExchange.h
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,29 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPREADRAWSPECTRUMEXCHANGE_H
-#define OBPREADRAWSPECTRUMEXCHANGE_H
+#ifndef OBPSETDEFAULTPIXELBINNINGEXCHANGE_H
+#define OBPSETDEFAULTPIXELBINNINGEXCHANGE_H
 
-#include "common/protocols/Transfer.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPCommand.h"
 
 namespace seabreeze {
   namespace oceanBinaryProtocol {
-    class OBPReadRawSpectrumExchange : public Transfer {
+    class OBPSetDefaultPixelBinningExchange : public OBPCommand {
     public:
-        OBPReadRawSpectrumExchange(unsigned int readoutLength, unsigned int numberOfPixels);
-        virtual ~OBPReadRawSpectrumExchange();
-
-        // Allow the number of pixels to be altered for pixel binning
-        void setNumberOfPixels(unsigned int readoutLength, unsigned int numPixels);
-
-        /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
-
-    protected:
-        unsigned int isLegalMessageType(unsigned int t);
-        unsigned int numberOfPixels;
+        OBPSetDefaultPixelBinningExchange();
+        virtual ~OBPSetDefaultPixelBinningExchange();
+        void setDefaultPixelBinningFactor(const unsigned char binning);
+        void setDefaultPixelBinningFactor();
     };
   }
 }
 
-#endif /* OBPREADRAWSPECTRUMEXCHANGE_H */
+#endif /* OBPSETDEFAULTPIXELBINNINGEXCHANGE_H */

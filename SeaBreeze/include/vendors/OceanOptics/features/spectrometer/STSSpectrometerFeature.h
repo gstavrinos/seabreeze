@@ -41,16 +41,28 @@
 
 namespace seabreeze {
 
+    namespace oceanBinaryProtocol {
+        class OBPReadRawSpectrumExchange;
+        class OBPReadSpectrumExchange;
+    }
+
     class STSSpectrometerFeature : public OOISpectrometerFeature {
     public:
         STSSpectrometerFeature();
         virtual ~STSSpectrometerFeature();
+
+        void setPixelBinningFactor(unsigned char binningFactor);
 
         /* The STS gets wavelengths a bit differently */
         virtual std::vector<double> *getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException);       
 
     private:
+        oceanBinaryProtocol::OBPReadRawSpectrumExchange *unformattedSpectrum;
+        oceanBinaryProtocol::OBPReadSpectrumExchange *formattedSpectrum;
+        unsigned char binningFactor;
+
+        static const unsigned int unbinnedNumberOfPixels = 1024;
         static const long INTEGRATION_TIME_MINIMUM;
         static const long INTEGRATION_TIME_MAXIMUM;
         static const long INTEGRATION_TIME_INCREMENT;

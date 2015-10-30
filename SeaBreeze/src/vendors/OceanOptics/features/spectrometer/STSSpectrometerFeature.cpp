@@ -49,9 +49,10 @@ const long STSSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 85000000;
 const long STSSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1;
 const long STSSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-STSSpectrometerFeature::STSSpectrometerFeature() {
+STSSpectrometerFeature::STSSpectrometerFeature()
+    : binningFactor(0) {
 
-    this->numberOfPixels = 1024;
+    this->numberOfPixels = unbinnedNumberOfPixels;
     this->maxIntensity = 16383;
 
     this->integrationTimeMinimum = STSSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -62,10 +63,10 @@ STSSpectrometerFeature::STSSpectrometerFeature() {
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             STSSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
+    unformattedSpectrum = new OBPReadRawSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
+    formattedSpectrum = new OBPReadSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
     Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
@@ -91,6 +92,12 @@ STSSpectrometerFeature::~STSSpectrometerFeature() {
 
 }
 
+void STSSpectrometerFeature::setPixelBinningFactor(unsigned char factor) {
+    binningFactor = factor;
+    numberOfPixels = unbinnedNumberOfPixels >> binningFactor;
+    unformattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
+    formattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
+}
 
 vector<double> *STSSpectrometerFeature::getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException) {
@@ -101,7 +108,22 @@ vector<double> *STSSpectrometerFeature::getWavelengths(const Protocol &protocol,
     vector<ProtocolHelper *> helpers;
     helpers.push_back(new OBPWaveCalCoeffsEEPromProtocol());
 
-    WaveCalCoeffsEEPromFeature WaveCalCoeffsEEProm(helpers, this->numberOfPixels);
+    WaveCalCoeffsEEPromFeature WaveCalCoeffsEEProm(helpers, unbinnedNumberOfPixels);
 
-    return WaveCalCoeffsEEProm.readWavelengths(protocol, bus);
+    vector<double> *wavelengths = WaveCalCoeffsEEProm.readWavelengths(protocol, bus);
+    vector<double> &w = *wavelengths;
+
+    if (binningFactor > 0) {
+        const size_t step = 1 << binningFactor;
+        for (size_t start = 0, destination = 0; start < unbinnedNumberOfPixels; start += step, ++destination) {
+            double sum = 0.0;
+            for (size_t i = start, count = 0; count < step; ++i, ++count) {
+                sum += w[i];
+            }
+            w[destination] = sum / step;
+        }
+        wavelengths->resize(numberOfPixels);
+    }
+
+    return wavelengths;
 }

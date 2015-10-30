@@ -79,6 +79,8 @@ public:
     int    getFormattedSpectrumLength(int index, int *errorCode);
     int    getUnformattedSpectrumLength(int index, int *errorCode);
     long   getMinIntegrationTimeMicrosec(int index, int *errorCode);
+    long   getMaxIntegrationTimeMicrosec(int index, int *errorCode);
+    int    getMaximumIntensity(int index, int *errorCode);
 
     // advanced features
     int    getElectricDarkPixelIndices(int index, int *errorCode, int *indices, int length);
