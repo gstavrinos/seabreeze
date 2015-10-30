@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPReadRawSpectrumExchange.h
- * @date    January 2011
+ * @file    OBPGetPixelBinningExchange.cpp
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,29 +27,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPREADRAWSPECTRUMEXCHANGE_H
-#define OBPREADRAWSPECTRUMEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetPixelBinningExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
-#include "common/protocols/Transfer.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 
-namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPReadRawSpectrumExchange : public Transfer {
-    public:
-        OBPReadRawSpectrumExchange(unsigned int readoutLength, unsigned int numberOfPixels);
-        virtual ~OBPReadRawSpectrumExchange();
-
-        // Allow the number of pixels to be altered for pixel binning
-        void setNumberOfPixels(unsigned int readoutLength, unsigned int numPixels);
-
-        /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
-
-    protected:
-        unsigned int isLegalMessageType(unsigned int t);
-        unsigned int numberOfPixels;
-    };
-  }
+OBPGetPixelBinningExchange::OBPGetPixelBinningExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_PIXEL_BINNING_FACTOR;
+    this->payload.resize(sizeof(unsigned char));
 }
 
-#endif /* OBPREADRAWSPECTRUMEXCHANGE_H */
+OBPGetPixelBinningExchange::~OBPGetPixelBinningExchange() {
+
+}

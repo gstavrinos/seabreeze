@@ -1,7 +1,8 @@
 /***************************************************//**
- * @file    OBPReadRawSpectrumExchange.h
- * @date    January 2011
+ * @file    PixelBinningProtocolInterface.cpp
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
+ *
  *
  * LICENSE:
  *
@@ -27,29 +28,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPREADRAWSPECTRUMEXCHANGE_H
-#define OBPREADRAWSPECTRUMEXCHANGE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/interfaces/PixelBinningProtocolInterface.h"
 
-#include "common/protocols/Transfer.h"
+using namespace seabreeze;
 
-namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPReadRawSpectrumExchange : public Transfer {
-    public:
-        OBPReadRawSpectrumExchange(unsigned int readoutLength, unsigned int numberOfPixels);
-        virtual ~OBPReadRawSpectrumExchange();
+PixelBinningProtocolInterface::PixelBinningProtocolInterface(Protocol *protocol)
+    : ProtocolHelper(protocol) {
 
-        // Allow the number of pixels to be altered for pixel binning
-        void setNumberOfPixels(unsigned int readoutLength, unsigned int numPixels);
-
-        /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
-
-    protected:
-        unsigned int isLegalMessageType(unsigned int t);
-        unsigned int numberOfPixels;
-    };
-  }
 }
 
-#endif /* OBPREADRAWSPECTRUMEXCHANGE_H */
+PixelBinningProtocolInterface::~PixelBinningProtocolInterface() {
+
+}

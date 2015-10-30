@@ -511,6 +511,17 @@ unsigned long SeaBreezeAPI::spectrometerGetMinimumIntegrationTimeMicros(
     return adapter->spectrometerGetMinimumIntegrationTimeMicros(featureID, errorCode);
 }
 
+unsigned long SeaBreezeAPI::spectrometerGetMaximumIntegrationTimeMicros(
+        long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrometerGetMaximumIntegrationTimeMicros(featureID, errorCode);
+}
+
 int SeaBreezeAPI::spectrometerGetUnformattedSpectrum(long deviceID,
         long featureID, int *errorCode, unsigned char *buffer, int bufferLength) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
@@ -590,6 +601,99 @@ int SeaBreezeAPI::spectrometerGetElectricDarkPixelIndices(long deviceID,
 
     return adapter->spectrometerGetElectricDarkPixelIndices(featureID, errorCode,
                 indices, length);
+}
+
+int SeaBreezeAPI::spectrometerGetMaximumIntensity(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrometerGetMaximumIntensity(featureID, errorCode);
+}
+
+/**************************************************************************************/
+//  Pixel binning features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI::getNumberOfPixelBinningFeatures(long id, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(id);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getNumberOfPixelBinningFeatures();
+}
+
+int SeaBreezeAPI::getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getPixelBinningFeatures(buffer, maxLength);
+}
+
+void SeaBreezeAPI::binningSetPixelBinningFactor(long deviceID, long featureID, int *errorCode, const unsigned char binningFactor) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+    }
+
+    adapter->binningSetPixelBinningFactor(featureID, errorCode, binningFactor);
+}
+
+unsigned char SeaBreezeAPI::binningGetPixelBinningFactor(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->binningGetPixelBinningFactor(featureID, errorCode);
+}
+
+void SeaBreezeAPI::binningSetDefaultPixelBinningFactor(long deviceID, long featureID, int *errorCode, const unsigned char binningFactor) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+    }
+
+    adapter->binningSetDefaultPixelBinningFactor(featureID, errorCode, binningFactor);
+}
+
+void SeaBreezeAPI::binningSetDefaultPixelBinningFactor(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+    }
+
+    adapter->binningSetDefaultPixelBinningFactor(featureID, errorCode);
+}
+
+unsigned char SeaBreezeAPI::binningGetDefaultPixelBinningFactor(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->binningGetDefaultPixelBinningFactor(featureID, errorCode);
+}
+
+unsigned char SeaBreezeAPI::binningGetMaxPixelBinningFactor(long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->binningGetMaxPixelBinningFactor(featureID, errorCode);
 }
 
 /**************************************************************************************/
@@ -1328,7 +1432,7 @@ void SeaBreezeAPI::spectrumProcessingScansToAverageSet(long deviceID, long featu
 }
 
 void SeaBreezeAPI::spectrumProcessingBoxcarWidthSet(long deviceID, long featureID,
-        int *errorCode, unsigned char boxcarWidth) {
+    int *errorCode, unsigned char boxcarWidth) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {
         SET_ERROR_CODE(ERROR_NO_DEVICE);

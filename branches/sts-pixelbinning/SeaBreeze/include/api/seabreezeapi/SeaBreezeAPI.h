@@ -133,6 +133,7 @@ public:
     void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
     void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
     unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
     int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
@@ -140,6 +141,17 @@ public:
     int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
     int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
+    int spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
+
+    /* Pixel binning capabilities */
+    int getNumberOfPixelBinningFeatures(long id, int *errorCode);
+    int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void binningSetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+    unsigned char binningGetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
         
     /* TEC capabilities */
     int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
