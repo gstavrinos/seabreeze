@@ -1402,7 +1402,7 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
         if(oldCapacity != maxCapacity) {
             targetCapacity = maxCapacity;
-        } else if(maxCapacity != minCapacity) {
+        } else if(maxCapacity > minCapacity) {
             /* The current capacity setting is the maximum, so try to back off by one.
              * This test confirms that there is at least some room between min and max.
              */
