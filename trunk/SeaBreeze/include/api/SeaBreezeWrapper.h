@@ -87,6 +87,14 @@ public:
     void   setShutterOpen            (int index, int *errorCode, unsigned char opened);
     void   setContinuousStrobePeriodMicrosec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec);
 
+    // Buffering features
+    void   clearBuffer               (int index, int *errorCode);
+    unsigned long getBufferElementCount(int index, int *errorCode);
+    unsigned long getBufferCapacity  (int index, int *errorCode);
+    unsigned long getBufferCapacityMaximum(int index, int *errorCode);
+    unsigned long getBufferCapacityMinimum(int index, int *errorCode);
+    void   setBufferCapacity         (int index, int *errorCode, unsigned long capacity);
+
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);
     int    writeEEPROMSlot           (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);
@@ -766,6 +774,61 @@ extern "C" {
     DLL_DECL void
     seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode,
         unsigned short strobe_id, unsigned long period_usec);
+
+    /**
+    * @brief Clear the spectrum buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer cleared
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    */
+    DLL_DECL void
+    seabreeze_clear_buffer(int index, int *error_code);
+
+    /**
+    * @brief Get the number of spectra presently in the buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer queried
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return Number of spectra in the buffer
+    */
+    DLL_DECL unsigned long
+    seabreeze_get_buffer_element_count(int index, int *error_code);
+
+    /**
+    * @brief Get the currently configured size of the data buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer queried
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return The present limit on the number of spectra that will be retained.
+    */
+    DLL_DECL unsigned long
+    seabreeze_get_buffer_capacity(int index, int *error_code);
+
+    /**
+    * @brief Get the maximum possible configurable size for the data buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer queried
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return Maximum allowed value for the buffer size
+    */
+    DLL_DECL unsigned long
+    seabreeze_get_buffer_capacity_maximum(int index, int *error_code);
+
+    /**
+    * @brief Get the minimum possible configurable size for the data buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer queried
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return Minimum allowed value for the buffer size
+    */
+    DLL_DECL unsigned long
+    seabreeze_get_buffer_capacity_minimum(int index, int *error_code);
+
+    /**
+    * @brief Set the number of spectra that the buffer should keep
+    * @param index (Input) Which spectrometer should have its buffer modified
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @param capacity (Input) Limit on number of spectra to store.
+    *        Note that this must be within the range defined by the capacity minimum
+    *        and maximum values.
+    */
+    DLL_DECL void
+    seabreeze_set_buffer_capacity(int index, int *error_code, unsigned long capacity);
 
     /**
     * @brief Programmatically enable debug outputs to stderr

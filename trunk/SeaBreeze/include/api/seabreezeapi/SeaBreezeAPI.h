@@ -115,7 +115,7 @@ public:
     /* Get the usb endpoint address for a specified type of endpoint */
    	unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType);
 
-	/* get raw usb access capabilities */
+    /* Get raw usb access capabilities */
     int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode);
     int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
@@ -206,8 +206,8 @@ public:
     int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode);
     unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode);
-	void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
-	void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
+    void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
+    void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
  
     /* Revision capabilities */
     int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
@@ -230,6 +230,16 @@ public:
     int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
     int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+
+    /* Data buffer capabilities */
+    int getNumberOfDataBufferFeatures(long deviceID, int *errorCode);
+    int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void dataBufferClear(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode);
+    void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity);
 
 private:
     SeaBreezeAPI();
@@ -2055,6 +2065,115 @@ extern "C" {
      */
     DLL_DECL int sbapi_stray_light_coeffs_get(long deviceID, long featureID,
             int *error_code, double *buffer, int max_length);
+
+
+    /**
+     * This function returns the total number of data buffer feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_data_buffer_features().
+     */
+    DLL_DECL int sbapi_get_number_of_data_buffer_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each data buffer
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated buffer to hold returned feature handles
+     * @param max_features (Input) size of preallocated buffer
+     *
+     * @return the number of data buffer feature IDs that were copied.
+     */
+    DLL_DECL int sbapi_get_data_buffer_features(long deviceID, int *error_code,
+            long *buffer, unsigned int maxLength);
+
+    /**
+     * @brief Clear the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     */
+    DLL_DECL void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Get the number of data elements currently in the buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return A count of how many items are available for retrieval from the buffer
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,
+            long featureID, int *error_code);
+
+    /**
+     * @brief Get the present limit of how many data elements will be retained by the buffer.
+     *        This value can be changed with sbapi_data_buffer_set_buffer_capacity().
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return A count of how many items the buffer will store before data may be lost
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity(long deviceID,
+            long featureID, int *error_code);
+
+    /**
+     * @brief Get the maximum possible configurable size for the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The largest value that may be set with sbapi_data_buffer_set_buffer_capacity().
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity_maximum(
+            long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Get the minimum possible configurable size for the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The smallest value that may be set with sbapi_data_buffer_set_buffer_capacity().
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity_minimum(
+            long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Set the number of data elements that the buffer should retain
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @param capacity (Input) Limit on the number of data elements to store.  This is
+     *        bounded by what is returned by sbapi_data_buffer_get_buffer_capacity_minimum() and
+     *        sbapi_data_buffer_get_buffer_capacity_maximum().
+     */
+    DLL_DECL void sbapi_data_buffer_set_buffer_capacity(long deviceID,
+            long featureID, int *error_code, unsigned long capacity);
 
 
 #ifdef __cplusplus

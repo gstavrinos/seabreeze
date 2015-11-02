@@ -41,6 +41,7 @@
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/QEProUSB.h"
 #include "vendors/OceanOptics/features/spectrometer/QEProSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/data_buffer/QEProDataBufferFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
@@ -75,6 +76,7 @@ QEPro::QEPro() {
 
     /* Set up the features that comprise this device */
     this->features.push_back(new QEProSpectrometerFeature());
+    this->features.push_back(new QEProDataBufferFeature());
 
     /* Add serial number feature */
     vector<ProtocolHelper *> serialNumberHelpers;
