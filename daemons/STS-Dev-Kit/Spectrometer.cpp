@@ -33,11 +33,16 @@
  *******************************************************/
 
 #include "Spectrometer.h"
+#include "RequestHandlerConfiguration.h"
 #include "IResponseHandler.h"
-#include <api/SeaBreezeWrapper.h>
+#include <api/seabreezeapi/SeaBreezeAPI.h>
+#include <api/seabreezeapi/SeaBreezeAPIConstants.h>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/join.hpp>
+#include <boost/range/adaptor/transformed.hpp>
 #include <boost/assign.hpp>
 #include <limits>
+#include <numeric>
 
 /* Submit a message (task) to the active object to be added to the execution queue.
 */
@@ -88,26 +93,15 @@ void Spectrometer::HandleError(boost::shared_ptr<Connection> connection) {
     m_responseHandler->NotifyError(connection);
 }
 
-/* Return a spectrum from this spectrometer.
-*/
-std::vector<double> Spectrometer::GetSpectrum() {
-
-    std::vector<double> spectrum(m_binnedPixelCount, 0.0);
-    int error = 0;
-    int actual = m_wrapper->getFormattedSpectrum(m_index, &error, spectrum.data(), m_binnedPixelCount);
-    return spectrum;
-}
-
 /* Constructor. Map the command codes to member function handlers.
 */
-Spectrometer::Spectrometer(IResponseHandler *responseHandler, const int index, SeaBreezeWrapper *wrapper) :
+Spectrometer::Spectrometer(IResponseHandler *responseHandler, const long handle, SeaBreezeAPI *seabreezeApi, RequestHandlerConfiguration &config) :
     m_responseHandler(responseHandler),
-    m_index(index),
-    m_wrapper(wrapper),
+    m_handle(handle),
+    m_seabreezeApi(seabreezeApi),
+    m_configuration(config),
     m_minIntegrationTime(0),
-    m_maxIntegrationTime(std::numeric_limits<long>::max()),
-    m_boxcarWidth(0),
-    m_scansToAverage(0) {
+    m_maxIntegrationTime(std::numeric_limits<long>::max()) {
 
     InitializeParameters();
 
@@ -125,14 +119,18 @@ Spectrometer::Spectrometer(IResponseHandler *responseHandler, const int index, S
     m_command.insert(Handler(SET_CALIBRATION_COEFFICIENTS_TO_BUFFER, &Spectrometer::SetBufferCalibrationCoefficients));
     m_command.insert(Handler(GET_CALIBRATION_COEFFICIENTS_FROM_EEPROM, &Spectrometer::GetEepromCalibrationCoefficients));
     m_command.insert(Handler(SET_CALIBRATION_COEFFICIENTS_TO_EEPROM, &Spectrometer::SetEepromCalibrationCoefficients));
-    m_command.insert(Handler(GET_PIXEL_BINNING_FACTOR, &Spectrometer::GetPixelBinningfactor));
-    m_command.insert(Handler(SET_PIXEL_BINNING_FACTOR, &Spectrometer::SetPixelBinningfactor));
+    m_command.insert(Handler(GET_PIXEL_BINNING_FACTOR, &Spectrometer::GetPixelBinningFactor));
+    m_command.insert(Handler(SET_PIXEL_BINNING_FACTOR, &Spectrometer::SetPixelBinningFactor));
     m_command.insert(Handler(GET_INTEGRATION_TIME_MINIMUM, &Spectrometer::GetIntegrationTimeMinimum));
     m_command.insert(Handler(GET_INTEGRATION_TIME_MAXIMUM, &Spectrometer::GetIntegrationTimeMaximum));
     m_command.insert(Handler(GET_INTENSITY_MAXIMUM, &Spectrometer::GetIntensityMaximum));
     m_command.insert(Handler(GET_ELECTRIC_DARK_CORRECTION, &Spectrometer::GetElectricDarkCorrection));
     m_command.insert(Handler(SET_ELECTRIC_DARK_CORRECTION, &Spectrometer::SetElectricDarkCorrection));
     m_command.insert(Handler(GET_SPECTROMETER_STATUS, &Spectrometer::GetCurrentStatus));
+    m_command.insert(Handler(SET_TEC_ENABLE, &Spectrometer::SetTecEnable));
+    m_command.insert(Handler(SET_TEC_TEMPERATURE, &Spectrometer::SetTecTemperature));
+    m_command.insert(Handler(GET_TEC_TEMPERATURE, &Spectrometer::GetTecTemperature));
+    m_command.insert(Handler(SET_LAMP_ENABLE, &Spectrometer::SetLampEnable));
 }
 
 Spectrometer::~Spectrometer() {
@@ -157,15 +155,16 @@ void Spectrometer::CommandMessage::Execute() {
     m_spectrometer->HandleResponse(m_connection, result.first, result.second);
 }
 
-/* Return the current integraiton time in microseconds for this spectrometer.
+/* Return the current integration time in microseconds for this spectrometer.
 */
 Spectrometer::Response Spectrometer::GetIntegrationTime(const std::string &arguments) {
     Response result;
     try {
-        result.second = boost::lexical_cast<std::string>(m_integrationTime);
+        // we can't query the spectrometer for this so return the cached value
+        result.second = boost::lexical_cast<std::string>(IntegrationTime());
         result.first = SUCCESS;
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = INVALID_INTEGRATION_TIME;
     }
     return result;
@@ -185,9 +184,13 @@ Spectrometer::Response Spectrometer::SetIntegrationTime(const std::string &argum
         else if (time > m_maxIntegrationTime) {
             result.first = INVALID_INTEGRATION_TIME;
         }
+        else if (m_spectrometerFeatures.size() == 0) {
+            result.first = SPECTROMETER_ERROR;
+        }
         else {
+            m_integrationTime = time;
             int error = 0;
-            m_wrapper->setIntegrationTimeMicrosec(m_index, &error, time);
+            m_seabreezeApi->spectrometerSetIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error, m_integrationTime);
             if (error != 0) {
                 result.first = SPECTROMETER_ERROR;
             }
@@ -197,7 +200,7 @@ Spectrometer::Response Spectrometer::SetIntegrationTime(const std::string &argum
             }
         }
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = UNABLE_TO_PARSE_PARAMETER;
     }
 
@@ -209,10 +212,23 @@ Spectrometer::Response Spectrometer::SetIntegrationTime(const std::string &argum
 Spectrometer::Response Spectrometer::GetBoxcarWidth(const std::string &arguments) {
     Response result;
     try {
-        result.second = boost::lexical_cast<std::string>(m_boxcarWidth);
-        result.first = SUCCESS;
+        // Intercept this functionality if it exists...we will do it here in the handler
+        if (false/*m_spectrumProcessingFeatures.size() == 0*/) {
+            result.first = SPECTROMETER_ERROR;
+        }
+        else {
+            int error = 0;
+            //unsigned char width = m_seabreezeApi->spectrumProcessingBoxcarWidthGet(m_handle, m_spectrumProcessingFeatures[0], &error);
+            if (error != 0) {
+                result.first = SPECTROMETER_ERROR;
+            }
+            else {
+                result.second = boost::lexical_cast<std::string>(static_cast<unsigned int>(m_boxcarWidth));
+                result.first = SUCCESS;
+            }
+        }
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = INVALID_BOXCAR_WIDTH;
     }
     return result;
@@ -225,16 +241,23 @@ Spectrometer::Response Spectrometer::SetBoxcarWidth(const std::string &arguments
     result.second = arguments;
 
     try {
-        int boxcar = boost::lexical_cast<int>(arguments);
-        if (boxcar < 0) {
+        // Intercept this functionality if it exists...we will do it here in the handler
+        // convert to unsigned int first otherwise we get the character value
+        unsigned int width = boost::lexical_cast<unsigned int>(arguments);
+        if (width > std::numeric_limits<unsigned char>::max()) {
             result.first = INVALID_BOXCAR_WIDTH;
         }
+        //else if (m_spectrumProcessingFeatures.size() == 0) {
+        //    result.first = SPECTROMETER_ERROR;
+        //}
         else {
-            m_boxcarWidth = boxcar;
-            result.first = SUCCESS;
+            m_boxcarWidth = static_cast<unsigned char>(width);
+            int error = 0;
+            //m_seabreezeApi->spectrumProcessingBoxcarWidthSet(m_handle, m_spectrumProcessingFeatures[0], &error, m_boxcarWidth);
+            result.first = (error == 0) ? SUCCESS : SPECTROMETER_ERROR;
         }
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = UNABLE_TO_PARSE_PARAMETER;
     }
 
@@ -246,10 +269,23 @@ Spectrometer::Response Spectrometer::SetBoxcarWidth(const std::string &arguments
 Spectrometer::Response Spectrometer::GetScansToAverage(const std::string &arguments) {
     Response result;
     try {
-        result.second = boost::lexical_cast<std::string>(m_scansToAverage);
-        result.first = SUCCESS;
+        // Intercept this functionality if it exists...we will do it here in the handler
+        if (false/*m_spectrumProcessingFeatures.size() == 0*/) {
+            result.first = SPECTROMETER_ERROR;
+        }
+        else {
+            int error = 0;
+            //unsigned short scans = m_seabreezeApi->spectrumProcessingScansToAverageGet(m_handle, m_spectrumProcessingFeatures[0], &error);
+            if (error != 0) {
+                result.first = SPECTROMETER_ERROR;
+            }
+            else {
+                result.second = boost::lexical_cast<std::string>(m_scansToAverage);
+                result.first = SUCCESS;
+            }
+        }
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = INVALID_SCANS_TO_AVERAGE;
     }
     return result;
@@ -262,89 +298,219 @@ Spectrometer::Response Spectrometer::SetScansToAverage(const std::string &argume
     result.second = arguments;
 
     try {
-        int scans = boost::lexical_cast<int>(arguments);
-        if (scans < 0) {
-            result.first = INVALID_SCANS_TO_AVERAGE;
+        // Intercept this functionality if it exists...we will do it here in the handler
+        if (false/*m_spectrumProcessingFeatures.size() == 0*/) {
+            result.first = SPECTROMETER_ERROR;
         }
         else {
-            m_scansToAverage = scans;
-            result.first = SUCCESS;
+            m_scansToAverage = boost::lexical_cast<unsigned short>(arguments);
+            int error = 0;
+            //m_seabreezeApi->spectrumProcessingScansToAverageSet(m_handle, m_spectrumProcessingFeatures[0], &error, m_scansToAverage);
+            result.first = (error == 0) ? SUCCESS : SPECTROMETER_ERROR;
         }
     }
-    catch (boost::bad_lexical_cast &blc) {
-        result.first = UNABLE_TO_PARSE_PARAMETER;
+    catch (boost::bad_lexical_cast) {
+        result.first = INVALID_SCANS_TO_AVERAGE;
     }
 
     return result;
+}
+
+/* Apply any electric dark correction.
+*/
+void Spectrometer::CorrectForElectricDark(std::vector<double> &spectrum, const size_t numPixels) {
+    if (m_applyElectricDark) {
+        const size_t numDark = m_electricDarkIndex.size();
+        if (numDark > 0) {
+            double correction = 0.0;
+            for (size_t i = 0; i < numDark; ++i) {
+                correction += spectrum[m_electricDarkIndex[i]];
+            }
+            correction /= numDark;
+
+            for (size_t i = 0; i < numPixels; ++i) {
+                spectrum[i] -= correction;
+            }
+        }
+    }
+}
+
+/* Apply any boxcar smoothing
+*/
+void Spectrometer::ApplyBoxcar(std::vector<double> &spectrum, const size_t numPixels) {
+    if (m_boxcarWidth > 0) {
+
+        const size_t windowSize = 2 * m_boxcarWidth + 1;
+        if (numPixels > windowSize) {
+            std::vector<double> window(spectrum.begin(), spectrum.begin() + windowSize);
+
+            size_t windowEndPos = windowSize - 1;
+            const size_t windowUpperLimit = numPixels - m_boxcarWidth;
+
+            for (size_t i = m_boxcarWidth; i < windowUpperLimit; ++i) {
+                window[windowEndPos % windowSize] = spectrum[windowEndPos];
+                spectrum[i] = std::accumulate(window.begin(), window.end(), 0.0) / windowSize;
+                ++windowEndPos;
+            }
+        }
+    }
+}
+
+/* Return a spectrum from this spectrometer.
+*/
+std::vector<double> Spectrometer::GetSpectrum() {
+
+    int error = 0;
+    std::vector<double> spectrum(m_binnedPixelCount, 0.0);
+    GetSpectrum(spectrum, error);
+
+    return spectrum;
+}
+
+/* Return a spectrum from this spectrometer.
+*/
+void Spectrometer::GetSpectrum(std::vector<double> &spectrum, int &error) {
+
+    if (m_spectrometerFeatures.size() > 0) {
+        const size_t numPixels = spectrum.size();
+        error = 0;
+
+        if (m_scansToAverage < 2) {
+            int actual = m_seabreezeApi->spectrometerGetFormattedSpectrum(m_handle, m_spectrometerFeatures[0], &error, spectrum.data(), numPixels);
+            if (error == 0) {
+                CorrectForElectricDark(spectrum, actual);
+            }
+        }
+        else {
+            std::vector<double> sum(numPixels, 0.0);
+            for (unsigned short scan = 0; scan < m_scansToAverage; ++scan) {
+                int actual = m_seabreezeApi->spectrometerGetFormattedSpectrum(m_handle, m_spectrometerFeatures[0], &error, spectrum.data(), numPixels);
+                if (error == 0) {
+                    CorrectForElectricDark(spectrum, actual);
+                    // accumulate the current spectrum into the sum
+                    transform(sum.begin(), sum.begin() + actual, spectrum.begin(), sum.begin(), std::plus<double>());
+                }
+                else {
+                    break;
+                }
+            }
+            if (error == 0) {
+                std::swap(spectrum, sum);
+                for (size_t i = 0; i < numPixels; ++i) {
+                    spectrum[i] /= m_scansToAverage;
+                }
+            }
+        }
+
+        if (error == 0) {
+            ApplyBoxcar(spectrum, numPixels);
+        }
+    }
+    else {
+        // TODO avoid this duplication of the test...for now just skip the error
+    }
 }
 
 /* Get a spectrum and return it as a space separated string.
 */
 Spectrometer::Response Spectrometer::GetSpectrum(const std::string &arguments) {
+
+    using boost::adaptors::transformed;
+    //using boost::adaptors::transform;
+    using boost::algorithm::join;
+    using boost::lexical_cast;
+    using boost::make_iterator_range;
+    using std::string;
+    //using std::vector;
+
+    Response result(SUCCESS, "");
+
+    if (m_spectrometerFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        int error = 0;
+        GetSpectrum(m_spectrum, error);
+        if (error != 0) {
+            result.first = UNABLE_TO_GET_SPECTRUM;
+        }
+        else {
+            try {
+                // put the length of the string into the first 4 characters of the reponse
+                const size_t sizeCount = 4;
+                unsigned char size[sizeCount] = {0};
+                result.second = string(size, size + sizeCount);
+                /*
+                 join concatenates a range of values, make_iterator_range selects the correct number of pixels according to the binning
+                 and transformed uses lexical_cast to convert double to string. The alternative is a loop with push_back and logic
+                 to prevent adding the space at the end
+                 */
+                result.second.append(
+                    join(make_iterator_range(m_spectrum.begin(), m_spectrum.begin() + m_binnedPixelCount) |
+                    transformed(lexical_cast<string, double>), " "));
+
+                size_t s = result.second.size() - sizeCount;
+                size[0] = (s >> 24) & 0xFF;
+                size[1] = (s >> 16) & 0xFF;
+                size[2] = (s >> 8) & 0xFF;
+                size[3] = s & 0xFF;
+
+                std::copy(size, size + sizeCount, result.second.begin());
+
+                result.first = SUCCESS;
+            }
+            catch (boost::bad_lexical_cast) {
+                result.first = UNABLE_TO_ENCODE_SPECTRUM;
+            }
+        }
+    }
+    return result;
+}
+
+/* Get the wavelengths for this spectrometer and return them as as space separated string.
+*/
+Spectrometer::Response Spectrometer::GetWavelengths(const std::string &arguments) {
+
+    using boost::adaptors::transformed;
+    using boost::algorithm::join;
+    using boost::lexical_cast;
+    using boost::make_iterator_range;
+    using std::string;
+
     Response result;
 
-    int error = 0;
-    int actual = m_wrapper->getFormattedSpectrum(m_index, &error, m_spectrum.data(), m_binnedPixelCount);
-    if (error == 0) {
-        try {
-            std::string spectrum;
-            const int lastSpaceMarker = m_binnedPixelCount - 1;
-            for (int i = 0; i < m_binnedPixelCount; ++i) {
-                std::string s = boost::lexical_cast<std::string>(m_spectrum[i]); 
-                spectrum.append(s).append(i < lastSpaceMarker ? " " : "");
-            }
-            // put the length of the string into the first 4 characters of the reponse
-            const int sizeCount = 4;
-            unsigned char size[sizeCount];
-            size_t s = spectrum.size();
+    try {
+        // put the length of the string into the first 4 characters of the reponse
+        const size_t sizeCount = 4;
+        unsigned char size[sizeCount] = {0};
+        result.second = string(size, size + sizeCount);
+        int error = 0;
+        int actual = m_seabreezeApi->spectrometerGetWavelengths(m_handle, m_spectrometerFeatures[0], &error, m_wavelengths.data(), m_binnedPixelCount);
+        if (error == 0) {
+            /*
+                join concatenates a range of values, make_iterator_range selects the correct number of pixels according to the binning
+                and transformed uses lexical_cast to convert double to string. The alternative is a loop with push_back and logic
+                to prevent adding the space at the end
+                */
+            result.second.append(
+                join(make_iterator_range(m_wavelengths.begin(), m_wavelengths.begin() + m_binnedPixelCount) |
+                transformed(lexical_cast<string, double>), " "));
+
+            size_t s = result.second.size() - sizeCount;
             size[0] = (s >> 24) & 0xFF;
             size[1] = (s >> 16) & 0xFF;
             size[2] = (s >> 8) & 0xFF;
             size[3] = s & 0xFF;
 
-            result.second.resize(s + sizeCount);
             std::copy(size, size + sizeCount, result.second.begin());
-            std::copy(spectrum.begin(), spectrum.end(), result.second.begin() + sizeCount);
 
             result.first = SUCCESS;
         }
-        catch (boost::bad_lexical_cast &blc) {
-            result.first = UNABLE_TO_ENCODE_SPECTRUM;
+        else {
+            result.first = UNABLE_TO_GET_WAVELENGTHS;
         }
     }
-    else {
-        result.first = UNABLE_TO_GET_SPECTRUM;
-    }
-    return result;
-}
-
-/* get the wavelengths for this spectrometer and return them as as space separated string.
-*/
-Spectrometer::Response Spectrometer::GetWavelengths(const std::string &arguments) {
-    Response result;
-    try {
-        std::string wavelengths;
-        const int lastSpaceMarker = m_binnedPixelCount - 1;
-        for (int i = 0; i < m_binnedPixelCount; ++i) {
-            std::string w = boost::lexical_cast<std::string>(m_wavelengths[i]); 
-            wavelengths.append(w).append(i < lastSpaceMarker ? " " : "");
-        }
-        // put the length of the string into the first 4 characters of the reponse
-        const int sizeCount = 4;
-        unsigned char size[sizeCount];
-        size_t s = wavelengths.size();
-        size[0] = (s >> 24) & 0xFF;
-        size[1] = (s >> 16) & 0xFF;
-        size[2] = (s >> 8) & 0xFF;
-        size[3] = s & 0xFF;
-
-        result.second.resize(s + sizeCount);
-        std::copy(size, size + sizeCount, result.second.begin());
-        std::copy(wavelengths.begin(), wavelengths.end(), result.second.begin() + sizeCount);
-
-        result.first = SUCCESS;
-    }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = UNABLE_TO_GET_WAVELENGTHS;
     }
     return result;
@@ -392,42 +558,160 @@ Spectrometer::Response Spectrometer::SetEepromCalibrationCoefficients(const std:
     return result;
 }
 
-/* Return the pixel binning factor (0 to 3) for this spectrometer (where supported).
+/* Return the pixel binning factor (0 to 3 for the STS) for this spectrometer (where supported).
 */
-Spectrometer::Response Spectrometer::GetPixelBinningfactor(const std::string &arguments) {
+Spectrometer::Response Spectrometer::GetPixelBinningFactor(const std::string &arguments) {
     Response result;
-    try {
-        result.second = boost::lexical_cast<std::string>(m_binningFactor);
-        result.first = SUCCESS;
+    if (m_pixelBinningFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
     }
-    catch (boost::bad_lexical_cast &blc) {
-        result.first = INVALID_PIXEL_BINNING_FACTOR;
+    else {
+        try {
+            int error = 0;
+            unsigned char binning = m_seabreezeApi->binningGetPixelBinningFactor(m_handle, m_pixelBinningFeatures[0], &error);
+            if (error != 0) {
+                result.first = INVALID_PIXEL_BINNING_FACTOR;
+            }
+            else {
+                result.second = boost::lexical_cast<std::string>(binning);
+                result.first = SUCCESS;
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_PIXEL_BINNING_FACTOR;
+        }
     }
     return result;
 }
 
 /* Set the pixel binning factor for this spectrometer (where supported).
 */
-Spectrometer::Response Spectrometer::SetPixelBinningfactor(const std::string &arguments) {
+Spectrometer::Response Spectrometer::SetPixelBinningFactor(const std::string &arguments) {
     Response result;
     result.second = arguments;
 
-    try {
-        int binningFactor = boost::lexical_cast<int>(arguments);
-        int error = 0;
-        m_wrapper->setPixelBinningFactor(m_index, &error, binningFactor);
-        if (error != 0) {
+    if (m_pixelBinningFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            unsigned int binning = boost::lexical_cast<unsigned int>(arguments);
+            if (binning > std::numeric_limits<unsigned char>::max()) {
+                result.first = INVALID_PIXEL_BINNING_FACTOR;
+            }
+            else {
+                unsigned char binningFactor = static_cast<unsigned char>(binning);
+                int error = 0;
+                m_seabreezeApi->binningSetPixelBinningFactor(m_handle, m_pixelBinningFeatures[0], &error, binningFactor);
+                if (error != 0) {
+                    result.first = INVALID_PIXEL_BINNING_FACTOR;
+                }
+                else {
+                    m_binningFactor = binningFactor;
+                    m_binnedPixelCount = m_pixelCount >> m_binningFactor;
+                    m_wavelengths.resize(m_binnedPixelCount);
+                    int actual = m_seabreezeApi->spectrometerGetWavelengths(m_handle, m_spectrometerFeatures[0], &error, m_wavelengths.data(), m_binnedPixelCount);
+                    if (error != 0) {
+                        result.first = SPECTROMETER_ERROR;
+                    }
+                    else {
+                        result.first = SUCCESS;
+                    }
+                }
+            }
+        }
+        catch (boost::bad_lexical_cast) {
             result.first = INVALID_PIXEL_BINNING_FACTOR;
         }
-        else {
-            m_binningFactor = binningFactor;
-            result.first = SUCCESS;
-        }
-    }
-    catch (boost::bad_lexical_cast &blc) {
-        result.first = INVALID_PIXEL_BINNING_FACTOR;
     }
 
+    return result;
+}
+
+/* Return the default pixel binning factor (0 to 3 for the STS) for this spectrometer (where supported).
+*/
+Spectrometer::Response Spectrometer::GetDefaultPixelBinningFactor(const std::string &arguments) {
+    Response result;
+    if (m_pixelBinningFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            int error = 0;
+            unsigned char binning = m_seabreezeApi->binningGetDefaultPixelBinningFactor(m_handle, m_pixelBinningFeatures[0], &error);
+            if (error != 0) {
+                result.first = INVALID_PIXEL_BINNING_FACTOR;
+            }
+            else {
+                result.second = boost::lexical_cast<std::string>(binning);
+                result.first = SUCCESS;
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_PIXEL_BINNING_FACTOR;
+        }
+    }
+    return result;
+}
+
+/* Set the pixel binning factor for this spectrometer (where supported).
+*/
+Spectrometer::Response Spectrometer::SetDefaultPixelBinningFactor(const std::string &arguments) {
+    Response result;
+    result.second = arguments;
+
+    if (m_pixelBinningFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            unsigned int binning = boost::lexical_cast<unsigned int>(arguments);
+            if (binning > std::numeric_limits<unsigned char>::max()) {
+                result.first = INVALID_PIXEL_BINNING_FACTOR;
+            }
+            else {
+                unsigned char binningFactor = static_cast<unsigned char>(binning);
+                int error = 0;
+                m_seabreezeApi->binningSetDefaultPixelBinningFactor(m_handle, m_pixelBinningFeatures[0], &error, binningFactor);
+                if (error != 0) {
+                    result.first = INVALID_PIXEL_BINNING_FACTOR;
+                }
+                else {
+                    result.first = SUCCESS;
+                }
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_PIXEL_BINNING_FACTOR;
+        }
+    }
+
+    return result;
+}
+
+/* Return the default pixel binning factor (0 to 3 for the STS) for this spectrometer (where supported).
+*/
+Spectrometer::Response Spectrometer::GetMaxPixelBinningFactor(const std::string &arguments) {
+    Response result;
+    if (m_pixelBinningFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            int error = 0;
+            unsigned char binning = m_seabreezeApi->binningGetMaxPixelBinningFactor(m_handle, m_pixelBinningFeatures[0], &error);
+            if (error != 0) {
+                result.first = INVALID_PIXEL_BINNING_FACTOR;
+            }
+            else {
+                result.second = boost::lexical_cast<std::string>(binning);
+                result.first = SUCCESS;
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_PIXEL_BINNING_FACTOR;
+        }
+    }
     return result;
 }
 
@@ -437,26 +721,26 @@ Spectrometer::Response Spectrometer::GetIntegrationTimeMinimum(const std::string
     Response result;
 
     try {
-        result.second = boost::lexical_cast<std::string>(m_minIntegrationTime);
+        result.second = boost::lexical_cast<std::string>(MinIntegrationTime());
         result.first = SUCCESS;
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = INVALID_INTEGRATION_TIME;
     }
 
     return result;
 }
 
-/* Return the maximum integration time for this spectromter.
+/* Return the maximum integration time for this spectrometer.
 */
 Spectrometer::Response Spectrometer::GetIntegrationTimeMaximum(const std::string &arguments) {
     Response result;
 
     try {
-        result.second = boost::lexical_cast<std::string>(m_maxIntegrationTime);
+        result.second = boost::lexical_cast<std::string>(MaxIntegrationTime());
         result.first = SUCCESS;
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = INVALID_INTEGRATION_TIME;
     }
 
@@ -472,7 +756,7 @@ Spectrometer::Response Spectrometer::GetIntensityMaximum(const std::string &argu
         result.second = boost::lexical_cast<std::string>(m_maxIntensity);
         result.first = SUCCESS;
     }
-    catch (boost::bad_lexical_cast &blc) {
+    catch (boost::bad_lexical_cast) {
         result.first = SPECTROMETER_ERROR;
     }
 
@@ -503,8 +787,140 @@ Spectrometer::Response Spectrometer::SetElectricDarkCorrection(const std::string
             m_applyElectricDark = ed != 0;
             result.first = SUCCESS;
         }
-        catch (boost::bad_lexical_cast &blc) {
+        catch (boost::bad_lexical_cast) {
             result.first = UNABLE_TO_PARSE_PARAMETER;
+        }
+    }
+
+    return result;
+}
+
+/* Turn the TEC on/off
+*/
+Spectrometer::Response Spectrometer::SetTecEnable(const std::string &arguments) {
+    Response result;
+    result.second = arguments;
+
+    if (m_thermoElectricFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            unsigned int intEnable = boost::lexical_cast<unsigned int>(arguments);
+            
+            if (intEnable > 1) {
+                result.first = INVALID_TEC_ENABLE;
+            }
+            else {
+                unsigned char enable = static_cast<unsigned char>(intEnable);
+                int error = 0;
+                m_seabreezeApi->tecSetEnable(m_handle, m_thermoElectricFeatures[0], &error, enable);
+                if (error != 0) {
+                    result.first = SPECTROMETER_ERROR;
+                }
+                else {
+                    result.first = SUCCESS;
+                }
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_TEC_ENABLE;
+        }
+    }
+
+    return result;
+}
+
+/* Set the TEC temperature
+*/
+Spectrometer::Response Spectrometer::SetTecTemperature(const std::string &arguments) {
+    Response result;
+    result.second = arguments;
+
+    if (m_thermoElectricFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            double temperature = boost::lexical_cast<double>(arguments);
+            
+            int error = 0;
+            m_seabreezeApi->tecSetTemperatureSetpointDegreesC(m_handle, m_thermoElectricFeatures[0], &error, temperature);
+
+            if (error != 0) {
+                result.first = SPECTROMETER_ERROR;
+            }
+            else {
+                result.first = SUCCESS;
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = UNABLE_TO_PARSE_PARAMETER;
+        }
+    }
+
+    return result;
+}
+
+/* Return the TEC temperature.
+*/
+Spectrometer::Response Spectrometer::GetTecTemperature(const std::string &arguments) {
+    Response result(SUCCESS, "");
+
+    if (m_thermoElectricFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            int error = 0;
+            double temperature = m_seabreezeApi->tecReadTemperatureDegreesC(m_handle, m_thermoElectricFeatures[0], &error);
+
+            if (error != 0) {
+                result.first = SPECTROMETER_ERROR;
+            }
+            else {
+                result.first = SUCCESS;
+                result.second = boost::lexical_cast<std::string>(temperature);
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = UNABLE_TO_PARSE_PARAMETER;
+        }
+    }
+
+    return result;
+}
+
+/* Turn on/off any lamp
+*/
+Spectrometer::Response Spectrometer::SetLampEnable(const std::string &arguments) {
+    Response result;
+    result.second = arguments;
+
+    if (m_lampFeatures.size() == 0) {
+        result.first = SPECTROMETER_ERROR;
+    }
+    else {
+        try {
+            unsigned int intEnable = boost::lexical_cast<unsigned int>(arguments);
+            
+            if (intEnable > 1) {
+                result.first = INVALID_LAMP_ENABLE;
+            }
+            else {
+                const bool enable = (intEnable == 1);
+                int error = 0;
+                m_seabreezeApi->lampSetLampEnable(m_handle, m_lampFeatures[0], &error, enable);
+                if (error != 0) {
+                    result.first = SPECTROMETER_ERROR;
+                }
+                else {
+                    result.first = SUCCESS;
+                }
+            }
+        }
+        catch (boost::bad_lexical_cast) {
+            result.first = INVALID_LAMP_ENABLE;
         }
     }
 
@@ -524,31 +940,100 @@ Spectrometer::Response Spectrometer::GetCurrentStatus(const std::string &argumen
 /* Convenience method to initialise the spectrometer.
 */
 void Spectrometer::InitializeParameters() {
-    if (m_wrapper != 0) {
+    if (m_seabreezeApi != 0) {
         int error = 0;
-        m_minIntegrationTime = m_wrapper->getMinIntegrationTimeMicrosec(m_index, &error);
-        m_maxIntegrationTime = m_wrapper->getMaxIntegrationTimeMicrosec(m_index, &error);
-        m_integrationTime = m_minIntegrationTime;
-        m_wrapper->setIntegrationTimeMicrosec(m_index, &error, m_integrationTime);
-        m_boxcarWidth = 0;
-        m_scansToAverage = 0;
-        m_pixelCount = m_wrapper->getFormattedSpectrumLength(m_index, &error);
-        m_binnedPixelCount = m_pixelCount;
-        m_electricDarkIndex.resize(ms_maxElectricDarkPixels);
-        int actualElectricDark = m_wrapper->getElectricDarkPixelIndices(m_index, &error, m_electricDarkIndex.data(), ms_maxElectricDarkPixels);
-        m_electricDarkIndex.resize(actualElectricDark);
+
+        int serialNumberFeatureCount = m_seabreezeApi->getNumberOfSerialNumberFeatures(m_handle, &error);
+        if (serialNumberFeatureCount > 0) {
+            m_serialNumberFeatures.resize(serialNumberFeatureCount);
+            m_seabreezeApi->getSerialNumberFeatures(m_handle, &error, m_serialNumberFeatures.data(), serialNumberFeatureCount);
+        }
+
+        int spectrumProcessingFeatureCount = m_seabreezeApi->getNumberOfSpectrumProcessingFeatures(m_handle, &error);
+        if (spectrumProcessingFeatureCount > 0) {
+            m_spectrumProcessingFeatures.resize(spectrumProcessingFeatureCount);
+            m_seabreezeApi->getSpectrumProcessingFeatures(m_handle, &error, m_spectrumProcessingFeatures.data(), spectrumProcessingFeatureCount);
+        }
+
+        int spectrometerFeatureCount = m_seabreezeApi->getNumberOfSpectrometerFeatures(m_handle, &error);
+        if (spectrometerFeatureCount > 0) {
+            m_spectrometerFeatures.resize(spectrometerFeatureCount);
+            m_seabreezeApi->getSpectrometerFeatures(m_handle, &error, m_spectrometerFeatures.data(), spectrometerFeatureCount);
+
+            m_pixelCount = m_seabreezeApi->spectrometerGetFormattedSpectrumLength(m_handle, m_spectrometerFeatures[0], &error);
+            m_binnedPixelCount = m_pixelCount;
+
+            int electricDarkPixelCount = m_seabreezeApi->spectrometerGetElectricDarkPixelCount(m_handle, m_spectrometerFeatures[0], &error);
+            m_electricDarkIndex.resize(electricDarkPixelCount);
+
+            int actualElectricDark = m_seabreezeApi->spectrometerGetElectricDarkPixelIndices(m_handle, m_spectrometerFeatures[0], &error, m_electricDarkIndex.data(), electricDarkPixelCount);
+            m_electricDarkIndex.resize(actualElectricDark);
+
+            m_spectrum.resize(m_pixelCount, 0.0);
+            m_wavelengths.resize(m_pixelCount, 0.0);
+            m_seabreezeApi->spectrometerGetWavelengths(m_handle, m_spectrometerFeatures[0], &error, m_wavelengths.data(), m_pixelCount);
+        }
+
+        if (serialNumberFeatureCount > 0) {
+            unsigned char snSize = m_seabreezeApi->getSerialNumberMaximumLength(m_handle, m_serialNumberFeatures[0], &error);
+            snSize = (snSize > 0) ? snSize : ms_maxSerialNumberCount;
+            m_serialNumber.resize(snSize);
+            int actual = m_seabreezeApi->getSerialNumber(m_handle, m_serialNumberFeatures[0], &error, const_cast<char *>(m_serialNumber.data()), snSize);
+            if (actual <= 0) {
+            }
+            // inconsistent behaviour between spectrometers...
+            else if (m_serialNumber[actual - 1] == '\0') {
+                m_serialNumber.resize(actual - 1);
+            }
+            else {
+                m_serialNumber.resize(actual);
+            }
+        }
+
+        int pixelBinningFeatureCount = m_seabreezeApi->getNumberOfPixelBinningFeatures(m_handle, &error);
+        if (pixelBinningFeatureCount > 0) {
+            m_pixelBinningFeatures.resize(pixelBinningFeatureCount);
+            m_seabreezeApi->getPixelBinningFeatures(m_handle, &error, m_pixelBinningFeatures.data(), pixelBinningFeatureCount);
+        }
+
+        int thermoElectricFeatureCount = m_seabreezeApi->getNumberOfThermoElectricFeatures(m_handle, &error);
+        if (thermoElectricFeatureCount > 0) {
+            m_thermoElectricFeatures.resize(thermoElectricFeatureCount);
+            m_seabreezeApi->getThermoElectricFeatures(m_handle, &error, m_thermoElectricFeatures.data(), thermoElectricFeatureCount);
+        }
+
+        int lampFeatureCount = m_seabreezeApi->getNumberOfLampFeatures(m_handle, &error);
+        if (lampFeatureCount > 0) {
+            m_lampFeatures.resize(lampFeatureCount);
+            m_seabreezeApi->getLampFeatures(m_handle, &error, m_lampFeatures.data(), lampFeatureCount);
+        }
+
+        m_integrationTime = m_configuration.IntegrationTime(m_serialNumber);
+        if (spectrometerFeatureCount > 0) {
+            long minIntegrationTime = m_seabreezeApi->spectrometerGetMinimumIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error);
+            m_maxIntegrationTime = m_seabreezeApi->spectrometerGetMaximumIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error);
+
+            m_integrationTime = std::max(m_minIntegrationTime, minIntegrationTime);
+            m_seabreezeApi->spectrometerSetIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error, m_integrationTime);
+
+            m_maxIntensity = m_seabreezeApi->spectrometerGetMaximumIntensity(m_handle, m_spectrometerFeatures[0], &error);
+        }
+
+        m_boxcarWidth = m_configuration.BoxcarWidth(m_serialNumber);
+        m_scansToAverage = m_configuration.ScansToAverage(m_serialNumber);
+        if (spectrumProcessingFeatureCount > 0) {
+            // We are intercepting smoothing and averaging and handling them
+
+            /*m_seabreezeApi->spectrumProcessingBoxcarWidthSet(m_handle, m_spectrumProcessingFeatures[0], &error, m_boxcarWidth);
+
+            m_seabreezeApi->spectrumProcessingScansToAverageSet(m_handle, m_spectrumProcessingFeatures[0], &error, m_scansToAverage);*/
+        }
+
         m_binningFactor = 0;
         m_applyElectricDark = false;
-        m_maxIntensity = m_wrapper->getMaximumIntensity(m_index, &error);
-        m_spectrum.resize(m_pixelCount, 0.0);
-        m_wavelengths.resize(m_pixelCount, 0.0);
-        m_wrapper->getWavelengths(m_index, &error, m_wavelengths.data(), m_pixelCount);
         char typeBuffer[ms_maxSpectrometerNameCount] = {0};
-        m_wrapper->getModel(m_index, &error, typeBuffer, ms_maxSpectrometerNameCount);
+        m_seabreezeApi->getDeviceType(m_handle, &error, typeBuffer, ms_maxSpectrometerNameCount);
         m_name = std::string(typeBuffer);
-        char serialBuffer[ms_maxSerialNumberCount] = {0};
-        m_wrapper->getSerialNumber(m_index, &error, serialBuffer, ms_maxSerialNumberCount);
-        m_serialNumber = std::string(serialBuffer);
     }
 }
 
@@ -573,4 +1058,6 @@ const std::map<int, std::string> Spectrometer::ms_results = boost::assign::map_l
     (UNABLE_TO_GET_WAVELENGTHS, std::string("Unable to get the spectrometer wavelengths"))
     (UNABLE_TO_ENCODE_WAVELENGTHS, std::string("Unable to encode the wavelengths for returning to the API"))
     (UNABLE_TO_SET_SHUTTER_POSITION, std::string("Unable to set the shutter position"))
-    (SPECTROMETER_INDEX_DOES_NOT_EXIST, std::string("Invalid spectrometer number"));
+    (SPECTROMETER_INDEX_DOES_NOT_EXIST, std::string("Invalid spectrometer number"))
+    (INVALID_TEC_ENABLE, std::string("Invalid TEC enable value"))
+    (INVALID_LAMP_ENABLE, std::string("Invalid lamp enable value"));

@@ -47,7 +47,7 @@ std::string ToString(const std::vector<double> &v) {
             }
             result.append(boost::lexical_cast<std::string>(v[delimitedCount]));
         }
-        catch (boost::bad_lexical_cast &blc) {
+        catch (boost::bad_lexical_cast) {
             ;
         }
     }

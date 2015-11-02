@@ -1,5 +1,7 @@
-CC = gcc
-SEABREEZEDIR = /home/ocean/SeaBreeze
+# Makefile for the Dev Kit 2.1 daemon
+#
+CC = g++
+SEABREEZEDIR = /home/pi/dev-kit/SeaBreeze
 
 LIBHEADERS = Connection.h   IResponseHandler.h  RequestHandler.h  Spectrometer.h \
 	ActiveObject.h           Common.h         Version.h \
@@ -22,17 +24,14 @@ LIBOBJECTS = Connection.o    RequestHandler.o \
 DAEMONOBJECTS = main.o OceanHandler.o OceanHandlerConfiguration.o Daemon.o
 
 INCLUDE = -I$(SEABREEZEDIR)/include
-LIBS = -lboost_thread -lboost_system-mt -lboost_filesystem-mt -lboost_chrono-mt -lseabreeze -lusb -lpthread 
+LIBS = -lboost_thread -lboost_system -lboost_filesystem -lboost_chrono -lseabreeze -lusb -lpthread 
 CFLAGS = -std=c++0x
 
 reqhandler : $(LIBOBJECTS)
-	$(CC) $(INCLUDE) $(LIBDIR) $(LIBS) $(CFLAGS) $(LIBOBJECTS) -O -shared -o libreqhandler.so
+	$(CC) $(INCLUDE) $(LIBDIR) $(LIBS) $(CFLAGS) $(LIBOBJECTS) -O -shared -o libreqhandler.2.1.so
 
 ocean-daemon : $(DAEMONOBJECTS) reqhandler
-	$(CC) $(INCLUDE) $(LIBDIR) $(LIBS) $(CFLAGS) $(DAEMONOBJECTS) -L./ -lreqhandler -O -o ocean-daemon
-
-daemon : $(OBJECTS)
-	$(CC) $(INCLUDE) $(LIBDIR) $(LIBS) $(CFLAGS) $(OBJECTS) -O -o ocean-daemon
+	$(CC) $(INCLUDE) $(LIBDIR) $(LIBS) $(CFLAGS) $(DAEMONOBJECTS) -L./ -lreqhandler -O -o ocean-daemon.2.1
 
 BaseConnectionHandler.o : BaseConnectionHandler.cpp BaseConnectionHandler.h
 	$(CC) $(INCLUDE) $(CFLAGS) -O -c BaseConnectionHandler.cpp

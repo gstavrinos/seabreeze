@@ -35,7 +35,7 @@
 #include "RequestHandler.h"
 #include "RequestHandlerConfiguration.h"
 #include "Spectrometer.h"
-#include "api/SeaBreezeWrapper.h"
+#include <api/seabreezeapi/SeaBreezeAPI.h>
 #include <boost/lexical_cast.hpp>
 #include <string>
 #include <iostream>
@@ -110,7 +110,7 @@ std::pair<int, std::string> RequestHandler::SeparateSpectrometerNumber(const std
             try {
                 spectrometerNumber = boost::lexical_cast<int>(number);
             }
-            catch (boost::bad_lexical_cast &blc) {
+            catch (boost::bad_lexical_cast) {
                 spectrometerNumber = -1;
             }
         }
@@ -143,21 +143,26 @@ RequestHandler::RequestHandler(boost::asio::io_service &ioService, RequestHandle
 
     BaseConnectionHandler(),
     m_spectrometerError(false),
-    m_wrapper(nullptr),
+    m_seabreezeApi(nullptr),
+    m_spectrometerCount(0),
     m_ioService(ioService),
     m_configuration(configuration) {
 
-    m_wrapper = SeaBreezeWrapper::getInstance();
+    m_seabreezeApi = SeaBreezeAPI::getInstance();
     int error = 0;
-    if (m_wrapper == nullptr) {
+    if (m_seabreezeApi == nullptr) {
         m_spectrometerError = true;
     }
     else {
+        m_spectrometerCount = m_seabreezeApi->probeDevices();
+        std::vector<long> deviceHandles(m_spectrometerCount);
+        m_seabreezeApi->getDeviceIDs(deviceHandles.data(), m_spectrometerCount);
+
         int count = 0;
-        for (int index = 0; index < SEABREEZE_MAX_DEVICES; ++index) {
-            int result = m_wrapper->openSpectrometer(index, &error);
+        for (int index = 0; index < m_spectrometerCount; ++index) {
+            int result = m_seabreezeApi->openDevice(deviceHandles[index], &error);
             if (result == 0) {
-                SpectrometerPtr p(new Spectrometer(this, index, m_wrapper));
+                SpectrometerPtr p(new Spectrometer(this, deviceHandles[index], m_seabreezeApi, m_configuration));
                 m_spectrometer.insert(SpectrometerMap::value_type(index, p));
                 ++count;
             }
@@ -172,11 +177,11 @@ RequestHandler::RequestHandler(boost::asio::io_service &ioService, RequestHandle
 /* Clean up the spectrometers.
 */
 RequestHandler::~RequestHandler() {
-    if (m_wrapper != nullptr) {
+    if (m_seabreezeApi != nullptr) {
         int error = 0;
         const size_t numSpectrometers = m_spectrometer.size();
         for (size_t i = 0; i < numSpectrometers; ++i) {
-            int result = m_wrapper->closeSpectrometer(i, &error);
+            m_seabreezeApi->closeDevice(m_spectrometer[i]->Handle(), &error);
         }
     }
 }

@@ -35,6 +35,9 @@
 #ifndef SPECTROMETER_H
 #define SPECTROMETER_H
 
+// For the benefit of VC++ which doesn't like throw specifications
+#pragma warning (disable : 4290)
+
 #include "Connection.h"
 #include "ActiveObject.h"
 #include <vector>
@@ -42,8 +45,9 @@
 #include <utility>
 #include <boost/asio.hpp>
 
-class SeaBreezeWrapper;
+class SeaBreezeAPI;
 class IResponseHandler;
+class RequestHandlerConfiguration;
 
 class Spectrometer {
 
@@ -76,6 +80,13 @@ public:
         GET_ELECTRIC_DARK_CORRECTION,
         SET_ELECTRIC_DARK_CORRECTION,
         GET_SPECTROMETER_STATUS,
+        SET_TEC_ENABLE,
+        SET_TEC_TEMPERATURE,
+        GET_TEC_TEMPERATURE,
+        SET_LAMP_ENABLE,
+        GET_DEFAULT_PIXEL_BINNING_FACTOR,
+        SET_DEFAULT_PIXEL_BINNING_FACTOR,
+        GET_MAX_PIXEL_BINNING_FACTOR,
 
         LAST_COMMAND_VALUE
     };
@@ -102,6 +113,8 @@ public:
         UNABLE_TO_ENCODE_WAVELENGTHS,
         UNABLE_TO_SET_SHUTTER_POSITION,
         SPECTROMETER_INDEX_DOES_NOT_EXIST,
+        INVALID_TEC_ENABLE,
+        INVALID_LAMP_ENABLE,
 
         LAST_RESULT_CODE
     };
@@ -162,9 +175,13 @@ public:
     */
     std::string Type() {return m_name;}
 
-    /* Return the minimum integration time
+    /* Return the cached minimum integration time
     */
     long MinIntegrationTime() {return m_minIntegrationTime;}
+
+    /* Return the cached maximum integration time
+    */
+    long MaxIntegrationTime() {return m_maxIntegrationTime;}
 
     /* Return the wavelengths associated with each pixel
     */
@@ -174,26 +191,36 @@ public:
     */
     std::vector<double> GetSpectrum();
 
-    /* Return the current integration time.
+    /* Get the currently acquired spectrum into an existing vector
     */
-    long GetIntegrationTime() {return m_integrationTime;}
+    void GetSpectrum(std::vector<double>& spectrum, int &error);
 
-    /* Return the current scans to average
+    /* Return the cached integration time.
     */
-    int GetScansToAverage() {return m_scansToAverage;}
+    long IntegrationTime() {return m_integrationTime;}
 
-    /* Return the current boxcar width
+    /* Return the cached current scans to average
     */
-    int GetBoxcarWidth() {return m_boxcarWidth;}
+    unsigned short ScansToAverage() {return m_scansToAverage;}
+
+    /* Return the cached boxcar width
+    */
+    unsigned char BoxcarWidth() {return m_boxcarWidth;}
 
     /* return the number of pixels in a spectrum
     */
     int PixelCount() {return m_pixelCount;}
 
+    /* Return the number of binned pixels
+    */
+    unsigned int BinnedPixelCount() {return m_binnedPixelCount;}
+
+    long Handle() const {return m_handle;}
+
     /* Constructor with the response handler, index of the spectrometer assigned by the SeaBreeze wrapper
     *  and a pointer to the SeaBreeze wrapper to execute the commands
     */
-    Spectrometer(IResponseHandler *reponseHandler, const int index, SeaBreezeWrapper *wrapper);
+    Spectrometer(IResponseHandler *reponseHandler, const long handle, SeaBreezeAPI *seabreezeApi, RequestHandlerConfiguration &config);
     virtual ~Spectrometer();
 
 private:
@@ -220,6 +247,12 @@ private:
     // Get the (possibly binned) wavelengths
     Response GetWavelengths(const std::string &arguments);
 
+    // Apply electric dark correction
+    void CorrectForElectricDark(std::vector<double> &spectrum, const size_t numPixels);
+
+    // Apply boxcar smoothing
+    void ApplyBoxcar(std::vector<double> &spectrum, const size_t numPixels);
+
     // Get the serial number
     Response GetSerialNumber(const std::string &arguments);
 
@@ -235,8 +268,11 @@ private:
     Response SetEepromCalibrationCoefficients(const std::string &arguments);
 
     // Get/set the pixel binning factor where supported (default to zero otherwise)
-    Response GetPixelBinningfactor(const std::string &arguments);
-    Response SetPixelBinningfactor(const std::string &arguments);
+    Response GetPixelBinningFactor(const std::string &arguments);
+    Response SetPixelBinningFactor(const std::string &arguments);
+    Response GetDefaultPixelBinningFactor(const std::string &arguments);
+    Response SetDefaultPixelBinningFactor(const std::string &arguments);
+    Response GetMaxPixelBinningFactor(const std::string &arguments);
 
     // Get the minimum integration time
     Response GetIntegrationTimeMinimum(const std::string &arguments);
@@ -251,6 +287,12 @@ private:
     Response GetElectricDarkCorrection(const std::string &arguments);
     Response SetElectricDarkCorrection(const std::string &arguments);
 
+    Response SetTecEnable(const std::string &arguments);
+    Response SetTecTemperature(const std::string &arguments);
+    Response GetTecTemperature(const std::string &arguments);
+
+    Response SetLampEnable(const std::string &arguments);
+
     // Get the current spectrometer status
     Response GetCurrentStatus(const std::string &arguments);
 
@@ -262,14 +304,17 @@ private:
 
     // Pointer to the object that will handle responses
     IResponseHandler *m_responseHandler;
-    // The index of the spectrometer as assigned by the SeaBreeze wrapper
-    const int m_index;
+    // The handle of the spectrometer as assigned by the SeaBreeze API
+    const long m_handle;
     // Pointer to the SeaBreeze wrapper singleton
-    SeaBreezeWrapper *m_wrapper;
+    SeaBreezeAPI *m_seabreezeApi;
 
     // The connection (socket) for the current connection we are receiving commands/parameters on - we will
     // send the response on this before closing it down
     boost::shared_ptr<Connection> m_connection;
+
+    // Configuration for default values
+    RequestHandlerConfiguration &m_configuration;
 
     // Integration time for this spectrometer
     long m_integrationTime;
@@ -277,10 +322,10 @@ private:
     long m_minIntegrationTime;
     // Maximum integration time for this spectrometer
     long m_maxIntegrationTime;
-    // Boxcar smoothing width for this spectrometer
-    int m_boxcarWidth;
-    // Scans to average for this spectrometer
-    int m_scansToAverage;
+    // Cached boxcar smoothing width for this spectrometer
+    unsigned char m_boxcarWidth;
+    // Cached scans to average for this spectrometer
+    unsigned short m_scansToAverage;
     // Binning factor for this spectrometer (not all spectrometers will use this)
     int m_binningFactor;
     // Flag for applying electric dark correction for this spectrometer (not all spectrometers will use this)
@@ -290,7 +335,7 @@ private:
     // Number of pixels for this spectrometer
     int m_pixelCount;
     // Binned pixel count for this spectrometer (not all spectrometers will use this)
-    int m_binnedPixelCount;
+    unsigned int m_binnedPixelCount;
     // The max intensity for this spectrometer
     int m_maxIntensity;
     // Current spectrum for this spectrometer
@@ -307,11 +352,19 @@ private:
     // The maximumm size of a spectrometer serial number
     static const int ms_maxSerialNumberCount = 64;
     // The maximum number of electric dark pixels
-    static const int ms_maxElectricDarkPixels = 128;
+    //static const int ms_maxElectricDarkPixels = 128;
     // The number of calibration coefficients
     static const int ms_coefficientCount = 14;
     // Calibration coefficients for this spectrometer
     double m_calibCoefficient[ms_coefficientCount];
+
+    std::vector<long> m_spectrometerFeatures;
+    std::vector<long> m_spectrumProcessingFeatures;
+    //std::vector<long> m_opticalBenchFeatures;
+    std::vector<long> m_serialNumberFeatures;
+    std::vector<long> m_pixelBinningFeatures;
+    std::vector<long> m_thermoElectricFeatures;
+    std::vector<long> m_lampFeatures;
 
     int m_resultCode;
     // Map the result codes to meaningful strings
