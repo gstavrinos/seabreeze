@@ -50,7 +50,7 @@ public:
     /* Save a spectrum to a file.
     */
     void SaveToFile(std::ofstream &out, const double *wavelengths, const double *spectrum, const int pixels,
-        const long integration, const int average, const int boxcar, const long millisecs);
+        const long integration, const int average, const int boxcar, const long long millisecs);
 
     /* Set the save mode i.e. to multiple files or a single file.
     *  multipleFiles On entry, true if we are saving to multiple files, false otherwise.
@@ -61,7 +61,7 @@ public:
     */
     void OnAcquisition(const double *wavelengths, const double *spectrum, const int pixels,
         const long integration, const int average, const int boxcar,
-        const long millisecs, const int sequenceNumber);
+        const long long millisecs, const int sequenceNumber);
 
     /* Handle the start sequence event.
     */

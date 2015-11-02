@@ -93,11 +93,11 @@ private:
         try {
             result = m_pTree.get_child(key).get_value<T>();
         }
-        catch (ptree_bad_path &pbp) {
+        catch (ptree_bad_path) {
             m_pTree.add(key, valueDefault);
             m_updateRequired = true;
         }
-        catch (ptree_bad_data &pbd) {
+        catch (ptree_bad_data) {
             m_pTree.add(key, valueDefault);
             m_updateRequired = true;
         }

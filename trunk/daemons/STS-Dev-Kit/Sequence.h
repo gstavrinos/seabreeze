@@ -281,7 +281,7 @@ private:
     /* Save a spectrum to a file with some header information e.g. integration time, scans to average and so on.
     */
     void SaveSpectrumToFile(std::ofstream &out, const std::vector<double> &w, const std::vector<double> &s,
-        const int length,  const long integration, const int average, const int boxcar, const long millisecs);
+        const int length,  const long integration, const int average, const int boxcar, const long long millisecs);
 
     /* Stop the sequence of acquisitions.
     */

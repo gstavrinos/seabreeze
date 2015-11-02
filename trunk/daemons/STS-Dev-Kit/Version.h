@@ -33,5 +33,5 @@
 #ifndef VERSION_H
 #define VERSION_H
 const unsigned int mg_majorVersion = 2;
-const unsigned int mg_minorVersion = 0;
+const unsigned int mg_minorVersion = 1;
 #endif

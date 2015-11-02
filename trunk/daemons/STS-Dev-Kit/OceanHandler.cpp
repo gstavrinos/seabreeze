@@ -77,7 +77,7 @@ OceanHandler::OceanHandler(boost::asio::io_service &ioService, OceanHandlerConfi
     m_timeStart = boost::posix_time::microsec_clock::local_time();
 
     const size_t numSpectrometers = m_spectrometer.size();
-    for (int s = 0; s < numSpectrometers; ++s) {
+    for (size_t s = 0; s < numSpectrometers; ++s) {
         SequencePtr p(new Sequence(this, ioService, *m_spectrometer.at(s), configuration));
         m_sequence.insert(SequenceMap::value_type(s, p));
         m_sequence.at(s)->SetTimeZero(m_timeStart);

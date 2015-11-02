@@ -40,7 +40,7 @@
 /* Save the spectrum to a file in either the default or OV_PLAIN format.
 */
 void FileManager::SaveToFile(std::ofstream &out, const double *wavelengths, const double *spectrum, const int pixels,
-    const long integration, const int average, const int boxcar, const long millisecs) {
+    const long integration, const int average, const int boxcar, const long long millisecs) {
 
     if (m_saveFormat == DEFAULT) {
         out << "Saved at time: " << millisecs << " milliseconds\n";
@@ -49,9 +49,12 @@ void FileManager::SaveToFile(std::ofstream &out, const double *wavelengths, cons
         out << "Boxcar smoothing: " << boxcar << '\n';
         out << "Wavelengths\tIntensities" << '\n';
     }
+
+    out << std::fixed << std::setprecision(m_precision);
     for (int i = 0; i < pixels; ++i) {
-        out << std::fixed << std::setprecision(m_precision) << *wavelengths++ << '\t' << *spectrum++ << '\n';
+        out << /*std::fixed << std::setprecision(m_precision) <<*/ *wavelengths++ << '\t' << *spectrum++ << '\n';
     }
+    out << std::endl;
 }
 
 /* Set the file save mode to either a single file (append each acquisition) or multiple files (one per acquisition).
@@ -66,7 +69,7 @@ void FileManager::SetSaveMode(const bool multipleFiles) {
 */
 void FileManager::OnAcquisition(const double *wavelengths, const double *spectrum, const int pixels,
     const long integration, const int average, const int boxcar,
-    const long millisecs, const int sequenceNumber) {
+    const long long millisecs, const int sequenceNumber) {
 
     if (m_multiple) {
         OpenSequenceNumber(sequenceNumber);
