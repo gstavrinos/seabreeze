@@ -56,6 +56,7 @@ void test_revision_feature(long deviceID, int *unsupportedFeatureCount, int *tes
 void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 
 /* Create a type called "testfunc_t" that is just a pointer to any function that
  * has this signature:  void func(long)
@@ -80,22 +81,23 @@ static testfunc_t __test_functions[] = {
     test_spectrum_processing_feature,
     test_stray_light_coeffs_feature,
     test_continuous_strobe_feature,
+    test_data_buffer_feature,
 };
 
 /* Utilities to count errors and unsupported features */
  void tallyErrors(int error, int *testFailureCount)
  {
- 	if (error != 0) // 0 = no error
- 	{
- 		(*testFailureCount)++;
- 		printf("====>Log Failure, Count=%d\n", *testFailureCount);
- 	}
+     if (error != 0) // 0 = no error
+     {
+         (*testFailureCount)++;
+         printf("====>Log Failure, Count=%d\n", *testFailureCount);
+     }
  }
  
   void tallyUnsupportedFeatures(int *unsupportedFeatureCount)
  {
-	(*unsupportedFeatureCount)++;
-	printf("------->Unsupported Feature, Count=%d\n", *unsupportedFeatureCount);
+    (*unsupportedFeatureCount)++;
+    printf("------->Unsupported Feature, Count=%d\n", *unsupportedFeatureCount);
  }
  
 /* Get a variable that tracks how many test functions have been specified */
@@ -112,7 +114,7 @@ int main() {
     int error = 0;
     char nameBuffer[80];
 
-	
+    
     /* Give the driver a chance to initialize itself */
     sbapi_initialize();
 
@@ -166,10 +168,10 @@ int main() {
             continue;
         }
 
-		// log deviations
-		unsupportedFeatureCount=0;
-		testFailureCount=0;
-		
+        // log deviations
+        unsupportedFeatureCount=0;
+        testFailureCount=0;
+        
         /* Test the device */
         for(test_index = 0; test_index < __test_function_count; test_index++) {
             /* Invoke each of the test functions against this device */
@@ -180,7 +182,7 @@ int main() {
         printf("\tAttempting to close:\n");
         sbapi_close_device(device_ids[i], &error);
         printf("\t\tResult is (%d) [%s]\n", flag, sbapi_get_error_string(error));
-		printf("%d: Device 0x%02lX: \n\tNumber of unsupported features = %d\n\tNumber of test failures = %d\n", i, device_ids[i], unsupportedFeatureCount, testFailureCount);
+        printf("%d: Device 0x%02lX: \n\tNumber of unsupported features = %d\n\tNumber of test failures = %d\n", i, device_ids[i], unsupportedFeatureCount, testFailureCount);
     }
     free(device_ids);
 
@@ -263,8 +265,8 @@ void test_revision_feature(long deviceID, int *unsupportedFeatureCount, int *tes
     printf("\t\tGetting number of revision features:\n");
     number_of_revision_features = sbapi_get_number_of_revision_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_revision_features, sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_revision_features) {
         printf("\tNo revision capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -288,10 +290,10 @@ void test_revision_feature(long deviceID, int *unsupportedFeatureCount, int *tes
         printf("\t\t\t\tHardware Revision: 0x%x\n", sbapi_revision_hardware_get(deviceID, revision_feature_ids[i], &error));
         printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);
-		printf("\t\t\t\tFirmware Revision: 0x%x\n", sbapi_revision_firmware_get(deviceID, revision_feature_ids[i], &error));
-		printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));	
-		tallyErrors(error, testFailureCount);	
-		
+        printf("\t\t\t\tFirmware Revision: 0x%x\n", sbapi_revision_firmware_get(deviceID, revision_feature_ids[i], &error));
+        printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));    
+        tallyErrors(error, testFailureCount);    
+        
         printf("\t\t%d: Finished testing device 0x%02lX, revision 0x%02lX\n",
                 i, deviceID, revision_feature_ids[i]);
     }
@@ -313,8 +315,8 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
     printf("\t\tGetting number of optical benches:\n");
     number_of_optical_benches = sbapi_get_number_of_optical_bench_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_optical_benches, sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_optical_benches) {
         printf("\tNo optical bench capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -326,8 +328,8 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
     printf("\t\tGetting optical bench feature IDs...\n");
     number_of_optical_benches = sbapi_get_optical_bench_features(deviceID, &error, optical_bench_ids, number_of_optical_benches);
     printf("\t\t\tResult is %d [%s]\n", number_of_optical_benches, sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_optical_benches; i++) {
         printf("\t\t%d: Testing device 0x%02lX, optical bench feature id 0x%02lX\n", i, deviceID, optical_bench_ids[i]);
 
@@ -445,28 +447,28 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
         sbapi_spectrometer_set_trigger_mode(deviceID,
                 spectrometer_ids[i], &error, 0);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tGetting minimum integration time\n");
         integration_time = sbapi_spectrometer_get_minimum_integration_time_micros(
                 deviceID, spectrometer_ids[i], &error);
         printf("\t\t\t\tResult is %ld [%s]\n", integration_time,
                 sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tSetting integration time to minimum:\n");
         sbapi_spectrometer_set_integration_time_micros(
                 deviceID, spectrometer_ids[i], &error, integration_time);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tGetting spectrum length\n");
         length = sbapi_spectrometer_get_formatted_spectrum_length(deviceID,
                 spectrometer_ids[i], &error);
         printf("\t\t\t\tResult is %d [%s]\n", length,
                 sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         doubleBuffer = (double *)calloc(length, sizeof(double));
         printf("\t\t\tGetting spectrum...\n");
         length = sbapi_spectrometer_get_formatted_spectrum(deviceID,
@@ -533,7 +535,7 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
             printf("\t\t\t\tSpectrometer has no electric dark pixels.\n");
         }
 
-		
+        
         printf("\t\t%d: Finished testing device 0x%02lX, spectrometer 0x%02lX\n",
                 i, deviceID, spectrometer_ids[i]);
     }
@@ -618,8 +620,8 @@ void test_spectrum_processing_feature(long deviceID, int *unsupportedFeatureCoun
     number_of_sp = sbapi_get_number_of_spectrum_processing_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_sp,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_sp) {
         printf("\tNo spectrum processing capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -632,8 +634,8 @@ void test_spectrum_processing_feature(long deviceID, int *unsupportedFeatureCoun
     number_of_sp = sbapi_get_spectrum_processing_features(deviceID, &error,
             sp_ids, number_of_sp);
     printf("\t\t\tResult is %d [%s]\n", number_of_sp, sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_sp; i++) {
         printf("\t\t%d: Testing device 0x%02lX, spectrum processing 0x%02lX\n",
                 i, deviceID, sp_ids[i]);
@@ -644,10 +646,10 @@ void test_spectrum_processing_feature(long deviceID, int *unsupportedFeatureCoun
         tallyErrors(error, testFailureCount);
         
         if(boxcarWidthR<15)
-        	boxcarWidthW=boxcarWidthR+1;
+            boxcarWidthW=boxcarWidthR+1;
         else
-        	boxcarWidthW=0;
-        	
+            boxcarWidthW=0;
+            
         printf("\t\t\tAttempting to write a boxcar filter width of %d.\n", boxcarWidthW);
         sbapi_spectrum_processing_boxcar_width_set(deviceID, sp_ids[i], &error, boxcarWidthW);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
@@ -656,27 +658,27 @@ void test_spectrum_processing_feature(long deviceID, int *unsupportedFeatureCoun
         printf("\t\t\tAttempting to read boxcar filter width again.\n");
         boxcarWidthR2=sbapi_spectrum_processing_boxcar_width_get(deviceID, sp_ids[i], &error);
         printf("\t\t\t\tResult is [%s], boxcar filter width = %d\n", sbapi_get_error_string(error), boxcarWidthR2);
-		tallyErrors(error, testFailureCount);
-		
-		if((boxcarWidthR2==boxcarWidthW)&&(boxcarWidthR2!=boxcarWidthR))
-			printf("\t\t\t\t...passed...\n");
-		else
-		{
-			printf("\t\t\t\t...failed...\n");
-			(*testFailureCount)++;
-		}
+        tallyErrors(error, testFailureCount);
+        
+        if((boxcarWidthR2==boxcarWidthW)&&(boxcarWidthR2!=boxcarWidthR))
+            printf("\t\t\t\t...passed...\n");
+        else
+        {
+            printf("\t\t\t\t...failed...\n");
+            (*testFailureCount)++;
+        }
 
         
-    	printf("\t\t\tAttempting to read scans to average.\n");
+        printf("\t\t\tAttempting to read scans to average.\n");
         scansToAverageR=sbapi_spectrum_processing_scans_to_average_get(deviceID, sp_ids[i], &error);
         printf("\t\t\t\tResult is [%s], scans to average = %d\n", sbapi_get_error_string(error), scansToAverageR);
         tallyErrors(error, testFailureCount);
         
         if((scansToAverageR>=1) && (scansToAverageR<15))
-        	scansToAverageW=scansToAverageR+1;
+            scansToAverageW=scansToAverageR+1;
         else
-        	scansToAverageW=1;
-        	
+            scansToAverageW=1;
+            
         printf("\t\t\tAttempting to write a scans to average number of %d.\n", scansToAverageW);
         sbapi_spectrum_processing_scans_to_average_set(deviceID, sp_ids[i], &error, scansToAverageW);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
@@ -685,15 +687,15 @@ void test_spectrum_processing_feature(long deviceID, int *unsupportedFeatureCoun
         printf("\t\t\tAttempting to read scans to average again.\n");
         scansToAverageR2=sbapi_spectrum_processing_scans_to_average_get(deviceID, sp_ids[i], &error);
         printf("\t\t\t\tResult is [%s], scans to average = %d\n", sbapi_get_error_string(error), scansToAverageR2);
-		tallyErrors(error, testFailureCount);
-		
-		if((scansToAverageR2==scansToAverageW)&&(scansToAverageR2!=scansToAverageR))
-			printf("\t\t\t\t...passed...\n");
-		else
-		{
-			printf("\t\t\t\t...failed...\n");
-			(*testFailureCount)++;
-		}
+        tallyErrors(error, testFailureCount);
+        
+        if((scansToAverageR2==scansToAverageW)&&(scansToAverageR2!=scansToAverageR))
+            printf("\t\t\t\t...passed...\n");
+        else
+        {
+            printf("\t\t\t\t...failed...\n");
+            (*testFailureCount)++;
+        }
 
         printf("\t\t%d: Finished testing device 0x%02lX, spectrum processing feature 0x%02lX\n",
                 i, deviceID, sp_ids[i]);
@@ -719,8 +721,8 @@ void test_light_source_feature(long deviceID, int *unsupportedFeatureCount, int 
     number_of_light_sources = sbapi_get_number_of_light_source_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_light_sources,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_light_sources) {
         printf("\tNo light source capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -734,8 +736,8 @@ void test_light_source_feature(long deviceID, int *unsupportedFeatureCount, int 
             light_source_ids, number_of_light_sources);
     printf("\t\t\tResult is %d [%s]\n", number_of_light_sources,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_light_sources; i++) {
         printf("\t\t%d: Testing device 0x%02lX, light source 0x%02lX\n",
                 i, deviceID, light_source_ids[i]);
@@ -763,14 +765,14 @@ void test_light_source_feature(long deviceID, int *unsupportedFeatureCount, int 
                         &error, source);
                 printf("\t\t\t\t\tResult is %1.1f%% [%s]\n", intensity * 100.0,
                     sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 printf("\t\t\t\tAttempting to set intensity to half of maximum\n");
                 sbapi_light_source_set_intensity(deviceID, light_source_ids[i],
                         &error, source, 0.5);
                 printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 /* Re-read the intensity to see if it was applied */
                 printf("\t\t\t\tAttempting to get light source %d percent intensity\n", source);
                 intensity = sbapi_light_source_get_intensity(deviceID, light_source_ids[i],
@@ -793,27 +795,27 @@ void test_light_source_feature(long deviceID, int *unsupportedFeatureCount, int 
                         &error, source);
                 printf("\t\t\t\t\tResult is %s [%s]\n", 0 == flag ? "false" : "true",
                     sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 printf("\t\t\t\tAttempting to enable light source %d\n", source);
                 sbapi_light_source_set_enable(deviceID, light_source_ids[i],
                         &error, source, 1);
                 printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 printf("\t\t\t\tAttempting to get light source %d enable status\n", source);
                 flag = sbapi_light_source_is_enabled(deviceID, light_source_ids[i],
                         &error, source);
                 printf("\t\t\t\t\tResult is %s [%s]\n", 0 == flag ? "false" : "true",
                     sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 printf("\t\t\t\tAttempting to disable light source %d\n", source);
                 sbapi_light_source_set_enable(deviceID, light_source_ids[i],
                         &error, source, 0);
                 printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-				
+                tallyErrors(error, testFailureCount);
+                
                 printf("\t\t\t\tAttempting to get light source %d enable status\n", source);
                 flag = sbapi_light_source_is_enabled(deviceID, light_source_ids[i],
                         &error, source);
@@ -841,8 +843,8 @@ void test_lamp_feature(long deviceID, int *unsupportedFeatureCount, int *testFai
     number_of_lamps = sbapi_get_number_of_lamp_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_lamps,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_lamps) {
         printf("\tNo lamp capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -856,8 +858,8 @@ void test_lamp_feature(long deviceID, int *unsupportedFeatureCount, int *testFai
             lamp_ids, number_of_lamps);
     printf("\t\t\tResult is %d [%s]\n", number_of_lamps,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_lamps; i++) {
         printf("\t\t%d: Testing device 0x%02lX, lamp 0x%02lX\n",
                 i, deviceID, lamp_ids[i]);
@@ -871,8 +873,8 @@ void test_lamp_feature(long deviceID, int *unsupportedFeatureCount, int *testFai
         sbapi_lamp_set_lamp_enable(deviceID,
                 lamp_ids[i], &error, 1);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tAttempting to disable lamp.\n");
         sbapi_lamp_set_lamp_enable(deviceID,
                 lamp_ids[i], &error, 0);
@@ -899,8 +901,8 @@ void test_eeprom_feature(long deviceID, int *unsupportedFeatureCount, int *testF
     number_of_eeproms = sbapi_get_number_of_eeprom_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_eeproms,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_eeproms) {
         printf("\tNo EEPROM capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -914,8 +916,8 @@ void test_eeprom_feature(long deviceID, int *unsupportedFeatureCount, int *testF
             eeprom_ids, number_of_eeproms);
     printf("\t\t\tResult is %d [%s]\n", number_of_eeproms,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_eeproms; i++) {
         printf("\t\t%d: Testing device 0x%02lX, eeprom 0x%02lX\n",
                 i, deviceID, eeprom_ids[i]);
@@ -954,8 +956,8 @@ void test_irradcal_feature(long deviceID, int *unsupportedFeatureCount, int *tes
     number_of_irradcals = sbapi_get_number_of_irrad_cal_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_irradcals,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_irradcals) {
         printf("\tNo irradiance calibration capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1025,8 +1027,8 @@ void test_tec_feature(long deviceID, int *unsupportedFeatureCount, int *testFail
     number_of_tec = sbapi_get_number_of_thermo_electric_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_tec,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_tec) {
         printf("\tNo TEC capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1040,8 +1042,8 @@ void test_tec_feature(long deviceID, int *unsupportedFeatureCount, int *testFail
             tec_ids, number_of_tec);
     printf("\t\t\tResult is %d [%s]\n", number_of_tec,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_tec; i++) {
         printf("\t\t%d: Testing device 0x%02lX, tec 0x%02lX\n",
                 i, deviceID, tec_ids[i]);
@@ -1051,19 +1053,19 @@ void test_tec_feature(long deviceID, int *unsupportedFeatureCount, int *testFail
                             tec_ids[i], &error);
         printf("\t\t\t\tResult is %1.2f [%s]\n", temperature,
                             sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tAttempting to enable TEC...\n");
         sbapi_tec_set_enable(deviceID, tec_ids[i], &error, 1);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tAttempting to set TEC temperature to -5C...\n");
         sbapi_tec_set_temperature_setpoint_degrees_C(deviceID,
                             tec_ids[i], &error, -5.0);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t%d: Finished testing device 0x%02lX, tec 0x%02lX\n",
                 i, deviceID, tec_ids[i]);
     }
@@ -1087,8 +1089,8 @@ void test_nonlinearity_coeffs_feature(long deviceID, int *unsupportedFeatureCoun
         sbapi_get_number_of_nonlinearity_coeffs_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_nonlinearity_coeff_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_nonlinearity_coeff_features) {
         printf("\tNo nonlinearity coefficient capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1104,8 +1106,8 @@ void test_nonlinearity_coeffs_feature(long deviceID, int *unsupportedFeatureCoun
             number_of_nonlinearity_coeff_features);
     printf("\t\t\tResult is %d [%s]\n", number_of_nonlinearity_coeff_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_nonlinearity_coeff_features; i++) {
         printf("\t\t%d: Testing device 0x%02lX, nonlinearity coeffs 0x%02lX\n",
                 i, deviceID, nonlinearity_coeff_feature_ids[i]);
@@ -1146,8 +1148,8 @@ void test_temperature_feature(long deviceID, int *unsupportedFeatureCount, int *
         sbapi_get_number_of_temperature_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_temperature_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_temperature_features) {
         printf("\tNo temperature capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1163,8 +1165,8 @@ void test_temperature_feature(long deviceID, int *unsupportedFeatureCount, int *
             number_of_temperature_features);
     printf("\t\t\tResult is %d [%s]\n", number_of_temperature_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_temperature_features; i++) {
         printf("\t\t%d: Testing device 0x%02lX, temperatures 0x%02lX\n",
                 i, deviceID, temperature_feature_ids[i]);
@@ -1177,12 +1179,12 @@ void test_temperature_feature(long deviceID, int *unsupportedFeatureCount, int *
         tallyErrors(error, testFailureCount);
         
         for(int t_index=0; t_index<length; t_index++) {
-        	if(0 == error && length > 0) {
-            	printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, buffer[t_index]);
-        	}
-		}
-		
-		printf("\t\t\tAttempting to get the number of specific temperatures...\n");
+            if(0 == error && length > 0) {
+                printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, buffer[t_index]);
+            }
+        }
+        
+        printf("\t\t\tAttempting to get the number of specific temperatures...\n");
         
         length = sbapi_temperature_count_get(deviceID,
             temperature_feature_ids[i], &error);
@@ -1190,13 +1192,13 @@ void test_temperature_feature(long deviceID, int *unsupportedFeatureCount, int *
         tallyErrors(error, testFailureCount);
         
         for(int t_index=0; t_index<length; t_index++) {
-        	if(0 == error && length > 0) {
-        		myTemp=sbapi_temperature_get(deviceID, temperature_feature_ids[i], &error, t_index);
-            	printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, myTemp);
-            	tallyErrors(error, testFailureCount);
-        	}
-		}
-		
+            if(0 == error && length > 0) {
+                myTemp=sbapi_temperature_get(deviceID, temperature_feature_ids[i], &error, t_index);
+                printf("\t\t\t\tTemperature(%d): %2.2f\n", t_index, myTemp);
+                tallyErrors(error, testFailureCount);
+            }
+        }
+        
         printf("\t\t%d: Finished testing device 0x%02lX, temperatures 0x%02lX\n",
                 i, deviceID, temperature_feature_ids[i]);
     }
@@ -1220,8 +1222,8 @@ void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount
     number_of_stray_light_coeff_features = sbapi_get_number_of_stray_light_coeffs_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_stray_light_coeff_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_stray_light_coeff_features) {
         printf("\tNo stray light coefficient capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1237,8 +1239,8 @@ void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount
             number_of_stray_light_coeff_features);
     printf("\t\t\tResult is %d [%s]\n", number_of_stray_light_coeff_features,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_stray_light_coeff_features; i++) {
         printf("\t\t%d: Testing device 0x%02lX, stray light coeffs 0x%02lX\n",
                 i, deviceID, stray_light_coeff_feature_ids[i]);
@@ -1275,8 +1277,8 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
     number_of_cont_strobes = sbapi_get_number_of_continuous_strobe_features(deviceID, &error);
     printf("\t\t\tResult is %d [%s]\n", number_of_cont_strobes,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     if(0 == number_of_cont_strobes) {
         printf("\tNo continuous strobe capabilities found.\n");
                 tallyUnsupportedFeatures(unsupportedFeatureCount);
@@ -1290,8 +1292,8 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
             cont_strobe_ids, number_of_cont_strobes);
     printf("\t\t\tResult is %d [%s]\n", number_of_cont_strobes,
             sbapi_get_error_string(error));
-	tallyErrors(error, testFailureCount);
-	
+    tallyErrors(error, testFailureCount);
+    
     for(i = 0; i < number_of_cont_strobes; i++) {
         printf("\t\t%d: Testing device 0x%02lX, continuous strobe 0x%02lX\n",
                 i, deviceID, cont_strobe_ids[i]);
@@ -1299,14 +1301,14 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         sbapi_continuous_strobe_set_continuous_strobe_enable(deviceID,
                 cont_strobe_ids[i], &error, 1);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tAttempting to set period to 20ms.\n");
         sbapi_continuous_strobe_set_continuous_strobe_period_micros(deviceID,
                 cont_strobe_ids[i], &error, 20000);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tDelaying to allow verification.\n");
         sleep(2);
 
@@ -1314,8 +1316,8 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         sbapi_continuous_strobe_set_continuous_strobe_period_micros(deviceID,
                 cont_strobe_ids[i], &error, 50000);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+        
         printf("\t\t\tDelaying to allow verification.\n");
         sleep(2);
 
@@ -1323,8 +1325,8 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         sbapi_continuous_strobe_set_continuous_strobe_enable(deviceID,
                 cont_strobe_ids[i], &error, 0);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-		
+        tallyErrors(error, testFailureCount);
+
         printf("\t\t%d: Finished testing device 0x%02lX, continuous strobe 0x%02lX\n",
                 i, deviceID, cont_strobe_ids[i]);
     }
@@ -1332,3 +1334,172 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 
     printf("\tFinished testing continuous strobe capabilities.\n");
 }
+
+
+void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {
+    int error = 0;
+    int number_of_data_buffers = 0;
+    long *data_buffer_ids = 0;
+    int i;
+    unsigned long capacity = 0;
+    unsigned long minCapacity = 0;
+    unsigned long maxCapacity = 0;
+    unsigned long oldCapacity = 0;
+    unsigned long targetCapacity = 0;
+    unsigned long count = 0;
+    unsigned long newCount = 0;
+
+    printf("\n\tTesting data buffer features:\n");
+
+    printf("\t\tGetting number of data buffer features:\n");
+    number_of_data_buffers = sbapi_get_number_of_data_buffer_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_data_buffers,
+            sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if(0 == number_of_data_buffers) {
+        printf("\tNo data buffer capabilities found.\n");
+                tallyUnsupportedFeatures(unsupportedFeatureCount);
+
+        return;
+    }
+
+    data_buffer_ids = (long *)calloc(number_of_data_buffers, sizeof(long));
+    printf("\t\tGetting data buffer feature IDs...\n");
+    number_of_data_buffers = sbapi_get_data_buffer_features(deviceID, &error,
+            data_buffer_ids, number_of_data_buffers);
+    printf("\t\t\tResult is %d [%s]\n", number_of_data_buffers,
+            sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for(i = 0; i < number_of_data_buffers; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, data buffer 0x%02lX\n",
+                i, deviceID, data_buffer_ids[i]);
+
+        printf("\t\t\tAttempting to get minimum buffer size...\n");
+        minCapacity = sbapi_data_buffer_get_buffer_capacity_minimum(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tMinimum buffer size: %ld\n", minCapacity);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get maximum buffer size...\n");
+        maxCapacity = sbapi_data_buffer_get_buffer_capacity_maximum(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tMaximum buffer size: %ld\n", maxCapacity);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get current buffer size...\n");
+        oldCapacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tCurrent buffer size: %ld\n", oldCapacity);
+        }
+        tallyErrors(error, testFailureCount);
+
+        if(oldCapacity != maxCapacity) {
+            targetCapacity = maxCapacity;
+        } else if(maxCapacity > minCapacity) {
+            /* The current capacity setting is the maximum, so try to back off by one.
+             * This test confirms that there is at least some room between min and max.
+             */
+            targetCapacity = maxCapacity - 1;
+        } else {
+            /* Not possible to change the capacity to anything new */
+            targetCapacity = oldCapacity;
+        }
+
+        if(targetCapacity != oldCapacity) {
+            printf("\t\t\tAttempting to set buffer size to %ld...\n", targetCapacity);
+            sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_ids[i], &error, targetCapacity);
+            printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+            tallyErrors(error, testFailureCount);
+
+            printf("\t\t\tAttempting to get current buffer size...\n");
+            capacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
+            printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+            if(0 == error) {
+                printf("\t\t\t\tCurrent buffer size: %ld\n", capacity);
+            }
+            tallyErrors(error, testFailureCount);
+            if(capacity != targetCapacity) {
+                printf("\t\t\t\tERROR: did not get back the expected value.\n");
+                (*testFailureCount)++;
+            }
+        }
+
+        printf("\t\t\tAttempting to get number of items in the buffer...\n");
+        count = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tNumber of items ready for retrieval: %ld\n", count);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tWaiting to allow more data to be buffered...\n");
+        /* This assumes that the spectrometer test occurred before this, so the
+         * integration time and trigger mode were set in a way that this will
+         * keep acquiring a few spectra.
+         */
+        sleep(2);
+
+        printf("\t\t\tAttempting to get number of items in the buffer...\n");
+        count = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tNumber of items ready for retrieval: %ld\n", count);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to clear buffer...\n");
+        sbapi_data_buffer_clear(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get number of items in the buffer...\n");
+        newCount = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tNumber of items ready for retrieval: %ld\n", newCount);
+        }
+        tallyErrors(error, testFailureCount);
+
+        if(newCount >= count && newCount > 1) {
+            /* It is expected that the count would drop to zero, but there is a chance that
+             * another scan could be stored between the clear and the query.  This should
+             * allow at most one scan in that interval without throwing the error.
+             */
+            printf("\t\t\t\tERROR: count did not seem to drop when the buffer was cleared.\n");
+            (*testFailureCount)++;
+        }
+
+        if(targetCapacity != oldCapacity) {
+            printf("\t\t\tAttempting to set buffer size back to %ld...\n", oldCapacity);
+            sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_ids[i], &error, oldCapacity);
+            printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+            tallyErrors(error, testFailureCount);
+
+            printf("\t\t\tAttempting to get current buffer size...\n");
+            capacity = sbapi_data_buffer_get_buffer_capacity(deviceID, data_buffer_ids[i], &error);
+            printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+            if(0 == error) {
+                printf("\t\t\t\tCurrent buffer size: %ld\n", capacity);
+            }
+            if(capacity != oldCapacity) {
+                printf("\t\t\t\tERROR: did not get back the expected value.\n");
+                (*testFailureCount)++;
+            }
+            tallyErrors(error, testFailureCount);
+        }
+        
+        printf("\t\t%d: Finished testing device 0x%02lX, data buffer 0x%02lX\n",
+                i, deviceID, data_buffer_ids[i]);
+    }
+    free(data_buffer_ids);
+
+    printf("\tFinished testing data buffer capabilities.\n");
+}
+

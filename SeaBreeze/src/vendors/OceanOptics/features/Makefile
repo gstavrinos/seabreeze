@@ -4,6 +4,7 @@ all: deps objs
 
 SUBDIRS = \
     continuous_strobe   \
+    data_buffer         \
     eeprom_slots        \
     fpga_register       \
     irradcal            \

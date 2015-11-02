@@ -51,6 +51,7 @@
 #include "api/seabreezeapi/ContinuousStrobeFeatureAdapter.h"
 #include "api/seabreezeapi/ThermoElectricCoolerFeatureAdapter.h"
 #include "api/seabreezeapi/LightSourceFeatureAdapter.h"
+#include "api/seabreezeapi/DataBufferFeatureAdapter.h"
 #include <vector>
 
 namespace seabreeze {
@@ -76,7 +77,7 @@ namespace seabreeze {
             /*  endpointType. A 0 is returned if the endpoint requested is not in use. */
             unsigned char getDeviceEndpoint(int *errorCode, usbEndpointType anEndpointType);
 
-		/* Get one or more raw USB access features */
+            /* Get one or more raw USB access features */
             int getNumberOfRawUSBBusAccessFeatures();
             int getRawUSBBusAccessFeatures(long *buffer, int maxFeatures);
             int rawUSBBusAccessRead(long featureID,
@@ -199,8 +200,8 @@ namespace seabreeze {
             int getSpectrumProcessingFeatures(long *buffer, int maxFeatures);
             unsigned short int spectrumProcessingScansToAverageGet(long spectrumProcessingFeatureID, int *errorCode);
             unsigned char spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode);
-			void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
-			void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
+            void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
+            void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
                                                    
             /* Get one or more optical bench features */
             int getNumberOfOpticalBenchFeatures();
@@ -219,6 +220,16 @@ namespace seabreeze {
             int getStrayLightCoeffsFeatures(long *buffer, int maxFeatures);
             int strayLightCoeffsGet(long featureID, int *errorCode,
                     double *buffer, int bufferLength);
+
+            /* Get one or more data buffer features */
+            int getNumberOfDataBufferFeatures();
+            int getDataBufferFeatures(long *buffer, int maxFeatures);
+            void dataBufferClear(long featureID, int *errorCode);
+            unsigned long dataBufferGetNumberOfElements(long featureID, int *errorCode);
+            unsigned long dataBufferGetBufferCapacity(long featureID, int *errorCode);
+            unsigned long dataBufferGetBufferCapacityMaximum(long featureID, int *errorCode);
+            unsigned long dataBufferGetBufferCapacityMinimum(long featureID, int *errorCode);
+            void dataBufferSetBufferCapacity(long featureID, int *errorCode, unsigned long capacity);
 
         protected:
             unsigned long instanceID;
@@ -239,8 +250,9 @@ namespace seabreeze {
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
-			
-			RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
+            std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
+            
+            RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
             SpectrometerFeatureAdapter *getSpectrometerFeatureByID(long featureID);
             ThermoElectricCoolerFeatureAdapter *getTECFeatureByID(long featureID);
@@ -256,6 +268,7 @@ namespace seabreeze {
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
             SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
+            DataBufferFeatureAdapter *getDataBufferFeatureByID(long featureID);
         };
     }
 }
