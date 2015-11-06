@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPAcquisitionDelayProtocol.h
+ * @file    OBPSetAcquisitionDelayExchange.cpp
  * @date    November 2015
  * @author  Ocean Optics, Inc.
  *
@@ -27,25 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPACQUISITIONDELAYPROTOCOL_H
-#define OBPACQUISITIONDELAYPROTOCOL_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetAcquisitionDelayExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/AcquisitionDelayProtocolInterface.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace oceanBinaryProtocol {
-        class OBPAcquisitionDelayProtocol : public AcquisitionDelayProtocolInterface {
-        public:
-            OBPAcquisitionDelayProtocol();
-            virtual ~OBPAcquisitionDelayProtocol();
+OBPSetAcquisitionDelayExchange::OBPSetAcquisitionDelayExchange() {
+    this->hints->push_back(new OBPControlHint());
 
-            virtual void setAcquisitionDelayMicroseconds(const Bus &bus,
-                    const unsigned long delayMicros) throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol */
-} /* end namespace seabreeze */
+    this->messageType = OBPMessageTypes::OBP_SET_TRIG_DELAY_USEC;
 
-#endif /* OBPACQUISITIONDELAYPROTOCOL_H */
+    this->payload.resize(4);
+}
+
+OBPSetAcquisitionDelayExchange::~OBPSetAcquisitionDelayExchange() {
+
+}
+
+void OBPSetAcquisitionDelayExchange::setAcquisitionDelayMicros(
+        unsigned long delayMicros) {
+
+    unsigned char *cptr;
+    int i;
+
+    cptr = (unsigned char *)&delayMicros;
+
+    for(i = 0; i < 4; i++) {
+        this->payload[i] = cptr[i];
+    }
+}
 
