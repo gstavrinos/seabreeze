@@ -1,7 +1,10 @@
 /***************************************************//**
- * @file    AcquisitionDelayFeature.h
+ * @file    STSAcquisitionDelayFeature.h
  * @date    November 2015
  * @author  Ocean Optics, Inc.
+ *
+ * This feature provides an interface to the acquisition
+ * delay feature in the STS.
  *
  * LICENSE:
  *
@@ -27,54 +30,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef ACQUISITION_DELAY_FEATURE_H
-#define ACQUISITION_DELAY_FEATURE_H
+#ifndef STSACQUISITIONDELAYFEATURE_H
+#define STSACQUISITIONDELAYFEATURE_H
 
-#include "common/features/Feature.h"
-#include "common/protocols/Protocol.h"
-#include "common/buses/Bus.h"
-#include "common/exceptions/FeatureException.h"
-#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
+#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature.h"
 
 namespace seabreeze {
 
-    class AcquisitionDelayFeature : public Feature, public AcquisitionDelayFeatureInterface {
+    class STSAcquisitionDelayFeature : public AcquisitionDelayFeature {
     public:
-        AcquisitionDelayFeature(std::vector<ProtocolHelper *> helpers);
-        virtual ~AcquisitionDelayFeature();
+        STSAcquisitionDelayFeature();
+        virtual ~STSAcquisitionDelayFeature();
 
-        virtual void setAcquisitionDelayMicroseconds(
-                    const Protocol &Protocol, const Bus &bus,
-                    const unsigned long delayMicros)
-                    throw (FeatureException);
-
-        virtual unsigned long getAcquisitionDelayMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
-
-        /* Overriding from Feature */
-        virtual FeatureFamily getFeatureFamily();
-
-        /* Methods that remain pure virtual since the protocol interface does
-         * not necessarily provide clean methods for these.  A derived
-         * class will be necessary to specify the limits.
-         */
+        /* Inherited from AcquisitionDelayFeature */
         virtual unsigned long getAcquisitionDelayIncrementMicroseconds(
                     const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
+                    throw (FeatureException);
         virtual unsigned long getAcquisitionDelayMaximumMicroseconds(
                     const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
+                    throw (FeatureException);
         virtual unsigned long getAcquisitionDelayMinimumMicroseconds(
                     const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-
-        private:
-            unsigned long lastAcquisitionDelayMicroseconds;
-            bool lastAcquisitionDelayValid;
+                    throw (FeatureException);
     };
 
 } /* end namespace seabreeze */
 
-#endif /* ACQUISITION_DELAY_FEATURE_H */
+#endif /*  STSACQUISITIONDELAYFEATURE_H */
 
