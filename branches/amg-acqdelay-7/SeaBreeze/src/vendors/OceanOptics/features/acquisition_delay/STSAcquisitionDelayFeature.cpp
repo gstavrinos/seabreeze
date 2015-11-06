@@ -1,10 +1,10 @@
 /***************************************************//**
- * @file    STSAcquisitionDelayFeature.h
+ * @file    STSAcquisitionDelayFeature.cpp
  * @date    November 2015
  * @author  Ocean Optics, Inc.
  *
  * This feature provides an interface to the acquisition
- * delay feature in the STS.
+ * (trigger) delay feature of the STS.
  *
  * LICENSE:
  *
@@ -30,31 +30,40 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef STSACQUISITIONDELAYFEATURE_H
-#define STSACQUISITIONDELAYFEATURE_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/features/acquisition_delay/STSAcquisitionDelayFeature.h"
 
-#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature.h"
+using namespace seabreeze;
+using namespace std;
 
-namespace seabreeze {
+#define STS_ACQUISITION_DELAY_INCREMENT_USEC    1
+#define STS_ACQUISITION_DELAY_MINIMUM_USEC      0
+#define STS_ACQUISITION_DELAY_MAXIMUM_USEC      335500
 
-    class STSAcquisitionDelayFeature : public AcquisitionDelayFeature {
-    public:
-        STSAcquisitionDelayFeature(std::vector<ProtocolHelper *> helpers);
-        virtual ~STSAcquisitionDelayFeature();
+STSAcquisitionDelayFeature::STSAcquisitionDelayFeature(
+        std::vector<ProtocolHelper *> helpers) : AcquisitionDelayFeature(helpers) {
 
-        /* Inherited from AcquisitionDelayFeature */
-        virtual unsigned long getAcquisitionDelayIncrementMicroseconds(
+}
+
+STSAcquisitionDelayFeature::~STSAcquisitionDelayFeature() {
+
+}
+
+unsigned long STSAcquisitionDelayFeature::getAcquisitionDelayIncrementMicroseconds(
                     const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
-        virtual unsigned long getAcquisitionDelayMaximumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
-        virtual unsigned long getAcquisitionDelayMinimumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
-    };
+                    throw (FeatureException) {
+    return STS_ACQUISITION_DELAY_INCREMENT_USEC;
+}
 
-} /* end namespace seabreeze */
+unsigned long STSAcquisitionDelayFeature::getAcquisitionDelayMaximumMicroseconds(
+            const Protocol &protocol, const Bus &bus)
+            throw (FeatureException) {
+    return STS_ACQUISITION_DELAY_MAXIMUM_USEC;
+}
 
-#endif /*  STSACQUISITIONDELAYFEATURE_H */
+unsigned long STSAcquisitionDelayFeature::getAcquisitionDelayMinimumMicroseconds(
+            const Protocol &protocol, const Bus &bus)
+            throw (FeatureException) {
+    return STS_ACQUISITION_DELAY_MINIMUM_USEC;
+}
 
