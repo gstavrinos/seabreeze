@@ -44,7 +44,7 @@ namespace seabreeze {
         virtual ~AcquisitionDelayFeature();
 
         virtual void setAcquisitionDelayMicroseconds(
-                    const Protocol &Protocol, const Bus &bus,
+                    const Protocol &protocol, const Bus &bus,
                     const unsigned long delayMicros)
                     throw (FeatureException);
 

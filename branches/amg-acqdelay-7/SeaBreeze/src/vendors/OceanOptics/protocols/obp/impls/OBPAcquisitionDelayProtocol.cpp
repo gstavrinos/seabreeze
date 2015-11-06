@@ -51,7 +51,7 @@ void OBPAcquisitionDelayProtocol::setAcquisitionDelayMicroseconds(
             throw (ProtocolException) {
 
     TransferHelper *helper;
-    OBPAcquisitionDelayExchange exchange;
+    OBPSetAcquisitionDelayExchange exchange;
 
     helper = bus.getHelper(exchange.getHints());
     if (NULL == helper) {

@@ -35,14 +35,22 @@
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/AcquisitionDelayProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPAcquisitionDelayProtocol.h"
+#include "api/seabreezeapi/FeatureFamilies.h"
+#include "common/exceptions/FeatureControlException.h"
+#include "common/exceptions/FeatureProtocolNotFoundException.h"
 
 using namespace seabreeze;
 using namespace seabreeze::api;
 using namespace std;
 
-AcquisitionDelayFeature::AcquisitionDelayFeature() {
+AcquisitionDelayFeature::AcquisitionDelayFeature(vector<ProtocolHelper *> helpers) {
     /* Set to a safe default */
     this->lastAcquisitionDelayMicroseconds = 0;
+
+    vector<ProtocolHelper *>::iterator iter;
+    for(iter = helpers.begin(); iter != helpers.end(); iter++) {
+        this->protocols.push_back(*iter);
+    }
 }
 
 AcquisitionDelayFeature::~AcquisitionDelayFeature() {
@@ -50,7 +58,7 @@ AcquisitionDelayFeature::~AcquisitionDelayFeature() {
 }
 
 void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
-            const Protocol &Protocol, const Bus &bus,
+            const Protocol &protocol, const Bus &bus,
             const unsigned long delayMicros)
             throw (FeatureException) {
 
