@@ -1573,8 +1573,9 @@ void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount,
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         if(0 == error) {
             printf("\t\t\t\tAcquisition delay: %ld usec\n", old_delay);
+        } else {
+            printf("\t\t\t\tAcquisition delay read may cause an error if never previously written; moving on\n");
         }
-        tallyErrors(error, testFailureCount);
 
         if(old_delay != delay_max) {
             new_delay = delay_max;
@@ -1597,7 +1598,7 @@ void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount,
         }
         tallyErrors(error, testFailureCount);
         
-        printf("\t\t\tAttempting to set acquisition delay back to %ld usec...\n", new_delay);
+        printf("\t\t\tAttempting to set acquisition delay back to %ld usec...\n", old_delay);
         sbapi_acquisition_delay_set_delay_microseconds(deviceID, acq_delay_ids[i], &error, old_delay);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);

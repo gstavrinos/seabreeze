@@ -46,6 +46,7 @@ using namespace std;
 AcquisitionDelayFeature::AcquisitionDelayFeature(vector<ProtocolHelper *> helpers) {
     /* Set to a safe default */
     this->lastAcquisitionDelayMicroseconds = 0;
+    this->lastAcquisitionDelayValid = false;
 
     vector<ProtocolHelper *>::iterator iter;
     for(iter = helpers.begin(); iter != helpers.end(); iter++) {
@@ -78,6 +79,7 @@ void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
     try {
         delay->setAcquisitionDelayMicroseconds(bus, delayMicros);
         this->lastAcquisitionDelayMicroseconds = delayMicros;
+        this->lastAcquisitionDelayValid = true;
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
