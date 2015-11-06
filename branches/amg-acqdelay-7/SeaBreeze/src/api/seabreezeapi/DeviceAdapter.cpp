@@ -96,6 +96,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<StrayLightCoeffsFeatureAdapter>(strayLightFeatures);
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
     __delete_feature_adapters<DataBufferFeatureAdapter>(dataBufferFeatures);
+    __delete_feature_adapters<AcquisitionDelayFeatureAdapter>(acquisitionDelayFeatures);
 
     delete this->device;
 }
@@ -237,6 +238,10 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<DataBufferFeatureInterface,
                     DataBufferFeatureAdapter>(this->device,
             dataBufferFeatures, bus, featureFamilies.DATA_BUFFER);
+
+    __create_feature_adapters<AcquisitionDelayFeatureInterface,
+                    AcquisitionDelayFeatureAdapter>(this->device,
+            acquisitionDelayFeatures, bus, featureFamilies.ACQUISITION_DELAY);
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return 0;
@@ -1199,4 +1204,69 @@ void DeviceAdapter::dataBufferSetBufferCapacity(long featureID, int *errorCode, 
     feature->setBufferCapacity(errorCode, capacity);
 }
 
+/* Acquisition delay feature wrappers */
+int DeviceAdapter::getNumberOfAcquisitionDelayFeatures() {
+    return (int) this->acquisitionDelayFeatures.size();
+}
+
+int DeviceAdapter::getAcquisitionDelayFeatures(long *buffer, int maxFeatures) {
+    return __getFeatureIDs<AcquisitionDelayFeatureAdapter>(
+                acquisitionDelayFeatures, buffer, maxFeatures);
+}
+
+AcquisitionDelayFeatureAdapter *DeviceAdapter::getAcquisitionDelayFeatureByID(long featureID) {
+    return __getFeatureByID<AcquisitionDelayFeatureAdapter>(
+                acquisitionDelayFeatures, featureID);
+}
+
+void DeviceAdapter::acquisitionDelaySetDelayMicroseconds(long featureID, int *errorCode,
+        unsigned long delay_usec) {
+    AcquisitionDelayFeatureAdapter *feature = getAcquisitionDelayFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->setAcquisitionDelayMicroseconds(errorCode, delay_usec);
+}
+
+unsigned long DeviceAdapter::acquisitionDelayGetDelayMicroseconds(long featureID, int *errorCode) {
+    AcquisitionDelayFeatureAdapter *feature = getAcquisitionDelayFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getAcquisitionDelayMicroseconds(errorCode);
+}
+
+unsigned long DeviceAdapter::acquisitionDelayGetDelayIncrementMicroseconds(long featureID, int *errorCode) {
+    AcquisitionDelayFeatureAdapter *feature = getAcquisitionDelayFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getAcquisitionDelayIncrementMicroseconds(errorCode);
+}
+
+unsigned long DeviceAdapter::acquisitionDelayGetDelayMaximumMicroseconds(long featureID, int *errorCode) {
+    AcquisitionDelayFeatureAdapter *feature = getAcquisitionDelayFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getAcquisitionDelayMaximumMicroseconds(errorCode);
+}
+
+unsigned long DeviceAdapter::acquisitionDelayGetDelayMinimumMicroseconds(long featureID, int *errorCode) {
+    AcquisitionDelayFeatureAdapter *feature = getAcquisitionDelayFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->getAcquisitionDelayMinimumMicroseconds(errorCode);
+}
 
