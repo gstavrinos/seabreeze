@@ -1,7 +1,12 @@
 /***************************************************//**
- * @file    AcquisitionDelayFeature.h
+ * @file    AcquisitionDelayFeature_FPGA.h
  * @date    November 2015
  * @author  Ocean Optics, Inc.
+ *
+ * This feature provides an interface to the acquisition
+ * delay feature that is controlled by the FPGA in many
+ * devices.  This is likely to be derived from to
+ * override the device limits.
  *
  * LICENSE:
  *
@@ -27,54 +32,48 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef ACQUISITION_DELAY_FEATURE_H
-#define ACQUISITION_DELAY_FEATURE_H
+#ifndef ACQUISITION_DELAY_FEATURE_FPGA_H
+#define ACQUISITION_DELAY_FEATURE_FPGA_H
 
-#include "common/features/Feature.h"
-#include "common/protocols/Protocol.h"
-#include "common/buses/Bus.h"
-#include "common/exceptions/FeatureException.h"
-#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
+#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature.h"
+#include <vector>
 
 namespace seabreeze {
 
-    class AcquisitionDelayFeature : public Feature, public AcquisitionDelayFeatureInterface {
+    class AcquisitionDelayFeature_FPGA : public AcquisitionDelayFeature {
     public:
-        AcquisitionDelayFeature(std::vector<ProtocolHelper *> helpers);
-        virtual ~AcquisitionDelayFeature();
+        AcquisitionDelayFeature_FPGA(std::vector<ProtocolHelper *> helpers);
+        virtual ~AcquisitionDelayFeature_FPGA();
+
+        /* Inherited from AcquisitionDelayFeature */
 
         virtual void setAcquisitionDelayMicroseconds(
                     const Protocol &protocol, const Bus &bus,
                     const unsigned long delayMicros)
                     throw (FeatureException);
 
-        virtual unsigned long getAcquisitionDelayMicroseconds(
+        virtual unsigned long getAcquisitionDelayIncrementMicroseconds(
+                    const Protocol &protocol, const Bus &bus)
+                    throw (FeatureException);
+        virtual unsigned long getAcquisitionDelayMaximumMicroseconds(
+                    const Protocol &protocol, const Bus &bus)
+                    throw (FeatureException);
+        virtual unsigned long getAcquisitionDelayMinimumMicroseconds(
                     const Protocol &protocol, const Bus &bus)
                     throw (FeatureException);
 
-        /* Overriding from Feature */
-        virtual FeatureFamily getFeatureFamily();
+    protected:
+        unsigned long countsToMicroseconds(unsigned long counts);
+        unsigned long microsecondsToCounts(unsigned long microseconds);
 
-        /* Methods that remain pure virtual since the protocol interface does
-         * not necessarily provide clean methods for these.  A derived
-         * class will be necessary to specify the limits.
-         */
-        virtual unsigned long getAcquisitionDelayIncrementMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-        virtual unsigned long getAcquisitionDelayMaximumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-        virtual unsigned long getAcquisitionDelayMinimumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-
-        protected:
-            unsigned long lastAcquisitionDelayMicroseconds;
-            bool lastAcquisitionDelayValid;
+        unsigned char acquisitionDelayRegister;
+        unsigned long countsPerMicrosecond;
+        unsigned long minimumDelayCounts;
+        unsigned long maximumDelayCounts;
+        unsigned long incrementMicroseconds;
     };
 
 } /* end namespace seabreeze */
 
-#endif /* ACQUISITION_DELAY_FEATURE_H */
+#endif /* ACQUISITION_DELAY_FEATURE_FPGA_H */
 

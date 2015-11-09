@@ -69,7 +69,7 @@ void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
     try {
         proto = lookupProtocolImpl(protocol);
         delay = static_cast<AcquisitionDelayProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException fpnfe) {
+    } catch (FeatureProtocolNotFoundException &fpnfe) {
         string error(
                 "Could not find matching protocol implementation to set acquisition delay.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
