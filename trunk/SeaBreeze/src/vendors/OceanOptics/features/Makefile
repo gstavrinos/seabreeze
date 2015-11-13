@@ -3,6 +3,7 @@ SEABREEZE = ../../../..
 all: deps objs
 
 SUBDIRS = \
+    acquisition_delay   \
     continuous_strobe   \
     data_buffer         \
     eeprom_slots        \

@@ -86,6 +86,7 @@ public:
     void   setStrobeEnable           (int index, int *errorCode, unsigned char strobe_enable);
     void   setShutterOpen            (int index, int *errorCode, unsigned char opened);
     void   setContinuousStrobePeriodMicrosec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec);
+    void   setAcquisitionDelayMicrosec(int index, int *errorCode, unsigned long delay_usec);
 
     // Buffering features
     void   clearBuffer               (int index, int *errorCode);
@@ -774,6 +775,16 @@ extern "C" {
     DLL_DECL void
     seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode,
         unsigned short strobe_id, unsigned long period_usec);
+
+    /**
+    * @brief Set the acquisition delay (trigger delay) in microseconds.  This
+    *        controls the amount of time between a particular event
+    *        (usually a request for spectrum or an external trigger pulse)
+    *        and the start of acquisition.
+    */
+    DLL_DECL void
+    seabreeze_set_acquisition_delay_microsec(int index,
+        int *errorCode, unsigned long delay_usec);
 
     /**
     * @brief Clear the spectrum buffer (if equipped)

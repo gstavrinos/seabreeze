@@ -57,6 +57,7 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 
 /* Create a type called "testfunc_t" that is just a pointer to any function that
  * has this signature:  void func(long)
@@ -82,6 +83,7 @@ static testfunc_t __test_functions[] = {
     test_stray_light_coeffs_feature,
     test_continuous_strobe_feature,
     test_data_buffer_feature,
+    test_acquisition_delay_feature,
 };
 
 /* Utilities to count errors and unsupported features */
@@ -1501,5 +1503,116 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
     free(data_buffer_ids);
 
     printf("\tFinished testing data buffer capabilities.\n");
+}
+
+void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {
+    int error = 0;
+    int number_of_acq_delays = 0;
+    long *acq_delay_ids = 0;
+    int i;
+    unsigned long delay_min;
+    unsigned long delay_max;
+    unsigned long delay_inc;
+    unsigned long old_delay;
+    unsigned long new_delay;
+    unsigned long temp;
+
+    printf("\n\tTesting acquisition delay features:\n");
+
+    printf("\t\tGetting number of acquisition delay features:\n");
+    number_of_acq_delays = sbapi_get_number_of_acquisition_delay_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_acq_delays,
+            sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if(0 == number_of_acq_delays) {
+        printf("\tNo acquisition delay capabilities found.\n");
+                tallyUnsupportedFeatures(unsupportedFeatureCount);
+
+        return;
+    }
+
+    acq_delay_ids = (long *)calloc(number_of_acq_delays, sizeof(long));
+    printf("\t\tGetting acquisition delay feature IDs...\n");
+    number_of_acq_delays = sbapi_get_acquisition_delay_features(deviceID, &error,
+            acq_delay_ids, number_of_acq_delays);
+    printf("\t\t\tResult is %d [%s]\n", number_of_acq_delays,
+            sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for(i = 0; i < number_of_acq_delays; i++) {
+        printf("\t\t%d: Testing device 0x%02lX, acquisition delay 0x%02lX\n",
+                i, deviceID, acq_delay_ids[i]);
+
+        printf("\t\t\tAttempting to get minimum delay...\n");
+        delay_min = sbapi_acquisition_delay_get_delay_minimum_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tMinimum acquisition delay: %ld usec\n", delay_min);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get maximum delay...\n");
+        delay_max = sbapi_acquisition_delay_get_delay_maximum_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tMaximum acquisition delay: %ld usec\n", delay_max);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get delay increment...\n");
+        delay_inc = sbapi_acquisition_delay_get_delay_increment_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tAcquisition delay increment: %ld usec\n", delay_inc);
+        }
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get current acquisition delay...\n");
+        old_delay = sbapi_acquisition_delay_get_delay_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tAcquisition delay: %ld usec\n", old_delay);
+        } else {
+            printf("\t\t\t\tAcquisition delay read may cause an error if never previously written; moving on\n");
+        }
+
+        if(old_delay != delay_max) {
+            new_delay = delay_max;
+        } else if(delay_min < delay_max) {
+            new_delay = delay_max - delay_inc;
+        } else {
+            new_delay = old_delay;
+        }
+
+        printf("\t\t\tAttempting to set acquisition delay to %ld usec...\n", new_delay);
+        sbapi_acquisition_delay_set_delay_microseconds(deviceID, acq_delay_ids[i], &error, new_delay);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get current acquisition delay...\n");
+        temp = sbapi_acquisition_delay_get_delay_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tAcquisition delay: %ld usec\n", temp);
+        }
+        tallyErrors(error, testFailureCount);
+        
+        printf("\t\t\tAttempting to set acquisition delay back to %ld usec...\n", old_delay);
+        sbapi_acquisition_delay_set_delay_microseconds(deviceID, acq_delay_ids[i], &error, old_delay);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to get current acquisition delay...\n");
+        temp = sbapi_acquisition_delay_get_delay_microseconds(deviceID, acq_delay_ids[i], &error);
+        printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        if(0 == error) {
+            printf("\t\t\t\tAcquisition delay: %ld usec\n", temp);
+        }
+        tallyErrors(error, testFailureCount);
+    }
+    free(acq_delay_ids);
+
+    printf("\tFinished testing acquisition delay capabilities\n");
 }
 
