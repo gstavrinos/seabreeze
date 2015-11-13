@@ -69,9 +69,9 @@ namespace seabreeze {
                     const Protocol &protocol, const Bus &bus)
                     throw (FeatureException) = 0;
 
-        protected:
-            unsigned long lastAcquisitionDelayMicroseconds;
-            bool lastAcquisitionDelayValid;
+    protected:
+        unsigned long lastAcquisitionDelayMicroseconds;
+        bool lastAcquisitionDelayValid;
     };
 
 } /* end namespace seabreeze */

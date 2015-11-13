@@ -101,7 +101,7 @@ void AcquisitionDelayFeature_FPGA::setAcquisitionDelayMicroseconds(
         throw FeatureControlException(error);
     }
 }
-  
+
 unsigned long AcquisitionDelayFeature_FPGA::getAcquisitionDelayIncrementMicroseconds(
             const Protocol &protocol, const Bus &bus)
             throw (FeatureException) {

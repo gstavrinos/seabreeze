@@ -1,10 +1,10 @@
 /***************************************************//**
- * @file    DataBufferFeatureAdapter.cpp
+ * @file    AcquisitionDelayFeatureAdapter.cpp
  * @date    November 2015
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
- * access to SeaBreeze DataBufferFeatureInterface instances.
+ * access to SeaBreeze AcquisitionDelayFeatureInterface instances.
  *
  * LICENSE:
  *
