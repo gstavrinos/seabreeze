@@ -75,27 +75,27 @@ string *OBPOpticalBenchProtocol::readOpticalBenchID(const Bus &bus)
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>('\0');
+        result = new vector<byte>('\0');
     }
     
-	retval = new string();
-	vector<byte>::iterator iter;
-	/* This is probably not the most efficient way to copy
-	 * from a vector of bytes into a string, but at least
-	 * this way issues of string encoding should be
-	 * avoided (i.e. the sizeof a string element is not
-	 * assumed here).  Since this function will not be called
-	 * continuously nor is the serial number ever very long,
-	 * this should suffice.
-	 */
-	for(iter = result->begin(); iter != result->end(); iter++) {
-		retval->push_back((char) * iter);
-		if('\0' == *iter) {
-			break;
-		}
-	}
+    retval = new string();
+    vector<byte>::iterator iter;
+    /* This is probably not the most efficient way to copy
+     * from a vector of bytes into a string, but at least
+     * this way issues of string encoding should be
+     * avoided (i.e. the sizeof a string element is not
+     * assumed here).  Since this function will not be called
+     * continuously nor is the serial number ever very long,
+     * this should suffice.
+     */
+    for(iter = result->begin(); iter != result->end(); iter++) {
+        retval->push_back((char) * iter);
+        if('\0' == *iter) {
+            break;
+        }
+    }
 
-	delete result;
+    delete result;
     return retval;
 }
 
@@ -117,7 +117,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchSerialNumber(const Bus &bus)
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>('\0');
+        result = new vector<byte>('\0');
     }
 
     retval = new string();
@@ -160,7 +160,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchCoating(const Bus &bus)
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>('\0');
+        result = new vector<byte>('\0');
     }
 
     retval = new string();
@@ -203,7 +203,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchFilter(const Bus &bus)
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>('\0');
+        result = new vector<byte>('\0');
     }
 
     retval = new string();
@@ -246,7 +246,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchGrating(const Bus &bus)
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>('\0');
+        result = new vector<byte>('\0');
     }
 
     retval = new string();
@@ -280,7 +280,7 @@ unsigned short int OBPOpticalBenchProtocol::readOpticalBenchSlitWidthMicrons(con
     byte *bptr;
         
     OBPGetOpticalBenchSlitWidthMicronsExchange xchange;
-	
+    
     TransferHelper *helper = bus.getHelper(xchange.getHints());
     if(NULL == helper) 
     {
@@ -288,21 +288,23 @@ unsigned short int OBPOpticalBenchProtocol::readOpticalBenchSlitWidthMicrons(con
         throw ProtocolBusMismatchException(error);
     }
     
-	result = xchange.queryDevice(helper);
+    result = xchange.queryDevice(helper);
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>((int)0);
-    	result->resize(sizeof(unsigned short int));
+        result = new vector<byte>((int)0);
+        result->resize(sizeof(unsigned short int));
     }
-	
-	// queryDevice returns a byte stream, turn that into a float... mind our endians.
-	bptr = (byte *)&slitWidth;
-	for(unsigned int j = 0; j < sizeof(unsigned short int); j++) 
-		bptr[j] = (*result)[j];
+    
+    // queryDevice returns a byte stream, turn that into a float... mind our endians.
+    bptr = (byte *)&slitWidth;
+    for(unsigned int j = 0; j < sizeof(unsigned short int); j++) {
+        bptr[j] = (*result)[j];
+    }
 
-		
-	return slitWidth;
+    delete result;
+
+    return slitWidth;
 }
 
 unsigned short int OBPOpticalBenchProtocol::readOpticalBenchFiberDiameterMicrons(const Bus &bus)
@@ -313,7 +315,7 @@ unsigned short int OBPOpticalBenchProtocol::readOpticalBenchFiberDiameterMicrons
     byte *bptr;
         
     OBPGetOpticalBenchFiberDiameterMicronsExchange xchange;
-	
+    
     TransferHelper *helper = bus.getHelper(xchange.getHints());
     if(NULL == helper) 
     {
@@ -321,19 +323,21 @@ unsigned short int OBPOpticalBenchProtocol::readOpticalBenchFiberDiameterMicrons
         throw ProtocolBusMismatchException(error);
     }
     
-	result = xchange.queryDevice(helper);
+    result = xchange.queryDevice(helper);
     // some spectromters return null strings to unsupported values
     //  the STS does this. Put an empty c string in result
     if (result==NULL) {
-    	result = new vector<byte>((int)0);
-    	result->resize(sizeof(unsigned short int));
+        result = new vector<byte>((int)0);
+        result->resize(sizeof(unsigned short int));
     }
-	
-	// queryDevice returns a byte stream, turn that into a float... mind our endians.
-	bptr = (byte *)&fiberDiameter;
-	for(unsigned int j = 0; j < sizeof(unsigned short int); j++) 
-		bptr[j] = (*result)[j];
-
-		
-	return fiberDiameter;
+    
+    // queryDevice returns a byte stream, turn that into a float... mind our endians.
+    bptr = (byte *)&fiberDiameter;
+    for(unsigned int j = 0; j < sizeof(unsigned short int); j++) {
+        bptr[j] = (*result)[j];
+    }
+    delete result;
+        
+    return fiberDiameter;
 }
+
