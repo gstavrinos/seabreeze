@@ -58,7 +58,7 @@ unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToA
     byte *bptr;
         
     OBPGetScansToAverageExchange xchange;
-	
+    
     TransferHelper *helper = bus.getHelper(xchange.getHints());
     if(NULL == helper) 
     {
@@ -73,14 +73,16 @@ unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToA
             "continue.");
         throw ProtocolException(error);
     }
-	
-	// queryDevice returns a byte stream, turn that into a float... mind our endians.
-	bptr = (byte *)&scansToAverage;
-	for(unsigned int j = 0; j < sizeof(unsigned short int); j++) 
-		bptr[j] = (*result)[j];
+    
+    // queryDevice returns a byte stream, turn that into a float... mind our endians.
+    bptr = (byte *)&scansToAverage;
+    for(unsigned int j = 0; j < sizeof(unsigned short int); j++) {
+        bptr[j] = (*result)[j];
+    }
 
-		
-	return scansToAverage;
+    delete result;
+
+    return scansToAverage;
 }
 
 void OBPSpectrumProcessingProtocol::writeSpectrumProcessingScansToAverage(
@@ -111,7 +113,7 @@ unsigned char OBPSpectrumProcessingProtocol::readSpectrumProcessingBoxcarWidth(c
     unsigned char boxcarWidth;
     
     OBPGetBoxcarWidthExchange xchange;
-	
+    
     TransferHelper *helper = bus.getHelper(xchange.getHints());
     if(NULL == helper) 
     {
@@ -126,11 +128,11 @@ unsigned char OBPSpectrumProcessingProtocol::readSpectrumProcessingBoxcarWidth(c
             "continue.");
         throw ProtocolException(error);
     }
-		
-	boxcarWidth=(*result)[0]; 
-	delete result;
-	
-	return boxcarWidth;
+        
+    boxcarWidth=(*result)[0]; 
+    delete result;
+    
+    return boxcarWidth;
 }
 
 
