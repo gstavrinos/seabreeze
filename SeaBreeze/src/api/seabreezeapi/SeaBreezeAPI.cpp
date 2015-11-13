@@ -1465,6 +1465,83 @@ void SeaBreezeAPI::dataBufferSetBufferCapacity(long deviceID, long featureID, in
     adapter->dataBufferSetBufferCapacity(featureID, errorCode, capacity);
 }
 
+int SeaBreezeAPI::getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getNumberOfAcquisitionDelayFeatures();
+}
+
+int SeaBreezeAPI::getAcquisitionDelayFeatures(long deviceID,
+        int *errorCode, long *buffer, unsigned int maxLength) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return adapter->getAcquisitionDelayFeatures(buffer, maxLength);
+}
+
+void SeaBreezeAPI::acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID,
+        int *errorCode, unsigned long delay_usec) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    adapter->acquisitionDelaySetDelayMicroseconds(featureID, errorCode, delay_usec);
+}
+
+unsigned long SeaBreezeAPI::acquisitionDelayGetDelayMicroseconds(long deviceID,
+        long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->acquisitionDelayGetDelayMicroseconds(featureID, errorCode);
+}
+
+unsigned long SeaBreezeAPI::acquisitionDelayGetDelayIncrementMicroseconds(long deviceID,
+        long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->acquisitionDelayGetDelayIncrementMicroseconds(featureID, errorCode);
+}
+
+unsigned long SeaBreezeAPI::acquisitionDelayGetDelayMaximumMicroseconds(long deviceID,
+        long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->acquisitionDelayGetDelayMaximumMicroseconds(featureID, errorCode);
+}
+
+unsigned long SeaBreezeAPI::acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
+        long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->acquisitionDelayGetDelayMinimumMicroseconds(featureID, errorCode);
+}
 
 /**************************************************************************************/
 //  C language wrapper for Device control 
@@ -2428,5 +2505,63 @@ void sbapi_data_buffer_set_buffer_capacity(long deviceID,
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     wrapper->dataBufferSetBufferCapacity(deviceID, featureID, error_code, capacity);
+}
+
+/**************************************************************************************/
+//  C language wrapper for acquisition delay features
+/**************************************************************************************/
+
+int sbapi_get_number_of_acquisition_delay_features(long deviceID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getNumberOfAcquisitionDelayFeatures(deviceID, error_code);
+}
+
+int sbapi_get_acquisition_delay_features(long deviceID, int *error_code,
+            long *features, unsigned int max_features) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->getAcquisitionDelayFeatures(deviceID, error_code,
+            features, max_features);
+}
+
+void sbapi_acquisition_delay_set_delay_microseconds(long deviceID, long featureID,
+            int *error_code, unsigned long delay_usec) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->acquisitionDelaySetDelayMicroseconds(deviceID, featureID,
+            error_code, delay_usec);
+}
+
+unsigned long sbapi_acquisition_delay_get_delay_microseconds(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->acquisitionDelayGetDelayMicroseconds(deviceID, featureID,
+            error_code);
+}
+
+unsigned long sbapi_acquisition_delay_get_delay_increment_microseconds(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->acquisitionDelayGetDelayIncrementMicroseconds(deviceID, featureID,
+            error_code);
+}
+
+unsigned long sbapi_acquisition_delay_get_delay_maximum_microseconds(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->acquisitionDelayGetDelayMaximumMicroseconds(deviceID, featureID,
+            error_code);
+}
+
+unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long deviceID,
+            long featureID, int *error_code) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->acquisitionDelayGetDelayMinimumMicroseconds(deviceID, featureID,
+            error_code);
 }
 

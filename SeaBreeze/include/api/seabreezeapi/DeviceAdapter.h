@@ -52,6 +52,7 @@
 #include "api/seabreezeapi/ThermoElectricCoolerFeatureAdapter.h"
 #include "api/seabreezeapi/LightSourceFeatureAdapter.h"
 #include "api/seabreezeapi/DataBufferFeatureAdapter.h"
+#include "api/seabreezeapi/AcquisitionDelayFeatureAdapter.h"
 #include <vector>
 
 namespace seabreeze {
@@ -231,6 +232,16 @@ namespace seabreeze {
             unsigned long dataBufferGetBufferCapacityMinimum(long featureID, int *errorCode);
             void dataBufferSetBufferCapacity(long featureID, int *errorCode, unsigned long capacity);
 
+            /* Get one or more acquisition delay features */
+            int getNumberOfAcquisitionDelayFeatures();
+            int getAcquisitionDelayFeatures(long *buffer, int maxFeatures);
+            void acquisitionDelaySetDelayMicroseconds(long featureID, int *errorCode,
+                unsigned long delay_usec);
+            unsigned long acquisitionDelayGetDelayMicroseconds(long featureID, int *errorCode);
+            unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long featureID, int *errorCode);
+            unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long featureID, int *errorCode);
+            unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long featureID, int *errorCode);
+
         protected:
             unsigned long instanceID;
             seabreeze::Device *device;
@@ -251,6 +262,7 @@ namespace seabreeze {
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
             std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
+            std::vector<AcquisitionDelayFeatureAdapter *> acquisitionDelayFeatures;
             
             RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
@@ -269,8 +281,10 @@ namespace seabreeze {
             SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
             DataBufferFeatureAdapter *getDataBufferFeatureByID(long featureID);
+            AcquisitionDelayFeatureAdapter *getAcquisitionDelayFeatureByID(long featureID);
         };
     }
 }
 
 #endif
+

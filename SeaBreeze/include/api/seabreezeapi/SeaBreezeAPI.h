@@ -241,6 +241,20 @@ public:
     unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode);
     void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity);
 
+    /* Acquisition delay capabilities */
+    int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode);
+    int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID,
+            int *errorCode, unsigned long delay_usec);
+    unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+
 private:
     SeaBreezeAPI();
     virtual ~SeaBreezeAPI();
@@ -2175,6 +2189,113 @@ extern "C" {
     DLL_DECL void sbapi_data_buffer_set_buffer_capacity(long deviceID,
             long featureID, int *error_code, unsigned long capacity);
 
+    /**
+     * This function returns the total number of acquisition delay feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_data_buffer_features().
+     */
+    DLL_DECL int sbapi_get_number_of_acquisition_delay_features(long deviceID, int *errorCode);
+
+    /**
+     * This function returns IDs for accessing each data buffer
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated buffer to hold returned feature handles
+     * @param max_features (Input) size of preallocated buffer
+     *
+     * @return the number of data buffer feature IDs that were copied.
+     */
+    DLL_DECL int sbapi_get_acquisition_delay_features(long deviceID, int *errorCode,
+            long *buffer, unsigned int maxLength);
+
+    /**
+     * Set the acquisition delay in microseconds.  This may also be referred to as the
+     * trigger delay.  In any event, it is the time between some event (such as a request
+     * for data, or an external trigger pulse) and when data acquisition begins.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @param delay_usec (Input) The new delay to use in microseconds
+     */
+    DLL_DECL void sbapi_acquisition_delay_set_delay_microseconds(long deviceID, long featureID,
+            int *errorCode, unsigned long delay_usec);
+
+    /**
+     * Get the acquisition delay in microseconds.  This may also be referred to as the
+     * trigger delay.  In any event, it is the time between some event (such as a request
+     * for data, or an external trigger pulse) and when data acquisition begins.
+     *
+     * Note that not all devices support reading this value back.  In these cases, the
+     * returned value will be the last value sent to sbapi_acquisition_delay_set_delay_microseconds().
+     * If no value has been set and the value cannot be read back, this function will
+     * indicate an error.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the allowed step size for the acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The acquisition delay step size in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_increment_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the maximum allowed acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The maximum acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_maximum_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the minimum allowed acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The minimum acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long deviceID,
+            long featureID, int *errorCode);
 
 #ifdef __cplusplus
 }
