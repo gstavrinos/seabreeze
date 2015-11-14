@@ -511,7 +511,7 @@ unsigned long SeaBreezeAPI::spectrometerGetMinimumIntegrationTimeMicros(
     return adapter->spectrometerGetMinimumIntegrationTimeMicros(featureID, errorCode);
 }
 
-unsigned long SeaBreezeAPI::spectrometerGetMaximumIntensity(
+double SeaBreezeAPI::spectrometerGetMaximumIntensity(
         long deviceID, long featureID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {
@@ -1821,7 +1821,7 @@ sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID,
             error_code);
 }
 
-long
+double
 sbapi_spectrometer_get_maximum_intensity(long deviceID,
         long spectrometerFeatureID, int *error_code) {
 

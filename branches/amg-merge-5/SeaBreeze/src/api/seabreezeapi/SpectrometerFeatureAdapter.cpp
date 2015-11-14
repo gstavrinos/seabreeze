@@ -255,7 +255,7 @@ long SpectrometerFeatureAdapter::getMinimumIntegrationTimeMicros(int *errorCode)
     return retval;
 }
 
-long SpectrometerFeatureAdapter::getMaximumIntensity(int *errorCode) {
+double SpectrometerFeatureAdapter::getMaximumIntensity(int *errorCode) {
     long retval = -1;
 
     try {

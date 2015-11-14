@@ -442,7 +442,7 @@ unsigned long DeviceAdapter::spectrometerGetMinimumIntegrationTimeMicros(
     return feature->getMinimumIntegrationTimeMicros(errorCode);
 }
 
-unsigned long DeviceAdapter::spectrometerGetMaximumIntensity(
+double DeviceAdapter::spectrometerGetMaximumIntensity(
             long featureID, int *errorCode) {
     SpectrometerFeatureAdapter *feature = getSpectrometerFeatureByID(featureID);
     if(NULL == feature) {
