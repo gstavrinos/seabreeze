@@ -101,6 +101,8 @@ namespace seabreeze {
                     unsigned long integrationTimeMicros);
             unsigned long spectrometerGetMinimumIntegrationTimeMicros(
                     long spectrometerFeatureID, int *errorCode);
+            unsigned long spectrometerGetMaximumIntensity(
+                    long spectrometerFeatureID, int *errorCode);
             int spectrometerGetUnformattedSpectrumLength(
                     long spectrometerFeatureID, int *errorCode);
             int spectrometerGetUnformattedSpectrum(long spectrometerFeatureID,

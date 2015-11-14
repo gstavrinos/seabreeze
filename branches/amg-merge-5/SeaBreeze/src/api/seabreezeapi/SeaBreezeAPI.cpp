@@ -511,6 +511,17 @@ unsigned long SeaBreezeAPI::spectrometerGetMinimumIntegrationTimeMicros(
     return adapter->spectrometerGetMinimumIntegrationTimeMicros(featureID, errorCode);
 }
 
+unsigned long SeaBreezeAPI::spectrometerGetMaximumIntensity(
+        long deviceID, long featureID, int *errorCode) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrometerGetMaximumIntensity(featureID, errorCode);
+}
+
 int SeaBreezeAPI::spectrometerGetUnformattedSpectrum(long deviceID,
         long featureID, int *errorCode, unsigned char *buffer, int bufferLength) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
@@ -1807,6 +1818,16 @@ sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID,
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->spectrometerGetMinimumIntegrationTimeMicros(deviceID, spectrometerFeatureID,
+            error_code);
+}
+
+long
+sbapi_spectrometer_get_maximum_intensity(long deviceID,
+        long spectrometerFeatureID, int *error_code) {
+
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->spectrometerGetMaximumIntensity(deviceID, spectrometerFeatureID,
             error_code);
 }
 

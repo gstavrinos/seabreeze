@@ -133,6 +133,7 @@ public:
     void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
     void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
     unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned long spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
     int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
@@ -744,6 +745,24 @@ extern "C" {
      */
     DLL_DECL long
     sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID,
+            long featureID, int *error_code);
+
+    /**
+     * This function returns the maximum pixel intensity, for the
+     * spectrometer.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a
+     *      spectrometer feature.  Valid IDs can be found with the
+     *      sbapi_get_spectrometer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used
+     *      for storing error codes.
+     * @return Returns maximum pixel intensity time if > 0.
+     *      On error, returns -1 and error_code will be set accordingly.
+     */
+    DLL_DECL long
+    sbapi_spectrometer_get_maximum_intensity(long deviceID,
             long featureID, int *error_code);
 
     /**
