@@ -410,6 +410,7 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
     int error = 0;
     int length;
     long integration_time;
+    double max_intensity;
     int number_of_spectrometers;
     long *spectrometer_ids = 0;
     int i;
@@ -449,6 +450,13 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
         sbapi_spectrometer_set_trigger_mode(deviceID,
                 spectrometer_ids[i], &error, 0);
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+        
+        printf("\t\t\tGetting maximum intensity\n");
+        max_intensity = sbapi_spectrometer_get_maximum_intensity(
+                deviceID, spectrometer_ids[i], &error);
+        printf("\t\t\t\tResult is %1.2f [%s]\n", max_intensity,
+                sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);
         
         printf("\t\t\tGetting minimum integration time\n");
