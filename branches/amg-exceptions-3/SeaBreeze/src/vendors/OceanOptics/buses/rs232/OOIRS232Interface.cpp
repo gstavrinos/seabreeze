@@ -72,7 +72,7 @@ TransferHelper *seabreeze::OOIRS232Interface::getHelper(const vector<ProtocolHin
     return this->rs232Helper;
 }
 
-void seabreeze::OOIRS232Interface::setLocation(const DeviceLocatorInterface &location) {
+void seabreeze::OOIRS232Interface::setLocation(const DeviceLocatorInterface &location) throw (IllegalArgumentException) {
     RS232DeviceLocator *rs232loc = NULL;
     DeviceLocatorInterface *dli;
 
@@ -95,6 +95,7 @@ void seabreeze::OOIRS232Interface::setLocation(const DeviceLocatorInterface &loc
         delete this->rs232;
     }
 
+    /* This may also throw an IllegalArgumentException */
     this->rs232 = new RS232(rs232loc->getDevicePath().c_str(), rs232loc->getBaudRate());
 
     delete dli;
@@ -102,3 +103,4 @@ void seabreeze::OOIRS232Interface::setLocation(const DeviceLocatorInterface &loc
     /* Delegate to the base class to copy the location instance */
     RS232Interface::setLocation(location);
 }
+

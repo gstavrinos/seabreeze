@@ -33,6 +33,7 @@
 #include "common/buses/Bus.h"
 #include "native/rs232/NativeRS232.h"
 #include "native/rs232/RS232.h"
+#include "common/exceptions/IllegalArgumentException.h"
 
 namespace seabreeze {
 
@@ -42,7 +43,7 @@ namespace seabreeze {
         virtual ~RS232Interface();
         virtual RS232 *getRS232Descriptor();
         virtual DeviceLocatorInterface *getLocation();
-        virtual void setLocation(const DeviceLocatorInterface &location);
+        virtual void setLocation(const DeviceLocatorInterface &location) throw (IllegalArgumentException);
         virtual BusFamily getBusFamily() const;
         virtual TransferHelper *getHelper(const std::vector<ProtocolHint *> &hints) const = 0;
         virtual bool open() = 0;

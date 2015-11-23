@@ -445,6 +445,9 @@ void SeaBreezeWrapper::setIntegrationTimeMicrosec(int index, int *errorCode,
         } catch (FeatureException &fe) {
             SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
             return;
+        } catch (IllegalArgumentException &iae) {
+            SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+            return;
         }
     }
 
