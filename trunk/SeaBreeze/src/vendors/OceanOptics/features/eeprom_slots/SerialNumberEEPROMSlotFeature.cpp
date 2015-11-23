@@ -36,6 +36,12 @@ using namespace std;
 using namespace seabreeze;
 using namespace seabreeze::api;
 
+/* Most devices that use the "EEPROM slot" mechanism have fixed 16-byte
+ * blocks.  This sets the length a little smaller to leave room for nulls.
+ * This behavior can be overridden by other classes if necessary.
+ */
+#define DEFAULT_EEPROM_SLOT_LENGTH 15
+
 SerialNumberEEPROMSlotFeature::SerialNumberEEPROMSlotFeature() {
 
 }
@@ -73,21 +79,9 @@ string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol
     return retval;
 }
 
-
-// this feature is not supported by EEPROM spectrometers. 
-//  The Jaz serial number length is 15, but can't be queried. 
-//  
 unsigned char SerialNumberEEPROMSlotFeature::readSerialNumberMaximumLength(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
-        
-        unsigned char bogus=0;
-        
-         string error("Serial Number length is not supported by EEPROM Slot Features.");
-        // FIXME: This function needs to be here to supply serial number length 
-        //     to devices that don't use eeprom slot reads and writes.
-        throw FeatureProtocolNotFoundException(error);
-        
-       	return bogus; 
+    return DEFAULT_EEPROM_SLOT_LENGTH;
 }
 
 FeatureFamily SerialNumberEEPROMSlotFeature::getFeatureFamily() {
