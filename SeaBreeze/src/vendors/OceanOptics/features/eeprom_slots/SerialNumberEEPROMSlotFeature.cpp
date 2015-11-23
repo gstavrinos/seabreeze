@@ -53,9 +53,15 @@ SerialNumberEEPROMSlotFeature::~SerialNumberEEPROMSlotFeature() {
 string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
 
+    vector<byte> *data;
+
     /* Slot zero has the serial number as an ASCII string. */
-    /* Note that this may throw a FeatureException. */
-    vector<byte> *data = readEEPROMSlot(protocol, bus, 0);
+    try {
+        /* Note that this may throw a FeatureException. */
+        data = readEEPROMSlot(protocol, bus, 0);
+    } catch (IllegalArgumentException &iae) {
+        throw FeatureException("Internal error: serial number slot invalid.");
+    }
 
     string *retval = new string();
     vector<byte>::iterator iter;
