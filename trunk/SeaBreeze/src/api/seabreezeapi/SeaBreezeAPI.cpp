@@ -173,9 +173,13 @@ int SeaBreezeAPI::probeDevices() {
                         /* Note that this pre-increments the device ID to
                          * mitigate any race conditions
                          */
-                        DeviceAdapter *da = new DeviceAdapter(newdev, ++__deviceID);
-                        this->probedDevices.push_back(da);
-                        validDevices.push_back(da);
+                        try {
+                            DeviceAdapter *da = new DeviceAdapter(newdev, ++__deviceID);
+                            this->probedDevices.push_back(da);
+                            validDevices.push_back(da);
+                        } catch (IllegalArgumentException &iae) {
+                            continue;
+                        }
                     }
                 }
                 for(vector<DeviceLocatorInterface *>::iterator iter = locations->begin();
@@ -235,8 +239,13 @@ int SeaBreezeAPI::addRS232DeviceLocation(char *deviceTypeName,
     RS232DeviceLocator locator(path, baud);
     dev->setLocation(locator);
 
-    /* Note that this pre-increments the device ID to mitigate any race conditions */
-    this->specifiedDevices.push_back(new DeviceAdapter(dev, ++__deviceID));
+    try {
+        /* Note that this pre-increments the device ID to mitigate any race conditions */
+        this->specifiedDevices.push_back(new DeviceAdapter(dev, ++__deviceID));
+    } catch (IllegalArgumentException &iae) {
+        /* Unable to create the adapter */
+        return 2;
+    }
 
     return 0;
 }

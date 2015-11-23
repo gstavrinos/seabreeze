@@ -35,8 +35,8 @@
 #include "common/buses/Bus.h"
 #include "common/SeaBreeze.h"
 #include "common/exceptions/FeatureException.h"
-#include "common/exceptions/IllegalArgumentException.h"
 #include "common/exceptions/NumberFormatException.h"
+#include "common/exceptions/IllegalArgumentException.h"
 #include <vector>
 
 namespace seabreeze {
@@ -52,10 +52,10 @@ namespace seabreeze {
         EEPROMSlotFeatureBase();
         virtual ~EEPROMSlotFeatureBase();
         virtual std::vector<byte> *readEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot) throw (FeatureException);
+                const Bus &bus, unsigned int slot) throw (FeatureException, IllegalArgumentException);
         virtual int writeEEPROMSlot(const Protocol &protocol,
                 const Bus &bus, unsigned int slot, const std::vector<byte> &data)
-                throw (FeatureException);
+                throw (FeatureException, IllegalArgumentException);
 
         /* This is a utility function that reads out the given EEPROM slot and
          * parses it into a double value.  If for some reason the parse fails,

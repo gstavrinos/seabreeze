@@ -39,6 +39,7 @@
 #include "common/buses/Bus.h"
 #include "native/usb/NativeUSB.h"
 #include "native/usb/USB.h"
+#include "common/exceptions/IllegalArgumentException.h"
 
 namespace seabreeze {
 
@@ -48,7 +49,7 @@ namespace seabreeze {
         virtual ~USBInterface();
         virtual USB *getUSBDescriptor() const;
         virtual DeviceLocatorInterface *getLocation();
-        virtual void setLocation(const DeviceLocatorInterface &location);
+        virtual void setLocation(const DeviceLocatorInterface &location) throw (IllegalArgumentException);
         virtual BusFamily getBusFamily() const;
         virtual bool open() = 0;
         virtual void close() = 0;

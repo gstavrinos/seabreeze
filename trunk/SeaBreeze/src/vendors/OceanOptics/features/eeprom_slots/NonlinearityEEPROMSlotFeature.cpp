@@ -59,8 +59,13 @@ vector<double> *NonlinearityEEPROMSlotFeature::readNonlinearityCoefficients(
     int numberCoeffs;
     vector<double> *retval;
 
-    /* Order of the polynomial is stored in slot 14 */
-    order = (int)readLong(protocol, bus, __NONLINEARITY_ORDER_SLOT);
+    try {
+        /* Order of the polynomial is stored in slot 14 */
+        order = (int)readLong(protocol, bus, __NONLINEARITY_ORDER_SLOT);
+    } catch (NumberFormatException &nfe) {
+        logger.error("Could not parse NLC order");
+        throw FeatureException("Could not get nonlinearity polynomial order.");
+    }
 
     /* Must add one to the order to include the 0th order coefficient */
     numberCoeffs = order + 1;
@@ -72,9 +77,7 @@ vector<double> *NonlinearityEEPROMSlotFeature::readNonlinearityCoefficients(
             /* This may throw a FeatureException or NumberFormatException */
             (*retval)[i] = readDouble(protocol, bus, i + __NONLINEARITY_SLOT_ORDER_ZERO);
         } catch (NumberFormatException &nfe) {
-            /* FIXME: If there were some sort of logging mechanism, this would
-             * be a good thing to warn about.
-             */
+            logger.error("Could not parse NLC coeff");
             for(i = 0; i < numberCoeffs; i++) {
                 /* Set the polynomial such that the correction is negated.
                  */

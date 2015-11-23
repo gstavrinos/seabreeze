@@ -58,32 +58,32 @@ SpectrumProcessingFeatureAdapter::~SpectrumProcessingFeatureAdapter() {
 
 
 unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidth(int *errorCode) {
-	unsigned char returnValue;
-	
-	// no memory allocated, just pass it through
-	try {
-    	returnValue=this->feature->readSpectrumProcessingBoxcarWidth(*this->protocol, *this->bus);
-    	SET_ERROR_CODE(ERROR_SUCCESS);
+    unsigned char returnValue;
+    
+    // no memory allocated, just pass it through
+    try {
+        returnValue=this->feature->readSpectrumProcessingBoxcarWidth(*this->protocol, *this->bus);
+        SET_ERROR_CODE(ERROR_SUCCESS);
     }
     catch (FeatureException &fe) {
-    	returnValue=-1; 
-    	SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        returnValue=-1; 
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return returnValue;
 }
 
 
 unsigned short int SpectrumProcessingFeatureAdapter::readSpectrumProcessingScansToAverage(int *errorCode) {
-	unsigned short int returnValue;
-	
-	// no memory allocated, just pass it through
-	try {
-    	returnValue=this->feature->readSpectrumProcessingScansToAverage(*this->protocol, *this->bus);
-    	SET_ERROR_CODE(ERROR_SUCCESS);
+    unsigned short int returnValue;
+    
+    // no memory allocated, just pass it through
+    try {
+        returnValue=this->feature->readSpectrumProcessingScansToAverage(*this->protocol, *this->bus);
+        SET_ERROR_CODE(ERROR_SUCCESS);
     }
     catch (FeatureException &fe) {
-    	returnValue=-1; // clearly an error vlaue
-    	SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        returnValue=-1; // clearly an error vlaue
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return returnValue;
 }
@@ -95,6 +95,9 @@ void SpectrumProcessingFeatureAdapter::writeSpectrumProcessingScansToAverage(int
         SET_ERROR_CODE(ERROR_SUCCESS);
     } catch (FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        return;
+    } catch (IllegalArgumentException &iae) {
+        SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return;
     }
 
@@ -108,6 +111,9 @@ void SpectrumProcessingFeatureAdapter::writeSpectrumProcessingBoxcarWidth(int *e
         SET_ERROR_CODE(ERROR_SUCCESS);
     } catch (FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        return;
+    } catch (IllegalArgumentException &iae) {
+        SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return;
     }
 
