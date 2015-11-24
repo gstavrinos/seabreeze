@@ -5,6 +5,7 @@
     <ClInclude Include="..\..\..\..\include\api\DeviceFactory.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\DllDecl.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\SeaBreezeWrapper.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\AcquisitionDelayFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\ContinuousStrobeFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\DataBufferFeatureAdapter.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\DeviceAdapter.h"><Filter>Headers</Filter></ClInclude>
@@ -128,6 +129,10 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\USB2000Plus.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\USB4000.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Ventana.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature_FPGA.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\STSAcquisitionDelayFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature_FPGA.h"><Filter>Headers</Filter></ClInclude>
@@ -200,6 +205,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\AcquisitionDelayProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\DataBufferProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
@@ -263,6 +269,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h"><Filter>Headers</Filter></ClInclude>
@@ -275,6 +282,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPTriggerModeExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\hints\OBPControlHint.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\hints\OBPSpectrumHint.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPAcquisitionDelayProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPContinuousStrobeProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPDataBufferProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.h"><Filter>Headers</Filter></ClInclude>
@@ -337,6 +345,7 @@
     <!-- SOURCES START HERE -->
     <ClCompile Include="..\..\..\..\src\api\DeviceFactory.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\SeaBreezeWrapper.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\AcquisitionDelayFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\ContinuousStrobeFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\DataBufferFeatureAdapter.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\DeviceAdapter.cpp"><Filter>Sources</Filter></ClCompile>
@@ -451,6 +460,9 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\USB2000Plus.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\USB4000.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Ventana.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature_FPGA.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\STSAcquisitionDelayFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature_FPGA.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\DataBufferFeatureBase.cpp"><Filter>Sources</Filter></ClCompile>
@@ -504,6 +516,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\AcquisitionDelayProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\DataBufferProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
@@ -566,6 +579,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.cpp"><Filter>Sources</Filter></ClCompile>
@@ -578,6 +592,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPTriggerModeExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\hints\OBPControlHint.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\hints\OBPSpectrumHint.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPAcquisitionDelayProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPContinuousStrobeProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPDataBufferProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.cpp"><Filter>Sources</Filter></ClCompile>

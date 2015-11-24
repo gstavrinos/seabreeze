@@ -186,6 +186,7 @@
 			<File RelativePath="..\..\..\..\include\api\DeviceFactory.h"></File>
 			<File RelativePath="..\..\..\..\include\api\DllDecl.h"></File>
 			<File RelativePath="..\..\..\..\include\api\SeaBreezeWrapper.h"></File>
+			<File RelativePath="..\..\..\..\include\api\seabreezeapi\AcquisitionDelayFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\ContinuousStrobeFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\DataBufferFeatureAdapter.h"></File>
 			<File RelativePath="..\..\..\..\include\api\seabreezeapi\DeviceAdapter.h"></File>
@@ -309,6 +310,10 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\USB2000Plus.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\USB4000.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Ventana.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeatureInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature_FPGA.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\acquisition_delay\STSAcquisitionDelayFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature_FPGA.h"></File>
@@ -381,6 +386,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeatureInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\AcquisitionDelayProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\DataBufferProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.h"></File>
@@ -444,6 +450,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h"></File>
@@ -456,6 +463,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPTriggerModeExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\hints\OBPControlHint.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\hints\OBPSpectrumHint.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPAcquisitionDelayProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPContinuousStrobeProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPDataBufferProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.h"></File>
@@ -517,6 +525,7 @@
             <!-- SOURCES START HERE -->
 			<File RelativePath="..\..\..\..\src\api\DeviceFactory.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\SeaBreezeWrapper.cpp"></File>
+			<File RelativePath="..\..\..\..\src\api\seabreezeapi\AcquisitionDelayFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\ContinuousStrobeFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\DataBufferFeatureAdapter.cpp"></File>
 			<File RelativePath="..\..\..\..\src\api\seabreezeapi\DeviceAdapter.cpp"></File>
@@ -631,6 +640,9 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\USB2000Plus.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\USB4000.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Ventana.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\AcquisitionDelayFeature_FPGA.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\acquisition_delay\STSAcquisitionDelayFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\continuous_strobe\ContinuousStrobeFeature_FPGA.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\DataBufferFeatureBase.cpp"></File>
@@ -684,6 +696,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\ThermoElectricQEFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\thermoelectric\VentanaThermoElectricFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\wavecalcoeffseeprom\WaveCalCoeffsEEPromFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\AcquisitionDelayProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ContinuousStrobeProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\DataBufferProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EEPROMProtocolInterface.cpp"></File>
@@ -746,6 +759,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.cpp"></File>
@@ -758,6 +772,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPTriggerModeExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\hints\OBPControlHint.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\hints\OBPSpectrumHint.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPAcquisitionDelayProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPContinuousStrobeProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPDataBufferProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.cpp"></File>
