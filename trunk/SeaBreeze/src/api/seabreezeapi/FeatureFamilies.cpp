@@ -54,6 +54,7 @@
 #define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING   17
 #define FEATURE_FAMILY_ID_DATA_BUFFER           18
 #define FEATURE_FAMILY_ID_ACQUISITION_DELAY     19
+#define FEATURE_FAMILY_ID_PIXEL_BINNING         18
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -226,6 +227,13 @@ seabreeze::api::SpectrumProcessingFeatureFamily::SpectrumProcessingFeatureFamily
 
 seabreeze::api::SpectrumProcessingFeatureFamily::~SpectrumProcessingFeatureFamily() {
 
+}
+
+seabreeze::api::PixelBinningFeatureFamily::PixelBinningFeatureFamily()
+    : FeatureFamily("PixelBinning", FEATURE_FAMILY_ID_PIXEL_BINNING) {
+}
+
+seabreeze::api::PixelBinningFeatureFamily::~PixelBinningFeatureFamily() {
 }
 
 seabreeze::api::DataBufferFeatureFamily::DataBufferFeatureFamily()

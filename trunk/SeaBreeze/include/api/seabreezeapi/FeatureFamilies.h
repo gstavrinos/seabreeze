@@ -159,6 +159,12 @@ namespace seabreeze {
             virtual ~AcquisitionDelayFeatureFamily();
         };
 
+        class PixelBinningFeatureFamily : public FeatureFamily {
+        public:
+            PixelBinningFeatureFamily();
+            virtual ~PixelBinningFeatureFamily();
+        };
+
         class FeatureFamilies {
         public:
             const UndefinedFeatureFamily UNDEFINED;
@@ -181,6 +187,7 @@ namespace seabreeze {
             const RawUSBBusAccessFeatureFamily RAW_USB_BUS_ACCESS;
             const DataBufferFeatureFamily DATA_BUFFER;
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
+            const PixelBinningFeatureFamily PIXEL_BINNING;
 
             FeatureFamilies();
             ~FeatureFamilies();

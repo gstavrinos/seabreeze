@@ -1,10 +1,10 @@
 /***************************************************//**
- * @file    AcquisitionDelayFeatureAdapter.h
- * @date    November 2015
+ * @file    PixelBinningFeatureAdapter.h
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows access to SeaBreeze
- * DataBufferFeatureInterface instances.
+ * TECFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -30,34 +30,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H
-#define SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H
+#ifndef SEABREEZE_PIXEL_BINNING_FEATURE_ADAPTER_H
+#define SEABREEZE_PIXEL_BINNING_FEATURE_ADAPTER_H
 
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
+#include "vendors/OceanOptics/features/pixel_binning/PixelBinningFeatureInterface.h"
 
 namespace seabreeze {
     namespace api {
 
-        class AcquisitionDelayFeatureAdapter
-                : public FeatureAdapterTemplate<AcquisitionDelayFeatureInterface> {
+        class PixelBinningFeatureAdapter
+                : public FeatureAdapterTemplate<PixelBinningFeatureInterface> {
         public:
-            AcquisitionDelayFeatureAdapter(AcquisitionDelayFeatureInterface *intf,
-                const FeatureFamily &f, Protocol *p, Bus *b,
-                unsigned short instanceIndex);
+            PixelBinningFeatureAdapter(PixelBinningFeatureInterface *intf,
+                    const FeatureFamily &f,
+                    Protocol *p, Bus *b, unsigned short instanceIndex);
+            virtual ~PixelBinningFeatureAdapter();
 
-            virtual ~AcquisitionDelayFeatureAdapter();
+            /* Thermoelectric cooler functions */
+            unsigned char getPixelBinningFactor(int *errorCode);
 
-            /* Acquisition delay functions */
-            unsigned long getAcquisitionDelayIncrementMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMaximumMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMinimumMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMicroseconds(int *errorCode);
-            void setAcquisitionDelayMicroseconds(int *errorCode, const unsigned long delay_usec);
+            void setPixelBinningFactor(int *errorCode,
+                    const unsigned char binningFactor);
+
+            unsigned char getDefaultPixelBinningFactor(int *errorCode);
+
+            void setDefaultPixelBinningFactor(int *errorCode,
+                    const unsigned char binningFactor);
+
+            void setDefaultPixelBinningFactor(int *errorCode);
+
+            unsigned char getMaxPixelBinningFactor(int *errorCode);
         };
+    }
+}
 
-    } /* end namespace api */
-} /* end namespace seabreeze */
-
-#endif /* SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H */
-
+#endif
