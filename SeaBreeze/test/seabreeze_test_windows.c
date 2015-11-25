@@ -45,6 +45,7 @@ void read_eeprom_test(int index);
 void strobe_enable_test(int index);
 void trigger_mode_test(int index);
 void tec_test(int index);
+void data_buffer_test(int index);
 
 const char* get_error_string(int error) {
     static char buffer[32];
@@ -93,6 +94,7 @@ int run_all_tests() {
         get_wavelengths_test(i);
         get_spectrum_test(i);
         get_raw_spectrum_test(i);
+        data_buffer_test(i);
         speed_test(i);
     }
 
@@ -203,6 +205,110 @@ void get_spectrum_test(int index) {
         printf("Pixel value 20 is %1.2f\n", spectrum[20]);
 
         free(spectrum);
+    }
+}
+
+void data_buffer_test(int index) {
+    int error = 0;
+    unsigned long capacity = 0;
+    unsigned long oldCapacity = 0;
+    unsigned long maxCapacity = 0;
+    unsigned long minCapacity = 0;
+    unsigned long targetCapacity = 0;
+    unsigned long count = 0;
+    unsigned long newCount = 0;
+
+    printf("\n\nTesting data buffering capabilities.\n");
+
+    printf("\nAttempting to get data buffer minimum capacity\n");
+    minCapacity = seabreeze_get_buffer_capacity_minimum(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    if(0 != error) {
+        printf("Device does not appear to support data buffer feature.\n");
+        return;
+    }
+    printf("Minimum capacity: %ld\n", minCapacity);
+    
+    printf("\nAttempting to get data buffer maximum capacity\n");
+    maxCapacity = seabreeze_get_buffer_capacity_maximum(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Maximum capacity: %ld\n", maxCapacity);
+    
+    printf("\nAttempting to get current data buffer capacity\n");
+    oldCapacity = seabreeze_get_buffer_capacity(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Current capacity: %ld\n", oldCapacity);
+
+    if(oldCapacity != maxCapacity) {
+        targetCapacity = maxCapacity;
+    } else if(maxCapacity > minCapacity) {
+        /* The current capacity setting is the maximum, so try to back off by one.
+         * This test confirms that there is at least some room between min and max.
+         */
+        targetCapacity = maxCapacity - 1;
+    } else {
+        /* Not possible to change the capacity to anything new */
+        targetCapacity = oldCapacity;
+    }
+
+    if(targetCapacity != oldCapacity) {
+        printf("\nAttempting to set data buffer capacity to %ld\n", targetCapacity);
+        seabreeze_set_buffer_capacity(index, &error, targetCapacity);
+        printf("...Result is [%s]\n", get_error_string(error));
+
+        printf("\nAttempting to get current data buffer capacity\n");
+        capacity = seabreeze_get_buffer_capacity(index, &error);
+        printf("...Result is [%s]\n", get_error_string(error));
+        printf("Current capacity: %ld\n", capacity);
+
+        if(capacity != targetCapacity) {
+            printf("ERROR: did not get back the expected value.\n");
+        }
+    }
+    
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    count = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", count);
+
+    printf("\nWaiting for more data to be buffered...\n");
+    Sleep(2000);
+
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    count = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", count);
+
+    printf("\nAttempting to clear the buffer:\n");
+    seabreeze_clear_buffer(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    
+    printf("\nAttempting to get the number of items now in the buffer:\n");
+    newCount = seabreeze_get_buffer_element_count(index, &error);
+    printf("...Result is [%s]\n", get_error_string(error));
+    printf("Number of items: %ld\n", newCount);
+
+    if(newCount >= count && newCount > 1) {
+            /* It is expected that the count would drop to zero, but there is a chance that
+             * another scan could be stored between the clear and the query.  This should
+             * allow at most one scan in that interval without throwing the error.
+             */
+            printf("ERROR: count did not seem to drop when the buffer was cleared.\n");
+    }
+
+    if(targetCapacity != oldCapacity) {
+        printf("\nAttempting to set data buffer capacity back to %ld\n", oldCapacity);
+        seabreeze_set_buffer_capacity(index, &error, oldCapacity);
+        printf("...Result is [%s]\n", get_error_string(error));
+    
+        printf("\nAttempting to get current data buffer capacity\n");
+        capacity = seabreeze_get_buffer_capacity(index, &error);
+        printf("...Result is [%s]\n", get_error_string(error));
+        printf("Current capacity: %ld\n", capacity);
+
+        if(capacity != oldCapacity) {
+            printf("ERROR: did not get back the expected value.\n");
+        }
     }
 }
 

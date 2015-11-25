@@ -45,6 +45,7 @@
 #include "common/buses/rs232/RS232DeviceLocator.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
+#include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureInterface.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeatureInterface.h"
 #include "vendors/OceanOptics/features/shutter/ShutterFeatureInterface.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeatureInterface.h"
@@ -53,6 +54,7 @@
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeatureInterface.h"
 #include "vendors/OceanOptics/features/thermoelectric/ThermoElectricFeatureInterface.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeatureInterface.h"
+#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 
 using namespace seabreeze;
@@ -747,6 +749,150 @@ int SeaBreezeWrapper::getSerialNumber(int index, int *errorCode, char *buffer,
     return i;
 }
 
+void SeaBreezeWrapper::clearBuffer(int index, int *errorCode) {
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            buffer->clearBuffer(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+}
+
+unsigned long SeaBreezeWrapper::getBufferElementCount(int index, int *errorCode) {
+    unsigned long retval;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            retval = buffer->getNumberOfElements(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return 0;
+        }
+
+    }
+    return retval;
+}
+
+unsigned long SeaBreezeWrapper::getBufferCapacity(int index, int *errorCode) {
+    unsigned long retval;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            retval = buffer->getBufferCapacity(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return 0;
+        }
+
+    }
+    return retval;
+}
+
+unsigned long SeaBreezeWrapper::getBufferCapacityMaximum(int index, int *errorCode) {
+    unsigned long retval;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            retval = buffer->getBufferCapacityMaximum(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return 0;
+        }
+
+    }
+    return retval;
+}
+
+unsigned long SeaBreezeWrapper::getBufferCapacityMinimum(int index, int *errorCode) {
+    unsigned long retval;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            retval = buffer->getBufferCapacityMinimum(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return 0;
+        }
+
+    }
+    return retval;
+}
+
+void SeaBreezeWrapper::setBufferCapacity(int index, int *errorCode, unsigned long capacity) {
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            buffer->setBufferCapacity(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0, capacity);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+}
+
 int SeaBreezeWrapper::readEEPROMSlot(int index, int *errorCode,
         int slot_number, unsigned char *buffer, int buffer_length) {
 
@@ -1351,6 +1497,32 @@ void SeaBreezeWrapper::setContinuousStrobePeriodMicrosec(int index, int *errorCo
     }
 }
 
+void SeaBreezeWrapper::setAcquisitionDelayMicrosec(int index, int *errorCode,
+        unsigned long delay_usec) {
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+    AcquisitionDelayFeatureInterface *feature =
+        __seabreeze_getFeature<AcquisitionDelayFeatureInterface>(this->devices[index]);
+    if(NULL != feature) {
+        try {
+            feature->setAcquisitionDelayMicroseconds(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]),
+                    delay_usec);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return;
+        }
+    }
+}
+
 int SeaBreezeWrapper::readUSB(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) {
     int bytesCopied = 0;
     Device * dev = this->devices[index];
@@ -1684,6 +1856,42 @@ seabreeze_get_electric_dark_pixel_indices(int index, int *error_code,
 }
 
 void
+seabreeze_clear_buffer(int index, int *error_code) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    wrapper->clearBuffer(index, error_code);
+}
+
+unsigned long
+seabreeze_get_buffer_element_count(int index, int *error_code) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->getBufferElementCount(index, error_code);
+}
+
+unsigned long
+seabreeze_get_buffer_capacity(int index, int *error_code) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->getBufferCapacity(index, error_code);
+}
+
+unsigned long
+seabreeze_get_buffer_capacity_maximum(int index, int *error_code) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->getBufferCapacityMaximum(index, error_code);
+}
+
+unsigned long
+seabreeze_get_buffer_capacity_minimum(int index, int *error_code) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->getBufferCapacityMinimum(index, error_code);
+}
+
+void
+seabreeze_set_buffer_capacity(int index, int *error_code, unsigned long capacity) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    wrapper->setBufferCapacity(index, error_code, capacity);
+}
+
+void
 seabreeze_shutdown() {
     SeaBreezeWrapper::shutdown();
 }
@@ -1704,6 +1912,12 @@ void
 seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec) {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->setContinuousStrobePeriodMicrosec(index, errorCode, strobe_id, period_usec);
+}
+
+void
+seabreeze_set_acquisition_delay_microseconds(int index, int *errorCode, unsigned long delay_usec) {
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->setAcquisitionDelayMicrosec(index, errorCode, delay_usec);
 }
 
 int

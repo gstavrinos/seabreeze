@@ -43,6 +43,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPShutterProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPContinuousStrobeProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPPixelBinningProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPAcquisitionDelayProtocol.h"
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/STSUSB.h"
 #include "vendors/OceanOptics/features/spectrometer/STSSpectrometerFeature.h"
@@ -56,6 +57,7 @@
 #include "vendors/OceanOptics/features/shutter/ShutterFeature.h"
 #include "vendors/OceanOptics/features/continuous_strobe/ContinuousStrobeFeature.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
+#include "vendors/OceanOptics/features/acquisition_delay/STSAcquisitionDelayFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/pixel_binning/STSPixelBinningFeature.h"
 
@@ -151,6 +153,11 @@ STS::STS() {
     vector<ProtocolHelper *> contStrobeHelpers;
     contStrobeHelpers.push_back(new OBPContinuousStrobeProtocol());
     this->features.push_back(new ContinuousStrobeFeature(contStrobeHelpers));
+
+    /* Add the acquisition delay (trigger delay) feature */
+    vector<ProtocolHelper *> acqDelayHelpers;
+    acqDelayHelpers.push_back(new OBPAcquisitionDelayProtocol());
+    this->features.push_back(new STSAcquisitionDelayFeature(acqDelayHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }
