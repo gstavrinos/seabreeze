@@ -133,6 +133,7 @@ public:
     void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
     void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
     unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
     double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
@@ -141,6 +142,16 @@ public:
     int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
     int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
+
+    /* Pixel binning capabilities */
+    int getNumberOfPixelBinningFeatures(long id, int *errorCode);
+    int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void binningSetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+    unsigned char binningGetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
         
     /* TEC capabilities */
     int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
@@ -914,6 +925,129 @@ extern "C" {
     DLL_DECL int
     sbapi_spectrometer_get_electric_dark_pixel_indices(long deviceID,
             long featureID, int *error_code, int *indices, int length);
+
+    /**
+     * This function returns the total number of pixel binning instances available
+     * in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the number of pixel binning features that will be returned by a call
+     *      to sbapi_get_pixel_binning_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_pixel_binning_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each pixel binning feature for this
+     * device.  The IDs are only valid when used with the deviceID used to
+     * obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     * @param features (Output) a pre-populated array to hold the returned
+     *      feature handles
+     * @param max_features (Input) size of the pre-allocated array
+     *
+     * @return the number of pixel binning feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_pixel_binning_features(long deviceID, int *error_code, long *features,
+            int max_features);
+
+    /**
+     * This function sets the pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     *  @param factor (Input) The desired pixel binning factor.
+     */
+    DLL_DECL void
+    sbapi_binning_set_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code, unsigned char factor);
+
+    /**
+     * This function gets the pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_pixel_binning_factor(long deviceID, long featureID, int *error_code);
+
+    /**
+     * This function sets the default pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *  @param factor (Input) The desired default pixel binning factor.
+     */
+    DLL_DECL void
+    sbapi_binning_set_default_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code, unsigned char factor);
+
+    /**
+     * This function resets the default pixel binning factor on the device back to the factory default.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     */
+    DLL_DECL void
+    sbapi_binning_reset_default_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code);
+
+    /**
+     * This function gets the default pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the default pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_default_pixel_binning_factor(long deviceID, long featureID, int *error_code);
+
+    /**
+     * This function gets the maximum pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the maximum pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_max_pixel_binning_factor(long deviceID, long featureID, int *error_code);
 
     /**
      * This function returns the total number of shutter instances available

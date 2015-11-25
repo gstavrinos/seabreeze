@@ -477,6 +477,54 @@ long SeaBreezeWrapper::getMinIntegrationTimeMicrosec(int index,
     return retval;
 }
 
+long SeaBreezeWrapper::getMaxIntegrationTimeMicrosec(int index,
+        int *errorCode) {
+    long retval = -1;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return -1;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    OOISpectrometerFeatureInterface *spec =
+            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+    if(NULL != spec) {
+        try {
+            retval = spec->getIntegrationTimeMaximum();
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return -1;
+        }
+    }
+    return retval;
+}
+
+int SeaBreezeWrapper::getMaximumIntensity(int index,
+        int *errorCode) {
+    long retval = -1;
+
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return -1;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    OOISpectrometerFeatureInterface *spec =
+            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+    if(NULL != spec) {
+        try {
+            retval = spec->getMaximumIntensity();
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return -1;
+        }
+    }
+    return retval;
+}
+
 void SeaBreezeWrapper::setShutterOpen(int index, int *errorCode,
         unsigned char opened) {
 

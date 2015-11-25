@@ -51,6 +51,7 @@
 #include "api/seabreezeapi/ContinuousStrobeFeatureAdapter.h"
 #include "api/seabreezeapi/ThermoElectricCoolerFeatureAdapter.h"
 #include "api/seabreezeapi/LightSourceFeatureAdapter.h"
+#include "api/seabreezeapi/PixelBinningFeatureAdapter.h"
 #include "api/seabreezeapi/DataBufferFeatureAdapter.h"
 #include "api/seabreezeapi/AcquisitionDelayFeatureAdapter.h"
 #include <vector>
@@ -101,6 +102,8 @@ namespace seabreeze {
                     unsigned long integrationTimeMicros);
             unsigned long spectrometerGetMinimumIntegrationTimeMicros(
                     long spectrometerFeatureID, int *errorCode);
+            unsigned long spectrometerGetMaximumIntegrationTimeMicros(
+                    long spectrometerFeatureID, int *errorCode);
             double spectrometerGetMaximumIntensity(
                     long spectrometerFeatureID, int *errorCode);
             int spectrometerGetUnformattedSpectrumLength(
@@ -117,6 +120,17 @@ namespace seabreeze {
                     long spectrometerFeatureID, int *errorCode);
             int spectrometerGetElectricDarkPixelIndices(
                     long spectrometerFeatureID, int *errorCode, int *indices, int length);
+
+
+            /* Get one or more pixel binning features */
+            int getNumberOfPixelBinningFeatures();
+            int getPixelBinningFeatures(long *buffer, int maxFeatures);
+            void binningSetPixelBinningFactor(long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+            unsigned char binningGetPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
+            void binningSetDefaultPixelBinningFactor(long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
+            void binningSetDefaultPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
+            unsigned char binningGetDefaultPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
+            unsigned char binningGetMaxPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
             
             /* Get one or more TEC features */
             int getNumberOfThermoElectricFeatures();
@@ -263,6 +277,7 @@ namespace seabreeze {
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
             std::vector<StrayLightCoeffsFeatureAdapter *> strayLightFeatures;
+            std::vector<PixelBinningFeatureAdapter *> pixelBinningFeatures;
             std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
             std::vector<AcquisitionDelayFeatureAdapter *> acquisitionDelayFeatures;
             
@@ -282,6 +297,7 @@ namespace seabreeze {
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
             SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);
             StrayLightCoeffsFeatureAdapter *getStrayLightCoeffsFeatureByID(long featureID);
+            PixelBinningFeatureAdapter *getPixelBinningFeatureByID(long featureID);
             DataBufferFeatureAdapter *getDataBufferFeatureByID(long featureID);
             AcquisitionDelayFeatureAdapter *getAcquisitionDelayFeatureByID(long featureID);
         };

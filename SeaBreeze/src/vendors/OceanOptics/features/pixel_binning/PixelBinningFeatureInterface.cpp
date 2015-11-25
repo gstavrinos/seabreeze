@@ -1,12 +1,7 @@
 /***************************************************//**
- * @file    AcquisitionDelayProtocolInterface.h
- * @date    November 2015
+ * @file    PixelBinningFeatureInterface.cpp
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
- *
- * This is a generic interface into thermoelectric functionality
- * at the protocol level, agnostic to any particular protocol.
- * Each Protocol offering this functionality should implement
- * this interface.
  *
  * LICENSE:
  *
@@ -32,33 +27,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef ACQUISITION_DELAY_PROTOCOL_INTERFACE_H
-#define ACQUISITION_DELAY_PROTOCOL_INTERFACE_H
+#include "vendors/OceanOptics/features/pixel_binning/PixelBinningFeatureInterface.h"
+using namespace seabreeze;
 
-#include "common/buses/Bus.h"
-#include "common/exceptions/ProtocolException.h"
-#include "common/protocols/ProtocolHelper.h"
-
-namespace seabreeze {
-
-    class AcquisitionDelayProtocolInterface : public ProtocolHelper {
-    public:
-        AcquisitionDelayProtocolInterface(Protocol *protocol);
-        virtual ~AcquisitionDelayProtocolInterface();
-
-        virtual void setAcquisitionDelayMicroseconds(const Bus &bus,
-            const unsigned long delayMicros) throw (ProtocolException) = 0;
-
-        /* At this point, the supported devices don't have protocol
-         * messages to get the current delay or the range of valid
-         * settings.  Later, such functions could be added here if
-         * they are needed, but for now the protocol interface is
-         * being kept to a minimum.
-         */
-
-    };
-
-} /* end namespace seabreeze */
-
-#endif /* ACQUISITION_DELAY_PROTOCOL_INTERFACE_H */
-
+PixelBinningFeatureInterface::~PixelBinningFeatureInterface() {
+}

@@ -42,6 +42,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPShutterProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPContinuousStrobeProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPPixelBinningProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPAcquisitionDelayProtocol.h"
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/STSUSB.h"
@@ -58,6 +59,7 @@
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
 #include "vendors/OceanOptics/features/acquisition_delay/STSAcquisitionDelayFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
+#include "vendors/OceanOptics/features/pixel_binning/STSPixelBinningFeature.h"
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
@@ -83,7 +85,15 @@ STS::STS() {
     this->protocols.push_back(new OceanBinaryProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new STSSpectrometerFeature());
+    STSSpectrometerFeature *spectrometerFeature = new STSSpectrometerFeature();
+    this->features.push_back(spectrometerFeature);
+
+    /* Add pixel binning feature */
+    vector<ProtocolHelper *> binningHelpers;
+    binningHelpers.push_back(new OBPPixelBinningProtocol());
+    STSPixelBinningFeature *binningFeature = new STSPixelBinningFeature(binningHelpers, spectrometerFeature);
+    //binningFeature->setSpectrometerFeature(spectrometerFeature);
+    features.push_back(binningFeature);
 
     /* Add serial number feature */
     vector<ProtocolHelper *> serialNumberHelpers;

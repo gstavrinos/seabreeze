@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    AcquisitionDelayProtocolInterface.h
- * @date    November 2015
+ * @file    PixelBinningProtocolInterface.h
+ * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
  * This is a generic interface into thermoelectric functionality
@@ -32,8 +32,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef ACQUISITION_DELAY_PROTOCOL_INTERFACE_H
-#define ACQUISITION_DELAY_PROTOCOL_INTERFACE_H
+#ifndef PIXELBINNINGPROTOCOLINTERFACE_H
+#define PIXELBINNINGPROTOCOLINTERFACE_H
 
 #include "common/buses/Bus.h"
 #include "common/exceptions/ProtocolException.h"
@@ -41,24 +41,47 @@
 
 namespace seabreeze {
 
-    class AcquisitionDelayProtocolInterface : public ProtocolHelper {
+    class PixelBinningProtocolInterface : public ProtocolHelper {
     public:
-        AcquisitionDelayProtocolInterface(Protocol *protocol);
-        virtual ~AcquisitionDelayProtocolInterface();
+        PixelBinningProtocolInterface(Protocol *protocol);
+        virtual ~PixelBinningProtocolInterface();
 
-        virtual void setAcquisitionDelayMicroseconds(const Bus &bus,
-            const unsigned long delayMicros) throw (ProtocolException) = 0;
-
-        /* At this point, the supported devices don't have protocol
-         * messages to get the current delay or the range of valid
-         * settings.  Later, such functions could be added here if
-         * they are needed, but for now the protocol interface is
-         * being kept to a minimum.
+        /**
+         * Get the pixel binning factor of the device.
          */
+        virtual unsigned char readPixelBinningFactor(const Bus &bus)
+            throw (ProtocolException) = 0;
 
+        /**
+         * Set the pixel binning factor on the device.
+         */
+        virtual void writePixelBinningFactor(const Bus &bus, const unsigned char binningFactor)
+            throw (ProtocolException) = 0;
+
+        /**
+         * Get the default pixel binning factor of the device.
+         */
+        virtual unsigned char readDefaultPixelBinningFactor(const Bus &bus)
+            throw (ProtocolException) = 0;
+
+        /**
+         * Set the default pixel binning factor on the device.
+         */
+        virtual void writeDefaultPixelBinningFactor(const Bus &bus, const unsigned char binningFactor)
+            throw (ProtocolException) = 0;
+
+        /**
+         * Reset the default pixel binning factor on the device. This will reinstate the factory default of 0.
+         */
+        virtual void writeDefaultPixelBinningFactor(const Bus &bus)
+            throw (ProtocolException) = 0;
+
+        /**
+         * Get the maximum pixel binning factor of the device.
+         */
+        virtual unsigned char readMaxPixelBinningFactor(const Bus &bus)
+            throw (ProtocolException) = 0;
     };
+}
 
-} /* end namespace seabreeze */
-
-#endif /* ACQUISITION_DELAY_PROTOCOL_INTERFACE_H */
-
+#endif /* PIXELBINNINGPROTOCOLINTERFACE_H */

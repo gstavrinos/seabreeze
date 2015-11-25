@@ -21,6 +21,7 @@ SUBDIRS = \
     spectrum_processing \
     stray_light         \
     thermoelectric      \
-    wavecalcoeffseeprom
+    wavecalcoeffseeprom \
+    pixel_binning
 
 include $(SEABREEZE)/common.mk
