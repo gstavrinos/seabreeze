@@ -71,17 +71,17 @@ namespace CSharpDemo
             // initialize logger
             logger.setTextBox(textBoxEventLog);
 
-            // assume initialization will fail
-            btnScan.Enabled = false;
-            checkBoxEnableIrradiance.Enabled = false;
-
-            initializeSpectrometer();
+            initialize();
             updateSpectrometerFromGUI();
             updateGUIFromSpectrometer();
         }
 
-        private void initializeSpectrometer()
+        private void initialize()
         {
+            // assume initialization will fail
+            btnScan.Enabled = false;
+            checkBoxEnableIrradiance.Enabled = false;
+
             if (spectrometer != null && !backgroundWorkerAcquisition.IsBusy)
             {
                 spectrometer.close();
@@ -125,18 +125,25 @@ namespace CSharpDemo
                         logger.display("Irradiance Collection Area = {0} cm^2", collectionArea);
                     }
 
-                    logger.display("Electrically dark pixel indices:");
                     edcIndices = spectrometer.getEDCIndices();
-                    for (int i = 0; i < edcIndices.Length; i++)
-                        logger.display("  [{0}] = {1}", i, edcIndices[i]);
-
-                    logger.display("Non-Linearity Correction Coefficients:");
-                    nlcCoeffs = spectrometer.getNLCCoeffs();
-                    if (nlcCoeffs != null)
+                    if (edcIndices != null && edcIndices.Length > 0)
                     {
+                        logger.display("Electrically dark pixel indices:");
+                        for (int i = 0; i < edcIndices.Length; i++)
+                            logger.display("  [{0}] = {1}", i, edcIndices[i]);
+                    }
+                    else
+                        checkBoxEnableEDC.Enabled = false;
+
+                    nlcCoeffs = spectrometer.getNLCCoeffs();
+                    if (nlcCoeffs != null && nlcCoeffs.Length > 0)
+                    {
+                        logger.display("Non-Linearity Correction Coefficients:");
                         for (int i = 0; i < nlcCoeffs.Length; i++)
                             logger.display("  [{0}] = {1}", i, nlcCoeffs[i]);
                     }
+                    else
+                        checkBoxEnableNLC.Enabled = false;
 
                     // buttonSave.Enabled = true;
                     btnScan.Enabled = true;
@@ -162,178 +169,62 @@ namespace CSharpDemo
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Methods
+        // Callbacks
         ////////////////////////////////////////////////////////////////////////
 
-        private void updateGUIFromSpectrometer()
+        private void buttonSaveDark_Click(object sender, EventArgs e)
         {
-            labelSerialNumber.Text = serialNumber;
-            labelType.Text = spectrometerType;
-            labelPixels.Text = String.Format("{0}", pixels);
+            if (dark == null && procSpectrum != null && procSpectrum.Length > 0)
+            {
+                dark = new double[pixels];
+                Array.Copy(procSpectrum, dark, pixels);
+                buttonSaveDark.Text = "Clear Dark";
+            }
+            else
+            {
+                dark = null;
+                buttonSaveDark.Text = "Take Dark";
+            }
         }
 
-        private void updateSpectrometerFromGUI()
+        private void buttonReset_Click(object sender, EventArgs e)
         {
-            spectrometer.setTriggerMode(triggerMode);
-            spectrometer.setIntegrationTimeMilliseconds(integrationTimeMillisec);
+            initialize();
+            updateSpectrometerFromGUI();
+            updateGUIFromSpectrometer();
         }
 
-        // Perform absolute irradiance calibration for spectrometer.
-        //
-        // S:  Sample spectrum (counts per nanometer)
-        // D:  Dark spectrum (counts per nanometer, with the same integration time, 
-        //     corrections, and smoothing as sample)
-        // C:  Calibration (represented in micro-Joules per count)
-        // T:  Integration time (represented here in seconds)
-        // A:  Collection area (represented in square centimeters) unless the light 
-        //     source is entirely inside an integrating sphere
-        // dL: The wavelength spread (how many nanometers a given pixel represents)
-        //
-        // Absolute irradiance (I) is computed as follows.  Below, the subscript P 
-        // will indicate a particular pixel for I, dL, S, D, and C.  Thus, SP refers 
-        // to pixel P of the sample spectrum.
-        //
-        //      IP = (SP - DP) * CP / (T * A * dLP)
-        //
-        // Note that if the lamp is entirely enclosed within an integrating sphere, 
-        // then the A term is omitted.
-        //
-        // dL is typically computed as follows, where L(P) refers to the wavelength 
-        // represented by the center of pixel index P.
-        //
-        //      dL = [L(P + 1) - L(P - 1)] / 2
-        //
-        private double[] computeAbsoluteIrradiance()
+        private void checkBoxEnableIrradiance_Click(object sender, EventArgs e)
         {
-            if (collectionArea <= 0 || procSpectrum == null || wavelengths == null)
-                return null;
-
-            double[] irradiance = new double[pixels];
-            double[] dLp = new double[pixels];
-
-            // Calculate dLp
-            dLp[0] = wavelengths[1] - wavelengths[0];
-            for (int i = 1; i < pixels - 1; i++)
-                dLp[i] = (wavelengths[i + 1] - wavelengths[i - 1]) / 2.0;
-            dLp[pixels - 1] = wavelengths[pixels - 1] - wavelengths[pixels - 2];
-
-            // compute irradiance
-            for (int i = 0; i < pixels; i++)
-                irradiance[i] = (procSpectrum[i] * irradCal[i]) 
-                              / (integrationTimeMillisec * 1000.0 * collectionArea * dLp[i]);
-
-            return irradiance;
+            logger.display("Irradiance {0}", checkBoxEnableIrradiance.Checked ? "enabled" : "disabled");
+            processSpectrum();
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // Graphing
-        ////////////////////////////////////////////////////////////////////////
-
-        private void processSpectrum()
+        private void numericUpDownTriggerMode_ValueChanged(object sender, EventArgs e)
         {
-            // start with raw spectrum we just acquired
-            procSpectrum = new double[pixels];
-            Array.Copy(rawSpectrum, procSpectrum, pixels);
-
-            // perform EDC if requested 
-            // Note that this should be done BEFORE ODC, if both EDC and ODC are
-            // used, and that EDC should be applied to BOTH the dark and sample
-            // measurements (or to neither).
-            if (checkBoxEnableEDC.Checked)
-            {
-                double value = 0.0;
-                int usableDarkCount = 0;
-                for (int i = 0; i < edcIndices.Length; i++)
-                {
-                    int edcPixelIndex = edcIndices[i];
-                    if (edcPixelIndex < pixels)
-                    {
-                        value += procSpectrum[edcPixelIndex];
-                        usableDarkCount++;
-                    }
-                }
-                if (usableDarkCount > 0)
-                {
-                    value /= usableDarkCount;
-                    for (int i = 0; i < pixels; i++)
-                        procSpectrum[i] -= value;
-                }
-            }
-
-            // perform ODC if requested
-            if (checkBoxSubtractDark.Checked && dark != null)
-            {
-                for (int i = 0; i < pixels; i++)
-                    procSpectrum[i] -= dark[i];
-            }
-
-            // perform NLC if requested (should be done after EDC and ODC)
-            if (checkBoxEnableNLC.Checked && nlcCoeffs != null)
-            {   
-                for (int i = 0; i < pixels; i++) 
-                {   
-                    double pixel = procSpectrum[i];
-                    double factor = nlcCoeffs[0];
-                    double pixelToTheN = pixel;
-
-                    // factor is already initialized with x^0...start at x^1
-                    for (int j = 1; j < nlcCoeffs.Length; j++) 
-                    {   
-                        factor += pixelToTheN * nlcCoeffs[j];
-                        pixelToTheN *= pixel;
-                    }   
-
-                    if (factor != 0.0) 
-                        procSpectrum[i] = pixel / factor;
-                }   
-            }   
-
-            // perform boxcar if requested (should be done after NLC)
-            if (numericUpDownBoxcarHalfWidth.Value > 0)
-            {
-                int boxcar = (int) numericUpDownBoxcarHalfWidth.Value;
-                double[] smoothed = new double[pixels];
-
-                int boxcarLimit = pixels - boxcar - 1;
-                int boxcarRange = 2 * boxcar + 1;
-
-                double sum;
-                for (int i = boxcar; i <= boxcarLimit; i++)
-                {
-                    sum = procSpectrum[i];
-                    for (int j = 1; j <= boxcar; j++)
-                        sum += procSpectrum[i - j] + procSpectrum[i + j];
-                    smoothed[i] = sum / boxcarRange;
-                }
-
-                for (int i = boxcar; i <= boxcarLimit; i++)
-                    procSpectrum[i] = smoothed[i];
-            }
-
-            updateGraph();
+            triggerMode = (int)numericUpDownTriggerMode.Value;
+            updateSpectrometerFromGUI();
         }
 
-        private void updateGraph()
+        private void numericUpDownIntegrationTimeMillisec_ValueChanged(object sender, EventArgs e)
         {
-            chartSpectrum.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "f0";
+            integrationTimeMillisec = (int) numericUpDownIntegrationTimeMillisec.Value;
+            updateSpectrometerFromGUI();
+        }
 
-            Series seriesSpectrum = chartSpectrum.Series.FindByName("seriesSpectrum");
-            Series seriesIrradiance = chartSpectrum.Series.FindByName("seriesIrradiance");
+        private void PersistenceUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            persistenceWindow = (uint)PersistenceUpDown.Value;
+        }
 
-            seriesSpectrum.Points.Clear();
-            seriesIrradiance.Points.Clear();
+        private void IntensityUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            intensityDelta = (uint)IntensityUpDown.Value;
+        }
 
-            for (int i = 0; i < pixels; i++)
-                seriesSpectrum.Points.AddXY(wavelengths[i], procSpectrum[i]);
-
-            if (checkBoxEnableIrradiance.Checked)
-            {
-                double[] irradiance = computeAbsoluteIrradiance();
-                if (irradiance != null)
-                    for (int i = 0; i < pixels; i++)
-                        seriesIrradiance.Points.AddXY(wavelengths[i], irradiance[i]);
-            }
-            Refresh();
+        private void numericUpDownScansToAverage_ValueChanged(object sender, EventArgs e)
+        {
+            scansToAverage = (uint) numericUpDownScansToAverage.Value;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -353,16 +244,13 @@ namespace CSharpDemo
             logger.display("Saved {0}", pathname);
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // GUI Events
-        ////////////////////////////////////////////////////////////////////////
-
-        private void btnScan_Click(object sender, EventArgs e)
+        private void buttonScan_Click(object sender, EventArgs e)
         {
             if (!scanning)
             {
                 logger.display("Start scanning");
                 btnScan.Text = "Stop";
+                buttonReset.Enabled = false;
                 scanning = true;
                 backgroundWorkerAcquisition.RunWorkerAsync();
             }
@@ -373,6 +261,7 @@ namespace CSharpDemo
             }
         }
 
+        // These are only used for the mouse-over peakfinding (not sure it's worth the complexity)
         void chartSpectrum_PostPaint(object sender, ChartPaintEventArgs e)
         {
             // Create font and brush.
@@ -518,8 +407,210 @@ namespace CSharpDemo
             lastMousePositionY = 0;
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if(backgroundWorkerAcquisition.IsBusy || backgroundWorkerAcquisition.CancellationPending)
+            {
+                // if acquisition worker is running, tell it to quit, then retrigger shutdown
+                e.Cancel = true;
+                closePending = true;
+                logger.log("[OnFormClosing] signalling acquisition worker to quit");
+                backgroundWorkerAcquisition.CancelAsync();
+            }
+            else if (!closePending)
+            {
+                // otherwise, since nothing is running, shutdown now
+                logger.log("[OnFormClosing] shutting down directly");
+                cleanShutdown();
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////
-        // Background Worker
+        // Methods
+        ////////////////////////////////////////////////////////////////////////
+
+        private void updateGUIFromSpectrometer()
+        {
+            labelSerialNumber.Text = serialNumber;
+            labelType.Text = spectrometerType;
+            labelPixels.Text = String.Format("{0}", pixels);
+        }
+
+        private void updateSpectrometerFromGUI()
+        {
+            spectrometer.setTriggerMode(triggerMode);
+            spectrometer.setIntegrationTimeMilliseconds(integrationTimeMillisec);
+        }
+
+        // Perform absolute irradiance calibration for spectrometer.
+        //
+        // S:  Sample spectrum (counts per nanometer)
+        // D:  Dark spectrum (counts per nanometer, with the same integration time, 
+        //     corrections, and smoothing as sample)
+        // C:  Calibration (represented in micro-Joules per count)
+        // T:  Integration time (represented here in seconds)
+        // A:  Collection area (represented in square centimeters) unless the light 
+        //     source is entirely inside an integrating sphere
+        // dL: The wavelength spread (how many nanometers a given pixel represents)
+        //
+        // Absolute irradiance (I) is computed as follows.  Below, the subscript P 
+        // will indicate a particular pixel for I, dL, S, D, and C.  Thus, SP refers 
+        // to pixel P of the sample spectrum.
+        //
+        //      IP = (SP - DP) * CP / (T * A * dLP)
+        //
+        // Note that if the lamp is entirely enclosed within an integrating sphere, 
+        // then the A term is omitted.
+        //
+        // dL is typically computed as follows, where L(P) refers to the wavelength 
+        // represented by the center of pixel index P.
+        //
+        //      dL = [L(P + 1) - L(P - 1)] / 2
+        //
+        private double[] computeAbsoluteIrradiance()
+        {
+            if (collectionArea <= 0 || procSpectrum == null || wavelengths == null)
+                return null;
+
+            double[] irradiance = new double[pixels];
+            double[] dLp = new double[pixels];
+
+            // Calculate dLp
+            dLp[0] = wavelengths[1] - wavelengths[0];
+            for (int i = 1; i < pixels - 1; i++)
+                dLp[i] = (wavelengths[i + 1] - wavelengths[i - 1]) / 2.0;
+            dLp[pixels - 1] = wavelengths[pixels - 1] - wavelengths[pixels - 2];
+
+            // compute irradiance
+            for (int i = 0; i < pixels; i++)
+                irradiance[i] = (procSpectrum[i] * irradCal[i]) 
+                              / (integrationTimeMillisec * 1000.0 * collectionArea * dLp[i]);
+
+            return irradiance;
+        }
+
+        private void processSpectrum()
+        {
+            // start with raw spectrum we just acquired
+            procSpectrum = new double[pixels];
+            Array.Copy(rawSpectrum, procSpectrum, pixels);
+
+            // perform EDC if requested 
+            // Note that this should be done BEFORE ODC, if both EDC and ODC are
+            // used, and that EDC should be applied to BOTH the dark and sample
+            // measurements (or to neither).
+            if (checkBoxEnableEDC.Checked)
+            {
+                double value = 0.0;
+                int usableDarkCount = 0;
+                for (int i = 0; i < edcIndices.Length; i++)
+                {
+                    int edcPixelIndex = edcIndices[i];
+                    if (edcPixelIndex < pixels)
+                    {
+                        value += procSpectrum[edcPixelIndex];
+                        usableDarkCount++;
+                    }
+                }
+                if (usableDarkCount > 0)
+                {
+                    value /= usableDarkCount;
+                    for (int i = 0; i < pixels; i++)
+                        procSpectrum[i] -= value;
+                }
+            }
+
+            // perform ODC if requested
+            if (dark != null)
+                for (int i = 0; i < pixels; i++)
+                    procSpectrum[i] -= dark[i];
+
+            // perform NLC if requested (should be done after EDC and ODC)
+            if (checkBoxEnableNLC.Checked)
+            {   
+                for (int i = 0; i < pixels; i++) 
+                {   
+                    double pixel = procSpectrum[i];
+                    double factor = nlcCoeffs[0];
+                    double pixelToTheN = pixel;
+
+                    // factor is already initialized with x^0...start at x^1
+                    for (int j = 1; j < nlcCoeffs.Length; j++) 
+                    {   
+                        factor += pixelToTheN * nlcCoeffs[j];
+                        pixelToTheN *= pixel;
+                    }   
+
+                    if (factor != 0.0) 
+                        procSpectrum[i] = pixel / factor;
+                }   
+            }   
+
+            // perform boxcar if requested (should be done after NLC)
+            if (numericUpDownBoxcarHalfWidth.Value > 0)
+            {
+                int boxcar = (int) numericUpDownBoxcarHalfWidth.Value;
+                double[] smoothed = new double[pixels];
+
+                int boxcarLimit = pixels - boxcar - 1;
+                int boxcarRange = 2 * boxcar + 1;
+
+                double sum;
+                for (int i = boxcar; i <= boxcarLimit; i++)
+                {
+                    sum = procSpectrum[i];
+                    for (int j = 1; j <= boxcar; j++)
+                        sum += procSpectrum[i - j] + procSpectrum[i + j];
+                    smoothed[i] = sum / boxcarRange;
+                }
+
+                for (int i = boxcar; i <= boxcarLimit; i++)
+                    procSpectrum[i] = smoothed[i];
+            }
+
+            updateGraph();
+        }
+
+        private void updateGraph()
+        {
+            chartSpectrum.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "f0";
+
+            Series seriesSpectrum = chartSpectrum.Series.FindByName("seriesSpectrum");
+            Series seriesIrradiance = chartSpectrum.Series.FindByName("seriesIrradiance");
+
+            seriesSpectrum.Points.Clear();
+            seriesIrradiance.Points.Clear();
+
+            for (int i = 0; i < pixels; i++)
+                seriesSpectrum.Points.AddXY(wavelengths[i], procSpectrum[i]);
+
+            if (checkBoxEnableIrradiance.Checked)
+            {
+                double[] irradiance = computeAbsoluteIrradiance();
+                if (irradiance != null)
+                    for (int i = 0; i < pixels; i++)
+                        seriesIrradiance.Points.AddXY(wavelengths[i], irradiance[i]);
+            }
+            Refresh();
+        }
+
+        private void cleanShutdown()
+        {
+            logger.log("[CleanShutdown] shutdown initiated");
+
+            // block further user input
+            this.Enabled = false;
+
+            // shutdown spectrometer
+            spectrometer.close();
+
+            // shutdown app
+            if (closePending)
+                this.Close();
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // BackgroundWorkerAcquisition
         ////////////////////////////////////////////////////////////////////////
 
         private void backgroundWorkerAcquisition_DoWork(object sender, DoWorkEventArgs e)
@@ -603,82 +694,15 @@ namespace CSharpDemo
         {
             logger.log("[AcquistionComplete] worker cleanup");
             btnScan.Text = "Start";
+            buttonReset.Enabled = false;
             scanning = false;
             if (closePending)
                 cleanShutdown();
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Safe Shutdown (ensure "[x] Close box" releases spectrometers)
+        // TODO: Move to PeakFinding class
         ////////////////////////////////////////////////////////////////////////
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            if(backgroundWorkerAcquisition.IsBusy || backgroundWorkerAcquisition.CancellationPending)
-            {
-                // if acquisition worker is running, tell it to quit, then retrigger shutdown
-                e.Cancel = true;
-                closePending = true;
-                logger.log("[OnFormClosing] signalling acquisition worker to quit");
-                backgroundWorkerAcquisition.CancelAsync();
-            }
-            else if (!closePending)
-            {
-                // otherwise, since nothing is running, shutdown now
-                logger.log("[OnFormClosing] shutting down directly");
-                cleanShutdown();
-            }
-        }
-
-        private void cleanShutdown()
-        {
-            logger.log("[CleanShutdown] shutdown initiated");
-
-            // block further user input
-            this.Enabled = false;
-
-            // shutdown spectrometer
-            spectrometer.close();
-
-            // shutdown app
-            if (closePending)
-                this.Close();
-        }
-
-        private void checkBoxEnableIrradiance_Click(object sender, EventArgs e)
-        {
-            logger.display("Irradiance {0}", checkBoxEnableIrradiance.Checked ? "enabled" : "disabled");
-            processSpectrum();
-        }
-
-        private void buttonSaveDark_Click(object sender, EventArgs e)
-        {
-            // Note that we use "processed" spectrum as the Dark, meaning that
-            // EDC has already been applied (if enabled).  It would be bad practice
-            // to use different EDC settings on the dark and sample measurements,
-            // but this demo does not enforce that both must be generated the same
-            // way.
-
-            if (procSpectrum != null && procSpectrum.Length > 0)
-            {
-                dark = new double[pixels];
-                Array.Copy(procSpectrum, dark, pixels);
-                checkBoxSubtractDark.Enabled = true;
-            }
-            else
-            {
-                dark = null;
-                checkBoxSubtractDark.Checked = false;
-                checkBoxSubtractDark.Enabled = false;
-            }
-        }
-
-        private void buttonReset_Click(object sender, EventArgs e)
-        {
-            initializeSpectrometer();
-            updateSpectrometerFromGUI();
-            updateGUIFromSpectrometer();
-        }
 
         private void PeakFindCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -694,10 +718,8 @@ namespace CSharpDemo
                 PersistenceUpDown.Enabled = false;
                 IntensityUpDown.Enabled = false;
             }
-
         }
 
-        // Wil Conine's quick-n-dirty peakfinder (not SPAM-quality)
         private int FindPeaks(ref List<int>  peakIndexes)
         {
             // get the current persistence value
@@ -763,37 +785,6 @@ namespace CSharpDemo
                 logger.display("FindPeaks: {0}", e);
             }
             return peakIndexes.Count;
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // Callbacks
-        ////////////////////////////////////////////////////////////////////////
-
-        private void numericUpDownTriggerMode_ValueChanged(object sender, EventArgs e)
-        {
-            triggerMode = (int)numericUpDownTriggerMode.Value;
-            updateSpectrometerFromGUI();
-        }
-
-        private void numericUpDownIntegrationTimeMillisec_ValueChanged(object sender, EventArgs e)
-        {
-            integrationTimeMillisec = (int) numericUpDownIntegrationTimeMillisec.Value;
-            updateSpectrometerFromGUI();
-        }
-
-        private void PersistenceUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            persistenceWindow = (uint)PersistenceUpDown.Value;
-        }
-
-        private void IntensityUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            intensityDelta = (uint)IntensityUpDown.Value;
-        }
-
-        private void numericUpDownScansToAverage_ValueChanged(object sender, EventArgs e)
-        {
-            scansToAverage = (uint) numericUpDownScansToAverage.Value;
         }
 
     }

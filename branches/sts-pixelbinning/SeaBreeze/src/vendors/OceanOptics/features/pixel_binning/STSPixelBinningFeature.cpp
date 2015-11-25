@@ -197,7 +197,7 @@ unsigned char STSPixelBinningFeature::getDefaultPixelBinningFactor(const Protoco
     unsigned char retval = 0;
 
     try {
-        retval = pb->readPixelBinningFactor(bus);
+        retval = pb->readDefaultPixelBinningFactor(bus);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -226,7 +226,7 @@ unsigned char STSPixelBinningFeature::getMaxPixelBinningFactor(const Protocol &p
     unsigned char retval = 0;
 
     try {
-        retval = pb->readPixelBinningFactor(bus);
+        retval = pb->readMaxPixelBinningFactor(bus);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();

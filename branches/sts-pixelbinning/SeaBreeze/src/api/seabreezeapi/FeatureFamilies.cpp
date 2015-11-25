@@ -34,24 +34,26 @@
 #include "api/seabreezeapi/FeatureFamilies.h"
 
 /* Constants */
-#define FEATURE_FAMILY_ID_UNDEFINED          	0
-#define FEATURE_FAMILY_ID_SERIAL_NUMBER      	1
-#define FEATURE_FAMILY_ID_SPECTROMETER       	2
-#define FEATURE_FAMILY_ID_THERMOELECTRIC    	3
-#define FEATURE_FAMILY_ID_IRRADCAL          	4
-#define FEATURE_FAMILY_ID_EEPROM             	5
-#define FEATURE_FAMILY_ID_STROBE_LAMP       	6
-#define FEATURE_FAMILY_ID_SHUTTER            	7
-#define FEATURE_FAMILY_ID_WAVECAL            	8
-#define FEATURE_FAMILY_ID_NONLINEARITYCAL    	9
-#define FEATURE_FAMILY_ID_STRAYLIGHTCAL     	10
+#define FEATURE_FAMILY_ID_UNDEFINED             0
+#define FEATURE_FAMILY_ID_SERIAL_NUMBER         1
+#define FEATURE_FAMILY_ID_SPECTROMETER          2
+#define FEATURE_FAMILY_ID_THERMOELECTRIC        3
+#define FEATURE_FAMILY_ID_IRRADCAL              4
+#define FEATURE_FAMILY_ID_EEPROM                5
+#define FEATURE_FAMILY_ID_STROBE_LAMP           6
+#define FEATURE_FAMILY_ID_SHUTTER               7
+#define FEATURE_FAMILY_ID_WAVECAL               8
+#define FEATURE_FAMILY_ID_NONLINEARITYCAL       9
+#define FEATURE_FAMILY_ID_STRAYLIGHTCAL         10
 #define FEATURE_FAMILY_ID_RAW_USB_BUS_ACCESS    11
-#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE 	12
-#define FEATURE_FAMILY_ID_LIGHT_SOURCE      	13
-#define FEATURE_FAMILY_ID_TEMPERATURE    		14
-#define FEATURE_FAMILY_ID_OPTICAL_BENCH    		15
-#define FEATURE_FAMILY_ID_REVISION	    		16
-#define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING	17
+#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE     12
+#define FEATURE_FAMILY_ID_LIGHT_SOURCE          13
+#define FEATURE_FAMILY_ID_TEMPERATURE           14
+#define FEATURE_FAMILY_ID_OPTICAL_BENCH         15
+#define FEATURE_FAMILY_ID_REVISION              16
+#define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING   17
+#define FEATURE_FAMILY_ID_DATA_BUFFER           18
+#define FEATURE_FAMILY_ID_ACQUISITION_DELAY     19
 #define FEATURE_FAMILY_ID_PIXEL_BINNING         18
 
 using namespace seabreeze;
@@ -234,6 +236,24 @@ seabreeze::api::PixelBinningFeatureFamily::PixelBinningFeatureFamily()
 seabreeze::api::PixelBinningFeatureFamily::~PixelBinningFeatureFamily() {
 }
 
+seabreeze::api::DataBufferFeatureFamily::DataBufferFeatureFamily()
+        : FeatureFamily("DataBuffer", FEATURE_FAMILY_ID_DATA_BUFFER) {
+
+}
+
+seabreeze::api::DataBufferFeatureFamily::~DataBufferFeatureFamily() {
+
+}
+
+seabreeze::api::AcquisitionDelayFeatureFamily::AcquisitionDelayFeatureFamily()
+        : FeatureFamily("AcquisitionDelay", FEATURE_FAMILY_ID_ACQUISITION_DELAY) {
+
+}
+
+seabreeze::api::AcquisitionDelayFeatureFamily::~AcquisitionDelayFeatureFamily() {
+
+}
+
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
     /* This creates new instances of these so the class-wide fields do not risk
@@ -253,8 +273,10 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new RawUSBBusAccessFeatureFamily());
     retval.push_back(new LightSourceFeatureFamily());
     retval.push_back(new TemperatureFeatureFamily());
-	retval.push_back(new OpticalBenchFeatureFamily());
-	retval.push_back(new SpectrumProcessingFeatureFamily());
-	
+    retval.push_back(new OpticalBenchFeatureFamily());
+    retval.push_back(new SpectrumProcessingFeatureFamily());
+    retval.push_back(new DataBufferFeatureFamily());
+    retval.push_back(new AcquisitionDelayFeatureFamily());
+    
     return retval;
 }

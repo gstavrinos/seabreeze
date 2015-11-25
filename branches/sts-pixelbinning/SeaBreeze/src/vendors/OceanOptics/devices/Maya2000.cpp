@@ -34,6 +34,7 @@
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIProtocol.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIIrradCalProtocol.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIStrobeLampProtocol.h"
+#include "vendors/OceanOptics/protocols/ooi/impls/FPGARegisterProtocol.h"
 #include "vendors/OceanOptics/buses/usb/Maya2000USB.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
@@ -44,6 +45,7 @@
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/continuous_strobe/ContinuousStrobeFeature_FPGA.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
+#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature_FPGA.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 
 using namespace seabreeze;
@@ -83,6 +85,10 @@ Maya2000::Maya2000() {
     vector<ProtocolHelper *> irradHelpers;
     irradHelpers.push_back(ooiIrrad);
     this->features.push_back(new IrradCalFeature(irradHelpers, 2080));
+
+    vector<ProtocolHelper *> fpgaHelpers;
+    fpgaHelpers.push_back(new FPGARegisterProtocol());
+    this->features.push_back(new AcquisitionDelayFeature_FPGA(fpgaHelpers));
 
     this->features.push_back(new NonlinearityEEPROMSlotFeature());
     this->features.push_back(new StrayLightEEPROMSlotFeature());

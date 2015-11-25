@@ -115,7 +115,7 @@ public:
     /* Get the usb endpoint address for a specified type of endpoint */
    	unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType);
 
-	/* get raw usb access capabilities */
+    /* Get raw usb access capabilities */
     int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode);
     int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
@@ -134,6 +134,7 @@ public:
     void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
     unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
     unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
+    double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
     int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
@@ -141,7 +142,6 @@ public:
     int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
     int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
     int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
-    int spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
 
     /* Pixel binning capabilities */
     int getNumberOfPixelBinningFeatures(long id, int *errorCode);
@@ -218,8 +218,8 @@ public:
     int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode);
     unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode);
-	void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
-	void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
+    void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
+    void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
  
     /* Revision capabilities */
     int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
@@ -242,6 +242,30 @@ public:
     int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
     int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+
+    /* Data buffer capabilities */
+    int getNumberOfDataBufferFeatures(long deviceID, int *errorCode);
+    int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void dataBufferClear(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode);
+    unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode);
+    void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity);
+
+    /* Acquisition delay capabilities */
+    int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode);
+    int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+    void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID,
+            int *errorCode, unsigned long delay_usec);
+    unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID,
+            long featureID, int *errorCode);
+    unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
+            long featureID, int *errorCode);
 
 private:
     SeaBreezeAPI();
@@ -735,6 +759,24 @@ extern "C" {
             long featureID, int *error_code);
 
     /**
+     * This function returns the maximum pixel intensity for the
+     * spectrometer.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a
+     *      spectrometer feature.  Valid IDs can be found with the
+     *      sbapi_get_spectrometer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used
+     *      for storing error codes.
+     * @return Returns maximum pixel intensity if > 0.
+     *      On error, returns -1 and error_code will be set accordingly.
+     */
+    DLL_DECL double
+    sbapi_spectrometer_get_maximum_intensity(long deviceID,
+            long featureID, int *error_code);
+
+    /**
      * This returns an integer denoting the number of pixels in a
      * formatted spectrum (as returned by get_formatted_spectrum(...)).
      *
@@ -883,6 +925,129 @@ extern "C" {
     DLL_DECL int
     sbapi_spectrometer_get_electric_dark_pixel_indices(long deviceID,
             long featureID, int *error_code, int *indices, int length);
+
+    /**
+     * This function returns the total number of pixel binning instances available
+     * in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the number of pixel binning features that will be returned by a call
+     *      to sbapi_get_pixel_binning_features().
+     */
+    DLL_DECL int
+    sbapi_get_number_of_pixel_binning_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each pixel binning feature for this
+     * device.  The IDs are only valid when used with the deviceID used to
+     * obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     * @param features (Output) a pre-populated array to hold the returned
+     *      feature handles
+     * @param max_features (Input) size of the pre-allocated array
+     *
+     * @return the number of pixel binning feature IDs that were copied.
+     */
+    DLL_DECL int
+    sbapi_get_pixel_binning_features(long deviceID, int *error_code, long *features,
+            int max_features);
+
+    /**
+     * This function sets the pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     *  @param factor (Input) The desired pixel binning factor.
+     */
+    DLL_DECL void
+    sbapi_binning_set_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code, unsigned char factor);
+
+    /**
+     * This function gets the pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output) A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_pixel_binning_factor(long deviceID, long featureID, int *error_code);
+
+    /**
+     * This function sets the default pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *  @param factor (Input) The desired default pixel binning factor.
+     */
+    DLL_DECL void
+    sbapi_binning_set_default_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code, unsigned char factor);
+
+    /**
+     * This function resets the default pixel binning factor on the device back to the factory default.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     */
+    DLL_DECL void
+    sbapi_binning_reset_default_pixel_binning_factor(long deviceID, long featureID,
+            int *error_code);
+
+    /**
+     * This function gets the default pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the default pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_default_pixel_binning_factor(long deviceID, long featureID, int *error_code);
+
+    /**
+     * This function gets the maximum pixel binning factor on the device.
+     *
+     *  @param deviceID (Input) The index of a device previously opened with
+     *      sbapi_open_device().
+     *  @param featureID (Input) The ID of a particular instance of a pixel binning feature.
+     *        Valid IDs can be found with the sbapi_get_pixel_binning_features() function.
+     *  @param error_code (Output)A pointer to an integer that can be used for
+     *      storing error codes.
+     *
+     * @return the maximum pixel binning factor for the specified feature.
+     */
+    DLL_DECL unsigned char
+    sbapi_binning_get_max_pixel_binning_factor(long deviceID, long featureID, int *error_code);
 
     /**
      * This function returns the total number of shutter instances available
@@ -2068,6 +2233,222 @@ extern "C" {
     DLL_DECL int sbapi_stray_light_coeffs_get(long deviceID, long featureID,
             int *error_code, double *buffer, int max_length);
 
+
+    /**
+     * This function returns the total number of data buffer feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_data_buffer_features().
+     */
+    DLL_DECL int sbapi_get_number_of_data_buffer_features(long deviceID, int *error_code);
+
+    /**
+     * This function returns IDs for accessing each data buffer
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated buffer to hold returned feature handles
+     * @param max_features (Input) size of preallocated buffer
+     *
+     * @return the number of data buffer feature IDs that were copied.
+     */
+    DLL_DECL int sbapi_get_data_buffer_features(long deviceID, int *error_code,
+            long *buffer, unsigned int maxLength);
+
+    /**
+     * @brief Clear the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     */
+    DLL_DECL void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Get the number of data elements currently in the buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return A count of how many items are available for retrieval from the buffer
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,
+            long featureID, int *error_code);
+
+    /**
+     * @brief Get the present limit of how many data elements will be retained by the buffer.
+     *        This value can be changed with sbapi_data_buffer_set_buffer_capacity().
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return A count of how many items the buffer will store before data may be lost
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity(long deviceID,
+            long featureID, int *error_code);
+
+    /**
+     * @brief Get the maximum possible configurable size for the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The largest value that may be set with sbapi_data_buffer_set_buffer_capacity().
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity_maximum(
+            long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Get the minimum possible configurable size for the data buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The smallest value that may be set with sbapi_data_buffer_set_buffer_capacity().
+     */
+    DLL_DECL unsigned long sbapi_data_buffer_get_buffer_capacity_minimum(
+            long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief Set the number of data elements that the buffer should retain
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @param capacity (Input) Limit on the number of data elements to store.  This is
+     *        bounded by what is returned by sbapi_data_buffer_get_buffer_capacity_minimum() and
+     *        sbapi_data_buffer_get_buffer_capacity_maximum().
+     */
+    DLL_DECL void sbapi_data_buffer_set_buffer_capacity(long deviceID,
+            long featureID, int *error_code, unsigned long capacity);
+
+    /**
+     * This function returns the total number of acquisition delay feature
+     * instances available in the indicated device.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     *
+     * @return the number of features that will be returned by a call to
+     *      sbapi_get_data_buffer_features().
+     */
+    DLL_DECL int sbapi_get_number_of_acquisition_delay_features(long deviceID, int *errorCode);
+
+    /**
+     * This function returns IDs for accessing each data buffer
+     * feature instance for this device.  The IDs are only valid when used with
+     * the deviceID used to obtain them.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *      error codes.
+     * @param features (Output) preallocated buffer to hold returned feature handles
+     * @param max_features (Input) size of preallocated buffer
+     *
+     * @return the number of data buffer feature IDs that were copied.
+     */
+    DLL_DECL int sbapi_get_acquisition_delay_features(long deviceID, int *errorCode,
+            long *buffer, unsigned int maxLength);
+
+    /**
+     * Set the acquisition delay in microseconds.  This may also be referred to as the
+     * trigger delay.  In any event, it is the time between some event (such as a request
+     * for data, or an external trigger pulse) and when data acquisition begins.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @param delay_usec (Input) The new delay to use in microseconds
+     */
+    DLL_DECL void sbapi_acquisition_delay_set_delay_microseconds(long deviceID, long featureID,
+            int *errorCode, unsigned long delay_usec);
+
+    /**
+     * Get the acquisition delay in microseconds.  This may also be referred to as the
+     * trigger delay.  In any event, it is the time between some event (such as a request
+     * for data, or an external trigger pulse) and when data acquisition begins.
+     *
+     * Note that not all devices support reading this value back.  In these cases, the
+     * returned value will be the last value sent to sbapi_acquisition_delay_set_delay_microseconds().
+     * If no value has been set and the value cannot be read back, this function will
+     * indicate an error.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the allowed step size for the acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The acquisition delay step size in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_increment_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the maximum allowed acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The maximum acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_maximum_microseconds(long deviceID,
+            long featureID, int *errorCode);
+
+    /**
+     * Get the minimum allowed acquisition delay in microseconds.
+     *
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @return The minimum acquisition delay in microseconds
+     */
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long deviceID,
+            long featureID, int *errorCode);
 
 #ifdef __cplusplus
 }
