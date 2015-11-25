@@ -53,7 +53,7 @@ namespace seabreeze {
             unsigned long getAcquisitionDelayMaximumMicroseconds(int *errorCode);
             unsigned long getAcquisitionDelayMinimumMicroseconds(int *errorCode);
             unsigned long getAcquisitionDelayMicroseconds(int *errorCode);
-            void setAcquisitionDelayMicroseconds(int *errorCode, unsigned long delay_usec);
+            void setAcquisitionDelayMicroseconds(int *errorCode, const unsigned long delay_usec);
         };
 
     } /* end namespace api */

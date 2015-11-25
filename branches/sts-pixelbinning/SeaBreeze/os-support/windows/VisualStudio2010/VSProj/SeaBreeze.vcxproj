@@ -257,7 +257,6 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <!-- INCLUDES START HERE -->
     <ClInclude Include="..\..\..\..\include\api\DeviceFactory.h" />
     <ClInclude Include="..\..\..\..\include\api\DllDecl.h" />
-    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\AcquisitionDelayFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\PixelBinningFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\SeaBreezeWrapper.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\ContinuousStrobeFeatureAdapter.h" />
@@ -522,7 +521,6 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityCommand.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityQuery.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPMessage.h" />
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetPixelBinningExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPQuery.h" />

@@ -34,6 +34,7 @@
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
+#include "common/exceptions/IllegalArgumentException.h"
 
 namespace seabreeze {
 
@@ -44,9 +45,10 @@ namespace seabreeze {
                 const Bus &bus) throw (FeatureException) = 0;
 
         virtual std::vector<byte> *readEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot) throw (FeatureException) = 0;
+                const Bus &bus, unsigned int slot) throw (FeatureException, IllegalArgumentException) = 0;
         virtual int writeEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot, const std::vector<byte> &data) throw (FeatureException) = 0;
+                const Bus &bus, unsigned int slot, const std::vector<byte> &data)
+                throw (FeatureException, IllegalArgumentException) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */
@@ -55,3 +57,4 @@ namespace seabreeze {
 }
 
 #endif /* EEPROMSLOTFEATUREINTERFACE_H */
+

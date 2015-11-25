@@ -50,15 +50,23 @@ vector< vector<byte> * > *EEPROMSlotFeature::readAllEEPROMSlots(
     vector< vector<byte> * > *retval = new vector< vector<byte> * >();
 
     for(i = 0; i < this->numberOfSlots; i++) {
-        /* This may throw a FeatureException */
-        retval[i].push_back(readEEPROMSlot(protocol, bus, i));
+        try {
+            /* This may throw a FeatureException */
+            retval[i].push_back(readEEPROMSlot(protocol, bus, i));
+        } catch (IllegalArgumentException &iae) {
+            /* This shouldn't be possible since the loop is enumerating
+             * the known range of slots, but recover anyway
+             */
+            continue;
+        }
     }
 
     return retval;
 }
 
 vector<byte> *EEPROMSlotFeature::readEEPROMSlot(const Protocol &protocol,
-        const Bus &bus, unsigned int slot) throw (FeatureException) {
+        const Bus &bus, unsigned int slot)
+        throw (FeatureException, IllegalArgumentException) {
 
     if(slot >= this->numberOfSlots) {
         string error("EEPROM slot out of bounds.");
@@ -71,7 +79,7 @@ vector<byte> *EEPROMSlotFeature::readEEPROMSlot(const Protocol &protocol,
 
 int EEPROMSlotFeature::writeEEPROMSlot(const Protocol &protocol,
         const Bus &bus, unsigned int slot, const vector<byte> &data)
-        throw (FeatureException) {
+        throw (FeatureException, IllegalArgumentException) {
 
     if(slot >= this->numberOfSlots) {
         throw IllegalArgumentException(string("EEPROM slot out of bounds."));
