@@ -237,7 +237,7 @@ void SpectrometerFeatureAdapter::setIntegrationTimeMicros(int *errorCode,
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
     } catch (IllegalArgumentException &iae) {
-        SET_ERROR_CODE(ERROR_INVALID_ERROR);
+        SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return;
     }
 }

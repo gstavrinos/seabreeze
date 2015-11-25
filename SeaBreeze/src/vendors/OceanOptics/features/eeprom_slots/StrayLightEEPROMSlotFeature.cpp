@@ -64,8 +64,12 @@ vector<double> *StrayLightEEPROMSlotFeature::readStrayLightCoefficients(
     char buffer[20] = { 0 };
     double temp;
 
-    /* This may throw an exception -- if it does, don't catch it here. */
-    rawSlot = readEEPROMSlot(protocol, bus, __STRAY_LIGHT_EEPROM_SLOT);
+    try {
+        /* This may throw an exception -- if it does, don't catch it here. */
+        rawSlot = readEEPROMSlot(protocol, bus, __STRAY_LIGHT_EEPROM_SLOT);
+    } catch (IllegalArgumentException &iae) {
+        throw FeatureException("Internal error: stray light slot invalid.");
+    }
 
     if(NULL == rawSlot) {
         string error("Could not read EEPROM slot for stray light.");

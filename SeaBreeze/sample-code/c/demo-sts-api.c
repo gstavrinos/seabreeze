@@ -575,6 +575,7 @@ int sendOBPMessage(OBPExchange *xfer)
         {
             printf("%s: response contained error: %s\n",
                 __FUNCTION__, getOBPError(response_header->err_no));
+            free(response);
             return -1;
         }
 

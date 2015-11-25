@@ -79,9 +79,9 @@ bool VentanaThermoElectricFeature::initialize(const Protocol &protocol, const Bu
         double temp = getDefaultSetPointCelsius(protocol, bus);
         setThermoElectricEnable(protocol, bus, enable);
         setTemperatureSetPointCelsius(protocol, bus, temp);
-    } catch (ProtocolException &pe) {
-        return false;
     } catch (FeatureException &fe) {
+        return false;
+    } catch (IllegalArgumentException &iae) {
         return false;
     }
 
