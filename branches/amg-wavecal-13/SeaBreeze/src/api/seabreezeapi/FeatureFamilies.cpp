@@ -157,12 +157,12 @@ seabreeze::api::ShutterFeatureFamily::~ShutterFeatureFamily() {
 
 }
 
-seabreeze::api::WaveCalCoeffsEEPromFeatureFamily::WaveCalCoeffsEEPromFeatureFamily()
+seabreeze::api::WaveCalFeatureFamily::WaveCalFeatureFamily()
         : FeatureFamily("WavelengthCalibration", FEATURE_FAMILY_ID_WAVECAL) {
 
 }
 
-seabreeze::api::WaveCalCoeffsEEPromFeatureFamily::~WaveCalCoeffsEEPromFeatureFamily() {
+seabreeze::api::WaveCalFeatureFamily::~WaveCalFeatureFamily() {
 
 }
 
@@ -267,7 +267,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new StrobeLampFeatureFamily());
     retval.push_back(new ContinuousStrobeFeatureFamily());
     retval.push_back(new ShutterFeatureFamily());
-    retval.push_back(new WaveCalCoeffsEEPromFeatureFamily());
+    retval.push_back(new WaveCalFeatureFamily());
     retval.push_back(new NonlinearityCoeffsFeatureFamily());
     retval.push_back(new StrayLightCoeffsFeatureFamily());
     retval.push_back(new RawUSBBusAccessFeatureFamily());
