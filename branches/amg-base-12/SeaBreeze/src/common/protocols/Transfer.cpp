@@ -43,8 +43,7 @@ const direction_t Transfer::TO_DEVICE = 1;
 const direction_t Transfer::FROM_DEVICE = 2;
 
 Transfer::Transfer(vector<ProtocolHint *> *hints, vector<byte> *buffer,
-        direction_t direction, unsigned int length) {
-    this->hints = hints;
+        direction_t direction, unsigned int length) : Exchange(hints) {
     this->buffer = buffer;
     this->direction = direction;
     this->length = length;
@@ -59,20 +58,13 @@ Transfer::Transfer(vector<ProtocolHint *> *hints, vector<byte> *buffer,
  */
 Transfer::Transfer() {
     this->buffer = new vector<byte>;
-    this->hints = new vector<ProtocolHint *>;
     this->length = 0;
 
     checkBufferSize();
 }
 
 Transfer::~Transfer() {
-    vector<ProtocolHint *>::iterator iter;
-    for(iter = this->hints->begin(); iter != this->hints->end(); iter++) {
-        delete *iter;
-    }
-
     delete this->buffer;
-    delete this->hints;
 }
 
 Data *Transfer::transfer(TransferHelper *helper) throw (ProtocolException) {
@@ -126,12 +118,9 @@ Data *Transfer::transfer(TransferHelper *helper) throw (ProtocolException) {
     return NULL;
 }
 
-const vector<ProtocolHint *> &Transfer::getHints() {
-    return *(this->hints);
-}
-
 void Transfer::checkBufferSize() {
     if(this->buffer->size() < this->length) {
         this->buffer->resize(this->length);
     }
 }
+

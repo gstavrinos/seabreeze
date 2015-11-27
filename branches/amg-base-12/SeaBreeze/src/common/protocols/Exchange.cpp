@@ -31,11 +31,26 @@
 #include "common/protocols/Exchange.h"
 
 using namespace seabreeze;
+using namespace std;
 
 Exchange::Exchange() {
+    this->hints = new vector<ProtocolHint *>;
+}
 
+Exchange::Exchange(vector<ProtocolHint *> *hints) {
+    this->hints = hints;
 }
 
 Exchange::~Exchange() {
+    vector<ProtocolHint *>::iterator iter;
+    for(iter = this->hints->begin(); iter != this->hints->end(); iter++) {
+        delete *iter;
+    }
 
+    delete this->hints;
 }
+
+const vector<ProtocolHint *> &Exchange::getHints() {
+    return *(this->hints);
+}
+

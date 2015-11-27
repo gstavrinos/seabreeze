@@ -68,25 +68,21 @@ Data *Transaction::transfer(TransferHelper *helper) throw (ProtocolException) {
     }
     /* This has the effect of returning the result of the last transfer. */
     return retval;
-
-}
-
-const vector<ProtocolHint *> &Transaction::getHints() {
-    return this->hints;
 }
 
 void Transaction::updateHints() {
     vector<Transfer *>::iterator iter;
     vector<ProtocolHint *>::iterator hintIter;
 
-    this->hints.resize(0);
+    this->hints->resize(0);
 
     /* Iterate over all stored transfers and gather up their hints.
      */
     for(iter = this->transfers.begin(); iter != this->transfers.end(); iter++) {
         vector<ProtocolHint *> h = (*iter)->getHints();
         for(hintIter = h.begin(); hintIter != h.end(); hintIter++) {
-            this->hints.push_back(*hintIter);
+            this->hints->push_back(*hintIter);
         }
     }
 }
+
