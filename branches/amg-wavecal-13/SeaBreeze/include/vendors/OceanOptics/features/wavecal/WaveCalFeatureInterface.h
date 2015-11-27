@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    WaveCalCoeffsEEPromFeatureInterface.h
+ * @file    WaveCalFeatureInterface.h
  * @date    February 2011
  * @author  Ocean Optics, Inc.
  *
@@ -35,15 +35,16 @@
 #include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
-    class WaveCalCoeffsEEPromFeatureInterface {
+    class WaveCalFeatureInterface {
     public:
-        virtual ~WaveCalCoeffsEEPromFeatureInterface() = 0;
+        virtual ~WaveCalFeatureInterface() = 0;
         virtual std::vector<double> *readWavelengths(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */
-    inline WaveCalCoeffsEEPromFeatureInterface::~WaveCalCoeffsEEPromFeatureInterface() {}
+    inline WaveCalFeatureInterface::~WaveCalFeatureInterface() {}
 }
 
 #endif /* WAVECALFEATUREINTERFACE_H */
+
