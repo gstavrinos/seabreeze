@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPWaveCalCoeffsEEPromProtocol.h
+ * @file    OBPGetWaveCalExchange.h
  * @date    January 2011
  * @author  Ocean Optics, Inc.
  *
@@ -27,25 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPWAVECALPROTOCOL_H
-#define OBPWAVECALPROTOCOL_H
+#ifndef OBPGETWAVECALEXCHANGE_H
+#define OBPGETWAVECALEXCHANGE_H
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/WaveCalCoeffsEEPromProtocolInterface.h"
-#include <vector>
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPWaveCalCoeffsEEPromProtocol : public WaveCalCoeffsEEPromProtocolInterface {
-    public:
-        OBPWaveCalCoeffsEEPromProtocol();
-        virtual ~OBPWaveCalCoeffsEEPromProtocol();
+    namespace oceanBinaryProtocol {
+        class OBPGetWaveCalExchange : public OBPQuery {
+        public:
+            OBPGetWaveCalExchange();
+            virtual ~OBPGetWaveCalExchange();
 
-        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus)
-                throw (ProtocolException);
-    };
-  }
+            void setCoefficientIndex(unsigned int index);
+        };
+    }
 }
 
-#endif /* OBPWAVECALPROTOCOL_H */
+#endif /* OBPGETWAVECALEXCHANGE_H */
+
