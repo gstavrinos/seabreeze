@@ -29,32 +29,15 @@
 
 #include "common/globals.h"
 #include "vendors/OceanOptics/protocols/ooi/exchanges/OOIIrradCalExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "common/protocols/Transfer.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
-using namespace std;
 
 OOIIrradCalExchange::OOIIrradCalExchange(int numPixels) {
-    this->hints.push_back(new ControlHint());
     this->numberOfPixels = numPixels;
 }
 
 OOIIrradCalExchange::~OOIIrradCalExchange() {
-    vector<ProtocolHint *>::iterator iter;
-    for(iter = this->hints.begin(); iter != this->hints.end(); iter++) {
-        delete *iter;
-    }
 
-    vector<Transfer *>::iterator xferIter;
-    for(    xferIter = this->transfers.begin();
-            xferIter != this->transfers.end();
-            xferIter++) {
-        delete *xferIter;
-    }
 }
 
-const vector<ProtocolHint *> &OOIIrradCalExchange::getHints() {
-    return this->hints;
-}
