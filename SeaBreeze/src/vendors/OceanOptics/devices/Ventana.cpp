@@ -33,7 +33,6 @@
 #include "common/buses/BusFamilies.h"
 #include "vendors/OceanOptics/devices/Ventana.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPIrradCalProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
