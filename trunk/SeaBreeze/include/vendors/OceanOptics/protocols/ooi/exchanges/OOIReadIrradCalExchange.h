@@ -49,4 +49,5 @@ namespace seabreeze {
   }
 }
 
-#endif
+#endif /* SEABREEZE_OOIREADIRRADCALEXCHANGE_H */
+

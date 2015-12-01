@@ -75,8 +75,6 @@ namespace seabreeze {
         virtual ~Transfer();
         virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
 
-        virtual const std::vector<ProtocolHint *> &getHints();
-
         static const direction_t TO_DEVICE;
         static const direction_t FROM_DEVICE;
 
@@ -84,7 +82,6 @@ namespace seabreeze {
         Transfer();
         void checkBufferSize();
 
-        std::vector<ProtocolHint *> *hints;
         unsigned int length;
         std::vector<byte> *buffer;
         direction_t direction;
@@ -92,4 +89,5 @@ namespace seabreeze {
 
 }
 
-#endif
+#endif /* SEABREEZE_TRANSFER_H */
+

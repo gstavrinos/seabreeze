@@ -36,18 +36,16 @@
 
 namespace seabreeze {
   namespace ooiProtocol {
-    class OOIIrradCalExchange : public Exchange {
+    class OOIIrradCalExchange : public Transaction {
     public:
         OOIIrradCalExchange(int numberOfPixels);
         virtual ~OOIIrradCalExchange();
-        virtual const std::vector<ProtocolHint *> &getHints();
 
     protected:
         unsigned int numberOfPixels;
-        std::vector<ProtocolHint *> hints;
-        std::vector<Transfer *> transfers;
     };
   }
 }
 
-#endif
+#endif /* SEABREEZE_OOIIRRADCALEXCHANGE_H */
+

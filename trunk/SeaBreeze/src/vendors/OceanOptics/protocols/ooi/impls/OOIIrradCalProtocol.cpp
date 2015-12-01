@@ -42,30 +42,29 @@ using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 using namespace std;
 
-OOIIrradCalProtocol::OOIIrradCalProtocol(unsigned int numberOfPixels)
+OOIIrradCalProtocol::OOIIrradCalProtocol(unsigned int pixelCount)
         : IrradCalProtocolInterface(new OOIProtocol()) {
-    this->readCalExchange = new OOIReadIrradCalExchange(numberOfPixels);
-    this->writeCalExchange = new OOIWriteIrradCalExchange(numberOfPixels);
+    this->numberOfPixels = pixelCount;
 }
 
 
 OOIIrradCalProtocol::~OOIIrradCalProtocol() {
-    delete this->readCalExchange;
-    delete this->writeCalExchange;
+
 }
 
 vector<float> *OOIIrradCalProtocol::readIrradCal(const Bus &bus)
         throw (ProtocolException) {
     TransferHelper *helper;
+    OOIReadIrradCalExchange readCalExchange(this->numberOfPixels);
 
-    helper = bus.getHelper(this->readCalExchange->getHints());
+    helper = bus.getHelper(readCalExchange.getHints());
     if (NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    Data *result = this->readCalExchange->transfer(helper);
+    Data *result = readCalExchange.transfer(helper);
     if (NULL == result) {
         string error("Expected Transfer::transfer to produce a non-null result "
             "containing calibration data.  Without this data, it is not possible to "
@@ -100,18 +99,19 @@ int OOIIrradCalProtocol::writeIrradCal(const Bus &bus, const vector<float> &cal)
             throw (ProtocolException) {
     TransferHelper *helper;
     int writeLength = 0;
+    OOIWriteIrradCalExchange writeCalExchange(this->numberOfPixels);
 
-    helper = bus.getHelper(this->readCalExchange->getHints());
+    helper = bus.getHelper(writeCalExchange.getHints());
     if (NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
 
     /* Push the calibration to the exchange */
-    writeLength = this->writeCalExchange->setCalibration(cal);
+    writeLength = writeCalExchange.setCalibration(cal);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    this->writeCalExchange->transfer(helper);
+    writeCalExchange.transfer(helper);
 
     return writeLength;
 }
