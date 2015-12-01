@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    OBPGetWaveCalCoeffsEEPromExchange.cpp
- * @date    January 2011
+ * @file    WaveCalFeatureInterface.h
+ * @date    February 2011
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -27,24 +27,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetWaveCalCoeffsEEPromExchange.h"
-#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
-#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#ifndef WAVECALFEATUREINTERFACE_H
+#define WAVECALFEATUREINTERFACE_H
 
-using namespace seabreeze;
-using namespace seabreeze::oceanBinaryProtocol;
+#include "common/protocols/Protocol.h"
+#include "common/buses/Bus.h"
+#include "common/exceptions/FeatureException.h"
 
-OBPGetWaveCalCoeffsEEPromExchange::OBPGetWaveCalCoeffsEEPromExchange() {
-    this->hints->push_back(new OBPControlHint());
-    this->messageType = OBPMessageTypes::OBP_GET_WL_COEFF;
-    this->payload.resize(1);
+namespace seabreeze {
+    class WaveCalFeatureInterface {
+    public:
+        virtual ~WaveCalFeatureInterface() = 0;
+        virtual std::vector<double> *readWavelengths(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException) = 0;
+    };
+
+    /* Default implementation for (otherwise) pure virtual destructor */
+    inline WaveCalFeatureInterface::~WaveCalFeatureInterface() {}
 }
 
-OBPGetWaveCalCoeffsEEPromExchange::~OBPGetWaveCalCoeffsEEPromExchange() {
+#endif /* WAVECALFEATUREINTERFACE_H */
 
-}
-
-void OBPGetWaveCalCoeffsEEPromExchange::setCoefficientIndex(unsigned int index) {
-    this->payload[0] = index & 0x00FF;
-}

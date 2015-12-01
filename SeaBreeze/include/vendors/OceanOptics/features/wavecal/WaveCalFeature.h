@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    OBPWaveCalCoeffsEEPromProtocol.h
- * @date    January 2011
+ * @file    WaveCalFeature.h
+ * @date    February 2011
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -27,25 +27,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPWAVECALPROTOCOL_H
-#define OBPWAVECALPROTOCOL_H
+#ifndef WAVECALFEATURE_H
+#define WAVECALFEATURE_H
 
-#include "common/SeaBreeze.h"
+#include "vendors/OceanOptics/features/wavecal/WaveCalFeatureInterface.h"
+#include "common/protocols/Protocol.h"
+#include "common/features/Feature.h"
 #include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/WaveCalCoeffsEEPromProtocolInterface.h"
-#include <vector>
+#include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
-  namespace oceanBinaryProtocol {
-    class OBPWaveCalCoeffsEEPromProtocol : public WaveCalCoeffsEEPromProtocolInterface {
-    public:
-        OBPWaveCalCoeffsEEPromProtocol();
-        virtual ~OBPWaveCalCoeffsEEPromProtocol();
 
-        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus)
-                throw (ProtocolException);
+    class WaveCalFeature : public Feature, public WaveCalFeatureInterface {
+    public:
+        WaveCalFeature(std::vector<ProtocolHelper *> helpers,
+                unsigned int numberOfPixels);
+        virtual ~WaveCalFeature();
+        virtual std::vector<double> *readWavelengths(const Protocol &protocol,
+                const Bus &bus) throw (FeatureException);
+
+        /* Overriding from Feature */
+        virtual FeatureFamily getFeatureFamily();
+
+    protected:
+        unsigned int numberOfPixels;
     };
-  }
+
 }
 
-#endif /* OBPWAVECALPROTOCOL_H */
+#endif /* WAVECALFEATURE_H */
+

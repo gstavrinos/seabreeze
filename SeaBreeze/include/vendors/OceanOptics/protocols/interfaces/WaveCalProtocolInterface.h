@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    WaveCalCoeffsEEPromProtocolInterface.h
+ * @file    WaveCalProtocolInterface.h
  * @date    January 2011
  * @author  Ocean Optics, Inc.
  *
@@ -48,10 +48,10 @@
 
 namespace seabreeze {
 
-    class WaveCalCoeffsEEPromProtocolInterface : public ProtocolHelper {
+    class WaveCalProtocolInterface : public ProtocolHelper {
     public:
-        WaveCalCoeffsEEPromProtocolInterface(Protocol *protocol);
-        virtual ~WaveCalCoeffsEEPromProtocolInterface();
+        WaveCalProtocolInterface(Protocol *protocol);
+        virtual ~WaveCalProtocolInterface();
         virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus)
                 throw (ProtocolException) = 0;
     };
@@ -59,3 +59,4 @@ namespace seabreeze {
 }
 
 #endif /* WAVECALPROTOCOLINTERFACE_H */
+
