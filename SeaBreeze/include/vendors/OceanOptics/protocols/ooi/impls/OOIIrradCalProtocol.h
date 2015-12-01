@@ -55,8 +55,7 @@ namespace seabreeze {
             throw (ProtocolException);
 
     private:
-        OOIReadIrradCalExchange *readCalExchange;
-        OOIWriteIrradCalExchange *writeCalExchange;
+        unsigned int numberOfPixels;
     };
   }
 }

@@ -44,11 +44,16 @@ namespace seabreeze {
     class Exchange {
     public:
         Exchange();
+        Exchange(std::vector<ProtocolHint *> *hints);
         virtual ~Exchange();
         virtual Data *transfer(TransferHelper *helper) throw (ProtocolException) = 0;
-        virtual const std::vector<ProtocolHint *> &getHints() = 0;
+        virtual const std::vector<ProtocolHint *> &getHints();
+
+    protected:
+        std::vector<ProtocolHint *> *hints;
     };
 
 }
 
-#endif
+#endif /* SEABREEZE_EXCHANGE_H */
+

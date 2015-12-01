@@ -69,4 +69,5 @@ namespace seabreeze {
 
 }
 
-#endif
+#endif /* SEABREEZE_PROTOCOLHINT_H */
+

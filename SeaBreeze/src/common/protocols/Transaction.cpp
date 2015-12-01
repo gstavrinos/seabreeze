@@ -38,6 +38,16 @@ Transaction::Transaction() {
 }
 
 Transaction::~Transaction() {
+    /* This class does not own any of the hints.  Their lifecycle is
+     * maintained by the Transfers that created them.  This simply
+     * stops tracking the hints so that the Exchange destructor does
+     * not try to destroy them.
+     *
+     * Alternately, they could have been cloned, but that would have
+     * added a lot more overhead.
+     */
+    this->hints->resize(0);
+
     vector<Transfer *>::iterator iter;
     for(iter = this->transfers.begin(); iter != this->transfers.end(); iter++) {
         delete (*iter);
@@ -68,25 +78,25 @@ Data *Transaction::transfer(TransferHelper *helper) throw (ProtocolException) {
     }
     /* This has the effect of returning the result of the last transfer. */
     return retval;
-
-}
-
-const vector<ProtocolHint *> &Transaction::getHints() {
-    return this->hints;
 }
 
 void Transaction::updateHints() {
     vector<Transfer *>::iterator iter;
     vector<ProtocolHint *>::iterator hintIter;
 
-    this->hints.resize(0);
+    /* This class does not own any of the hints.  Their lifecycle is
+     * maintained by the Transfers that created them.  This simply
+     * stops tracking the hints so that the vector can be repopulated.
+     */
+    this->hints->resize(0);
 
     /* Iterate over all stored transfers and gather up their hints.
      */
     for(iter = this->transfers.begin(); iter != this->transfers.end(); iter++) {
         vector<ProtocolHint *> h = (*iter)->getHints();
         for(hintIter = h.begin(); hintIter != h.end(); hintIter++) {
-            this->hints.push_back(*hintIter);
+            this->hints->push_back(*hintIter);
         }
     }
 }
+

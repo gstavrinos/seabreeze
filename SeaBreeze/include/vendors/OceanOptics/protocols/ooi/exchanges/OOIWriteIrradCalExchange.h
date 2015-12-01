@@ -50,4 +50,5 @@ namespace seabreeze {
   }
 }
 
-#endif /* OOIPROTOCOLWRITEIRRADCALEXCHANGE_H */
+#endif /* SEABREEZE_OOIWRITEIRRADCALEXCHANGE_H */
+
