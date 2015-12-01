@@ -1365,7 +1365,7 @@ int main(int argc, char **argv)
                         printf("  Wavecal coeff %u: %.2e\n", i, *coeff);
                     }
                     else
-                        printf("ERROR: error with get_wavecalcoeffseeprom_coeff(%u) exchange\n", i);
+                        printf("ERROR: error with get_wavecal_coeff(%u) exchange\n", i);
                 }
             }
             else

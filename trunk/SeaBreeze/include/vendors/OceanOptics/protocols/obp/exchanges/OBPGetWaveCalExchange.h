@@ -1,6 +1,6 @@
 /***************************************************//**
- * @file    WaveCalCoeffsEEPromFeature.h
- * @date    February 2011
+ * @file    OBPGetWaveCalExchange.h
+ * @date    January 2011
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -27,32 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef WAVECALFEATURE_H
-#define WAVECALFEATURE_H
+#ifndef OBPGETWAVECALEXCHANGE_H
+#define OBPGETWAVECALEXCHANGE_H
 
-#include "vendors/OceanOptics/features/wavecalcoeffseeprom/WaveCalCoeffsEEPromFeatureInterface.h"
-#include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
-#include "common/buses/Bus.h"
-#include "common/exceptions/FeatureException.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
+    namespace oceanBinaryProtocol {
+        class OBPGetWaveCalExchange : public OBPQuery {
+        public:
+            OBPGetWaveCalExchange();
+            virtual ~OBPGetWaveCalExchange();
 
-    class WaveCalCoeffsEEPromFeature : public Feature, public WaveCalCoeffsEEPromFeatureInterface {
-    public:
-        WaveCalCoeffsEEPromFeature(std::vector<ProtocolHelper *> helpers,
-                unsigned int numberOfPixels);
-        virtual ~WaveCalCoeffsEEPromFeature();
-        virtual std::vector<double> *readWavelengths(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
-
-        /* Overriding from Feature */
-        virtual FeatureFamily getFeatureFamily();
-
-    protected:
-        unsigned int numberOfPixels;
-    };
-
+            void setCoefficientIndex(unsigned int index);
+        };
+    }
 }
 
-#endif /* WAVECALFEATURE_H */
+#endif /* OBPGETWAVECALEXCHANGE_H */
+

@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    WaveCalCoeffsEEPromProtocolInterface.cpp
+ * @file    WaveCalProtocolInterface.cpp
  * @date    January 2011
  * @author  Ocean Optics, Inc.
  *
@@ -28,15 +28,16 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/interfaces/WaveCalCoeffsEEPromProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 
 using namespace seabreeze;
 
-WaveCalCoeffsEEPromProtocolInterface::WaveCalCoeffsEEPromProtocolInterface(Protocol *protocol)
+WaveCalProtocolInterface::WaveCalProtocolInterface(Protocol *protocol)
     : ProtocolHelper(protocol) {
 
 }
 
-WaveCalCoeffsEEPromProtocolInterface::~WaveCalCoeffsEEPromProtocolInterface() {
+WaveCalProtocolInterface::~WaveCalProtocolInterface() {
 
 }
+

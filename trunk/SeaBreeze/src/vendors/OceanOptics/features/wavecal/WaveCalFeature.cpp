@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    WaveCalCoeffsEEPromFeature.cpp
+ * @file    WaveCalFeature.cpp
  * @date    February 2011
  * @author  Ocean Optics, Inc.
  *
@@ -28,9 +28,9 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/wavecalcoeffseeprom/WaveCalCoeffsEEPromFeature.h"
-#include "vendors/OceanOptics/protocols/interfaces/WaveCalCoeffsEEPromProtocolInterface.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalCoeffsEEPromProtocol.h"
+#include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
+#include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
 #include "vendors/OceanOptics/utils/Polynomial.h"
 #include "common/exceptions/FeatureProtocolNotFoundException.h"
 #include "common/exceptions/FeatureControlException.h"
@@ -45,7 +45,7 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-WaveCalCoeffsEEPromFeature::WaveCalCoeffsEEPromFeature(vector<ProtocolHelper *> helpers, unsigned int numberOfPix) {
+WaveCalFeature::WaveCalFeature(vector<ProtocolHelper *> helpers, unsigned int numberOfPix) {
 
     this->numberOfPixels = numberOfPix;
 
@@ -55,14 +55,14 @@ WaveCalCoeffsEEPromFeature::WaveCalCoeffsEEPromFeature(vector<ProtocolHelper *> 
     }
 }
 
-WaveCalCoeffsEEPromFeature::~WaveCalCoeffsEEPromFeature() {
+WaveCalFeature::~WaveCalFeature() {
 
 }
 
-vector<double> *WaveCalCoeffsEEPromFeature::readWavelengths(const Protocol &protocol,
+vector<double> *WaveCalFeature::readWavelengths(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) {
 
-    WaveCalCoeffsEEPromProtocolInterface *wavecal = NULL;
+    WaveCalProtocolInterface *wavecal = NULL;
     vector<double> *coeffs = NULL;
     ProtocolHelper *proto = NULL;
     Polynomial<double> *calibration = NULL;
@@ -70,7 +70,7 @@ vector<double> *WaveCalCoeffsEEPromFeature::readWavelengths(const Protocol &prot
 
     try {
         proto = lookupProtocolImpl(protocol);
-        wavecal = static_cast<WaveCalCoeffsEEPromProtocolInterface *>(proto);
+        wavecal = static_cast<WaveCalProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to get wavelength calibration.");
@@ -98,8 +98,9 @@ vector<double> *WaveCalCoeffsEEPromFeature::readWavelengths(const Protocol &prot
 }
 
 
-FeatureFamily WaveCalCoeffsEEPromFeature::getFeatureFamily() {
+FeatureFamily WaveCalFeature::getFeatureFamily() {
     FeatureFamilies families;
 
     return families.WAVELENGTH_CAL;
 }
+
