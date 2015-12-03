@@ -53,15 +53,19 @@ not provided through the binary installers.
 \section distribution Distribution Contents
 
 \verbatim
-    doc/             Documentation relating to SeaBreeze and its API
-    include/         headers for building SeaBreeze
-      api/           exportable headers for client applications
-    os-support/      helpers for specific operating systems
-      linux/         provides udev rules allowing non-root users to claim devices
-      windows/       provides working Visual Studio 2005, 2010 and 2012 solutions
-    src/             core SeaBreeze source for all operating systems
-    test/            command-line tests, including seabreeze-util cmd-line utility
-    sample-code/    "recipes" demonstrating how to call SeaBreeze for common tasks
+    SeaBreeze/       The driver and key components
+        doc/         Documentation relating to SeaBreeze and its API
+        include/     headers for building SeaBreeze
+          api/       exportable headers for client applications
+        os-support/  helpers for specific operating systems
+          linux/     provides udev rules allowing non-root users to claim devices
+          windows/   provides working Visual Studio 2005, 2010 and 2012 solutions
+        src/         core SeaBreeze source for all operating systems
+        test/        command-line tests, including seabreeze-util cmd-line utility
+        sample-code/ "recipes" demonstrating how to call SeaBreeze for common tasks
+    daemons/         server daemons layered atop SeaBreeze for remote / concurrent access
+    util/            miscellaneous programs related to spectroscopy which may or may not 
+                     require SeaBreeze
 \endverbatim
 
 \section docs Generated Documentation
@@ -124,7 +128,7 @@ Note that this is simply using the Cygwin bash shell and GNU toolchain (make) fo
 the actual compiler invoked is Visual Studio.  At this time, we have not found a way to support
 native Cygwin GCC or MinGW (submissions/solutions welcome!)
 
-\subsubsection errors Common Build Errors
+\subsubsection errors Common Build or Runtime Errors
 
 \verbatim
 Error: NativeUSBWinUSB.c(26): fatal error C1083: Cannot open include file: 'Winusb.h'
@@ -148,6 +152,11 @@ Fix:   Our sources are normally built and tested using Microsoft Visual Studio
 Error: LINK : fatal error LNK1123: failure during conversion to COFF: file invalid or corrupt
 Fix:   Uninstall .NET 4.5.1 and re-install .NET 4.0
        (cf http://stackoverflow.com/questions/10888391, 6626397, etc)
+
+Error: Runtime: An unhandled exception of type 'System.BadImageFormatException' occured in CSharpDemo.exe
+Fix:   This nearly always means that SeaBreeze.dll was compiled in 32-bit mode and linked to 
+       a 64-bit CSharpDemo.exe, or vice-versa.  Please ensure that both the library and client 
+       application are compiled to the same target and try again.
 \endverbatim
 
 \subsection build_linux Linux
