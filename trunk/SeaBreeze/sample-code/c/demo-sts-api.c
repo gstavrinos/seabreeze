@@ -64,6 +64,9 @@
 #define OBP_MESSAGE_GET_FIRMWARE_VERSION    0x00000090L
 #define OBP_MESSAGE_GET_SERIAL_NUMBER       0x00000100L
 #define OBP_MESSAGE_GET_SERIAL_NUMBER_LEN   0x00000101L
+#define OBP_MESSAGE_GET_USER_STRING_COUNT   0x00000300L
+#define OBP_MESSAGE_GET_USER_STRING_LEN     0x00000301L
+#define OBP_MESSAGE_GET_USER_STRING         0x00000302L
 #define OBP_MESSAGE_SET_INTEGRATION_TIME    0x00110010L
 #define OBP_MESSAGE_GET_CORRECTED_SPECTRUM  0x00101000L
 #define OBP_MESSAGE_GET_RAW_SPECTRUM        0x00101100L
@@ -1423,6 +1426,73 @@ int main(int argc, char **argv)
         }
         else
             printf("ERROR: unable to execute GET_NLC_COEFF_COUNT transaction\n");
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // user strings
+    ////////////////////////////////////////////////////////////////////////////
+
+    if (1)
+    {
+        unsigned char user_string_count = 0;
+
+        memset(&xfer, 0, sizeof(xfer));
+        xfer.message_type       = OBP_MESSAGE_GET_USER_STRING_COUNT;
+        xfer.response_len       = sizeof(user_string_count);
+        xfer.response           = &user_string_count;
+
+        printf("\ngetting user string count...\n");
+        if (!sendOBPMessage(&xfer))
+        {
+            if (xfer.response_len == xfer.actual_response_len)
+            {
+                printf("user string count: %u\n", user_string_count);
+
+                unsigned short user_string_len = 0;
+
+                memset(&xfer, 0, sizeof(xfer));
+                xfer.message_type       = OBP_MESSAGE_GET_USER_STRING_LEN;
+                xfer.response_len       = sizeof(user_string_len);
+                xfer.response           = (unsigned char*) &user_string_len;
+
+                printf("\ngetting user string len...\n");
+                if (!sendOBPMessage(&xfer))
+                {
+                    if (xfer.response_len == xfer.actual_response_len)
+                    {
+                        printf("user string length: %u\n", user_string_len);
+
+                        for (unsigned char i = 0; i < user_string_count; i++)
+                        {
+                            unsigned char buf[user_string_len];
+                            memset(buf, 0, sizeof(buf));
+
+                            memset(&xfer, 0, sizeof(xfer));
+                            xfer.message_type = OBP_MESSAGE_GET_USER_STRING;;
+                            xfer.request_len  = 1;
+                            xfer.request      = &i;
+                            xfer.response_len = sizeof(buf);
+                            xfer.response     = buf;
+
+                            if (!sendOBPMessage(&xfer))
+                                printf("  User string %02u: [%s]\n", i, buf);
+                            else
+                                printf("ERROR: error with get_user_string(%u) exchange\n", i);
+                        }
+                    }
+                    else
+                        printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
+                            xfer.response_len, xfer.message_type, xfer.actual_response_len);
+                }
+                else
+                    printf("ERROR: unable to execute GET_USER_STRING_LEN transaction\n");
+            }
+            else
+                printf("ERROR: expected %u bytes back from 0x%08x, received %u\n",
+                    xfer.response_len, xfer.message_type, xfer.actual_response_len);
+        }
+        else
+            printf("ERROR: unable to execute GET_USER_STRING_COUNT transaction\n");
     }
 
     ////////////////////////////////////////////////////////////////////////////
