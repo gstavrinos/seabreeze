@@ -74,7 +74,7 @@ NIRQuest256::NIRQuest256() {
     /* Set up the features that comprise this device */
     this->features.push_back(new NIRQuest256SpectrometerFeature());
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
-    this->features.push_back(new EEPROMSlotFeature(18));
+    this->features.push_back(new EEPROMSlotFeature(20));
 
     vector<ProtocolHelper *> strobeLampHelpers;
     strobeLampHelpers.push_back(new OOIStrobeLampProtocol());

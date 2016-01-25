@@ -74,7 +74,7 @@ NIRQuest512::NIRQuest512() {
     /* Set up the features that comprise this device */
     this->features.push_back(new NIRQuest512SpectrometerFeature());
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
-    this->features.push_back(new EEPROMSlotFeature(18));
+    this->features.push_back(new EEPROMSlotFeature(20));
 
     vector<ProtocolHelper *> strobeLampHelpers;
     strobeLampHelpers.push_back(new OOIStrobeLampProtocol());
