@@ -468,6 +468,9 @@ resolved the issue.
 
 \section history Appendix A: Version History
 
+\date ????-??-?? (version 3.????)
+- fixed NIRQuest EEPROM slot count (was 18, now 20)
+
 \date 2015-09-16 (version 3.0.10)
 - added Spark (tested under MacOS, VS2010)
 
