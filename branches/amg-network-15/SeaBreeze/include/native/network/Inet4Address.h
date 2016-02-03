@@ -27,8 +27,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef INET4ADDRESS_H
-#define INET4ADDRESS_H
+#ifndef SEABREEZE_INET4ADDRESS_H
+#define SEABREEZE_INET4ADDRESS_H
 
 #include <string>
 #include "common/exceptions/IllegalArgumentException.h"
@@ -58,4 +58,4 @@ namespace seabreeze {
     };
 }
 
-#endif /* INET4ADDRESS_H */
+#endif /* SEABREEZE_INET4ADDRESS_H */

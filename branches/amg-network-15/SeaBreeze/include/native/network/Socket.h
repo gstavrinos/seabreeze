@@ -76,4 +76,4 @@ namespace seabreeze {
     inline Socket::~Socket() {}
 }
 
-#endif /* SOCKET_H */
+#endif /* SEABREEZE_SOCKET_H */

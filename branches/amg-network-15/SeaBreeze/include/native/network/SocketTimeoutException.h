@@ -28,8 +28,8 @@
  *******************************************************/
 
 
-#ifndef SOCKETTIMEOUTEXCEPTION_H
-#define SOCKETTIMEOUTEXCEPTION_H
+#ifndef SEABREEZE_SOCKETTIMEOUTEXCEPTION_H
+#define SEABREEZE_SOCKETTIMEOUTEXCEPTION_H
 
 #include "native/network/SocketException.h"
 
@@ -42,4 +42,4 @@ namespace seabreeze {
 
 }
 
-#endif /* SOCKETTIMEOUTEXCEPTION_H */
+#endif /* SEABREEZE_SOCKETTIMEOUTEXCEPTION_H */

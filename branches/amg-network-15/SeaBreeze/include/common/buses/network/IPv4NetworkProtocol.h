@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SocketException.h
+ * @file    IPv4NetworkProtocol.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,19 +27,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_SOCKETEXCEPTION_H
-#define SEABREEZE_SOCKETEXCEPTION_H
+#ifndef SEABREEZE_IPV4NETWORKPROTOCOL_H
+#define SEABREEZE_IPV4NETWORKPROTOCOL_H
 
-#include "common/exceptions/BusException.h"
+#include <string>
 
 namespace seabreeze {
-
-    class SocketException : public BusException {
+    class IPv4NetworkProtocol {
     public:
-        SocketException(const std::string &error);
+        virtual ~IPv4NetworkProtocol();
+        virtual std::string getName();
+        virtual bool equals(const IPv4NetworkProtocol &that);
+
+    protected:
+        IPv4NetworkProtocol(std::string name, int id);
+
+    private:
+        std::string protocolName;
+        int type;
     };
 
 }
 
-#endif /* SEABREEZE_SOCKETEXCEPTION_H */
+#endif /* SEABREEZE_IPV4NETWORKPROTOCOL_H */
 

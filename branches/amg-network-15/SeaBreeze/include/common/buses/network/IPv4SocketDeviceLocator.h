@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SocketException.h
+ * @file    IPv4SocketDeviceLocator.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,19 +27,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_SOCKETEXCEPTION_H
-#define SEABREEZE_SOCKETEXCEPTION_H
+#ifndef IPV4SOCKETDEVICELOCATOR_H
+#define IPV4SOCKETDEVICELOCATOR_H
 
-#include "common/exceptions/BusException.h"
+#include "common/buses/DeviceLocatorInterface.h"
+#include "common/buses/network/IPv4NetworkProtocol.h"
+#include <string>
 
 namespace seabreeze {
-
-    class SocketException : public BusException {
+    class IPv4SocketDeviceLocator : public DeviceLocatorInterface {
     public:
-        SocketException(const std::string &error);
-    };
+        IPv4SocketDeviceLocator(IPv4NetworkProtocol proto, std::string ip,
+            int portNumber);
+        virtual ~IPv4SocketDeviceLocator();
+        
+        virtual unsigned long getUniqueLocation() const;
 
+        virtual bool equals(DeviceLocatorInterface &that);
+
+        virtual std::string getDescription();
+
+        virtual BusFamily getBusFamily() const;
+
+        virtual DeviceLocatorInterface *clone() const;
+    };
 }
 
-#endif /* SEABREEZE_SOCKETEXCEPTION_H */
+#endif /* IPV4SOCKETDEVICELOCATOR_H */
 

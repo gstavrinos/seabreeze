@@ -41,4 +41,4 @@ namespace seabreeze {
 
 }
 
-#endif /* UNKNOWNHOSTEXCEPTION_H */
+#endif /* SEABREEZE_UNKNOWNHOSTEXCEPTION_H */

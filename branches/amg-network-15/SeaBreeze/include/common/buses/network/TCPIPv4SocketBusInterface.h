@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SocketException.h
+ * @file    TCPIPv4SocketBusInterface.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,19 +27,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_SOCKETEXCEPTION_H
-#define SEABREEZE_SOCKETEXCEPTION_H
+#ifndef SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
+#define SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
 
-#include "common/exceptions/BusException.h"
+#include "common/buses/Bus.h"
+#include "native/rs232/NativeRS232.h"
+#include "native/rs232/RS232.h"
+#include "common/exceptions/IllegalArgumentException.h"
 
 namespace seabreeze {
-
-    class SocketException : public BusException {
+    class TCPIPv4SocketBusInterface : public Bus {
     public:
-        SocketException(const std::string &error);
+        TCPIPv4SocketBusInterface();
+        virtual ~TCPIPv4SocketBusInterface();
+        
+        virtual TransferHelper *getHelper(
+                const std::vector<ProtocolHint *> &hints) const;
+        virtual BusFamily getBusFamily() const;
+        
+        virtual void setLocation(const DeviceLocatorInterface &location);
+        virtual bool open() = 0;
+        virtual void close() = 0;
+        virtual DeviceLocatorInterface *getLocation();
     };
-
 }
 
-#endif /* SEABREEZE_SOCKETEXCEPTION_H */
+#endif /* SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H */
 
