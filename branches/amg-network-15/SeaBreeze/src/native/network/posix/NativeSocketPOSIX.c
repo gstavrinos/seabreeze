@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <sched.h>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -39,11 +40,12 @@
 
 typedef struct  {
     int sock;
+    unsigned char bound;
     unsigned char closed;
 } __socket_handle_t;
 
 void *SocketConnect(char *hostname, unsigned int port) {
-    
+    struct hostent *host_info;
 }
 
 void SocketDestroy(void *handle) {

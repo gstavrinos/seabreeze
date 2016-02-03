@@ -72,3 +72,8 @@ Inet4Address::~Inet4Address() {
 struct in_addr Inet4Address::getAddress() {
     return this->in_addr;
 }
+
+string Inet4Address::getHostAddress() {
+    char *addr = inet_ntoa(this->in);
+    return string(addr);
+}

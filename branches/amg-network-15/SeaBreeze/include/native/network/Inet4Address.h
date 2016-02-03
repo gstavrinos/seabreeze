@@ -50,6 +50,8 @@ namespace seabreeze {
         
         struct in_addr getAddress();
         
+        std::string getHostAddress();
+        
     private:
         struct in_addr in;
     };
