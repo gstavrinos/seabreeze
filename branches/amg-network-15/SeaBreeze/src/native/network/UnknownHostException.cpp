@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    NativeSocketPOSIX.c
+ * @file    UnknownHostException.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,55 +27,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-/* Includes */
-#include <netdb.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sched.h>
+#include "common/globals.h"
+#include "native/network/UnknownHostException.h"
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
+using namespace seabreeze;
 
-typedef struct  {
-    int sock;
-    unsigned char bound;
-    unsigned char closed;
-} __socket_handle_t;
+UnknownHostException::UnknownHostException(const std::string &msg) : runtime_error(msg) {
 
-void *SocketConnect(char *hostname, unsigned int port) {
-    struct hostent *host_info;
-}
-
-void SocketDestroy(void *handle) {
-    
-}
-
-int SocketClose(void *handle) {
-    
-}
-
-int SocketGetSOLinger(void *handle) {
-    
-}
-
-int SocketSetSOLinger(void *handle, unsigned char enable, unsigned int linger) {
-    
-}
-
-int SocketGetSOTimeout(void *handle) {
-    
-}
-
-int SocketSetSOTimeout(void *handle, unsigned int timeout) {
-    
-}
-
-int SocketRead(void *handle, unsigned char *buffer, unsigned int length) {
-    
-}
-
-int SocketWrite(void *handle, unsigned char *buffer, unsigned int length) {
-    
 }

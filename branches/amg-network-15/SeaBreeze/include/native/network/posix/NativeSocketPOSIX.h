@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    Socket.h
+ * @file    NativeSocketPOSIX.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,48 +27,44 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_SOCKET_H
-#define SEABREEZE_SOCKET_H
+#ifndef NATIVESOCKETPOSIX_H
+#define NATIVESOCKETPOSIX_H
 
-/* Includes */
-#include "common/exceptions/BusTransferException.h"
+#include "native/network/Inet4Address.h"
 #include "common/exceptions/BusConnectException.h"
-#include "native/network/UnknownHostException.h"
 #include <string>
 
 namespace seabreeze {
-    
-    class Socket {
+    class NativeSocketPOSIX : Socket {
     public:
-        static Socket *create();
-        
-        virtual ~Socket();
+        NativeSocket();
+        virtual ~NativeSocket();
         
         virtual void connect(Inet4Address &addr, int port)
-                throw (UnknownHostException, BusConnectException) = 0;
-        virtual void connect(const std::string host, int port)
-                throw (UnknownHostException, BusConnectException) = 0;
+                throw (UnknownHostException, BusConnectException);
+        virtual void connect(const std::string hostname, int port)
+                throw (UnknownHostException, BusConnectException);
         
-        virtual void close() throw (BusException) = 0;
-        virtual bool isClosed() = 0;
-        virtual bool isBound() = 0;
+        virtual void close() throw (BusException);
+        virtual bool isClosed();
+        virtual bool isBound();
         
-        /* Socket options */
-        virtual int getSOLinger() throw (SocketException) = 0;
-        virtual void setSOLinger(bool enable, int linger) throw (SocketException) = 0;
-        virtual unsigned long getReadTimeout() throw (SocketException) = 0;
-        virtual void setReadTimeout(unsigned long timeout) throw (SocketException) = 0;
+        virtual int getSOLinger() throw (SocketException);
+        virtual void setSOLinger(bool enable, int linger) throw (SocketException);
+        virtual unsigned long getReadTimeoutMillis() throw (SocketException);
+        virtual void setReadTimeoutMillis(unsigned long timeout) throw (SocketException);
         
-        /* Data transfer */
         virtual int read(unsigned char *buffer, unsigned long length)
-            throw (BusTransferException) = 0;
+            throw (BusTransferException);
         virtual int write(const unsigned char *buffer, unsigned long length)
-            throw (BusTransferException) = 0;
+            throw (BusTransferException);
         
+    private:
+        int sock;
+        bool bound;
+        bool closed;
+        Inet4Address address;
     };
-    
-    /* Default implementation for (otherwise) pure virtual destructor */
-    inline Socket::~Socket() {}
 }
 
-#endif /* SOCKET_H */
+#endif /* NATIVESOCKETPOSIX_H */

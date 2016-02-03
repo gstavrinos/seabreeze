@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    UnknownHostException.h
+ * @file    SocketTimeoutException.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,18 +27,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_UNKNOWNHOSTEXCEPTION_H
-#define SEABREEZE_UNKNOWNHOSTEXCEPTION_H
+#include "common/globals.h"
+#include "native/network/SocketTimeoutException.h"
 
-#include <stdexcept>
+using namespace seabreeze;
 
-namespace seabreeze {
-
-    class UnknownHostException : public std::runtime_error {
-    public:
-        UnknownHostException(const std::string &error);
-    };
+SocketTimeoutException::SocketTimeoutException(const std::string &msg)
+        : SocketException(msg) {
 
 }
-
-#endif /* UNKNOWNHOSTEXCEPTION_H */

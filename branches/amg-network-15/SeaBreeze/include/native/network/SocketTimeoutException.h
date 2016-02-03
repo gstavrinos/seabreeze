@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    Socket.cpp
+ * @file    SocketTimeoutException.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,42 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "native/network/Socket.h"
 
-using namespace seabreeze;
-using namespace std;
+#ifndef SOCKETTIMEOUTEXCEPTION_H
+#define SOCKETTIMEOUTEXCEPTION_H
 
-Socket::Socket(string host, int port)
-        throw (UnknownHostException, BusConnectException) {
-    
+#include "native/network/SocketException.h"
+
+namespace seabreeze {
+
+    class SocketTimeoutException : public SocketException {
+    public:
+        SocketTimeoutException(const std::string &error);
+    };
+
 }
 
-void Socket::close() throw (BusException) {
-    
-}
-
-int Socket::getSOLinger() throw (SocketException) {
-    
-}
-
-void Socket::setSOLinger(bool enable, int linger) throw (SocketException) {
-    
-}
-
-int Socket::getSOTimeout() throw (SocketException) {
-    
-}
-
-int Socket::setSOTimeout(int timeout) throw (SocketException) {
-    
-}
-
-int Socket::read(unsigned char *buffer, unsigned long length)
-        throw (BusTransferException) {
-    
-}
-
-int Socket::write(const unsigned char *buffer, unsigned long length)
-        throw (BusTransferException) {
-    
-}
+#endif /* SOCKETTIMEOUTEXCEPTION_H */
