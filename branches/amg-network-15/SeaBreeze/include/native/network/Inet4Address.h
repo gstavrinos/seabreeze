@@ -31,6 +31,7 @@
 #define INET4ADDRESS_H
 
 #include <string>
+#include "common/exceptions/IllegalArgumentException.h"
 
 #ifdef _WINDOWS
 #include <winsock2.h>

@@ -30,15 +30,16 @@
 #ifndef NATIVESOCKETPOSIX_H
 #define NATIVESOCKETPOSIX_H
 
+#include "native/network/Socket.h"
 #include "native/network/Inet4Address.h"
 #include "common/exceptions/BusConnectException.h"
 #include <string>
 
 namespace seabreeze {
-    class NativeSocketPOSIX : Socket {
+    class NativeSocketPOSIX : public Socket {
     public:
-        NativeSocket();
-        virtual ~NativeSocket();
+        NativeSocketPOSIX();
+        virtual ~NativeSocketPOSIX();
         
         virtual void connect(Inet4Address &addr, int port)
                 throw (UnknownHostException, BusConnectException);

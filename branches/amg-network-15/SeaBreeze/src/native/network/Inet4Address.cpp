@@ -46,12 +46,12 @@ Inet4Address::Inet4Address() {
 Inet4Address::Inet4Address(std::string ipAddressQuads)
         throw (IllegalArgumentException) {
     
-    char *addrString = ipAddressQuads.c_str();
+    const char *addrString = ipAddressQuads.c_str();
     
 #ifdef _WINDOWS
     this->in.S_un.S_addr = inet_addr(addrString);
 #else
-    if(0 == inet_aton(addrString, &(this->in)) {
+    if(0 == inet_aton(addrString, &(this->in))) {
         throw IllegalArgumentException("Invalid IPv4 address");
     }
 #endif
@@ -70,7 +70,7 @@ Inet4Address::~Inet4Address() {
 }
 
 struct in_addr Inet4Address::getAddress() {
-    return this->in_addr;
+    return this->in;
 }
 
 string Inet4Address::getHostAddress() {
