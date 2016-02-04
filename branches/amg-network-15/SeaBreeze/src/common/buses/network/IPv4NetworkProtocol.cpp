@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    IPv4SocketDeviceLocator.h
+ * @file    IPv4NetworkProtocol.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,39 +27,68 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
-#define SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
-
-#include "common/buses/DeviceLocatorInterface.h"
+/* Includes */
 #include "common/buses/network/IPv4NetworkProtocol.h"
-#include <string>
 
-namespace seabreeze {
-    class IPv4SocketDeviceLocator : public DeviceLocatorInterface {
-    public:
-        IPv4SocketDeviceLocator(IPv4NetworkProtocol proto, std::string ip,
-            int portNumber);
-        virtual ~IPv4SocketDeviceLocator();
-        
-        virtual unsigned long getUniqueLocation() const;
+using namespace seabreeze;
+using namespace std;
 
-        virtual bool equals(DeviceLocatorInterface &that);
+/* Constants */
+#define IP4_PROTOCOL_ID_TCPIP   0
+#define IP4_PROTOCOL_ID_UDPIP   1
 
-        virtual std::string getDescription();
-
-        virtual BusFamily getBusFamily() const;
-
-        virtual DeviceLocatorInterface *clone() const;
-        
-    protected:
-        void computeLocationHash();
-        
-        std::string ipAddr;
-        int port;
-        IPv4NetworkProtocol protocol;
-        unsigned long locationHash;
-    };
+IPv4NetworkProtocol::IPv4NetworkProtocol(string name, int id) {
+    this->protocolName = name;
+    this->type = id;
 }
 
-#endif /* SEABREEZE_IPV4SOCKETDEVICELOCATOR_H */
+IPv4NetworkProtocol::~IPv4NetworkProtocol() {
+    
+}
 
+string IPv4NetworkProtocol::getName() const {
+    return this->protocolName;
+}
+
+bool IPv4NetworkProtocol::equals(const IPv4NetworkProtocol &that) {
+    return this->type == that.type;
+}
+
+TCP_IPv4::TCP_IPv4() : IPv4NetworkProtocol("TCP/IPv4", IP4_PROTOCOL_ID_TCPIP) {
+    
+}
+
+TCP_IPv4::~TCP_IPv4() {
+    
+}
+
+UDP_IPv4::UDP_IPv4() : IPv4NetworkProtocol("UDP/IPv4", IP4_PROTOCOL_ID_UDPIP) {
+    
+}
+
+UDP_IPv4::~UDP_IPv4() {
+    
+}
+
+IPv4NetworkProtocols::IPv4NetworkProtocols() {
+    
+}
+
+IPv4NetworkProtocols::~IPv4NetworkProtocols() {
+    
+}
+
+vector<IPv4NetworkProtocol *> IPv4NetworkProtocols::getAllIPv4NetworkProtocols() {
+    vector<IPv4NetworkProtocol *> retval;
+
+    /* This creates new instances of these so the class-wide fields do not risk
+     * having their const flags ignored.
+     */
+    IPv4NetworkProtocol *tcp_ipv4 = new TCP_IPv4();
+    IPv4NetworkProtocol *udp_ipv4 = new UDP_IPv4();
+    
+    retval.push_back(tcp_ipv4);
+    retval.push_back(udp_ipv4);
+    
+    return retval;
+}

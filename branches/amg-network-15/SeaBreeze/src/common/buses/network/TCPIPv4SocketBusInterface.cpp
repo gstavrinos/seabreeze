@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TCPIPv4SocketBusInterface.h
+ * @file    TCPIPv4SocketBusInterface.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,38 +27,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
-#define SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
+#include "common/buses/network/TCPIPv4SocketBusInterface.h"
 
-#include "common/buses/Bus.h"
-#include "common/exceptions/IllegalArgumentException.h"
-#include "native/network/Socket.h"
+using namespace seabreeze;
+using namespace std;
 
-namespace seabreeze {
-    class TCPIPv4SocketBusInterface : public Bus {
-    public:
-        TCPIPv4SocketBusInterface();
-        virtual ~TCPIPv4SocketBusInterface();
-        
-        virtual Socket *getSocketDescriptor();
-        
-        virtual BusFamily getBusFamily() const;
-        
-        virtual void setLocation(const DeviceLocatorInterface &location)
-                throw (IllegalArgumentException);
-        virtual DeviceLocatorInterface *getLocation();
-        
-        /* Pure virtual methods */
-        virtual TransferHelper *getHelper(
-                const std::vector<ProtocolHint *> &hints) const = 0;
-        virtual bool open() = 0;
-        virtual void close() = 0;
-        
-        
-    protected:
-        Socket *socket;
-        DeviceLocatorInterface *deviceLocator;
-    };
+TCPIPv4SocketBusInterface::TCPIPv4SocketBusInterface() {
+    this->deviceLocator = NULL;
 }
 
-#endif /* SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H */
+TCPIPv4SocketBusInterface::~TCPIPv4SocketBusInterface() {
+    if(NULL != this->deviceLocator) {
+        delete this->deviceLocator;
+    }
+}
+
+Socket *TCPIPv4SocketBusInterface::getSocketDescriptor() {
+    return this->socket;
+}
+
+BusFamily TCPIPv4SocketBusInterface::getBusFamily() const {
+    TCPIPv4BusFamily family;
+    return family;
+}
+
+void TCPIPv4SocketBusInterface::setLocation(
+        const DeviceLocatorInterface &location) throw (IllegalArgumentException) {
+    if(NULL != this->deviceLocator) {
+        delete this->deviceLocator;
+    }
+    
+    this->deviceLocator = location.clone();
+}
+
+DeviceLocatorInterface *TCPIPv4SocketBusInterface::getLocation() {
+    return this->deviceLocator;
+}

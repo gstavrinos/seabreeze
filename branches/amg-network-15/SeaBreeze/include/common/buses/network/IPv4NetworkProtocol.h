@@ -31,12 +31,13 @@
 #define SEABREEZE_IPV4NETWORKPROTOCOL_H
 
 #include <string>
+#include <vector>
 
 namespace seabreeze {
     class IPv4NetworkProtocol {
     public:
-        virtual ~IPv4NetworkProtocol();
-        virtual std::string getName();
+        virtual ~IPv4NetworkProtocol() = 0;
+        virtual std::string getName() const = 0;
         virtual bool equals(const IPv4NetworkProtocol &that);
 
     protected:
@@ -46,7 +47,28 @@ namespace seabreeze {
         std::string protocolName;
         int type;
     };
+    
+    class TCP_IPv4 : public IPv4NetworkProtocol {
+    public:
+        TCP_IPv4();
+        virtual ~TCP_IPv4();
+    };
+    
+    class UDP_IPv4 : public IPv4NetworkProtocol {
+    public:
+        UDP_IPv4();
+        virtual ~UDP_IPv4();
+    };
 
+    class IPv4NetworkProtocols {
+    public:
+        const TCP_IPv4 TCP_IP4;
+        const UDP_IPv4 UDP_IP4;
+
+        IPv4NetworkProtocols();
+        ~IPv4NetworkProtocols();
+        std::vector<BusFamily *> getAllIPv4NetworkProtocols();
+    };
 }
 
 #endif /* SEABREEZE_IPV4NETWORKPROTOCOL_H */

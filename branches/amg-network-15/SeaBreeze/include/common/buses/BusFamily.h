@@ -38,7 +38,7 @@ namespace seabreeze {
     class BusFamily {
     public:
         virtual ~BusFamily();
-        virtual std::string getName();
+        virtual std::string getName() const;
         virtual bool equals(const BusFamily &that);
 
     protected:

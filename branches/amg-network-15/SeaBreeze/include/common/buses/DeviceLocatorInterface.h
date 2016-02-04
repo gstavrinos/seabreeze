@@ -77,7 +77,6 @@ namespace seabreeze {
     /* Default implementation for (otherwise) pure virtual destructor */
     inline DeviceLocatorInterface::~DeviceLocatorInterface() {}
 
-
 }
 
 #endif /* DEVICELOCATORINTERFACE_H */

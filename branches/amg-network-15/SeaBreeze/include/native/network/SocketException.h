@@ -42,4 +42,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_SOCKETEXCEPTION_H */
-
