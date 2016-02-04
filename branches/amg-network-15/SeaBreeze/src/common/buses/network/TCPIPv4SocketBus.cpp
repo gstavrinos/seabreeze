@@ -42,6 +42,8 @@ TCPIPv4SocketBus::~TCPIPv4SocketBus() {
     if(NULL != this->deviceLocator) {
         delete this->deviceLocator;
     }
+
+    clearHelpers();
 }
 
 Socket *TCPIPv4SocketBus::getSocketDescriptor() {
