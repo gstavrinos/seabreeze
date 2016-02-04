@@ -101,8 +101,8 @@ vector<BusFamily *> BusFamilies::getAllBusFamilies() {
     USBBusFamily *usb = new USBBusFamily();
     EthernetBusFamily *ethernet = new EthernetBusFamily();
     RS232BusFamily *rs232 = new RS232BusFamily();
-    TCPIPv4BusFamily tcpipv4 = new TCPIPv4BusFamily();
-    TCPIPv4BusFamily udpipv4 = new UDPIPv4BusFamily();
+    TCPIPv4BusFamily *tcpipv4 = new TCPIPv4BusFamily();
+    UDPIPv4BusFamily *udpipv4 = new UDPIPv4BusFamily();
 
     retval.push_back(usb);
     retval.push_back(ethernet);

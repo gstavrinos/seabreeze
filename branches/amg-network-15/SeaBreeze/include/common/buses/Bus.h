@@ -41,6 +41,7 @@
 #include "common/buses/TransferHelper.h"
 #include "common/buses/BusFamily.h"
 #include "common/buses/DeviceLocatorInterface.h"
+#include "common/exceptions/IllegalArgumentException.h"
 
 namespace seabreeze {
 
