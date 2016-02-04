@@ -62,7 +62,17 @@ bool JazTCPIPv4::open() {
         return false;
     }
     
-    this->socket->connect(loc->getIPv4Address(), loc->getPort());
+    try {
+        this->socket->connect(loc->getIPv4Address(), loc->getPort());
+        this->socket->setSOLinger(false, 1);
+        this->socket->setReadTimeoutMillis(0);  /* Wait indefinitely */
+    } catch (UnknownHostException &uhe) {
+        return false;
+    } catch (BusConnectException &bce) {
+        return false;
+    } catch (SocketException &se) {
+        return false;
+    }
     
     addHelper(new SpectrumHint(), new TCPIPv4SocketTransferHelper(this->socket));
     addHelper(new ControlHint(), new TCPIPv4SocketTransferHelper(this->socket));

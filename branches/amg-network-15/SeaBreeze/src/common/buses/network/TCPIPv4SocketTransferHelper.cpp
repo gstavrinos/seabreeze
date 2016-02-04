@@ -46,16 +46,49 @@ int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
         unsigned int length) throw (BusTransferException) {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
+    unsigned int bytesRead = 0;
     
-    /* TODO: need to check for exceptions and possibly poll */
-    return this->socket->read(rawBuffer, buffer.size());
+    /* TODO: There should be a couple alternatives for this.  One should
+     * poll more or less indefinitely.  The other should do a single read
+     * attempt and return, which allows the Protocol layer to decide what
+     * to do next.
+     */
+    try {
+        while(bytesRead < length) {
+            int result = this->socket->read(rawBuffer, length);
+            if(result > 0) {
+                bytesRead += result;
+            } else {
+                /* This should only be possible if a timeout was set for the
+                 * socket.
+                 */
+                break;
+            }
+        }
+    } catch (BusTransferException &bte) {
+        if(0 == bytesRead) {
+            throw bte;
+        }
+    }
+    return bytesRead;
 }
 
 int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
         unsigned int length) const throw (BusTransferException) {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
+    unsigned int written = 0;
     
-    /* TODO: need to check for exceptions and possibly poll */
-    return this->socket->write(rawBuffer, buffer.size());
+    while(written < length) {
+        /* This may throw a BusTransferException.  This needs to be dealt with
+         * by the caller.
+         */
+        int result = this->socket->write(rawBuffer, length);
+        if(result > 0) {
+            written += result;
+        } else {
+            break;
+        }
+    }
+    return written;
 }
