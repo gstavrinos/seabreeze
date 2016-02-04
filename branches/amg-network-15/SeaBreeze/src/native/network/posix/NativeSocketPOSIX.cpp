@@ -39,6 +39,8 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 
+#include <string.h>
+
 #include "native/network/posix/NativeSocketPOSIX.h"
 #include "native/network/SocketTimeoutException.h"
 

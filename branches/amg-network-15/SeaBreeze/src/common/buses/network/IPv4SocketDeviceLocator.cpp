@@ -32,6 +32,9 @@
 #include "common/buses/network/IPv4NetworkProtocol.h"
 #include "common/buses/BusFamilies.h"
 
+#include <stdio.h>
+#include <stdexcept>
+
 using namespace seabreeze;
 using namespace std;
 

@@ -62,13 +62,12 @@ bool JazTCPIPv4::open() {
         return false;
     }
     
-    bool flag = false;
     this->socket->connect(loc->getIPv4Address(), loc->getPort());
     
     addHelper(new SpectrumHint(), new TCPIPv4SocketTransferHelper(this->socket));
     addHelper(new ControlHint(), new TCPIPv4SocketTransferHelper(this->socket));
     
-    return flag;
+    return true;
 }
 
 void JazTCPIPv4::close() {

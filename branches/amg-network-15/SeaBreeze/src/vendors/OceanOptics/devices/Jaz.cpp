@@ -90,8 +90,7 @@ ProtocolFamily Jaz::getSupportedProtocol(FeatureFamily family, BusFamily bus) {
     ProtocolFamilies protocols;
     BusFamilies busFamilies;
 
-    if(bus.equals(busFamilies.USB) || bus.equals(busFamilies.ETHERNET)) {
-        /* This device only supports one protocol over USB. */
+    if(bus.equals(busFamilies.USB) || bus.equals(busFamilies.TCPIPv4)) {
         return protocols.OOI_PROTOCOL;
     }
 
