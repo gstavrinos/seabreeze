@@ -50,7 +50,7 @@ string IPv4NetworkProtocol::getName() const {
     return this->protocolName;
 }
 
-bool IPv4NetworkProtocol::equals(const IPv4NetworkProtocol &that) {
+bool IPv4NetworkProtocol::equals(const IPv4NetworkProtocol &that) const {
     return this->type == that.type;
 }
 

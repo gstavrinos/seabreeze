@@ -29,16 +29,14 @@
 
 /* Includes */
 #include "common/buses/network/IPv4SocketDeviceLocator.h"
+#include "common/buses/network/IPv4NetworkProtocol.h"
 #include "common/buses/BusFamilies.h"
 
 using namespace seabreeze;
 using namespace std;
 
-IPv4SocketDeviceLocator::IPv4SocketDeviceLocator(IPv4NetworkProtocol proto,
-        string ip, int portNumber) {
-    this->protocol = proto;
-    this->ipAddr = ip;
-    this->port = portNumber;
+IPv4SocketDeviceLocator::IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto,
+        string ip, int portNumber) : protocol(proto), ipAddr(ip), port(portNumber) {
     
     this->locationHash = computeLocationHash();
 }
@@ -47,12 +45,24 @@ IPv4SocketDeviceLocator::~IPv4SocketDeviceLocator() {
     
 }
 
+string IPv4SocketDeviceLocator::getIPv4Address() {
+    return this->ipAddr;
+}
+
+int IPv4SocketDeviceLocator::getPort() {
+    return this->port;
+}
+
+IPv4NetworkProtocol IPv4SocketDeviceLocator::getIPv4NetworkProtocol() {
+    return this->protocol;
+}
+
 unsigned long IPv4SocketDeviceLocator::getUniqueLocation() const {
     return this->locationHash;
 }
 
 bool IPv4SocketDeviceLocator::equals(DeviceLocatorInterface &that) {
-    RS232DeviceLocator *loc;
+    IPv4SocketDeviceLocator *loc;
 
     loc = dynamic_cast<IPv4SocketDeviceLocator *>(&that);
     if(NULL == loc) {
@@ -82,10 +92,13 @@ string IPv4SocketDeviceLocator::getDescription() {
 }
 
 BusFamily IPv4SocketDeviceLocator::getBusFamily() const {
-    if(this->protocol.equals(IPv4NetworkProtocols.TCP_IPv4)) {
-        return BusFamilies.TCPIPv4;
-    } else if(this->protocol.equals(IPv4NetworkProtocols.UDP_IPv4)) {
-        return BusFamilies.UDPIPv4;
+    IPv4NetworkProtocols networkProtocols;
+    BusFamilies families;
+    
+    if(this->protocol.equals(networkProtocols.TCP_IP4)) {
+        return families.TCPIPv4;
+    } else if(this->protocol.equals(networkProtocols.UDP_IP4)) {
+        return families.UDPIPv4;
     }
     
     throw runtime_error("Internal error: unknown IPv4 protocol");
@@ -98,7 +111,7 @@ DeviceLocatorInterface *IPv4SocketDeviceLocator::clone() const {
     return retval;
 }
 
-void IPv4SocketDeviceLocator::computeLocationHash() {
+unsigned long IPv4SocketDeviceLocator::computeLocationHash() {
     /* Iterate over the devicePath and compute a sort of hash */
     unsigned long hash = 1;
     string::iterator iter;
@@ -110,5 +123,5 @@ void IPv4SocketDeviceLocator::computeLocationHash() {
         hash = 31 * hash + (*iter);
     }
 
-    this->locationHash = hash;
+    return hash;
 }

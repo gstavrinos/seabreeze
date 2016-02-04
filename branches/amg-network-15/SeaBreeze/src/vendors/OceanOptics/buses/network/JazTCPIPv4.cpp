@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TCPIPv4SocketBusInterface.cpp
+ * @file    JazTCPIPv4.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,39 +27,52 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/buses/network/TCPIPv4SocketBusInterface.h"
+#include <cstddef>
+#include "vendors/OceanOptics/buses/network/JazTCPIPv4.h"
+#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
+#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
+#include "common/buses/network/IPv4SocketDeviceLocator.h"
+#include "common/buses/network/TCPIPv4SocketTransferHelper.h"
 
 using namespace seabreeze;
+using namespace seabreeze::ooiProtocol;
 using namespace std;
 
-TCPIPv4SocketBusInterface::TCPIPv4SocketBusInterface() {
-    this->deviceLocator = NULL;
+JazTCPIPv4::JazTCPIPv4() {
+    this->socket = Socket::create();
 }
 
-TCPIPv4SocketBusInterface::~TCPIPv4SocketBusInterface() {
-    if(NULL != this->deviceLocator) {
-        delete this->deviceLocator;
+JazTCPIPv4::~JazTCPIPv4() {
+    if(NULL != this->socket) {
+        if(false == this->socket->isClosed()) {
+            this->socket->close();
+        }
+        delete this->socket;
     }
 }
 
-Socket *TCPIPv4SocketBusInterface::getSocketDescriptor() {
-    return this->socket;
-}
-
-BusFamily TCPIPv4SocketBusInterface::getBusFamily() const {
-    TCPIPv4BusFamily family;
-    return family;
-}
-
-void TCPIPv4SocketBusInterface::setLocation(
-        const DeviceLocatorInterface &location) throw (IllegalArgumentException) {
-    if(NULL != this->deviceLocator) {
-        delete this->deviceLocator;
+bool JazTCPIPv4::open() {
+    if(NULL == this->deviceLocator || NULL == this->socket) {
+        return false;
     }
     
-    this->deviceLocator = location.clone();
+    IPv4SocketDeviceLocator *loc = dynamic_cast<IPv4SocketDeviceLocator *>(this->deviceLocator);
+    if(NULL == loc) {
+        /* Must have been passed an invalid location */
+        return false;
+    }
+    
+    bool flag = false;
+    this->socket->connect(loc->getIPv4Address(), loc->getPort());
+    
+    addHelper(new SpectrumHint(), new TCPIPv4SocketTransferHelper(this->socket));
+    addHelper(new ControlHint(), new TCPIPv4SocketTransferHelper(this->socket));
+    
+    return flag;
 }
 
-DeviceLocatorInterface *TCPIPv4SocketBusInterface::getLocation() {
-    return this->deviceLocator;
+void JazTCPIPv4::close() {
+    if(NULL != this->socket) {
+        this->socket->close();
+    }
 }

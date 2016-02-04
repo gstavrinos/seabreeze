@@ -1,7 +1,7 @@
-SEABREEZE = ../../..
+SEABREEZE = ../../../../..
 
 all: deps objs
 
-SUBDIRS = network rs232 usb
+SUBDIRS =
 
 include $(SEABREEZE)/common.mk

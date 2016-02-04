@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    IPv4SocketDeviceLocator.h
+ * @file    TCPIPv4SocketTransferHelper.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,40 +27,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
-#define SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
+#ifndef SEABREEZE_TCPIPV4SOCKETTRANSFERHELPER_H
+#define SEABREEZE_TCPIPV4SOCKETTRANSFERHELPER_H
 
-#include "common/buses/DeviceLocatorInterface.h"
-#include "common/buses/network/IPv4NetworkProtocol.h"
-#include <string>
+#include "common/buses/TransferHelper.h"
+#include "native/network/Socket.h"
 
 namespace seabreeze {
-    class IPv4SocketDeviceLocator : public DeviceLocatorInterface {
+    class TCPIPv4SocketTransferHelper : public TransferHelper {
     public:
-        IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto, std::string ip,
-            int portNumber);
-        virtual ~IPv4SocketDeviceLocator();
+        TCPIPv4SocketTransferHelper(Socket *sock);
+        virtual ~TCPIPv4SocketTransferHelper();
         
-        std::string getIPv4Address();
-        int getPort();
-        IPv4NetworkProtocol getIPv4NetworkProtocol();
-        
-        /* Inherited from DeviceLocatorInterface */
-        virtual unsigned long getUniqueLocation() const;
-        virtual bool equals(DeviceLocatorInterface &that);
-        virtual std::string getDescription();
-        virtual BusFamily getBusFamily() const;
-        virtual DeviceLocatorInterface *clone() const;
+        virtual int receive(std::vector<byte> &buffer, unsigned int length)
+            throw (BusTransferException);
+        virtual int send(const std::vector<byte> &buffer, unsigned int length) const
+            throw (BusTransferException);
         
     protected:
-        unsigned long computeLocationHash();
-        
-        IPv4NetworkProtocol protocol;
-        std::string ipAddr;
-        int port;
-        unsigned long locationHash;
+        Socket *socket;
     };
 }
 
-#endif /* SEABREEZE_IPV4SOCKETDEVICELOCATOR_H */
-
+#endif /* SEABREEZE_TCPIPV4SOCKETTRANSFERHELPER_H */

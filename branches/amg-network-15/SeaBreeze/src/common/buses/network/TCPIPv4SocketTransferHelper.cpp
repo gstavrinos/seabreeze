@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    IPv4SocketDeviceLocator.h
+ * @file    TCPIPv4SocketTransferHelper.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,40 +27,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
-#define SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
+#include "common/buses/network/TCPIPv4SocketTransferHelper.h"
 
-#include "common/buses/DeviceLocatorInterface.h"
-#include "common/buses/network/IPv4NetworkProtocol.h"
-#include <string>
+using namespace seabreeze;
+using namespace std;
 
-namespace seabreeze {
-    class IPv4SocketDeviceLocator : public DeviceLocatorInterface {
-    public:
-        IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto, std::string ip,
-            int portNumber);
-        virtual ~IPv4SocketDeviceLocator();
-        
-        std::string getIPv4Address();
-        int getPort();
-        IPv4NetworkProtocol getIPv4NetworkProtocol();
-        
-        /* Inherited from DeviceLocatorInterface */
-        virtual unsigned long getUniqueLocation() const;
-        virtual bool equals(DeviceLocatorInterface &that);
-        virtual std::string getDescription();
-        virtual BusFamily getBusFamily() const;
-        virtual DeviceLocatorInterface *clone() const;
-        
-    protected:
-        unsigned long computeLocationHash();
-        
-        IPv4NetworkProtocol protocol;
-        std::string ipAddr;
-        int port;
-        unsigned long locationHash;
-    };
+TCPIPv4SocketTransferHelper::TCPIPv4SocketTransferHelper(Socket *sock) {
+    this->socket = sock;
 }
 
-#endif /* SEABREEZE_IPV4SOCKETDEVICELOCATOR_H */
+TCPIPv4SocketTransferHelper::~TCPIPv4SocketTransferHelper() {
+    /* Note that disposal of the socket is the responsibility of the Bus
+     * (i.e. TCPIPv4SocketBus).
+     */
+}
 
+int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
+        unsigned int length) throw (BusTransferException) {
+    
+    unsigned char *rawBuffer = (unsigned char *)&buffer[0];
+    
+    /* TODO: need to check for exceptions and possibly poll */
+    return this->socket->read(rawBuffer, buffer.size());
+}
+
+int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
+        unsigned int length) const throw (BusTransferException) {
+    
+    unsigned char *rawBuffer = (unsigned char *)&buffer[0];
+    
+    /* TODO: need to check for exceptions and possibly poll */
+    return this->socket->write(rawBuffer, buffer.size());
+}

@@ -36,9 +36,9 @@
 namespace seabreeze {
     class IPv4NetworkProtocol {
     public:
-        virtual ~IPv4NetworkProtocol() = 0;
-        virtual std::string getName() const = 0;
-        virtual bool equals(const IPv4NetworkProtocol &that);
+        virtual ~IPv4NetworkProtocol();
+        virtual std::string getName() const;
+        virtual bool equals(const IPv4NetworkProtocol &that) const;
 
     protected:
         IPv4NetworkProtocol(std::string name, int id);
@@ -67,7 +67,7 @@ namespace seabreeze {
 
         IPv4NetworkProtocols();
         ~IPv4NetworkProtocols();
-        std::vector<BusFamily *> getAllIPv4NetworkProtocols();
+        std::vector<IPv4NetworkProtocol *> getAllIPv4NetworkProtocols();
     };
 }
 

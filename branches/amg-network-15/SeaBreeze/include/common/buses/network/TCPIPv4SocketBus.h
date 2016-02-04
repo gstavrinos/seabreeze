@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    IPv4SocketDeviceLocator.h
+ * @file    TCPIPv4SocketBus.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,40 +27,49 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
-#define SEABREEZE_IPV4SOCKETDEVICELOCATOR_H
+#ifndef SEABREEZE_TCPIPV4SOCKETBUS_H
+#define SEABREEZE_TCPIPV4SOCKETBUS_H
 
-#include "common/buses/DeviceLocatorInterface.h"
-#include "common/buses/network/IPv4NetworkProtocol.h"
-#include <string>
+#include "common/buses/Bus.h"
+#include "common/exceptions/IllegalArgumentException.h"
+#include "native/network/Socket.h"
+#include <vector>
 
 namespace seabreeze {
-    class IPv4SocketDeviceLocator : public DeviceLocatorInterface {
+    class TCPIPv4SocketBus : public Bus {
     public:
-        IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto, std::string ip,
-            int portNumber);
-        virtual ~IPv4SocketDeviceLocator();
+        TCPIPv4SocketBus();
+        virtual ~TCPIPv4SocketBus();
         
-        std::string getIPv4Address();
-        int getPort();
-        IPv4NetworkProtocol getIPv4NetworkProtocol();
+        virtual Socket *getSocketDescriptor();
         
-        /* Inherited from DeviceLocatorInterface */
-        virtual unsigned long getUniqueLocation() const;
-        virtual bool equals(DeviceLocatorInterface &that);
-        virtual std::string getDescription();
         virtual BusFamily getBusFamily() const;
-        virtual DeviceLocatorInterface *clone() const;
+        
+        virtual void setLocation(const DeviceLocatorInterface &location)
+                throw (IllegalArgumentException);
+        virtual DeviceLocatorInterface *getLocation();
+        virtual TransferHelper *getHelper(
+                const std::vector<ProtocolHint *> &hints) const;
+        
+        /* Pure virtual methods */
+        virtual bool open() = 0;
+        virtual void close() = 0;
+        
         
     protected:
-        unsigned long computeLocationHash();
+        void addHelper(ProtocolHint *hint, TransferHelper *helper);
+        void clearHelpers();
         
-        IPv4NetworkProtocol protocol;
-        std::string ipAddr;
-        int port;
-        unsigned long locationHash;
+        Socket *socket;
+        DeviceLocatorInterface *deviceLocator;
+        
+        /* These vectors should really be in a map, but that didn't want to
+         * work easily.  Since there will likely be about 2 entries in here,
+         * storing in a pair of vectors for now won't hurt anything.
+         */
+        std::vector<ProtocolHint *> helperKeys;
+        std::vector<TransferHelper *> helperValues;
     };
 }
 
-#endif /* SEABREEZE_IPV4SOCKETDEVICELOCATOR_H */
-
+#endif /* SEABREEZE_TCPIPV4SOCKETBUS_H */

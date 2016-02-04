@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    TCPIPv4SocketBusInterface.h
+ * @file    JazTCPIPv4.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,38 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
-#define SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H
+#ifndef SEABREEZE_JAZTCPIPV4_H
+#define SEABREEZE_JAZTCPIPV4_H
 
-#include "common/buses/Bus.h"
-#include "common/exceptions/IllegalArgumentException.h"
-#include "native/network/Socket.h"
+#include "common/buses/network/TCPIPv4SocketBus.h"
 
 namespace seabreeze {
-    class TCPIPv4SocketBusInterface : public Bus {
+    class JazTCPIPv4 : public TCPIPv4SocketBus {
     public:
-        TCPIPv4SocketBusInterface();
-        virtual ~TCPIPv4SocketBusInterface();
+        JazTCPIPv4();
+        virtual ~JazTCPIPv4();
         
-        virtual Socket *getSocketDescriptor();
-        
-        virtual BusFamily getBusFamily() const;
-        
-        virtual void setLocation(const DeviceLocatorInterface &location)
-                throw (IllegalArgumentException);
-        virtual DeviceLocatorInterface *getLocation();
-        
-        /* Pure virtual methods */
-        virtual TransferHelper *getHelper(
-                const std::vector<ProtocolHint *> &hints) const = 0;
-        virtual bool open() = 0;
-        virtual void close() = 0;
-        
-        
-    protected:
-        Socket *socket;
-        DeviceLocatorInterface *deviceLocator;
+        virtual bool open();
+        virtual void close();
     };
 }
 
-#endif /* SEABREEZE_TCPIPV4SOCKETBUSINTERFACE_H */
+#endif /* SEABREEZE_JAZTCPIPV4_H */
+
