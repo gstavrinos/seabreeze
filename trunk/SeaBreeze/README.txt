@@ -425,9 +425,6 @@ For support with SeaBreeze issues, please contact oem@oceanoptics.com.
 
 \section issues Known Issues
 
-- \ref tickets
-- \ref backlog
-
 \subsection vst_modules VST Module Conflicts
 
 Under Ubuntu 10.04 LTS and other Linux versions, you may have trouble claiming
@@ -439,37 +436,44 @@ A similar problem was found between HR4000, Debian 6, and the "vstusb" module.
 Again, adding "blacklist vstusb" to /etc/modprobe.d/blacklist.conf and rebooting
 resolved the issue. 
 
-\subsection tickets Open Tickets
+\subsection toshiba USB4000 and Flame-T on libusb
 
-- EDC pixels for Flame-S and Flame-T need updated to distinguish from USB2000+/USB4000
-  via USB Descriptor
-- [oem-2306] SeaBreezeWrapper::getInstance() returns before fully initialized
+Some versions of libusb, including that used by some Linux distributions and
+the latest release of MacOS (El Capitan 10.11.3) lead to very slow enumeration of
+Toshiba-based spectrometers (the USB4000 and Flame-T).  This is being investigated.
 
 \section backlog Product Backlog
 
 \subsection backlog_high High
 
-- add Spark *.inf files to other Visual Studio installer projects besides 2010
-- enable SeaBreezeAPI from binary-only distribution (provide missing headers, etc)
-- generate Feature Matrix showing which features are (N)ot-possible, (P)ossible,
-  (I)mplemented or (W)orkaround-available for each spectrometer, for both 
-  SeaBreezeWrapper and SeaBreezeAPI.
+- deprecate SeaBreezeWrapper
+- update number of user-configurable EEPROM slots from the MAX_COEFFS constants
+  in the appropriate device firmware
+- EDC pixels for Flame-S and Flame-T need updated to distinguish from USB2000+/USB4000
+  via USB Descriptor
 
 \subsection backlog_med Medium
 
 - provide more Visual Basic samples
 - provide more Visual C++ samples
 - fix Cygwin on Win64
+- add Spark *.inf files to other Visual Studio installer projects besides 2010
+- enable SeaBreezeAPI from binary-only distribution (provide missing headers, etc)
 
 \subsection backlog_low Low
 
+- [oem-2306] SeaBreezeWrapper::getInstance() returns before fully initialized
 - support MinGW if possible
 - provide bindings for Python, Ruby, Perl, etc
+- generate Feature Matrix showing which features are (N)ot-possible, (P)ossible,
+  (I)mplemented or (W)orkaround-available for each spectrometer, for both 
+  SeaBreezeWrapper and SeaBreezeAPI.
 
 \section history Appendix A: Version History
 
 \date ????-??-?? (version 3.????)
 - fixed NIRQuest EEPROM slot count (was 18, now 20)
+- increased USB2000+/Flame-S EEPROM slot count (was 17, now 30)
 
 \date 2015-09-16 (version 3.0.10)
 - added Spark (tested under MacOS, VS2010)
