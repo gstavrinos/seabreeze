@@ -43,6 +43,7 @@
 #include "api/SeaBreezeWrapper.h"
 #include "api/DeviceFactory.h"
 #include "common/buses/rs232/RS232DeviceLocator.h"
+#include "native/system/System.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
 #include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureInterface.h"
@@ -109,7 +110,8 @@ SeaBreezeWrapper::SeaBreezeWrapper() {
 SeaBreezeWrapper::~SeaBreezeWrapper() {
     LOG(__FUNCTION__);
     int i;
-    vector<Device *>::iterator dIter;
+    
+    System::initialize();
 
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
         if(NULL != this->devices[i]) {
@@ -134,6 +136,7 @@ void SeaBreezeWrapper::shutdown() {
         instance = NULL;
     }
     DeviceFactory::shutdown();
+    System::shutdown();
 }
 
 OOIUSBInterface *__seabreeze_getUSB(Device *dev, int *errorCode) {

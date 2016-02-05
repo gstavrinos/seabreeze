@@ -52,3 +52,18 @@ void System::sleepMilliseconds(unsigned int millis) {
      */
     ::sleepMilliseconds(millis);
 }
+
+bool System::initialize() {
+    /* Delegate to the native C startup function. */
+    int result = ::systemInitialize();
+    if(0 == result) {
+        return true;
+    }
+    
+    return false;
+}
+
+void System::shutdown() {
+    /* Delegate to the native C shutdown function */
+    ::systemShutdown();
+}
