@@ -71,7 +71,7 @@ USB2000Plus::USB2000Plus() {
     /* Set up the features that comprise this device */
     this->features.push_back(new USB2000PlusSpectrometerFeature());
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
-    this->features.push_back(new EEPROMSlotFeature(17));
+    this->features.push_back(new EEPROMSlotFeature(31));
 
     vector<ProtocolHelper *> strobeLampHelpers;
     strobeLampHelpers.push_back(new OOIStrobeLampProtocol());
