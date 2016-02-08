@@ -88,8 +88,13 @@ bool IPv4SocketDeviceLocator::equals(DeviceLocatorInterface &that) {
 string IPv4SocketDeviceLocator::getDescription() {
     char buffer[80];
     /* Produce a string in the following format: protocol:address:port */
+#ifdef _WINDOWS
+	_snprintf(buffer, 79, "%s:%s:%d", this->protocol.getName().c_str(),
+		this->ipAddr.c_str(), this->port);
+#else
     snprintf(buffer, 79, "%s:%s:%d", this->protocol.getName().c_str(),
             this->ipAddr.c_str(), this->port);
+#endif
     string retval(buffer);
     return retval;
 }
