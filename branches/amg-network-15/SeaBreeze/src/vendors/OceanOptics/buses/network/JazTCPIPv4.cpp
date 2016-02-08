@@ -61,7 +61,10 @@ bool JazTCPIPv4::open() {
         /* Must have been passed an invalid location */
         return false;
     }
-    
+
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
     try {
         this->socket->connect(loc->getIPv4Address(), loc->getPort());
         this->socket->setSOLinger(false, 1);

@@ -32,6 +32,7 @@
 
 #include <string>
 #include "common/exceptions/IllegalArgumentException.h"
+#include "common/SeaBreeze.h"
 
 #ifdef _WINDOWS
 #include <winsock2.h>

@@ -111,6 +111,9 @@ void SeaBreezeAPI::shutdown() {
     DeviceFactory::shutdown();
 }
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
 int SeaBreezeAPI::probeDevices() {
     /* This function is a little ugly because it tries to find hardware
      * associated with every device type, but without allowing multiple

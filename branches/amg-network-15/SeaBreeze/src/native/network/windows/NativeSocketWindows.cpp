@@ -28,6 +28,7 @@
  *******************************************************/
 
 /* Includes */
+#include "common/SeaBreeze.h"
 #include "native/network/windows/NativeSocketWindows.h"
 #include "native/network/SocketTimeoutException.h"
 
@@ -87,7 +88,9 @@ void NativeSocketWindows::connect(const string hostname, int port)
     host_info = gethostbyname(hostname.c_str());
     if(0 == host_info) {
         string error("Failed to resolve hostname [");
-        error += hostname + "]: " + WSAGetLastError();
+		error += hostname;
+		error += "]: ";
+		error += WSAGetLastError();
         throw BusConnectException(error);
     }
     
@@ -110,7 +113,7 @@ void NativeSocketWindows::close() throw (BusException) {
         
         if(result != 0) {
             string error("Got error when trying to close socket: ");
-            error += "Error " + WASGetlastError();
+            error += "Error " + WSAGetLastError();
             throw BusException(error);
         }
     }
@@ -126,7 +129,7 @@ bool NativeSocketWindows::isBound() {
 
 int NativeSocketWindows::getSOLinger() throw (SocketException) {
     linger so_linger;
-    unsigned int length;
+    int length;
     int result;
     
     if(this->sock < 0) {
@@ -153,7 +156,7 @@ int NativeSocketWindows::getSOLinger() throw (SocketException) {
 
 void NativeSocketWindows::setSOLinger(bool enable, int linger)
         throw (SocketException) {
-    linger so_linger;
+    struct linger so_linger;
     int result;
     
     if(this->sock < 0) {
@@ -186,7 +189,7 @@ unsigned long NativeSocketWindows::getReadTimeoutMillis() throw (SocketException
     
     length = sizeof(timeoutMillis);
     result = getsockopt(this->sock, SOL_SOCKET, SO_RCVTIMEO,
-                (char *)&timeoutMillis, &length);
+                (char *)&timeoutMillis, (int *)&length);
     
     if(result < 0 || length != sizeof(timeoutMillis)) {
         string error("Failed to get socket options: ");
@@ -218,7 +221,7 @@ void NativeSocketWindows::setReadTimeoutMillis(unsigned long timeoutMillis)
 
 int NativeSocketWindows::read(unsigned char *buf, unsigned long count)
             throw (BusTransferException) {
-    int result = ::recv(this->sock, buf, count, 0);
+    int result = ::recv(this->sock, (char *)buf, count, 0);
     
     if(result < 0) {
         int err = WSAGetLastError();
@@ -235,9 +238,9 @@ int NativeSocketWindows::read(unsigned char *buf, unsigned long count)
     return result;
 }
 
-int NativeSocketPOSIX::write(const unsigned char *buf, unsigned long count)
+int NativeSocketWindows::write(const unsigned char *buf, unsigned long count)
             throw (BusTransferException) {
-    int result = ::send(this->sock, buf, count, 0);
+    int result = ::send(this->sock, (char *)buf, count, 0);
     
     if(result < 0) {
         string error("Socket error on write: ");

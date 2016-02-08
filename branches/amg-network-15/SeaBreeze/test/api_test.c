@@ -139,6 +139,9 @@ int main() {
     //sbapi_add_RS232_device_location("STS", "/dev/tty.KeySerial1", 9600);
     //sbapi_add_RS232_device_location("STS", "/dev/tty.usbserial", 9600);
 #endif
+    
+    /* This shows how to add network devices (note that most use TCP/IP) */
+    //sbapi_add_TCPIPv4_device_location("Jaz", "10.120.17.5", 7654);
 
     printf("Getting device count...\n"); fflush(stdout);
     number_of_devices = sbapi_get_number_of_device_ids();

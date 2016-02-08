@@ -31,9 +31,9 @@
  *******************************************************/
 
 #include "common/globals.h"
+#include <winsock2.h>              /* Must include winsock2.h before windows.h */
 #include <windows.h>               /* For definition of Sleep() */
 #include "native/system/NativeSystem.h"
-#include <winsock2.h>
 
 /* Function definitions */
 
