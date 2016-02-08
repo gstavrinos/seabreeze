@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winusb.lib setupapi.lib"
+				AdditionalDependencies="winusb.lib setupapi.lib ws2_32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\WinDDK\7600.16385.1\lib\wxp\i386"
 				GenerateDebugInformation="true"
