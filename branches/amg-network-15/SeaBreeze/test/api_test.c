@@ -1,12 +1,12 @@
 /*******************************************************
- * File:    api_test_linux.c
+ * File:    api_test.c
  * Date:    February 2012
  * Author:  Ocean Optics, Inc.
  *
  * This is a test program to exercise some of the
- * SeaBreeze functionality.  This will not compile
- * under Windows, so if you are using Visual Studio,
- * remove this file from the project.
+ * SeaBreeze functionality.  If using Windows, please
+ * #define _WINDOWS (directly or as a project setting)
+ * so that this will compile.
  *
  * LICENSE:
  *
@@ -36,9 +36,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>  /* For sleep() */
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 
+#ifndef _WINDOWS
+#include <unistd.h>
+#else
+#include <Windows.h>
+#endif
 
 /* Prototypes */
 void test_serial_number_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -141,7 +145,7 @@ int main() {
 #endif
     
     /* This shows how to add network devices (note that most use TCP/IP) */
-    //sbapi_add_TCPIPv4_device_location("Jaz", "10.120.17.5", 7654);
+    //sbapi_add_TCPIPv4_device_location("Jaz", "192.168.1.150", 7654);
 
     printf("Getting device count...\n"); fflush(stdout);
     number_of_devices = sbapi_get_number_of_device_ids();
@@ -1326,7 +1330,11 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         tallyErrors(error, testFailureCount);
         
         printf("\t\t\tDelaying to allow verification.\n");
+#ifndef _WINDOWS
         sleep(2);
+#else
+		Sleep(2000);
+#endif
 
         printf("\t\t\tAttempting to set period to 50ms.\n");
         sbapi_continuous_strobe_set_continuous_strobe_period_micros(deviceID,
@@ -1334,8 +1342,12 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);
         
-        printf("\t\t\tDelaying to allow verification.\n");
-        sleep(2);
+		printf("\t\t\tDelaying to allow verification.\n");
+#ifndef _WINDOWS
+		sleep(2);
+#else
+		Sleep(2000);
+#endif
 
         printf("\t\t\tAttempting to disable continous strobe.\n");
         sbapi_continuous_strobe_set_continuous_strobe_enable(deviceID,
@@ -1460,7 +1472,11 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
          * integration time and trigger mode were set in a way that this will
          * keep acquiring a few spectra.
          */
-        sleep(2);
+#ifndef _WINDOWS
+		sleep(2);
+#else
+		Sleep(2000);
+#endif
 
         printf("\t\t\tAttempting to get number of items in the buffer...\n");
         count = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_ids[i], &error);
