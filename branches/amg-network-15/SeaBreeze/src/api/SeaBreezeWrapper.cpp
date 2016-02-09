@@ -106,6 +106,9 @@ SeaBreezeWrapper *SeaBreezeWrapper::instance = NULL;
 SeaBreezeWrapper::SeaBreezeWrapper() {
     LOG(__FUNCTION__);
     int i;
+    
+    System::initialize();
+    
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
         this->devices[i] = NULL;
     }
@@ -114,8 +117,6 @@ SeaBreezeWrapper::SeaBreezeWrapper() {
 SeaBreezeWrapper::~SeaBreezeWrapper() {
     LOG(__FUNCTION__);
     int i;
-    
-    System::initialize();
 
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
         if(NULL != this->devices[i]) {
@@ -123,6 +124,8 @@ SeaBreezeWrapper::~SeaBreezeWrapper() {
             this->devices[i] = NULL;
         }
     }
+    
+    System::shutdown();
 }
 
 SeaBreezeWrapper *SeaBreezeWrapper::getInstance() {
@@ -140,7 +143,6 @@ void SeaBreezeWrapper::shutdown() {
         instance = NULL;
     }
     DeviceFactory::shutdown();
-    System::shutdown();
 }
 
 OOIUSBInterface *__seabreeze_getUSB(Device *dev, int *errorCode) {

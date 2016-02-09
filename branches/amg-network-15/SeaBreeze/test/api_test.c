@@ -1333,7 +1333,7 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 #ifndef _WINDOWS
         sleep(2);
 #else
-		Sleep(2000);
+        Sleep(2000);
 #endif
 
         printf("\t\t\tAttempting to set period to 50ms.\n");
@@ -1342,11 +1342,11 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
         printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);
         
-		printf("\t\t\tDelaying to allow verification.\n");
+        printf("\t\t\tDelaying to allow verification.\n");
 #ifndef _WINDOWS
-		sleep(2);
+        sleep(2);
 #else
-		Sleep(2000);
+        Sleep(2000);
 #endif
 
         printf("\t\t\tAttempting to disable continous strobe.\n");
@@ -1473,9 +1473,9 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
          * keep acquiring a few spectra.
          */
 #ifndef _WINDOWS
-		sleep(2);
+        sleep(2);
 #else
-		Sleep(2000);
+        Sleep(2000);
 #endif
 
         printf("\t\t\tAttempting to get number of items in the buffer...\n");
