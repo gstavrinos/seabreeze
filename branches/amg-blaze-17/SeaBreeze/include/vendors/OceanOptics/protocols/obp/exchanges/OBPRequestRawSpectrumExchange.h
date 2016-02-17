@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPRequestSpectrumExchange.cpp
- * @date    January 2011
+ * @file    OBPRequestRawSpectrumExchange.h
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,39 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPMessage.h"
-#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#ifndef OBPREQUESTSPECTRUMEXCHANGE_H
+#define OBPREQUESTSPECTRUMEXCHANGE_H
 
-using namespace seabreeze;
-using namespace seabreeze::oceanBinaryProtocol;
-using namespace std;
+#include "common/protocols/Transfer.h"
 
-OBPRequestSpectrumExchange::OBPRequestSpectrumExchange() {
-    OBPMessage message;
-    vector<byte> *stream;
-    unsigned int i;
-
-    this->hints->push_back(new OBPSpectrumHint());
-
-    this->direction = Transfer::TO_DEVICE;
-
-    message.setMessageType(OBPMessageTypes::OBP_GET_CORRECTED_SPECTRUM_NOW);
-    stream = message.toByteStream();
-
-    this->length = (unsigned) stream->size();
-    this->buffer->resize(stream->size());
-
-    for(i = 0; i < stream->size(); i++) {
-        (*(this->buffer))[i] = (*stream)[i];
+namespace seabreeze {
+    namespace oceanBinaryProtocol {
+        class OBPRequestRawSpectrumExchange : public Transfer {
+        public:
+            OBPRequestRawSpectrumExchange();
+            virtual ~OBPRequestRawSpectrumExchange();
+        };
     }
-    delete stream;
-
-    checkBufferSize();
 }
 
-OBPRequestSpectrumExchange::~OBPRequestSpectrumExchange() {
-
-}
+#endif /* OBPREQUESTSPECTRUMEXCHANGE_H */

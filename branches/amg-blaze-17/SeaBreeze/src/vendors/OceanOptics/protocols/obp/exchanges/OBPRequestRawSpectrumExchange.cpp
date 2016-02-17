@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    OBPRequestSpectrumExchange.cpp
- * @date    January 2011
+ * @file    OBPRequestRawSpectrumExchange.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestRawSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPMessage.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
@@ -37,7 +37,7 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-OBPRequestSpectrumExchange::OBPRequestSpectrumExchange() {
+OBPRequestRawSpectrumExchange::OBPRequestRawSpectrumExchange() {
     OBPMessage message;
     vector<byte> *stream;
     unsigned int i;
@@ -46,7 +46,7 @@ OBPRequestSpectrumExchange::OBPRequestSpectrumExchange() {
 
     this->direction = Transfer::TO_DEVICE;
 
-    message.setMessageType(OBPMessageTypes::OBP_GET_CORRECTED_SPECTRUM_NOW);
+    message.setMessageType(OBPMessageTypes::OBP_GET_RAW_SPECTRUM_NOW);
     stream = message.toByteStream();
 
     this->length = (unsigned) stream->size();
@@ -60,6 +60,6 @@ OBPRequestSpectrumExchange::OBPRequestSpectrumExchange() {
     checkBufferSize();
 }
 
-OBPRequestSpectrumExchange::~OBPRequestSpectrumExchange() {
+OBPRequestRawSpectrumExchange::~OBPRequestRawSpectrumExchange() {
 
 }
