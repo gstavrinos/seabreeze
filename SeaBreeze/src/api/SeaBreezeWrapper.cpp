@@ -43,6 +43,7 @@
 #include "api/SeaBreezeWrapper.h"
 #include "api/DeviceFactory.h"
 #include "common/buses/rs232/RS232DeviceLocator.h"
+#include "native/system/System.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
 #include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureInterface.h"
@@ -64,6 +65,8 @@ using namespace std;
 #include <vector>
 #include <string.h>
 
+#define SET_ERROR_CODE(code) do { if(NULL != errorCode) { *errorCode = code; }  } while(0)
+
 #define ERROR_SUCCESS               0
 #define ERROR_INVALID_ERROR         1
 #define ERROR_NO_DEVICE             2
@@ -72,6 +75,8 @@ using namespace std;
 #define ERROR_FEATURE_NOT_FOUND     5
 #define ERROR_TRANSFER_ERROR        6
 #define ERROR_BAD_USER_BUFFER       7
+#define ERROR_INPUT_OUT_OF_BOUNDS       8
+#define ERROR_SPECTROMETER_SATURATED    9
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
@@ -101,6 +106,9 @@ SeaBreezeWrapper *SeaBreezeWrapper::instance = NULL;
 SeaBreezeWrapper::SeaBreezeWrapper() {
     LOG(__FUNCTION__);
     int i;
+    
+    System::initialize();
+    
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
         this->devices[i] = NULL;
     }
@@ -109,7 +117,6 @@ SeaBreezeWrapper::SeaBreezeWrapper() {
 SeaBreezeWrapper::~SeaBreezeWrapper() {
     LOG(__FUNCTION__);
     int i;
-    vector<Device *>::iterator dIter;
 
     for(i = 0; i < SEABREEZE_MAX_DEVICES; i++) {
         if(NULL != this->devices[i]) {
@@ -117,6 +124,8 @@ SeaBreezeWrapper::~SeaBreezeWrapper() {
             this->devices[i] = NULL;
         }
     }
+    
+    System::shutdown();
 }
 
 SeaBreezeWrapper *SeaBreezeWrapper::getInstance() {

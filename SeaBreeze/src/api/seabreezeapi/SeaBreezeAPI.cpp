@@ -42,8 +42,11 @@
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "api/DeviceFactory.h"  // references device.h
+#include "common/buses/network/IPv4SocketDeviceLocator.h"
+#include "common/buses/network/IPv4NetworkProtocol.h"
 #include "common/buses/rs232/RS232DeviceLocator.h"
 #include "common/buses/DeviceLocationProberInterface.h"
+#include "native/system/System.h"
 
 #include <ctype.h>
 #include <vector>
@@ -76,7 +79,7 @@ static char __messageBuffer[MESSAGE_BUFFER_SIZE];
 SeaBreezeAPI *SeaBreezeAPI::instance = NULL;
 
 SeaBreezeAPI::SeaBreezeAPI() {
-
+    System::initialize();
 }
 
 SeaBreezeAPI::~SeaBreezeAPI() {
@@ -89,6 +92,8 @@ SeaBreezeAPI::~SeaBreezeAPI() {
     for(dIter = this->probedDevices.begin(); dIter != this->probedDevices.end(); dIter++) {
         delete *dIter;
     }
+    
+    System::shutdown();
 }
 
 SeaBreezeAPI *SeaBreezeAPI::getInstance() {
@@ -106,6 +111,9 @@ void SeaBreezeAPI::shutdown() {
     DeviceFactory::shutdown();
 }
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
 int SeaBreezeAPI::probeDevices() {
     /* This function is a little ugly because it tries to find hardware
      * associated with every device type, but without allowing multiple
@@ -225,6 +233,31 @@ int SeaBreezeAPI::probeDevices() {
     return (int) probedDevices.size();
 }
 
+int SeaBreezeAPI::addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr,
+        int port) {
+    string address(ipAddr);
+
+    Device *dev = DeviceFactory::getInstance()->create(deviceTypeName);
+    if(NULL == dev) {
+        /* Failed to identify that type of device. */
+        return 1;
+    }
+    
+    IPv4NetworkProtocols protocols;
+
+    IPv4SocketDeviceLocator locator(protocols.TCP_IP4, address, port);
+    dev->setLocation(locator);
+
+    try {
+        /* Note that this pre-increments the device ID to mitigate any race conditions */
+        this->specifiedDevices.push_back(new DeviceAdapter(dev, ++__deviceID));
+    } catch (IllegalArgumentException &iae) {
+        /* Unable to create the adapter */
+        return 2;
+    }
+
+    return 0;
+}
 
 int SeaBreezeAPI::addRS232DeviceLocation(char *deviceTypeName,
         char *deviceBusPath, unsigned int baud) {
@@ -1673,6 +1706,14 @@ void sbapi_shutdown() {
     SeaBreezeAPI::shutdown();
 }
 
+int
+sbapi_add_TCPIPv4_device_location(char *deviceTypeName, char *ipAddress,
+            unsigned int port) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+    
+    return wrapper->addTCPIPv4DeviceLocation(deviceTypeName, ipAddress, port);
+}
+    
 int
 sbapi_add_RS232_device_location(char *deviceTypeName, char *deviceBusPath,
             unsigned int baud) {

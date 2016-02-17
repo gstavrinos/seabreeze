@@ -37,6 +37,8 @@
 #define BUS_FAMILY_ID_USB       0
 #define BUS_FAMILY_ID_ETHERNET  1
 #define BUS_FAMILY_ID_RS232     2
+#define BUS_FAMILY_ID_TCPIPV4   3
+#define BUS_FAMILY_ID_UDPIPV4   4
 
 using namespace seabreeze;
 using namespace std;
@@ -74,6 +76,22 @@ RS232BusFamily::~RS232BusFamily() {
 
 }
 
+TCPIPv4BusFamily::TCPIPv4BusFamily() : BusFamily("TCP/IPv4", BUS_FAMILY_ID_TCPIPV4) {
+
+}
+
+TCPIPv4BusFamily::~TCPIPv4BusFamily() {
+
+}
+
+UDPIPv4BusFamily::UDPIPv4BusFamily() : BusFamily("UDP/IPv4", BUS_FAMILY_ID_UDPIPV4) {
+
+}
+
+UDPIPv4BusFamily::~UDPIPv4BusFamily() {
+
+}
+
 vector<BusFamily *> BusFamilies::getAllBusFamilies() {
     vector<BusFamily *> retval;
 
@@ -83,10 +101,14 @@ vector<BusFamily *> BusFamilies::getAllBusFamilies() {
     USBBusFamily *usb = new USBBusFamily();
     EthernetBusFamily *ethernet = new EthernetBusFamily();
     RS232BusFamily *rs232 = new RS232BusFamily();
+    TCPIPv4BusFamily *tcpipv4 = new TCPIPv4BusFamily();
+    UDPIPv4BusFamily *udpipv4 = new UDPIPv4BusFamily();
 
     retval.push_back(usb);
     retval.push_back(ethernet);
     retval.push_back(rs232);
+    retval.push_back(tcpipv4);
+    retval.push_back(udpipv4);
 
     return retval;
 }
