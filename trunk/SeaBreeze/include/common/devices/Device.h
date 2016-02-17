@@ -47,7 +47,6 @@
 #include "common/features/Feature.h"
 #include "common/features/FeatureFamily.h"
 #include "common/protocols/Protocol.h"
-#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 
 // usb endpoints are associated with a particular device.

@@ -41,6 +41,8 @@ namespace seabreeze {
         virtual ~System();
 
         static void sleepMilliseconds(unsigned int millis);
+        static bool initialize();
+        static void shutdown();
 
     };
 

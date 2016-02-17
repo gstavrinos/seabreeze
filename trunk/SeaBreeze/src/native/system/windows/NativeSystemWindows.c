@@ -31,6 +31,7 @@
  *******************************************************/
 
 #include "common/globals.h"
+#include <winsock2.h>              /* Must include winsock2.h before windows.h */
 #include <windows.h>               /* For definition of Sleep() */
 #include "native/system/NativeSystem.h"
 
@@ -41,4 +42,25 @@ void sleepMilliseconds(unsigned int msecs) {
      * the given number of milliseconds.
      */
     Sleep(msecs);
+}
+
+int systemInitialize() {
+    /* Need to start up WinSock to be able to use network functionality. */
+    WSADATA wsaData;
+    WORD wVersionRequested;
+    int err;
+    
+    wVersionRequested = MAKEWORD(2, 2);
+    err = WSAStartup(wVersionRequested, &wsaData);
+    if(0 != err) {
+        /* Unable to find suitable WinSock implementation. */
+        return -1;
+    }
+    
+    return 0;
+}
+
+void systemShutdown() {
+    /* Need to tell WinSock to shut down cleanly. */
+    WSACleanup();
 }

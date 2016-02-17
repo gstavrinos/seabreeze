@@ -29,6 +29,7 @@
 
 #include "common/globals.h"
 #include "common/devices/Device.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable

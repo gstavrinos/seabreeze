@@ -66,7 +66,7 @@ namespace seabreeze {
         virtual std::string getDescription() = 0;
 
         /**
-         * Get a description of the type of bus that the device is associated withs
+         * Get a description of the type of bus that the device is associated with
          */
         virtual BusFamily getBusFamily() const = 0;
 
@@ -76,7 +76,6 @@ namespace seabreeze {
 
     /* Default implementation for (otherwise) pure virtual destructor */
     inline DeviceLocatorInterface::~DeviceLocatorInterface() {}
-
 
 }
 
