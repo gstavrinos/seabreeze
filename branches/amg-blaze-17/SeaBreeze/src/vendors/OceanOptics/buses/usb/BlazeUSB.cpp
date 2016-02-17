@@ -31,12 +31,12 @@
 #include "vendors/OceanOptics/buses/usb/BlazeUSB.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
 #include "vendors/OceanOptics/buses/usb/BlazeUSBTransferHelper.h"
 
 using namespace seabreeze;
-using namespace seabreeze::ooiProtocol;
+using namespace oceanBinaryProtocol;
 
 BlazeUSB::BlazeUSB() {
     this->productID = BLAZE_USB_PID;

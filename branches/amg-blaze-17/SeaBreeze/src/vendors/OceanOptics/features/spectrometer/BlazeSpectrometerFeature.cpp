@@ -29,15 +29,18 @@
 
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/IntegrationTimeExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/ReadSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/USBFPGASpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/RequestSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/TriggerModeExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/impls/OOISpectrometerProtocol.h"
+#include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
+#include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
 
 using namespace seabreeze;
-using namespace ooiProtocol;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 1000;
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
@@ -85,7 +88,7 @@ BlazeSpectrometerFeature::~BlazeSpectrometerFeature() {
 
 }
 
-vector<double> *QEProSpectrometerFeature::getWavelengths(const Protocol &protocol,
+vector<double> *BlazeSpectrometerFeature::getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException) {
 
     /* FIXME: this probably ought to attempt to create an instance based on

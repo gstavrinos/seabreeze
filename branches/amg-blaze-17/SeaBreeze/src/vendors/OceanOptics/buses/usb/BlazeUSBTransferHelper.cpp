@@ -34,10 +34,10 @@
 using namespace seabreeze;
 using namespace std;
 
-const long BlazeUSBTransferHelper::WORD_SIZE_BYTES = 4;
+const int BlazeUSBTransferHelper::WORD_SIZE_BYTES = 4;
 
 BlazeUSBTransferHelper::BlazeUSBTransferHelper(USB *usb,
-        const BlazeUSBTransferHelper &map) : USBTransferHelper(usb) {
+        const OOIUSBBidrectionalEndpointMap &map) : USBTransferHelper(usb) {
     this->sendEndpoint = map.getPrimaryOutEndpoint();
     this->receiveEndpoint = map.getPrimaryInEndpoint();
 }
@@ -55,7 +55,7 @@ int BlazeUSBTransferHelper::receive(vector<byte> &buffer,
         paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
         inBuffer = new vector<byte>(paddedLength);
         
-        int result = USBTransferHelper::receive(inBuffer, paddedLength);
+        int result = USBTransferHelper::receive(*inBuffer, paddedLength);
         if(result != paddedLength) {
             string error("Failed to read padded message length: ");
             error += result;
@@ -74,21 +74,15 @@ int BlazeUSBTransferHelper::receive(vector<byte> &buffer,
 int BlazeUSBTransferHelper::send(const std::vector<byte> &buffer,
         unsigned int length) const throw (BusTransferException) {
     
-    vector<byte> *outBuffer = &buffer;
-    int paddedLength = length;
-    
     if(0 != (length % WORD_SIZE_BYTES)) {
         /* Pad up to a multiple of the word size */
-        paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
-        outBuffer = new vector<byte>(paddedLength);
+        int paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
+        vector<byte> *outBuffer = new vector<byte>(paddedLength);
         memcpy(&outBuffer[0], &buffer[0], length);
-    }
-    
-    int result = USBTransferHelper::send(outBuffer, paddedLength);
-    
-    if(outBuffer != &buffer) {
+        int result = USBTransferHelper::send(*outBuffer, paddedLength);
         delete outBuffer;
+        return result;
+    } else {
+        return USBTransferHelper::send(buffer, length);
     }
-    
-    return result;
 }
