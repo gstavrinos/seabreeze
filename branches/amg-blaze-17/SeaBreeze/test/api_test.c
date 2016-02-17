@@ -146,6 +146,7 @@ int main() {
     
     /* This shows how to add network devices (note that most use TCP/IP) */
     //sbapi_add_TCPIPv4_device_location("Jaz", "192.168.1.150", 7654);
+    //sbapi_add_TCPIPv4_device_location("Blaze", "192.168.1.151", 57357);
 
     printf("Getting device count...\n"); fflush(stdout);
     number_of_devices = sbapi_get_number_of_device_ids();
