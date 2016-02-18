@@ -55,7 +55,8 @@ int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
      */
     try {
         while(bytesRead < length) {
-            int result = this->socket->read(rawBuffer, length);
+            int result = this->socket->read(&rawBuffer[bytesRead],
+                    length - bytesRead);
             if(result > 0) {
                 bytesRead += result;
             } else {
@@ -83,7 +84,7 @@ int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
         /* This may throw a BusTransferException.  This needs to be dealt with
          * by the caller.
          */
-        int result = this->socket->write(rawBuffer, length);
+        int result = this->socket->write(&rawBuffer[written], length - written);
         if(result > 0) {
             written += result;
         } else {
