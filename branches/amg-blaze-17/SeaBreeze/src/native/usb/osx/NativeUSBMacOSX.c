@@ -227,7 +227,6 @@ void __setup_endpoint_map(__usb_interface_t *usb) {
     for(i = 0; i < count; i++) {
         usb->endpoints[i].pipe = i + 1; /* Pipe 0 is EP0 */
         usb->endpoints[i].endpoint = __get_endpoint(usb, i);
-        printf("Native USB: pipe %d is endpoint 0x%02X\n", i, usb->endpoints[i].endpoint);
         
         int flag = USBGetEndpointDescriptor(usb, i, &endpointDesc);
         if(0 == flag) {
@@ -235,10 +234,7 @@ void __setup_endpoint_map(__usb_interface_t *usb) {
             /* TODO: probably not necessary to allocate space for OUT endpoints */
             usb->endpoints[i].buffer =
                     (unsigned char *)calloc(endpointDesc.wMaxPacketSize, 1);
-            printf("Native USB: set up endpoint 0x%02X buffer for %d bytes\n",
-                    usb->endpoints[i].endpoint, endpointDesc.wMaxPacketSize);
         } else {
-            printf("Native USB: failed to get max packet size for pipe %d\n", i);
             usb->endpoints[i].buffer = NULL;
         }
         usb->endpoints[i].length = 0;
@@ -558,15 +554,11 @@ USBOpen(unsigned long deviceID, int *errorCode) {
      */
     idVendor = instance->vendorID;
     idProduct = instance->productID;
-    
-    printf("USBOpen(): Attempting to create a master port\n");
 
     /* Attempt to create a master port */
     if(IOMasterPort(MACH_PORT_NULL, &masterPort) != kIOReturnSuccess) {
         goto error0;
     }
-    
-    printf("USBOpen(): Attempting to create matching dictionary\n");
 
     /* Attempt to create a matching dictionary */
     matchingDictionary = IOServiceMatching(kIOUSBDeviceClassName);
@@ -574,8 +566,7 @@ USBOpen(unsigned long deviceID, int *errorCode) {
         /* Failed to get the dictionary, so clean up and bail out */
         goto error1;
     }
-
-    printf("USBOpen(): Attempting to create vendor reference\n");
+    
     /* Attempt to create vendor reference */
     numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type,
                                &idVendor);
@@ -595,7 +586,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
         goto error1;
     }
 
-    printf("USBOpen(): attempting to create iterator\n");
     /* Attempt to create an interator */
     CFDictionaryAddValue(matchingDictionary, CFSTR(kUSBProductID), numberRef);
     CFRelease(numberRef);
@@ -612,7 +602,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
         goto error2;  /* FIXME: does this try to release a null iterator? */
     }
 
-    printf("USBOpen(): About to iterate\n");
     /* Search using the iterator for the indicated device */
     while(0 != (usbDeviceRef = IOIteratorNext(iterator))) {
         /* The iterator contains all devices matching the VID and PID.
@@ -731,28 +720,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
                 (*dev)->Release(dev);
                 goto error3;
             }
-
-            /* Try to clear and reset all endpoints.  These are expected
-             * to fail for the endpoints not defined by the interface, but
-             * that will not cause any problems.
-             */
-/*
-            printf("USBOpen(): Attempting to clear pipe stalls and halts\n");
-            (*intf)->ClearPipeStall(intf, 1);
-            (*intf)->ClearPipeStall(intf, 2);
-            (*intf)->ClearPipeStall(intf, 3);
-            (*intf)->ClearPipeStall(intf, 4);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x01);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x02);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x04);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x82);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x86);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x87);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x81);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x07);
-            __clear_halt((cIOUSBDeviceInterface **)dev, 0x88);
-            printf("USBOpen(): Done clearing stalls and halts\n");
-*/
         }
         IOObjectRelease(iterator);
 
@@ -767,7 +734,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
         /* Keep a reference to the handle for later */
         instance->handle = retval;
 
-        printf("USBOpen(): opened device successfully.\n");
         SET_ERROR_CODE(OPEN_OK);
 
         return (void *)retval;
@@ -776,7 +742,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
     IOObjectRelease(iterator);
     iterator = 0;
     SET_ERROR_CODE(NO_DEVICE_FOUND);
-    printf("USBOpen(): failed to open device.\n");
     return (void *)NULL;
 
 /* If anything goes wrong above, there are a lot of different ways that the
@@ -785,24 +750,18 @@ USBOpen(unsigned long deviceID, int *errorCode) {
  * handling.
  */
 error2:
-printf("USBOpen(): Error 2\n");
     IOObjectRelease(iterator);
 error1:
-printf("USBOpen(): Error 1\n");
     mach_port_deallocate(mach_task_self(), masterPort);
 error0:
-printf("USBOpen(): Error 0\n");
     SET_ERROR_CODE(NO_DEVICE_FOUND);
     return (void *)NULL;
 
 error5:
-printf("USBOpen(): Error 5\n");
     (*dev)->Release(dev);
 error4:
-printf("USBOpen(): Error 4\n");
     (*iodev)->Release(iodev);
 error3:
-printf("USBOpen(): Error 3\n");
     IOObjectRelease(usbDeviceRef);
     IOObjectRelease(iterator);
     SET_ERROR_CODE(NO_DEVICE_FOUND);
@@ -839,7 +798,6 @@ USBWrite(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByt
     __usb_endpoint_t *endpoint_desc;
 
     if(0 == deviceHandle) {
-        printf("USBWrite(): no device handle\n");
         return WRITE_FAILED;
     }
 
@@ -847,19 +805,14 @@ USBWrite(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByt
     
     endpoint_desc = __get_endpoint_descriptor(usb, endpoint);
     if(NULL == endpoint_desc) {
-        printf("USBWrite(): No descriptor for endpoint\n");
         return WRITE_FAILED;
     }
-    printf("USBWrite(): pipe is %d\n", (int)endpoint_desc->pipe);
 
     flag = (*usb->intf)->WritePipe(usb->intf, endpoint_desc->pipe, data, numberOfBytes);
-    printf("USBWrite(): WritePipe returned %d\n", flag);
     if(kIOReturnSuccess != flag) {
-        printf("USBWrite(): Returning with failure\n");
         return WRITE_FAILED;
     }
 
-    printf("USBWrite(): Wrote %d bytes\n", numberOfBytes);
     return numberOfBytes;
 }
 
@@ -867,9 +820,6 @@ int __read_from_cache(__usb_endpoint_t *endpoint, char *target, int bytesToRead)
     
     int availableBytes = endpoint->length - endpoint->offset;
     int bytesToCopy = 0;
-    
-    printf("USB read cache has %d bytes available, need %d\n",
-                availableBytes, bytesToRead);
     
     if(availableBytes > 0) {
         bytesToCopy = availableBytes < bytesToRead ? availableBytes : bytesToRead;
@@ -879,10 +829,7 @@ int __read_from_cache(__usb_endpoint_t *endpoint, char *target, int bytesToRead)
         endpoint->offset += bytesToCopy;
         availableBytes -= bytesToCopy;
         
-        printf("USB read got %d bytes from cache\n", bytesToCopy);
-        
         if(0 == availableBytes) {
-            printf("USB read buffer has been emptied, resetting.\n");
             /* Reset the endpoint buffer since it has been exhausted */
             endpoint->offset = 0;
             endpoint->length = 0;
@@ -900,28 +847,17 @@ int __read_from_endpoint(__usb_interface_t *usb, __usb_endpoint_t *endpoint) {
      * low-level USB layer will stall the endpoint.
      */
     UInt32 bytesRead = endpoint->maxPacketSize;  /* Number of bytes to read */
-    
-    printf("USBRead(): attempting to read %d bytes from endpoint 0x%02X\n",
-            bytesRead, endpoint->endpoint);
 
     flag = (*usb->intf)->ReadPipe(usb->intf, endpoint->pipe,
             endpoint->buffer, &bytesRead);
-    printf("USBRead(): ReadPipe returned 0x%02X\n", ((unsigned int)flag));
     if(kIOReturnSuccess != flag) {
         endpoint->length = 0;  /* Mark the buffer as empty */
         endpoint->offset = 0;
-        printf("USBRead(): returning with failure\n");
-        if(kIOReturnOverrun == flag) {
-            printf("Error was kIOReturnOverrun\n");
-        }
         return READ_FAILED;
     }
     
     endpoint->length = bytesRead;  /* Update the length to what was written */
     endpoint->offset = 0;
-    
-    printf("USB read %d bytes from endpoint 0x%02X\n", bytesRead,
-            endpoint->endpoint);
     
     return bytesRead;
 }
@@ -932,11 +868,8 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
     __usb_endpoint_t *endpoint_desc;
     int bytesCopied = 0;
     int result;
-    
-    printf("USBRead(): called to try to read EP 0x%02X for %d bytes\n", endpoint, numberOfBytes);
 
     if(NULL == deviceHandle) {
-        printf("USBRead(): no device handle\n");
         return READ_FAILED;
     }
 
@@ -944,10 +877,8 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
     
     endpoint_desc = __get_endpoint_descriptor(usb, endpoint);
     if(NULL == endpoint_desc) {
-        printf("USBRead(): No descriptor for endpoint\n");
         return READ_FAILED;
     }
-    printf("USBRead(): pipe is %d\n", (int)endpoint_desc->pipe);
     
     /* First, try to push whatever might exist in the endpoint buffer back to
      * the caller.  This will be necessary if anything was previously cached.
@@ -982,8 +913,6 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
             numberOfBytes -= bytesCopied;
         }
     } while(numberOfBytes > 0);
-    
-    printf("USBRead(): Read %d bytes\n", bytesCopied);
     
     return bytesCopied;
 }
