@@ -98,6 +98,8 @@ void __purge_unmarked_device_instances(int vendorID, int productID);
 void __close_and_dealloc_usb_interface(__usb_interface_t *usb);
 void __setup_endpoint_map(__usb_interface_t *usb);
 unsigned char __get_pipe_for_endpoint(__usb_interface_t *usb, unsigned char ep);
+int __read_from_cache(__usb_endpoint_t *endpoint, char *target, int bytesToRead);
+int __read_from_endpoint(__usb_interface_t *usb, __usb_endpoint_t *endpoint);
 
 /* This function will iterate over the known devices and attempt to match
  * the given ID.  It might be more efficient for the sake of this search
