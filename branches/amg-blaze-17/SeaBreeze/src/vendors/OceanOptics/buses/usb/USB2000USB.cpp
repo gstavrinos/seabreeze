@@ -55,15 +55,19 @@ bool USB2000USB::open() {
     if(true == retval) {
         ControlHint *controlHint = new ControlHint();
         SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBLegacy2KEndpointMap epMap;
+        OOIUSBLegacy2KEndpointMap endpointMap;
 
         clearHelpers();
 
         addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
 
         addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
+        
+        this->usb->clearStall(endpointMap.getLowSpeedInEP());
+        this->usb->clearStall(endpointMap.getHighSpeedInEP());
+        this->usb->clearStall(endpointMap.getLowSpeedOutEP());
     }
 
     return retval;

@@ -37,7 +37,7 @@
 #include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
 
 using namespace seabreeze;
-using namespace seabreeze::ooiProtocol;
+using namespace ooiProtocol;
 
 MayaLSLUSB::MayaLSLUSB() 
 {

@@ -194,17 +194,17 @@ int
 USBRead(void *handle, unsigned char endpoint, char * data, int numberOfBytes);
 
 //------------------------------------------------------------------------------
-// This function attempts to reset (clear halt for) the given endpoint.
+// This function attempts to clear any stall on the given endpoint.
 //
 // PARAMETERS:
 // handle: The device handle obtained via the open() function.
-// endpoint: The endpoint on the device to reset.
+// endpoint: The endpoint on the device to clear a stall condition on.
 //
 // RETURN VALUE:
 // No value is returned (void).
 //------------------------------------------------------------------------------
 void
-USBResetPipe(void *handle, unsigned char endpoint);
+USBClearStall(void *handle, unsigned char endpoint);
 
 int
 USBGetDeviceDescriptor(void *handle, struct USBDeviceDescriptor *desc);

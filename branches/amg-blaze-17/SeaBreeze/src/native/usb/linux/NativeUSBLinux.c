@@ -413,22 +413,6 @@ USBOpen(unsigned long deviceID, int *errorCode) {
                 retval->deviceID = instance->deviceID;
                 instance->handle = retval;
 
-                /* For good measure, try to reset the state of the bus on all
-                 * endpoints.  The set of endpoints can be different depending
-                 * on the device.  This will just clear all typical
-                 * endpoints (so we would expect all but four of these function
-                 * calls to fail).
-                 */
-                usb_clear_halt(deviceHandle, 0x01);
-                usb_clear_halt(deviceHandle, 0x02);
-                usb_clear_halt(deviceHandle, 0x04);
-                usb_clear_halt(deviceHandle, 0x82);
-                usb_clear_halt(deviceHandle, 0x86);
-                usb_clear_halt(deviceHandle, 0x87);
-                usb_clear_halt(deviceHandle, 0x81);
-                usb_clear_halt(deviceHandle, 0x07);
-                usb_clear_halt(deviceHandle, 0x88);
-
                 SET_ERROR_CODE(OPEN_OK);
                 return (void *)retval;
             }
@@ -514,7 +498,7 @@ USBClose(void *deviceHandle) {
     return CLOSE_OK;
 }
 
-void USBResetPipe(void *deviceHandle, unsigned char endpoint) {
+void USBClearStall(void *deviceHandle, unsigned char endpoint) {
     __usb_interface_t *usb;
 
     if(0 == deviceHandle) {
@@ -525,7 +509,6 @@ void USBResetPipe(void *deviceHandle, unsigned char endpoint) {
 
     usb_clear_halt(usb->dev, endpoint);
 }
-
 
 int
 USBGetDeviceDescriptor(void *deviceHandle, struct USBDeviceDescriptor *desc) {

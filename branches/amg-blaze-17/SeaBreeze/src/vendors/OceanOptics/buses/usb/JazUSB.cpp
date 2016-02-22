@@ -64,6 +64,11 @@ bool JazUSB::open() {
 
         addHelper(controlHint, new OOIUSBControlTransferHelper(
                 (this->usb), epMap));
+        
+        this->usb->clearStall(0x01);
+        this->usb->clearStall(0x08);
+        this->usb->clearStall(0x81);
+        this->usb->clearStall(0x82);
     }
 
     return retval;
