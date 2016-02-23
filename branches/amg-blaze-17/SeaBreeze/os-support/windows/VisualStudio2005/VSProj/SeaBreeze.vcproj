@@ -461,6 +461,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLampEnableCommand.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityCommand.h"></File>
@@ -505,6 +506,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrumProcessingProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrobeLampProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPTemperatureProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.h"></File>
@@ -797,6 +799,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLampEnableCommand.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityCommand.cpp"></File>
@@ -840,6 +843,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrumProcessingProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrobeLampProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPTemperatureProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.cpp"></File>
