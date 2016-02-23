@@ -33,10 +33,12 @@
 #include "vendors/OceanOptics/buses/network/BlazeTCPIPv4.h"
 #include "vendors/OceanOptics/buses/usb/BlazeUSB.h"
 #include "vendors/OceanOptics/devices/Blaze.h"
+#include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
 using namespace seabreeze;
@@ -69,6 +71,11 @@ Blaze::Blaze() {
     vector<ProtocolHelper *> serialNumberHelpers;
     serialNumberHelpers.push_back(new OBPSerialNumberProtocol());
     this->features.push_back(new SerialNumberFeature(serialNumberHelpers));
+    
+    /* Add lamp enable feature */
+    vector<ProtocolHelper *> lampHelpers;
+    lampHelpers.push_back(new OBPStrobeLampProtocol());
+    this->features.push_back(new StrobeLampFeature(lampHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }

@@ -33,6 +33,7 @@
 #include "vendors/OceanOptics/devices/QEPro.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIrradCalProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
@@ -41,6 +42,7 @@
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/QEProUSB.h"
 #include "vendors/OceanOptics/features/spectrometer/QEProSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/data_buffer/QEProDataBufferFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
@@ -110,6 +112,11 @@ QEPro::QEPro() {
     vector<ProtocolHelper *> contStrobeHelpers;
     contStrobeHelpers.push_back(new OBPContinuousStrobeProtocol());
     this->features.push_back(new ContinuousStrobeFeature(contStrobeHelpers));
+    
+    /* Add lamp enable feature */
+    vector<ProtocolHelper *> lampHelpers;
+    lampHelpers.push_back(new OBPStrobeLampProtocol());
+    this->features.push_back(new StrobeLampFeature(lampHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }
