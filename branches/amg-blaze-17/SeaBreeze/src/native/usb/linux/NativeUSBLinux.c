@@ -399,6 +399,7 @@ USBOpen(unsigned long deviceID, int *errorCode) {
                     fprintf(stderr, "usb_claim_interface() returned %d - did you copy "
                                     "os-support/linux/10-oceanoptics.rules to /etc/udev/rules.d?\n", 
                                     claim_err);
+                    usb_close(deviceHandle);
                     return 0;
                 }
 
