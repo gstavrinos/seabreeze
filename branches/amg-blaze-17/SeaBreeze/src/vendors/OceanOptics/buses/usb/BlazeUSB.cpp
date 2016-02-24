@@ -54,7 +54,7 @@ bool BlazeUSB::open() {
     if(true == retval) {
         OBPControlHint *controlHint = new OBPControlHint();
         OBPSpectrumHint *spectrumHint = new OBPSpectrumHint();
-        OOIUSBSimpleDualEndpointMap epMap;
+        OOIUSBSimpleDualEndpointMap endpointMap;
 
         clearHelpers();
 
@@ -64,9 +64,9 @@ bool BlazeUSB::open() {
          * size that must be respected when communicating over USB.
          */
         addHelper(spectrumHint, new BlazeUSBTransferHelper(
-            (this->usb), epMap));
+            (this->usb), endpointMap));
         addHelper(controlHint, new BlazeUSBTransferHelper(
-            (this->usb), epMap));
+            (this->usb), endpointMap));
     }
 
     return retval;

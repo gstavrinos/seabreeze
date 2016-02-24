@@ -27,8 +27,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPREQUESTSPECTRUMEXCHANGE_H
-#define OBPREQUESTSPECTRUMEXCHANGE_H
+#ifndef OBPREQUESTRAWSPECTRUMEXCHANGE_H
+#define OBPREQUESTRAWSPECTRUMEXCHANGE_H
 
 #include "common/protocols/Transfer.h"
 
@@ -42,4 +42,4 @@ namespace seabreeze {
     }
 }
 
-#endif /* OBPREQUESTSPECTRUMEXCHANGE_H */
+#endif /* OBPREQUESTRAWSPECTRUMEXCHANGE_H */

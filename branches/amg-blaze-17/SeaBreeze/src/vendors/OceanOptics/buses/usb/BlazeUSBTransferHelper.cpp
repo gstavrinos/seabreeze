@@ -63,7 +63,7 @@ int BlazeUSBTransferHelper::receive(vector<byte> &buffer,
             error += paddedLength;
             throw BusTransferException(error);
         }
-        memcpy(&inBuffer[0], &buffer[0], length);
+        memcpy(&buffer[0], &inBuffer[0], length);
         delete inBuffer;
         return length;
     } else {
