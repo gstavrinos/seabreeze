@@ -36,8 +36,12 @@
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
+#include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
+#include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
@@ -71,6 +75,17 @@ Blaze::Blaze() {
     vector<ProtocolHelper *> serialNumberHelpers;
     serialNumberHelpers.push_back(new OBPSerialNumberProtocol());
     this->features.push_back(new SerialNumberFeature(serialNumberHelpers));
+
+    /* Add nonlinearity coefficients feature */
+    vector<ProtocolHelper *> nonlinearityHelpers;
+    nonlinearityHelpers.push_back(new OBPNonlinearityCoeffsProtocol());
+    this->features.push_back(
+        new NonlinearityCoeffsFeature(nonlinearityHelpers));
+
+    /* Add stray light coefficients feature */
+    vector<ProtocolHelper *> strayHelpers;
+    strayHelpers.push_back(new OBPStrayLightCoeffsProtocol());
+    this->features.push_back(new StrayLightCoeffsFeature(strayHelpers));
     
     /* Add lamp enable feature */
     vector<ProtocolHelper *> lampHelpers;
