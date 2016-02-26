@@ -63,6 +63,14 @@ int StrayLightCoeffsFeatureAdapter::readStrayLightCoeffs(int *errorCode, double 
 
     try {
         cal = this->feature->readStrayLightCoefficients(*this->protocol, *this->bus);
+        if(NULL == cal) {
+            /* This can happen if the device does not have the values stored.
+             * An exception will not be thrown in that case because the result
+             * is valid, just not so useful.
+             */
+            SET_ERROR_CODE(ERROR_VALUE_NOT_FOUND);
+            return 0;
+        }
         int doubles = (int) cal->size();
         doublesCopied = (doubles < bufferLength) ? doubles : bufferLength;
         memcpy(buffer, &((*cal)[0]), doublesCopied * sizeof(double));
