@@ -33,7 +33,7 @@
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestRawSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
@@ -68,7 +68,7 @@ SparkSpectrometerFeature::SparkSpectrometerFeature() {
     Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *requestSpectrum = new OBPRequestRawSpectrumExchange();
+    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
