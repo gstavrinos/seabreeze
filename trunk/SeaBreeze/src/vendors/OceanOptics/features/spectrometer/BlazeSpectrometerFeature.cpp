@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    QEProSpectrometerFeature.cpp
- * @date    September 2013
+ * @file    BlazeSpectrometerFeature.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,12 +28,12 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/spectrometer/QEProSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrum32AndMetadataExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestBufferedSpectrum32AndMetadataExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
@@ -42,41 +42,34 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-const long QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 10000;
-const long QEProSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 1600000000;
-const long QEProSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1;
-const long QEProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
+const long BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 1000;
+const long BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
+const long BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
+const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-QEProSpectrometerFeature::QEProSpectrometerFeature() {
+BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
 
-    this->numberOfPixels = 1044;
-    this->maxIntensity = 200000; // technically 18-bit, but internally limited
+    /* In the future, much of this will need to be probed */
+    this->numberOfPixels = 2048;
+    this->maxIntensity = 65535;
 
-    this->integrationTimeMinimum = QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
-    this->integrationTimeMaximum = QEProSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
-    this->integrationTimeBase = QEProSpectrometerFeature::INTEGRATION_TIME_BASE;
-    this->integrationTimeIncrement = QEProSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
+    this->integrationTimeMinimum = BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
+    this->integrationTimeMaximum = BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
+    this->integrationTimeBase = BlazeSpectrometerFeature::INTEGRATION_TIME_BASE;
+    this->integrationTimeIncrement = BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    /* This device has two bands of electric dark pixels, one at each end of the
-     * pixel array.
-     */
-    for(int i = 0; i < 4; i++) {
-        this->electricDarkPixelIndices.push_back(i);
-    }
-    for(int i = 1040; i < 1044; i++) {
-        this->electricDarkPixelIndices.push_back(i);
-    }
+    /* TODO: set up electric dark pixels when the indices are known */
 
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
-            QEProSpectrometerFeature::INTEGRATION_TIME_BASE);
+            BlazeSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new OBPReadRawSpectrum32AndMetadataExchange(
-            this->numberOfPixels);
+    Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
+            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *formattedSpectrum = new OBPReadSpectrum32AndMetadataExchange(
-            this->numberOfPixels);
+    Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
+            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *requestSpectrum = new OBPRequestBufferedSpectrum32AndMetadataExchange();
+    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
@@ -85,23 +78,17 @@ QEProSpectrometerFeature::QEProSpectrometerFeature() {
             triggerMode);
 
     this->protocols.push_back(obpProtocol);
-
+    
     this->triggerModes.push_back(
         new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_LEVEL));
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SYNCHRONIZATION));
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_EDGE));
 
 }
 
-QEProSpectrometerFeature::~QEProSpectrometerFeature() {
+BlazeSpectrometerFeature::~BlazeSpectrometerFeature() {
 
 }
 
-vector<double> *QEProSpectrometerFeature::getWavelengths(const Protocol &protocol,
+vector<double> *BlazeSpectrometerFeature::getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException) {
 
     /* FIXME: this probably ought to attempt to create an instance based on
@@ -114,4 +101,3 @@ vector<double> *QEProSpectrometerFeature::getWavelengths(const Protocol &protoco
 
     return WaveCal.readWavelengths(protocol, bus);
 }
-

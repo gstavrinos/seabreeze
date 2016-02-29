@@ -1,11 +1,16 @@
 /***************************************************//**
- * @file    MayaLSLUSB.cpp
- * @date    13-Jan-2015
+ * @file    BlazeUSBTransferHelper.h
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
+ *
+ * This class encapsulates the behavior of the USB4000 and HR4000
+ * in the case where they are connected via a USB2.0 bus.  For the
+ * case where the device is connected via USB 1.1, then the
+ * OOIUSBSpectrumTransferHelper should be used instead.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,37 +32,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/MayaLSLUSB.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
+#ifndef BLAZEUSBTRANSFERHELPER_H
+#define BLAZEUSBTRANSFERHELPER_H
+
+#include "common/buses/usb/USBTransferHelper.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
 
-using namespace seabreeze;
-using namespace ooiProtocol;
+namespace seabreeze {
 
-MayaLSLUSB::MayaLSLUSB() 
-{
-    this->productID = MAYALSL_USB_PID;
+    class BlazeUSBTransferHelper : public USBTransferHelper {
+    public:
+        BlazeUSBTransferHelper(USB *usb,
+            const OOIUSBBidrectionalEndpointMap &map);
+        virtual ~BlazeUSBTransferHelper();
+
+        /* Inherited */
+        virtual int receive(std::vector<byte> &buffer, unsigned int length)
+            throw (BusTransferException);
+        virtual int send(const std::vector<byte> &buffer, unsigned int length) const
+            throw (BusTransferException);
+        
+    private:
+        static const int WORD_SIZE_BYTES;
+    };
+
 }
 
-MayaLSLUSB::~MayaLSLUSB() { }
-
-bool MayaLSLUSB::open() 
-{
-    if (!OOIUSBInterface::open())
-        return false;
-
-    ControlHint *controlHint = new ControlHint();
-    SpectrumHint *spectrumHint = new SpectrumHint();
-    OOIUSBFPGAEndpointMap epMap;
-
-    clearHelpers();
-    addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper((this->usb), epMap));
-    addHelper(controlHint, new OOIUSBControlTransferHelper((this->usb), epMap));
-
-    return true;
-}
+#endif /* BLAZEUSBTRANSFERHELPER_H */

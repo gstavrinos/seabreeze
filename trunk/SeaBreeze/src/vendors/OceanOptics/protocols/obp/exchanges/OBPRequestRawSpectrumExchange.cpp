@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    Maya2000USB.cpp
- * @date    February 2009
+ * @file    OBPRequestRawSpectrumExchange.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,43 +28,38 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/Maya2000USB.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestRawSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPMessage.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
 using namespace seabreeze;
-using namespace ooiProtocol;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-Maya2000USB::Maya2000USB() {
-    this->productID = MAYA2000_USB_PID;
-}
+OBPRequestRawSpectrumExchange::OBPRequestRawSpectrumExchange() {
+    OBPMessage message;
+    vector<byte> *stream;
+    unsigned int i;
 
-Maya2000USB::~Maya2000USB() {
+    this->hints->push_back(new OBPSpectrumHint());
 
-}
+    this->direction = Transfer::TO_DEVICE;
 
-bool Maya2000USB::open() {
-    bool retval = false;
+    message.setMessageType(OBPMessageTypes::OBP_GET_RAW_SPECTRUM_NOW);
+    stream = message.toByteStream();
 
-    retval = OOIUSBInterface::open();
+    this->length = (unsigned) stream->size();
+    this->buffer->resize(stream->size());
 
-    if(true == retval) {
-        ControlHint *controlHint = new ControlHint();
-        SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap epMap;
-
-        clearHelpers();
-
-        addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
-
-        addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
+    for(i = 0; i < stream->size(); i++) {
+        (*(this->buffer))[i] = (*stream)[i];
     }
+    delete stream;
 
-    return retval;
+    checkBufferSize();
+}
+
+OBPRequestRawSpectrumExchange::~OBPRequestRawSpectrumExchange() {
+
 }

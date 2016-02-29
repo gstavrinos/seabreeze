@@ -94,9 +94,12 @@
     <ClInclude Include="..\..\..\..\include\native\usb\USB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\native\usb\USBDiscovery.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\native\usb\winusb\WindowsGUID.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\network\BlazeTCPIPv4.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\network\JazTCPIPv4.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\rs232\OOIRS232Interface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\ApexUSB.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSB.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000PlusUSB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000USB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR4000USB.h"><Filter>Headers</Filter></ClInclude>
@@ -123,6 +126,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB4000USB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\VentanaUSB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Apex.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Blaze.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000Plus.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR4000.h"><Filter>Headers</Filter></ClInclude>
@@ -184,6 +188,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000SpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
@@ -275,6 +280,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLampEnableCommand.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityCommand.h"><Filter>Headers</Filter></ClInclude>
@@ -286,6 +292,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h"><Filter>Headers</Filter></ClInclude>
@@ -318,6 +325,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSpectrumProcessingProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPStrobeLampProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPTemperatureProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.h"><Filter>Headers</Filter></ClInclude>
@@ -447,9 +455,12 @@
     <ClCompile Include="..\..\..\..\src\native\usb\USB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\native\usb\USBDiscovery.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\native\usb\winusb\NativeUSBWinUSB.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\network\BlazeTCPIPv4.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\network\JazTCPIPv4.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\rs232\OOIRS232Interface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\ApexUSB.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSB.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000PlusUSB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000USB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR4000USB.cpp"><Filter>Sources</Filter></ClCompile>
@@ -475,6 +486,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB4000USB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\VentanaUSB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Apex.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Blaze.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000Plus.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR4000.cpp"><Filter>Sources</Filter></ClCompile>
@@ -522,6 +534,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\serial_number\SerialNumberFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\shutter\ShutterFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000SpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
@@ -606,6 +619,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetThermoElectricTemperatureExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetWaveCalExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPIntegrationTimeExchange.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLampEnableCommand.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnableCommand.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceEnabledQuery.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPLightSourceIntensityCommand.cpp"><Filter>Sources</Filter></ClCompile>
@@ -617,6 +631,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.cpp"><Filter>Sources</Filter></ClCompile>
@@ -648,6 +663,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrometerProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSpectrumProcessingProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrayLightCoeffsProtocol.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPStrobeLampProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPTemperatureProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPThermoElectricProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPWaveCalProtocol.cpp"><Filter>Sources</Filter></ClCompile>

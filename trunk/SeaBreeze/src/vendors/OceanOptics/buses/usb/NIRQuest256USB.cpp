@@ -37,7 +37,7 @@
 #include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
 
 using namespace seabreeze;
-using namespace seabreeze::ooiProtocol;
+using namespace ooiProtocol;
 
 NIRQuest256USB::NIRQuest256USB() {
     this->productID = NIRQUEST256_USB_PID;
@@ -55,15 +55,19 @@ bool NIRQuest256USB::open() {
     if(true == retval) {
         ControlHint *controlHint = new ControlHint();
         SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap epMap;
+        OOIUSBFPGAEndpointMap endpointMap;
 
         clearHelpers();
 
         addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
 
         addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
+        
+        this->usb->clearStall(endpointMap.getLowSpeedInEP());
+        this->usb->clearStall(endpointMap.getHighSpeedInEP());
+        this->usb->clearStall(endpointMap.getLowSpeedOutEP());
     }
 
     return retval;

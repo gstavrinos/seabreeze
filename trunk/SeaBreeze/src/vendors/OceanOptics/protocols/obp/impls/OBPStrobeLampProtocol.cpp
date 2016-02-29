@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    Maya2000USB.cpp
- * @date    February 2009
+ * @file    OBPStrobeLampProtocol.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,43 +28,36 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/Maya2000USB.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
+#include <string>
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPLampEnableCommand.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
+#include "common/exceptions/ProtocolBusMismatchException.h"
 
 using namespace seabreeze;
-using namespace ooiProtocol;
+using namespace oceanBinaryProtocol;
+using namespace std;
 
-Maya2000USB::Maya2000USB() {
-    this->productID = MAYA2000_USB_PID;
+OBPStrobeLampProtocol::OBPStrobeLampProtocol()
+            : StrobeLampProtocolInterface(new OceanBinaryProtocol()) {
+    
 }
 
-Maya2000USB::~Maya2000USB() {
-
+OBPStrobeLampProtocol::~OBPStrobeLampProtocol() {
+    
 }
 
-bool Maya2000USB::open() {
-    bool retval = false;
+void OBPStrobeLampProtocol::setStrobeLampEnable(const Bus &bus, bool enable)
+        throw (ProtocolException) {
+    TransferHelper *helper;
+    OBPLampEnableCommand command;
 
-    retval = OOIUSBInterface::open();
-
-    if(true == retval) {
-        ControlHint *controlHint = new ControlHint();
-        SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap epMap;
-
-        clearHelpers();
-
-        addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
-
-        addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
+    helper = bus.getHelper(command.getHints());
+    if (NULL == helper) {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
     }
 
-    return retval;
+    /* Send the command to the device.  This may throw a ProtocolException. */
+    command.setEnable(helper, enable);
 }

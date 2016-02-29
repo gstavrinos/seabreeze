@@ -68,7 +68,8 @@ static const char *error_msgs[] = {
     "Error: Data transfer error",
     "Error: Invalid user buffer provided",
     "Error: Input was out of bounds",
-    "Error: Spectrometer was saturated"
+    "Error: Spectrometer was saturated",
+    "Error: Value not found"
 };
 
 static int number_error_msgs = sizeof (error_msgs) / sizeof (char *);

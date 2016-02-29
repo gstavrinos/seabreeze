@@ -63,6 +63,14 @@ int NonlinearityCoeffsFeatureAdapter::readNonlinearityCoeffs(int *errorCode, dou
 
     try {
         cal = this->feature->readNonlinearityCoefficients(*this->protocol, *this->bus);
+        if(NULL == cal) {
+            /* This may happen if the device does not have any coefficients
+             * stored.  An exception is not likely to be thrown because the
+             * driver itself did not fail, there was just no data.
+             */
+            SET_ERROR_CODE(ERROR_VALUE_NOT_FOUND);
+            return 0;
+        }
         int doubles = (int) cal->size();
         doublesCopied = (doubles < bufferLength) ? doubles : bufferLength;
         memcpy(buffer, &((*cal)[0]), doublesCopied * sizeof(double));

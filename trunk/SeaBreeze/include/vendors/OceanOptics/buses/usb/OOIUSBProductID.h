@@ -45,6 +45,7 @@
 #define TORUS_USB_PID           0x1040
 #define APEX_USB_PID            0x1044
 #define JAZ_USB_PID             0x2000
+#define BLAZE_USB_PID           0x2001
 #define STS_USB_PID             0x4000
 #define QEPRO_USB_PID           0x4004
 #define SPARK_USB_PID           0x4200

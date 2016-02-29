@@ -37,7 +37,7 @@
 #include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
 
 using namespace seabreeze;
-using namespace seabreeze::ooiProtocol;
+using namespace ooiProtocol;
 
 Maya2000ProUSB::Maya2000ProUSB() {
     this->productID = MAYA2000PRO_USB_PID;
@@ -55,15 +55,19 @@ bool Maya2000ProUSB::open() {
     if(true == retval) {
         ControlHint *controlHint = new ControlHint();
         SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap epMap;
+        OOIUSBFPGAEndpointMap endpointMap;
 
         clearHelpers();
 
         addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
 
         addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
+                (this->usb), endpointMap));
+        
+        this->usb->clearStall(endpointMap.getLowSpeedInEP());
+        this->usb->clearStall(endpointMap.getHighSpeedInEP());
+        this->usb->clearStall(endpointMap.getLowSpeedOutEP());
     }
 
     return retval;

@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    TorusUSB.cpp
- * @date    February 2012
+ * @file    BlazeUSB.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,46 +28,45 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/TorusUSB.h"
+#include "vendors/OceanOptics/buses/usb/BlazeUSB.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
+#include "vendors/OceanOptics/buses/usb/BlazeUSBTransferHelper.h"
 
 using namespace seabreeze;
-using namespace ooiProtocol;
+using namespace oceanBinaryProtocol;
 
-TorusUSB::TorusUSB() {
-    this->productID = TORUS_USB_PID;
+BlazeUSB::BlazeUSB() {
+    this->productID = BLAZE_USB_PID;
 }
 
-TorusUSB::~TorusUSB() {
+BlazeUSB::~BlazeUSB() {
 
 }
 
-bool TorusUSB::open() {
+bool BlazeUSB::open() {
     bool retval = false;
 
     retval = OOIUSBInterface::open();
 
     if(true == retval) {
-        ControlHint *controlHint = new ControlHint();
-        SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap endpointMap;
+        OBPControlHint *controlHint = new OBPControlHint();
+        OBPSpectrumHint *spectrumHint = new OBPSpectrumHint();
+        OOIUSBSimpleDualEndpointMap endpointMap;
 
         clearHelpers();
 
-        addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), endpointMap));
-
-        addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), endpointMap));
-        
-        this->usb->clearStall(endpointMap.getLowSpeedInEP());
-        this->usb->clearStall(endpointMap.getHighSpeedInEP());
-        this->usb->clearStall(endpointMap.getLowSpeedOutEP());
+        /* On the Blaze, there is only a single endpoint in
+         * each direction.  All hints map to the same kind of helper.
+         * The helper is special because there is a certain minimum block
+         * size that must be respected when communicating over USB.
+         */
+        addHelper(spectrumHint, new BlazeUSBTransferHelper(
+            (this->usb), endpointMap));
+        addHelper(controlHint, new BlazeUSBTransferHelper(
+            (this->usb), endpointMap));
     }
 
     return retval;
