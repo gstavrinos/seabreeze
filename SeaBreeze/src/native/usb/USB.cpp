@@ -168,18 +168,17 @@ int USB::read(int endpoint, void *data, unsigned int length_bytes) {
     return flag;
 }
 
-void USB::resetEndpoint(int endpoint) {
+void USB::clearStall(int endpoint) {
 
     if(NULL == this->descriptor || false == this->opened) {
         /* FIXME: throw an exception for device not ready or opened */
         if(true == this->verbose) {
-            fprintf(stderr, "ERROR: tried to read a USB device that is not opened.\n");
+            fprintf(stderr, "ERROR: tried to access a USB device that is not opened.\n");
         }
         return;
     }
 
-    USBResetPipe(this->descriptor, (unsigned char)endpoint);
-
+    USBClearStall(this->descriptor, (unsigned char)endpoint);
 }
 
 void USB::setVerbose(bool v) {

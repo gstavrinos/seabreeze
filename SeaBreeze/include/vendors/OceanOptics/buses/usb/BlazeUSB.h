@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    MayaLSLUSB.cpp
- * @date    13-Jan-2015
+ * @file    BlazeUSB.h
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,37 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/MayaLSLUSB.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
+#ifndef BLAZEUSB_H
+#define BLAZEUSB_H
 
-using namespace seabreeze;
-using namespace ooiProtocol;
+#include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 
-MayaLSLUSB::MayaLSLUSB() 
-{
-    this->productID = MAYALSL_USB_PID;
+namespace seabreeze {
+
+    class BlazeUSB : public OOIUSBInterface {
+    public:
+        BlazeUSB();
+        virtual ~BlazeUSB();
+
+        /* Inherited from OOIUSBInterface */
+        virtual bool open();
+    };
+
 }
 
-MayaLSLUSB::~MayaLSLUSB() { }
-
-bool MayaLSLUSB::open() 
-{
-    if (!OOIUSBInterface::open())
-        return false;
-
-    ControlHint *controlHint = new ControlHint();
-    SpectrumHint *spectrumHint = new SpectrumHint();
-    OOIUSBFPGAEndpointMap epMap;
-
-    clearHelpers();
-    addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper((this->usb), epMap));
-    addHelper(controlHint, new OOIUSBControlTransferHelper((this->usb), epMap));
-
-    return true;
-}
+#endif /* BLAZEUSB_H */

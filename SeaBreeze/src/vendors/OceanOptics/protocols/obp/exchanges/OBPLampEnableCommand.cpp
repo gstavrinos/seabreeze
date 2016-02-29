@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    Maya2000USB.cpp
- * @date    February 2009
+ * @file    OBPLampEnableCommand.cpp
+ * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,44 +27,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/Maya2000USB.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/ControlHint.h"
-#include "vendors/OceanOptics/protocols/ooi/hints/SpectrumHint.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBControlTransferHelper.h"
-#include "vendors/OceanOptics/buses/usb/OOIUSBSpectrumTransferHelper.h"
+/* Includes */
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPLampEnableCommand.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
 using namespace seabreeze;
-using namespace ooiProtocol;
+using namespace oceanBinaryProtocol;
 
-Maya2000USB::Maya2000USB() {
-    this->productID = MAYA2000_USB_PID;
+OBPLampEnableCommand::OBPLampEnableCommand() {
+    this->hints->push_back(new OBPControlHint());
+
+    this->messageType = OBPMessageTypes::OBP_SET_LAMP_ENABLE;
 }
 
-Maya2000USB::~Maya2000USB() {
-
+OBPLampEnableCommand::~OBPLampEnableCommand() {
+    
 }
 
-bool Maya2000USB::open() {
-    bool retval = false;
-
-    retval = OOIUSBInterface::open();
-
-    if(true == retval) {
-        ControlHint *controlHint = new ControlHint();
-        SpectrumHint *spectrumHint = new SpectrumHint();
-        OOIUSBFPGAEndpointMap epMap;
-
-        clearHelpers();
-
-        addHelper(spectrumHint, new OOIUSBSpectrumTransferHelper(
-                (this->usb), epMap));
-
-        addHelper(controlHint, new OOIUSBControlTransferHelper(
-                (this->usb), epMap));
-    }
-
-    return retval;
+void OBPLampEnableCommand::setEnable(TransferHelper *helper, bool enable)
+        throw (ProtocolException) {
+    
+    this->payload.resize(1);
+    
+    this->payload[0] = (true == enable) ? 1 : 0;
+    
+    sendCommandToDevice(helper);
 }

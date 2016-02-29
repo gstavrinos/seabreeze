@@ -63,7 +63,8 @@ void OBPReadRawSpectrumExchange::setNumberOfPixels(unsigned int readoutLength, u
 }
 
 unsigned int OBPReadRawSpectrumExchange::isLegalMessageType(unsigned int t) {
-    if(OBPMessageTypes::OBP_GET_RAW_SPECTRUM_NOW == t) {
+    if(OBPMessageTypes::OBP_GET_RAW_SPECTRUM_NOW == t
+            || OBPMessageTypes::OBP_GET_CORRECTED_SPECTRUM_NOW) {
         return 1;
     }
 

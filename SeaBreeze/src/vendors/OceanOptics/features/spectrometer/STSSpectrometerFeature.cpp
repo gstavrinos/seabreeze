@@ -33,12 +33,10 @@
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestRawSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
-#include "common/exceptions/FeatureProtocolNotFoundException.h"
-#include "common/exceptions/FeatureControlException.h"
 
 using namespace seabreeze;
 using namespace oceanBinaryProtocol;
@@ -69,7 +67,7 @@ STSSpectrometerFeature::STSSpectrometerFeature()
     formattedSpectrum = new OBPReadSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+    Transfer *requestSpectrum = new OBPRequestRawSpectrumExchange();
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 

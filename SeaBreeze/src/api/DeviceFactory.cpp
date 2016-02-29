@@ -37,6 +37,7 @@
 #include "api/DeviceFactory.h"
 
 #include "vendors/OceanOptics/devices/Apex.h"
+#include "vendors/OceanOptics/devices/Blaze.h"
 #include "vendors/OceanOptics/devices/HR2000.h"
 #include "vendors/OceanOptics/devices/HR2000Plus.h"
 #include "vendors/OceanOptics/devices/HR4000.h"
@@ -88,6 +89,7 @@ void DeviceFactory::shutdown() {
 DeviceFactory::DeviceFactory()
 {
     nameToCreator.insert(make_pair("Apex",        (creatorFunction) &deviceFactory<Apex       >));
+    nameToCreator.insert(make_pair("Blaze",       (creatorFunction) &deviceFactory<Blaze      >));
     nameToCreator.insert(make_pair("HR2000",      (creatorFunction) &deviceFactory<HR2000     >));
     nameToCreator.insert(make_pair("HR2000Plus",  (creatorFunction) &deviceFactory<HR2000Plus >));
     nameToCreator.insert(make_pair("HR4000",      (creatorFunction) &deviceFactory<HR4000     >));
