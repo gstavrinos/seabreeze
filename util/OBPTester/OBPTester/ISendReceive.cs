@@ -35,7 +35,8 @@ namespace OceanUtil
         IO_OUT_OF_RANGE = 4,  // offset, numBytes or offset + numBytes exceeds the buffer size
         IO_TIMEOUT = 5,  // A timeout occurred before all bytes were sent or received
         IO_INSUFFICIENT_DATA = 6,  // Insufficient data was send or received (not the specified amount)
-        IO_OTHER_EXCEPTION = 7,  // Another exception was caught during the IO
+        IO_PIPE_ERROR = 7, // an error specific to winUSB/winUSBNet
+        IO_OTHER_EXCEPTION = 8,  // Another exception was caught during the IO
     }
 
     //

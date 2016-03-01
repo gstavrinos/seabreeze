@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.comboBoxComPort = new System.Windows.Forms.ComboBox();
             this.comboBoxDataBits = new System.Windows.Forms.ComboBox();
             this.comboBoxParity = new System.Windows.Forms.ComboBox();
@@ -334,6 +334,16 @@
             this.label13 = new System.Windows.Forms.Label();
             this.labelIPAddress = new System.Windows.Forms.Label();
             this.labelPortNum = new System.Windows.Forms.Label();
+            this.tabPageWinUSBNet = new System.Windows.Forms.TabPage();
+            this.dataGridViewOutPipes = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewInPipes = new System.Windows.Forms.DataGridView();
+            this.ColumnPipes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label89 = new System.Windows.Forms.Label();
+            this.label88 = new System.Windows.Forms.Label();
+            this.dataGridViewUSBDeviceList = new System.Windows.Forms.DataGridView();
+            this.ColumnDeviceDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnProductID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlContent.SuspendLayout();
             this.tabPageIOLog.SuspendLayout();
             this.tabPageInfo.SuspendLayout();
@@ -353,6 +363,10 @@
             this.tabControlProtocol.SuspendLayout();
             this.tabPageRS232.SuspendLayout();
             this.tabPageTCPIP.SuspendLayout();
+            this.tabPageWinUSBNet.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOutPipes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInPipes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUSBDeviceList)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxComPort
@@ -476,17 +490,17 @@
             // 
             // buttonTest
             // 
-            this.buttonTest.Location = new System.Drawing.Point(34, 121);
+            this.buttonTest.Location = new System.Drawing.Point(25, 215);
             this.buttonTest.Name = "buttonTest";
-            this.buttonTest.Size = new System.Drawing.Size(75, 23);
+            this.buttonTest.Size = new System.Drawing.Size(121, 23);
             this.buttonTest.TabIndex = 13;
-            this.buttonTest.Text = "Test";
+            this.buttonTest.Text = "Connect and Test";
             this.buttonTest.UseVisualStyleBackColor = true;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // buttonSyncFW
             // 
-            this.buttonSyncFW.Location = new System.Drawing.Point(125, 121);
+            this.buttonSyncFW.Location = new System.Drawing.Point(152, 215);
             this.buttonSyncFW.Name = "buttonSyncFW";
             this.buttonSyncFW.Size = new System.Drawing.Size(111, 23);
             this.buttonSyncFW.TabIndex = 14;
@@ -563,7 +577,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(55, 166);
+            this.label8.Location = new System.Drawing.Point(46, 260);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(54, 13);
             this.label8.TabIndex = 21;
@@ -572,7 +586,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(44, 183);
+            this.label9.Location = new System.Drawing.Point(35, 277);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(65, 13);
             this.label9.TabIndex = 22;
@@ -581,7 +595,7 @@
             // labelIOStatus
             // 
             this.labelIOStatus.AutoSize = true;
-            this.labelIOStatus.Location = new System.Drawing.Point(116, 166);
+            this.labelIOStatus.Location = new System.Drawing.Point(107, 260);
             this.labelIOStatus.Name = "labelIOStatus";
             this.labelIOStatus.Size = new System.Drawing.Size(16, 13);
             this.labelIOStatus.TabIndex = 23;
@@ -590,7 +604,7 @@
             // labelOBPStatus
             // 
             this.labelOBPStatus.AutoSize = true;
-            this.labelOBPStatus.Location = new System.Drawing.Point(116, 183);
+            this.labelOBPStatus.Location = new System.Drawing.Point(107, 277);
             this.labelOBPStatus.Name = "labelOBPStatus";
             this.labelOBPStatus.Size = new System.Drawing.Size(16, 13);
             this.labelOBPStatus.TabIndex = 24;
@@ -599,7 +613,7 @@
             // checkBoxAckAlways
             // 
             this.checkBoxAckAlways.AutoSize = true;
-            this.checkBoxAckAlways.Location = new System.Drawing.Point(278, 114);
+            this.checkBoxAckAlways.Location = new System.Drawing.Point(269, 208);
             this.checkBoxAckAlways.Name = "checkBoxAckAlways";
             this.checkBoxAckAlways.Size = new System.Drawing.Size(81, 17);
             this.checkBoxAckAlways.TabIndex = 25;
@@ -609,7 +623,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(385, 115);
+            this.label10.Location = new System.Drawing.Point(376, 209);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(84, 13);
             this.label10.TabIndex = 26;
@@ -617,7 +631,7 @@
             // 
             // textBoxProtocolVersion
             // 
-            this.textBoxProtocolVersion.Location = new System.Drawing.Point(472, 112);
+            this.textBoxProtocolVersion.Location = new System.Drawing.Point(463, 206);
             this.textBoxProtocolVersion.Name = "textBoxProtocolVersion";
             this.textBoxProtocolVersion.Size = new System.Drawing.Size(105, 20);
             this.textBoxProtocolVersion.TabIndex = 27;
@@ -634,10 +648,11 @@
             this.tabControlContent.Controls.Add(this.tabPageGPIO);
             this.tabControlContent.Controls.Add(this.tabPageI2C);
             this.tabControlContent.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tabControlContent.Location = new System.Drawing.Point(0, 210);
+            this.tabControlContent.Enabled = false;
+            this.tabControlContent.Location = new System.Drawing.Point(0, 309);
             this.tabControlContent.Name = "tabControlContent";
             this.tabControlContent.SelectedIndex = 0;
-            this.tabControlContent.Size = new System.Drawing.Size(732, 403);
+            this.tabControlContent.Size = new System.Drawing.Size(734, 403);
             this.tabControlContent.TabIndex = 28;
             // 
             // tabPageIOLog
@@ -648,7 +663,7 @@
             this.tabPageIOLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageIOLog.Name = "tabPageIOLog";
             this.tabPageIOLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageIOLog.Size = new System.Drawing.Size(724, 377);
+            this.tabPageIOLog.Size = new System.Drawing.Size(726, 377);
             this.tabPageIOLog.TabIndex = 0;
             this.tabPageIOLog.Text = "IO Log";
             // 
@@ -742,7 +757,7 @@
             this.tabPageInfo.Location = new System.Drawing.Point(4, 22);
             this.tabPageInfo.Name = "tabPageInfo";
             this.tabPageInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInfo.Size = new System.Drawing.Size(724, 377);
+            this.tabPageInfo.Size = new System.Drawing.Size(726, 377);
             this.tabPageInfo.TabIndex = 1;
             this.tabPageInfo.Text = "Basic Info";
             // 
@@ -1383,7 +1398,7 @@
             this.tabPageAcquisitionParams.Location = new System.Drawing.Point(4, 22);
             this.tabPageAcquisitionParams.Name = "tabPageAcquisitionParams";
             this.tabPageAcquisitionParams.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAcquisitionParams.Size = new System.Drawing.Size(724, 377);
+            this.tabPageAcquisitionParams.Size = new System.Drawing.Size(726, 377);
             this.tabPageAcquisitionParams.TabIndex = 2;
             this.tabPageAcquisitionParams.Text = "Acquisition Params";
             // 
@@ -1930,7 +1945,7 @@
             this.tabPageSpectrum.Location = new System.Drawing.Point(4, 22);
             this.tabPageSpectrum.Name = "tabPageSpectrum";
             this.tabPageSpectrum.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSpectrum.Size = new System.Drawing.Size(724, 377);
+            this.tabPageSpectrum.Size = new System.Drawing.Size(726, 377);
             this.tabPageSpectrum.TabIndex = 3;
             this.tabPageSpectrum.Text = "Spectrum";
             // 
@@ -1958,25 +1973,25 @@
             // 
             // chartSpectrum
             // 
-            chartArea3.AxisX.MinorGrid.Enabled = true;
-            chartArea3.AxisX.MinorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea3.AxisX.Title = "Pixel";
-            chartArea3.AxisY.MinorGrid.Enabled = true;
-            chartArea3.AxisY.MinorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea3.AxisY.Title = "Counts";
-            chartArea3.Name = "ChartArea1";
-            this.chartSpectrum.ChartAreas.Add(chartArea3);
+            chartArea1.AxisX.MinorGrid.Enabled = true;
+            chartArea1.AxisX.MinorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisX.Title = "Pixel";
+            chartArea1.AxisY.MinorGrid.Enabled = true;
+            chartArea1.AxisY.MinorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisY.Title = "Counts";
+            chartArea1.Name = "ChartArea1";
+            this.chartSpectrum.ChartAreas.Add(chartArea1);
             this.chartSpectrum.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Enabled = false;
-            legend3.Name = "Legend1";
-            this.chartSpectrum.Legends.Add(legend3);
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chartSpectrum.Legends.Add(legend1);
             this.chartSpectrum.Location = new System.Drawing.Point(3, 3);
             this.chartSpectrum.Name = "chartSpectrum";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Spectrum";
-            this.chartSpectrum.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Spectrum";
+            this.chartSpectrum.Series.Add(series1);
             this.chartSpectrum.Size = new System.Drawing.Size(675, 296);
             this.chartSpectrum.TabIndex = 0;
             this.chartSpectrum.Text = "Spectrum";
@@ -2418,7 +2433,7 @@
             this.tabPageCoefficients.Location = new System.Drawing.Point(4, 22);
             this.tabPageCoefficients.Name = "tabPageCoefficients";
             this.tabPageCoefficients.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCoefficients.Size = new System.Drawing.Size(724, 377);
+            this.tabPageCoefficients.Size = new System.Drawing.Size(726, 377);
             this.tabPageCoefficients.TabIndex = 5;
             this.tabPageCoefficients.Text = "Coefficients";
             // 
@@ -2664,7 +2679,7 @@
             this.tabPageTecTemp.Location = new System.Drawing.Point(4, 22);
             this.tabPageTecTemp.Name = "tabPageTecTemp";
             this.tabPageTecTemp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTecTemp.Size = new System.Drawing.Size(724, 377);
+            this.tabPageTecTemp.Size = new System.Drawing.Size(726, 377);
             this.tabPageTecTemp.TabIndex = 6;
             this.tabPageTecTemp.Text = "TEC & Temp";
             // 
@@ -2929,7 +2944,7 @@
             this.tabPageGPIO.Location = new System.Drawing.Point(4, 22);
             this.tabPageGPIO.Name = "tabPageGPIO";
             this.tabPageGPIO.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGPIO.Size = new System.Drawing.Size(724, 377);
+            this.tabPageGPIO.Size = new System.Drawing.Size(726, 377);
             this.tabPageGPIO.TabIndex = 7;
             this.tabPageGPIO.Text = "GPIO";
             // 
@@ -3092,7 +3107,7 @@
             this.tabPageI2C.Location = new System.Drawing.Point(4, 22);
             this.tabPageI2C.Name = "tabPageI2C";
             this.tabPageI2C.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageI2C.Size = new System.Drawing.Size(724, 377);
+            this.tabPageI2C.Size = new System.Drawing.Size(726, 377);
             this.tabPageI2C.TabIndex = 8;
             this.tabPageI2C.Text = "I2C";
             // 
@@ -3284,7 +3299,7 @@
             // checkBoxMD5Checksum
             // 
             this.checkBoxMD5Checksum.AutoSize = true;
-            this.checkBoxMD5Checksum.Location = new System.Drawing.Point(278, 140);
+            this.checkBoxMD5Checksum.Location = new System.Drawing.Point(269, 234);
             this.checkBoxMD5Checksum.Name = "checkBoxMD5Checksum";
             this.checkBoxMD5Checksum.Size = new System.Drawing.Size(102, 17);
             this.checkBoxMD5Checksum.TabIndex = 29;
@@ -3293,7 +3308,7 @@
             // 
             // textBoxRegarding
             // 
-            this.textBoxRegarding.Location = new System.Drawing.Point(472, 138);
+            this.textBoxRegarding.Location = new System.Drawing.Point(463, 232);
             this.textBoxRegarding.Name = "textBoxRegarding";
             this.textBoxRegarding.Size = new System.Drawing.Size(105, 20);
             this.textBoxRegarding.TabIndex = 31;
@@ -3302,7 +3317,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(413, 141);
+            this.label11.Location = new System.Drawing.Point(404, 235);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(56, 13);
             this.label11.TabIndex = 30;
@@ -3312,10 +3327,11 @@
             // 
             this.tabControlProtocol.Controls.Add(this.tabPageRS232);
             this.tabControlProtocol.Controls.Add(this.tabPageTCPIP);
+            this.tabControlProtocol.Controls.Add(this.tabPageWinUSBNet);
             this.tabControlProtocol.Location = new System.Drawing.Point(18, 15);
             this.tabControlProtocol.Name = "tabControlProtocol";
             this.tabControlProtocol.SelectedIndex = 0;
-            this.tabControlProtocol.Size = new System.Drawing.Size(589, 91);
+            this.tabControlProtocol.Size = new System.Drawing.Size(589, 185);
             this.tabControlProtocol.TabIndex = 32;
             this.tabControlProtocol.SelectedIndexChanged += new System.EventHandler(this.tabControlProtocol_SelectedIndexChanged);
             // 
@@ -3343,7 +3359,7 @@
             this.tabPageRS232.Location = new System.Drawing.Point(4, 22);
             this.tabPageRS232.Name = "tabPageRS232";
             this.tabPageRS232.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRS232.Size = new System.Drawing.Size(581, 65);
+            this.tabPageRS232.Size = new System.Drawing.Size(581, 159);
             this.tabPageRS232.TabIndex = 0;
             this.tabPageRS232.Text = "RS232";
             // 
@@ -3361,7 +3377,7 @@
             this.tabPageTCPIP.Location = new System.Drawing.Point(4, 22);
             this.tabPageTCPIP.Name = "tabPageTCPIP";
             this.tabPageTCPIP.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTCPIP.Size = new System.Drawing.Size(581, 65);
+            this.tabPageTCPIP.Size = new System.Drawing.Size(581, 159);
             this.tabPageTCPIP.TabIndex = 1;
             this.tabPageTCPIP.Text = "TCP-IP";
             // 
@@ -3439,11 +3455,134 @@
             this.labelPortNum.TabIndex = 22;
             this.labelPortNum.Text = "8080";
             // 
+            // tabPageWinUSBNet
+            // 
+            this.tabPageWinUSBNet.Controls.Add(this.dataGridViewOutPipes);
+            this.tabPageWinUSBNet.Controls.Add(this.dataGridViewInPipes);
+            this.tabPageWinUSBNet.Controls.Add(this.label89);
+            this.tabPageWinUSBNet.Controls.Add(this.label88);
+            this.tabPageWinUSBNet.Controls.Add(this.dataGridViewUSBDeviceList);
+            this.tabPageWinUSBNet.Location = new System.Drawing.Point(4, 22);
+            this.tabPageWinUSBNet.Name = "tabPageWinUSBNet";
+            this.tabPageWinUSBNet.Size = new System.Drawing.Size(581, 159);
+            this.tabPageWinUSBNet.TabIndex = 2;
+            this.tabPageWinUSBNet.Text = "WinUSBNet";
+            this.tabPageWinUSBNet.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewOutPipes
+            // 
+            this.dataGridViewOutPipes.AllowUserToAddRows = false;
+            this.dataGridViewOutPipes.AllowUserToDeleteRows = false;
+            this.dataGridViewOutPipes.AllowUserToResizeColumns = false;
+            this.dataGridViewOutPipes.AllowUserToResizeRows = false;
+            this.dataGridViewOutPipes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewOutPipes.ColumnHeadersVisible = false;
+            this.dataGridViewOutPipes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1});
+            this.dataGridViewOutPipes.Location = new System.Drawing.Point(477, 57);
+            this.dataGridViewOutPipes.MultiSelect = false;
+            this.dataGridViewOutPipes.Name = "dataGridViewOutPipes";
+            this.dataGridViewOutPipes.RowHeadersVisible = false;
+            this.dataGridViewOutPipes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewOutPipes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewOutPipes.Size = new System.Drawing.Size(50, 75);
+            this.dataGridViewOutPipes.TabIndex = 6;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.FillWeight = 50F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Pipes";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 50;
+            // 
+            // dataGridViewInPipes
+            // 
+            this.dataGridViewInPipes.AllowUserToAddRows = false;
+            this.dataGridViewInPipes.AllowUserToDeleteRows = false;
+            this.dataGridViewInPipes.AllowUserToResizeColumns = false;
+            this.dataGridViewInPipes.AllowUserToResizeRows = false;
+            this.dataGridViewInPipes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewInPipes.ColumnHeadersVisible = false;
+            this.dataGridViewInPipes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnPipes});
+            this.dataGridViewInPipes.Location = new System.Drawing.Point(385, 57);
+            this.dataGridViewInPipes.MultiSelect = false;
+            this.dataGridViewInPipes.Name = "dataGridViewInPipes";
+            this.dataGridViewInPipes.RowHeadersVisible = false;
+            this.dataGridViewInPipes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewInPipes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewInPipes.Size = new System.Drawing.Size(50, 75);
+            this.dataGridViewInPipes.TabIndex = 5;
+            // 
+            // ColumnPipes
+            // 
+            this.ColumnPipes.FillWeight = 50F;
+            this.ColumnPipes.HeaderText = "Pipes";
+            this.ColumnPipes.Name = "ColumnPipes";
+            this.ColumnPipes.ReadOnly = true;
+            this.ColumnPipes.Width = 50;
+            // 
+            // label89
+            // 
+            this.label89.AutoSize = true;
+            this.label89.Location = new System.Drawing.Point(479, 41);
+            this.label89.Name = "label89";
+            this.label89.Size = new System.Drawing.Size(48, 13);
+            this.label89.TabIndex = 4;
+            this.label89.Text = "Out Pipe";
+            // 
+            // label88
+            // 
+            this.label88.AutoSize = true;
+            this.label88.Location = new System.Drawing.Point(392, 41);
+            this.label88.Name = "label88";
+            this.label88.Size = new System.Drawing.Size(40, 13);
+            this.label88.TabIndex = 3;
+            this.label88.Text = "In Pipe";
+            // 
+            // dataGridViewUSBDeviceList
+            // 
+            this.dataGridViewUSBDeviceList.AllowUserToAddRows = false;
+            this.dataGridViewUSBDeviceList.AllowUserToDeleteRows = false;
+            this.dataGridViewUSBDeviceList.AllowUserToResizeRows = false;
+            this.dataGridViewUSBDeviceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewUSBDeviceList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnDeviceDescription,
+            this.ColumnProductID});
+            this.dataGridViewUSBDeviceList.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridViewUSBDeviceList.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewUSBDeviceList.Name = "dataGridViewUSBDeviceList";
+            this.dataGridViewUSBDeviceList.ReadOnly = true;
+            this.dataGridViewUSBDeviceList.RowHeadersVisible = false;
+            this.dataGridViewUSBDeviceList.RowTemplate.ReadOnly = true;
+            this.dataGridViewUSBDeviceList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridViewUSBDeviceList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewUSBDeviceList.Size = new System.Drawing.Size(304, 153);
+            this.dataGridViewUSBDeviceList.TabIndex = 0;
+            this.dataGridViewUSBDeviceList.SelectionChanged += new System.EventHandler(this.dataGridViewUSBDeviceList_SelectionChanged);
+            // 
+            // ColumnDeviceDescription
+            // 
+            this.ColumnDeviceDescription.FillWeight = 225F;
+            this.ColumnDeviceDescription.HeaderText = "Description";
+            this.ColumnDeviceDescription.Name = "ColumnDeviceDescription";
+            this.ColumnDeviceDescription.ReadOnly = true;
+            this.ColumnDeviceDescription.Width = 225;
+            // 
+            // ColumnProductID
+            // 
+            this.ColumnProductID.FillWeight = 75F;
+            this.ColumnProductID.HeaderText = "ProductID";
+            this.ColumnProductID.Name = "ColumnProductID";
+            this.ColumnProductID.ReadOnly = true;
+            this.ColumnProductID.Width = 75;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 613);
+            this.ClientSize = new System.Drawing.Size(734, 712);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tabControlProtocol);
             this.Controls.Add(this.textBoxRegarding);
@@ -3494,6 +3633,11 @@
             this.tabPageRS232.PerformLayout();
             this.tabPageTCPIP.ResumeLayout(false);
             this.tabPageTCPIP.PerformLayout();
+            this.tabPageWinUSBNet.ResumeLayout(false);
+            this.tabPageWinUSBNet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOutPipes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInPipes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUSBDeviceList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3804,6 +3948,16 @@
         private System.Windows.Forms.TextBox textBoxI2CNumBytes;
         private System.Windows.Forms.Label label82;
         private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.TabPage tabPageWinUSBNet;
+        private System.Windows.Forms.DataGridView dataGridViewUSBDeviceList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDeviceDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnProductID;
+        private System.Windows.Forms.Label label89;
+        private System.Windows.Forms.Label label88;
+        private System.Windows.Forms.DataGridView dataGridViewOutPipes;
+        private System.Windows.Forms.DataGridView dataGridViewInPipes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPipes;
     }
 }
 

@@ -46,6 +46,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WinUSBNet">
+      <HintPath>..\..\WinUSBNetForOceanOptics\WinUSBNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISendReceive.cs" />
@@ -63,6 +66,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TcpIpIO.cs" />
+    <Compile Include="USBIO.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
