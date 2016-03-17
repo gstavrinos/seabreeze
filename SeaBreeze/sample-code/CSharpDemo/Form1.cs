@@ -30,7 +30,7 @@ namespace CSharpDemo
         double[] nlcCoeffs;
         bool scanning = false;
 
-        int integrationTimeMillisec = 100; 
+        double integrationTimeMillisec = 100; 
         int triggerMode = 0;
 
         double[] irradCal;
@@ -208,7 +208,7 @@ namespace CSharpDemo
 
         private void numericUpDownIntegrationTimeMillisec_ValueChanged(object sender, EventArgs e)
         {
-            integrationTimeMillisec = (int) numericUpDownIntegrationTimeMillisec.Value;
+            integrationTimeMillisec = (double) numericUpDownIntegrationTimeMillisec.Value;
             updateSpectrometerFromGUI();
         }
 
@@ -668,7 +668,7 @@ namespace CSharpDemo
                 worker.ReportProgress(scanCount++);
 
                 // necessary to ensure the GUI stays responsive
-                int delay = integrationTimeMillisec;
+                int delay = (int) integrationTimeMillisec;
                 if (delay < 200)
                     delay = 200;
                 Thread.Sleep(delay);

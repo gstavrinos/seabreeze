@@ -22,6 +22,6 @@ interface Spectrometer
     int[]    getEDCIndices();
     double[] getNLCCoeffs();
 
-    bool     setIntegrationTimeMilliseconds(int ms);
+    bool     setIntegrationTimeMilliseconds(double ms);
     bool     setTriggerMode(int mode);
 }

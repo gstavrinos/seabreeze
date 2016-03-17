@@ -170,7 +170,7 @@ public class SeaBreezeSpectrometer : Spectrometer
         return result;
     }
 
-    public bool setIntegrationTimeMilliseconds(int ms)
+    public bool setIntegrationTimeMilliseconds(double ms)
     {
         bool result = false;
 
@@ -182,7 +182,7 @@ public class SeaBreezeSpectrometer : Spectrometer
         try
         {
             int error = 0;
-            SeaBreezeWrapper.seabreeze_set_integration_time_microsec(specIndex, ref error, (long)ms * 1000);
+            SeaBreezeWrapper.seabreeze_set_integration_time_microsec(specIndex, ref error, (long) (ms * 1000));
             result = checkSeaBreezeError("set_integration_time_microsec", error);
         }
         catch (Exception e)
