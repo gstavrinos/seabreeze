@@ -50,7 +50,7 @@ const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
 
     /* In the future, much of this will need to be probed */
-    this->numberOfPixels = 2048;
+    this->numberOfPixels = 2081;
     this->maxIntensity = 65535;
 
     this->integrationTimeMinimum = BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -58,7 +58,9 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
     this->integrationTimeBase = BlazeSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    /* TODO: set up electric dark pixels when the indices are known */
+    for(int i = 13; i <= 30; i++) {
+        this->electricDarkPixelIndices.push_back(i);
+    }
 
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             BlazeSpectrometerFeature::INTEGRATION_TIME_BASE);
