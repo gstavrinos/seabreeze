@@ -34,21 +34,38 @@ using namespace seabreeze;
 using namespace std;
 
 GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature(
-                ProgrammableSaturationFeatureInterface saturationFeature) {
+                ProgrammableSaturationFeature *saturationFeature) {
     this->saturation = saturationFeature;
 }
 
 GainAdjustedSpectrometerFeature::~GainAdjustedSpectrometerFeature() {
-
+    delete this->saturation;
 }
 
 unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
-    return this->saturation->getSaturation();
+    try {
+        unsigned int result = this->saturation->getSaturation();
+        if(result < 0 || result > this->maxIntensity) {
+            /* The saturation setting was retrieved but appears to be invalid.
+             * Use the max intensity instead.
+             */
+            return this->maxIntensity;
+        }
+        return result;
+    } catch (FeatureException &fe) {
+        /* No valid saturation setting, so default to the max intensity */
+        return this->maxIntensity;
+    }
 }
-
 
 bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
         throw (FeatureException) {
 
-    this->saturation->initialize(proto, bus);
+    bool result = this->saturation->initialize(proto, bus);
+    
+    if(false == result) {
+        return false;
+    }
+    
+    return OOISpectrometerFeature::initialize(proto, bus);
 }

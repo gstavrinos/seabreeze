@@ -32,7 +32,9 @@
 
 using namespace seabreeze;
 
-NIRQuest256SpectrometerFeature::NIRQuest256SpectrometerFeature() : NIRQuestSpectrometerFeature() {
+NIRQuest256SpectrometerFeature::NIRQuest256SpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : NIRQuestSpectrometerFeature(saturationFeature) {
     this->numberOfPixels = 256;
     int readoutLength = (256 * 2) + 1;
 

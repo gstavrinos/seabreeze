@@ -32,6 +32,7 @@
 #include "common/buses/BusFamilies.h"
 #include "vendors/OceanOptics/devices/NIRQuest256.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIProtocol.h"
+#include "vendors/OceanOptics/protocols/ooi/impls/OOIEEPROMProtocol.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIIrradCalProtocol.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOIStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/FPGARegisterProtocol.h"
@@ -40,6 +41,7 @@
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SerialNumberEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature_NIRQuest.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/NIRQuest256SpectrometerFeature.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
@@ -48,6 +50,7 @@
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature_FPGA.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature_NIRQuest.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
@@ -72,7 +75,13 @@ NIRQuest256::NIRQuest256() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new NIRQuest256SpectrometerFeature());
+    
+    vector<ProtocolHelper *> saturationHelpers;
+    saturationHelpers.push_back(new OOIEEPROMProtocol());
+    ProgrammableSaturationFeature saturation =
+            new SaturationEEPROMSlotFeature_NIRQuest(saturationHelpers, 0x0011);
+    
+    this->features.push_back(new NIRQuest256SpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(20));
 

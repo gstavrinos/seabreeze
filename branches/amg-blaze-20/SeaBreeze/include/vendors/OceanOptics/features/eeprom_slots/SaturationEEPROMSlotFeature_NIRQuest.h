@@ -30,6 +30,7 @@
 #define SATURATIONEEPROMSLOTFEATURE_NIRQUEST_H
 
 #include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeatureBase.h"
+#include <vector>
 
 namespace seabreeze {
     
@@ -39,7 +40,8 @@ namespace seabreeze {
     class SaturationEEPROMSlotFeature_NIRQuest
             : public SaturationEEPROMSlotFeatureBase {
     public:
-        SaturationEEPROMSlotFeature_NIRQuest();
+        SaturationEEPROMSlotFeature_NIRQuest(
+                std::vector<ProtocolHelper *> &helpers, int slot);
         virtual ~SaturationEEPROMSlotFeature_NIRQuest();
         
     protected:
