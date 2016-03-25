@@ -58,7 +58,7 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
     this->integrationTimeBase = BlazeSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 13; i <= 30; i++) {
+    for(int i = 14; i <= 29; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
 
