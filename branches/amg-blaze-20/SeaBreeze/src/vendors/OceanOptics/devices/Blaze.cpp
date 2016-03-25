@@ -36,7 +36,7 @@
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureImpl.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
@@ -46,7 +46,6 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
-#include "OBPProgrammableSaturationProtocol.h"
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;

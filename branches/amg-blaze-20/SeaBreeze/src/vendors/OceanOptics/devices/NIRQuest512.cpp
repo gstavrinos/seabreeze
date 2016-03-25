@@ -74,7 +74,7 @@ NIRQuest512::NIRQuest512() {
 
     /* Set up the features that comprise this device */
     
-    ProgrammableSaturationFeature saturation =
+    ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature_NIRQuest(0x0011);
     
     this->features.push_back(new NIRQuest512SpectrometerFeature(saturation));

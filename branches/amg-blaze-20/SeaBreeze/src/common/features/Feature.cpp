@@ -34,7 +34,16 @@ using namespace seabreeze;
 using namespace std;
 
 Feature::Feature() {
-
+    /* TODO: if it can be done cleanly, this should take the
+     * vector<ProtocolHelper *> list and apply it here.  This would make
+     * the constructor symmetric with the destructor and remove a lot of
+     * redundancy.  The only question is whether the list can be created
+     * satisfactorily within the constructor chain.
+     * 
+     * Because of diamond inheritance, it might be necessary to split this into
+     * Feature and FeatureImpl, where the handling of the helpers would be in
+     * the FeatureImpl class.
+     */
 }
 
 Feature::~Feature() {

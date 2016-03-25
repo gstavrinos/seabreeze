@@ -31,6 +31,7 @@
 #define PROGRAMMABLESATURATIONFEATURE_H
 
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureBase.h"
+#include <vector>
 
 namespace seabreeze {
     /* This class is intended for devices that have a clean protocol

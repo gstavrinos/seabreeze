@@ -27,6 +27,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
+#include "api/seabreezeapi/FeatureFamilies.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeatureBase.h"
 
 using namespace seabreeze;
@@ -57,4 +58,10 @@ unsigned int SaturationEEPROMSlotFeatureBase::getSaturation()
     }
     
     return this->saturation;
+}
+
+FeatureFamily SaturationEEPROMSlotFeatureBase::getFeatureFamily() {
+    FeatureFamilies families;
+
+    return families.UNDEFINED;
 }

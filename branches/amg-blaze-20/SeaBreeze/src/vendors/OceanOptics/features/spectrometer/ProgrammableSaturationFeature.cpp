@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    SaturationEEPROMSlotFeatureBase.h
+ * @file    ProgrammableSaturationFeature.h
  * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,39 +27,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SATURATIONEEPROMSLOTFEATUREBASE_H
-#define SATURATIONEEPROMSLOTFEATUREBASE_H
-
+#include "api/seabreezeapi/FeatureFamilies.h"
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeature.h"
-#include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeatureBase.h"
 
-namespace seabreeze {
-    
-    class SaturationEEPROMSlotFeatureBase
-            : public EEPROMSlotFeatureBase, public ProgrammableSaturationFeature {
-    public:
-        SaturationEEPROMSlotFeatureBase();
-        virtual ~SaturationEEPROMSlotFeatureBase();
-        
-        /* Inherited from ProgrammableSaturationFeature */
-        virtual unsigned int getSaturation() throw (FeatureException);
-        
-        /* Inherited from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
-        
-    protected:
-        /* Derived classes must implement this in whatever way is appropriate
-         * to get the saturation level for the device.
-         */
-        virtual unsigned int readSaturation(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
-        
-    private:
-        unsigned int saturation;
-        bool valid;
-    };
-    
-} /* end namespace seabreeze */
+using namespace seabreeze;
+using namespace api;
+using namespace std;
 
-#endif /* SATURATIONEEPROMSLOTFEATUREBASE_H */
+ProgrammableSaturationFeature::ProgrammableSaturationFeature() {
+    
+}
+
+ProgrammableSaturationFeature::~ProgrammableSaturationFeature() {
+    
+}
+
+FeatureFamily ProgrammableSaturationFeature::getFeatureFamily() {
+    FeatureFamilies families;
+
+    return families.UNDEFINED;
+}

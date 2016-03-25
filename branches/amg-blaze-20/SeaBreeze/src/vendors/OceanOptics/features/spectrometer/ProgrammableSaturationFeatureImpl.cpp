@@ -33,8 +33,14 @@
 using namespace seabreeze;
 using namespace std;
 
-ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl() {
+ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl(
+        vector<ProtocolHelper *> helpers) {
     
+    /* TODO: Can these be delegated up to Feature */
+    vector<ProtocolHelper *>::iterator iter;
+    for(iter = helpers.begin(); iter != helpers.end(); iter++) {
+        this->protocols.push_back(*iter);
+    }
 }
 
 ProgrammableSaturationFeatureImpl::~ProgrammableSaturationFeatureImpl() {

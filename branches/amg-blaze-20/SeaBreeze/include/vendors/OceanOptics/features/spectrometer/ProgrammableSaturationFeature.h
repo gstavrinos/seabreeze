@@ -40,7 +40,7 @@ namespace seabreeze {
             public ProgrammableSaturationFeatureInterface {
         
     public:
-        ProgrammableSaturationFeature(std::vector<ProtocolHelper *> helpers);
+        ProgrammableSaturationFeature();
         virtual ~ProgrammableSaturationFeature();
         
         virtual unsigned int getSaturation() throw (FeatureException) = 0;

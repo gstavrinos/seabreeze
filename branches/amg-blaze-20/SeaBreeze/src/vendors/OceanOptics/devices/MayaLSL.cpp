@@ -71,7 +71,7 @@ MayaLSL::MayaLSL()
 
     // Set up the features that comprise this device
     
-    ProgrammableSaturationFeature saturation =
+    ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature(0x0011);
     
     this->features.push_back(new MayaLSLSpectrometerFeature(saturation));
