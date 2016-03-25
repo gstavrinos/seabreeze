@@ -36,7 +36,8 @@ namespace seabreeze {
 
     class ApexSpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        ApexSpectrometerFeature();
+        ApexSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~ApexSpectrometerFeature();
 
         /* Inherited from Feature */

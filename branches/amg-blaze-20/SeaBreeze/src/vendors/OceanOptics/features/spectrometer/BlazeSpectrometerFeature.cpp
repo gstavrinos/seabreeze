@@ -47,7 +47,9 @@ const long BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
+BlazeSpectrometerFeature::BlazeSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     /* In the future, much of this will need to be probed */
     this->numberOfPixels = 2088;

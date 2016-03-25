@@ -37,6 +37,7 @@
 #include "vendors/OceanOptics/buses/usb/USB4000USB.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SerialNumberEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
@@ -69,7 +70,11 @@ USB4000::USB4000() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new USB4000SpectrometerFeature());
+    
+    ProgrammableSaturationFeature saturation =
+            new SaturationEEPROMSlotFeature(0x0011);
+    
+    this->features.push_back(new USB4000SpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));
 

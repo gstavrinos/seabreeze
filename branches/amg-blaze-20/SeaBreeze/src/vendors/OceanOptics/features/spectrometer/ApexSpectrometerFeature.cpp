@@ -46,7 +46,9 @@ const long ApexSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 1600000000;
 const long ApexSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long ApexSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-ApexSpectrometerFeature::ApexSpectrometerFeature() {
+ApexSpectrometerFeature::ApexSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2068;
     this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector

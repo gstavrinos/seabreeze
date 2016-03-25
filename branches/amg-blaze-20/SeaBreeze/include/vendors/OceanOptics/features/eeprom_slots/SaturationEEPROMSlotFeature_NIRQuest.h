@@ -40,8 +40,7 @@ namespace seabreeze {
     class SaturationEEPROMSlotFeature_NIRQuest
             : public SaturationEEPROMSlotFeatureBase {
     public:
-        SaturationEEPROMSlotFeature_NIRQuest(
-                std::vector<ProtocolHelper *> &helpers, int slot);
+        SaturationEEPROMSlotFeature_NIRQuest(int slot);
         virtual ~SaturationEEPROMSlotFeature_NIRQuest();
         
     protected:

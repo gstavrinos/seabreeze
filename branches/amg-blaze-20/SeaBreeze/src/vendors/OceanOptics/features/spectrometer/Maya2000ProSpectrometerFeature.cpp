@@ -46,7 +46,9 @@ const long Maya2000ProSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 65000000; 
 const long Maya2000ProSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long Maya2000ProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-Maya2000ProSpectrometerFeature::Maya2000ProSpectrometerFeature() {
+Maya2000ProSpectrometerFeature::Maya2000ProSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2068;
     this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector

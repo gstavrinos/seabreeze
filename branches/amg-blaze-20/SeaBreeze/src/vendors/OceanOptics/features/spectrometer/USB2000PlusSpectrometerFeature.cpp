@@ -44,7 +44,9 @@ const long USB2000PlusSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 655350000;
 const long USB2000PlusSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long USB2000PlusSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-USB2000PlusSpectrometerFeature::USB2000PlusSpectrometerFeature() {
+USB2000PlusSpectrometerFeature::USB2000PlusSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2048;
     this->maxIntensity = 65535;
