@@ -27,21 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureImpl.h"
 #include <string>
 
 using namespace seabreeze;
 using namespace std;
 
-ProgrammableSaturationFeature::ProgrammableSaturationFeature() {
+ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl() {
     
 }
 
-ProgrammableSaturationFeature::~ProgrammableSaturationFeature() {
+ProgrammableSaturationFeatureImpl::~ProgrammableSaturationFeatureImpl() {
     
 }
 
-unsigned int ProgrammableSaturationFeature::getSaturation(const Protocol &protocol,
+unsigned int ProgrammableSaturationFeatureImpl::getSaturation(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
     
     ProgrammableSaturationProtocolInterface *saturation = NULL;

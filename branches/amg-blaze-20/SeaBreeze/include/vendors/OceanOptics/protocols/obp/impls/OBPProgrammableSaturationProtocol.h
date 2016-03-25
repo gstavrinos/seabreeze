@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    ProgrammableSaturationFeature.h
+ * @file    OBPProgrammableSaturationProtocol.h
  * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,27 +27,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef PROGRAMMABLESATURATIONFEATURE_H
-#define PROGRAMMABLESATURATIONFEATURE_H
+#ifndef OBPPROGRAMMABLESATURATIONPROTOCOL_H
+#define OBPPROGRAMMABLESATURATIONPROTOCOL_H
 
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureBase.h"
+#include "common/SeaBreeze.h"
+#include "common/buses/Bus.h"
+#include "vendors/OceanOptics/protocols/interfaces/ProgrammableSaturationProtocolInterface.h"
 
 namespace seabreeze {
-    /* This class is intended for devices that have a clean protocol
-     * interface for reading out the saturation level directly.
-     */
-    class ProgrammableSaturationFeature
-            : public ProgrammableSaturationFeatureBase {
-    public:
-        ProgrammableSaturationFeature();
-        virtual ~ProgrammableSaturationFeature();
-        
-    protected:
-        /* Inherited from ProgrammableSaturationFeatureBase */
-        virtual unsigned int getSaturation(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
-    };
-    
+    namespace oceanBinaryProtocol {
+        class OBPProgrammableSaturationProtocol
+                : public ProgrammableSaturationProtocolInterface {
+        public:
+            OBPProgrammableSaturationProtocol();
+            virtual ~OBPProgrammableSaturationProtocol();
+            
+            /* Inherited from ProgrammableSaturationProtocolInterface */
+            virtual unsigned int getSaturation(const Bus &bus)
+                throw (ProtocolException);
+        };
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
-#endif /* PROGRAMMABLESATURATIONFEATURE_H */
+#endif /* OBPPROGRAMMABLESATURATIONPROTOCOL_H */
+

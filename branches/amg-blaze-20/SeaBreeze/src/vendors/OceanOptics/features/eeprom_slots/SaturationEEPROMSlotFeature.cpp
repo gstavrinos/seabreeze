@@ -48,8 +48,8 @@ unsigned int SaturationEEPROMSlotFeature::getSaturation(const Protocol &protocol
 
     vector<byte> *slot = readEEPROMSlot(protocol, bus, this->autonullingSlot);
     
-    if(0 == slot || slot->size() < 6) {
-        if(0 != slot) {
+    if(NULL == slot || slot->size() < 6) {
+        if(NULL != slot) {
             delete slot;
         }
         throw FeatureException("Unable to read EEPROM slot for saturation level");

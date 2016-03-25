@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    GainAdjustedSpectrometerFeature.cpp
- * @date    February 2009
+ * @file    OBPProgrammableSaturationProtocol.cpp
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014-2016, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,28 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPProgrammableSaturationProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetSaturationExchange.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
+#include "common/exceptions/ProtocolBusMismatchException.h"
+#include <string>
 
 using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature(
-                ProgrammableSaturationFeatureInterface saturationFeature) {
-    this->saturation = saturationFeature;
+OBPProgrammableSaturationProtocol::OBPProgrammableSaturationProtocol()
+    : ProgrammableSaturationProtocolInterface(new OceanBinaryProtocol()) {
+    
 }
 
-GainAdjustedSpectrometerFeature::~GainAdjustedSpectrometerFeature() {
-
+OBPProgrammableSaturationProtocol::~OBPProgrammableSaturationProtocol() {
+    
 }
 
-unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
-    return this->saturation->getSaturation();
-}
+unsigned int OBPProgrammableSaturationProtocol::getSaturation(const Bus &bus)
+        throw (ProtocolException) {
+    
+    TransferHelper *helper;
+    OBPGetSaturationExchange exchange;
 
+    helper = bus.getHelper(exchange.getHints());
+    if (NULL == helper) {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
 
-bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
-        throw (FeatureException) {
-
-    this->saturation->initialize(proto, bus);
+    unsigned int saturation = exchange.querySaturationLevel(helper);
+    
+    return saturation;
 }

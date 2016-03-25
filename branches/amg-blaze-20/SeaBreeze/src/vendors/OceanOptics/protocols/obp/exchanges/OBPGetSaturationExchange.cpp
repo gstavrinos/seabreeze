@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    GainAdjustedSpectrometerFeature.cpp
- * @date    February 2009
+ * @file    OBPGetSaturationExchange.cpp
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014-2016, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,27 +28,45 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetSaturationExchange.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include <vector>
 
 using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature(
-                ProgrammableSaturationFeatureInterface saturationFeature) {
-    this->saturation = saturationFeature;
+OBPGetSaturationExchange::OBPGetSaturationExchange() {
+    this->messageType = OBPMessageTypes::OBP_GET_SATURATION_LEVEL;
+
+    this->hints->push_back(new OBPControlHint());
 }
 
-GainAdjustedSpectrometerFeature::~GainAdjustedSpectrometerFeature() {
+OBPGetSaturationExchange::~OBPGetSaturationExchange() {
 
 }
 
-unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
-    return this->saturation->getSaturation();
-}
+unsigned int OBPGetSaturationExchange::querySaturationLevel(
+        TransferHelper *helper) throw (ProtocolException) {
 
+    unsigned int saturation;
+    vector<byte> *result;
 
-bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
-        throw (FeatureException) {
+    result = this->queryDevice(helper);
+    if(NULL == result || result->size() < 4) {
+        if(NULL != result) {
+            delete result;
+        }
+        throw ProtocolException("Got a short read when querying saturation level.");
+    }
 
-    this->saturation->initialize(proto, bus);
+    saturation = (       ((*result)[0] & 0x00FF)
+                    | (((*result)[1] & 0x00FF) << 8)
+                    | (((*result)[2] & 0x00FF) << 16)
+                    | (((*result)[3] & 0x00FF) << 24));
+
+    delete result;
+
+    return saturation;
 }

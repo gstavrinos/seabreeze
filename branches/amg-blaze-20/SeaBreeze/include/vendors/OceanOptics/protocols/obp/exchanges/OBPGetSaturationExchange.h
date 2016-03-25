@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    GainAdjustedSpectrometerFeature.h
- * @date    July 2009
+ * @file    OBPGetSaturationExchange.h
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,30 +27,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef GAINADJUSTEDSPECTROMETERFEATURE_H
-#define GAINADJUSTEDSPECTROMETERFEATURE_H
+#ifndef OBPGETSATURATIONEXCHANGE_H
+#define OBPGETSATURATIONEXCHANGE_H
 
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
-
-    class GainAdjustedSpectrometerFeature : public OOISpectrometerFeature {
-    public:
-        GainAdjustedSpectrometerFeature(
-                ProgrammableSaturationFeatureInterface saturationFeature);
-        virtual ~GainAdjustedSpectrometerFeature();
-
-        virtual unsigned int getSaturationLevel();
-
-        /* Inherited from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
-
-    protected:
-        ProgrammableSaturationFeatureInterface *saturation; 
-    };
-
+    namespace oceanBinaryProtocol {
+        class OBPGetSaturationExchange : public OBPQuery {
+        public:
+            OBPGetSaturationExchange();
+            virtual ~OBPGetSaturationExchange();
+            
+        unsigned int querySaturationLevel(TransferHelper *helper)
+                throw (ProtocolException);
+        };
+    }
 }
 
-#endif /* GAINADJUSTEDSPECTROMETERFEATURE_H */
+#endif /* OBPGETSATURATIONEXCHANGE_H */
+

@@ -48,8 +48,8 @@ unsigned int SaturationEEPROMSlotFeature_NIRQuest::getSaturation(
     
     vector<byte> *slot = readEEPROMSlot(protocol, bus, this->saturationSlot);
     
-    if(0 == slot || slot->size() < 8) {
-        if(0 != slot) {
+    if(NULL == slot || slot->size() < 8) {
+        if(NULL != slot) {
             delete slot;
         }
         throw FeatureException("Unable to read EEPROM slot for saturation level");
