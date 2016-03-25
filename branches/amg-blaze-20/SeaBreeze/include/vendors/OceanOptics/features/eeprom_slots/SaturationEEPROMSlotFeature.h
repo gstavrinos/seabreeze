@@ -40,7 +40,7 @@ namespace seabreeze {
      * class.
      */
     class SaturationEEPROMSlotFeature
-            : public ProgrammableSaturationFeatureBase, EEPROMSlotFeatureBase {
+            : public ProgrammableSaturationFeatureInterface, EEPROMSlotFeatureBase {
     public:
         SaturationEEPROMSlotFeature();
         virtual ~SaturationEEPROMSlotFeature();

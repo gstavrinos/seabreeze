@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    ProgrammableSaturationFeatureBase.h
+ * @file    ProgrammableSaturationFeature.h
  * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,37 +27,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef PROGRAMMABLESATURATIONFEATUREBASE_H
-#define PROGRAMMABLESATURATIONFEATUREBASE_H
+#ifndef PROGRAMMABLESATURATIONFEATURE_H
+#define PROGRAMMABLESATURATIONFEATURE_H
 
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h"
+#include "common/features/Feature.h"
+#include <vector>
 
 namespace seabreeze {
     
-    class ProgrammableSaturationFeatureBase
-            : public ProgrammableSaturationFeature {
-    public:
-        ProgrammableSaturationFeatureBase(std::vector<ProtocolHelper *> helpers);
-        virtual ~ProgrammableSaturationFeatureBase();
+    class ProgrammableSaturationFeature : public Feature,
+            public ProgrammableSaturationFeatureInterface {
         
-        /* Inherited from ProgrammableSaturationFeature */
-        virtual unsigned int getSaturation() throw (FeatureException);
+    public:
+        ProgrammableSaturationFeature(std::vector<ProtocolHelper *> helpers);
+        virtual ~ProgrammableSaturationFeature();
+        
+        virtual unsigned int getSaturation() throw (FeatureException) = 0;
         
         virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
+            throw (FeatureException) = 0;
         
-    protected:
-        /* Derived classes must implement this in whatever way is appropriate
-         * to get the saturation level for the device.
-         */
-        virtual unsigned int getSaturation(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
-        
-    private:
-        unsigned int saturation;
-        bool valid;
+        /* Overriding from Feature */
+        virtual FeatureFamily getFeatureFamily();
     };
     
 } /* end namespace seabreeze */
-
-#endif /* PROGRAMMABLESATURATIONFEATUREBASE_H */
+    
+#endif /* PROGRAMMABLESATURATIONFEATURE_H */

@@ -39,7 +39,7 @@ namespace seabreeze {
     class ProgrammableSaturationFeatureImpl
             : public ProgrammableSaturationFeatureBase {
     public:
-        ProgrammableSaturationFeatureImpl();
+        ProgrammableSaturationFeatureImpl(std::vector<ProtocolHelper *> helpers);
         virtual ~ProgrammableSaturationFeatureImpl();
         
     protected:
