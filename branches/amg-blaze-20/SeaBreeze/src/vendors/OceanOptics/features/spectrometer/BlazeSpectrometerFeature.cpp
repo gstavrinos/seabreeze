@@ -50,7 +50,7 @@ const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
 
     /* In the future, much of this will need to be probed */
-    this->numberOfPixels = 2081;
+    this->numberOfPixels = 2088;
     this->maxIntensity = 65535;
 
     this->integrationTimeMinimum = BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
