@@ -51,8 +51,7 @@ bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
         this->valid = false;
     }
     
-    /* Unreachable */
-    return false;
+    return true;
 }
 
 unsigned int ProgrammableSaturationFeatureBase::getSaturation()
