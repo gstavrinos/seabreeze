@@ -48,4 +48,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* PROGRAMMABLESATURATIONPROTOCOLINTERFACE_H */
-

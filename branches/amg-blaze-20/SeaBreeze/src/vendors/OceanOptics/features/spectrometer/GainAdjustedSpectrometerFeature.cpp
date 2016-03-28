@@ -45,7 +45,7 @@ GainAdjustedSpectrometerFeature::~GainAdjustedSpectrometerFeature() {
 unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
     try {
         unsigned int result = this->saturation->getSaturation();
-        if(0 == result || result > this->maxIntensity) {
+        if(0 == result || result > (unsigned)this->maxIntensity) {
             /* The saturation setting was retrieved but appears to be invalid.
              * Use the max intensity instead.
              */
