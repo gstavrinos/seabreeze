@@ -31,7 +31,7 @@
 #define OOISPECTROMETERFEATURE_H
 
 #include <vector>
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
@@ -41,7 +41,8 @@
 
 namespace seabreeze {
 
-    class OOISpectrometerFeature : public Feature, public OOISpectrometerFeatureInterface {
+    class OOISpectrometerFeature : public FeatureImpl,
+            public OOISpectrometerFeatureInterface {
     public:
         OOISpectrometerFeature();
         virtual ~OOISpectrometerFeature();

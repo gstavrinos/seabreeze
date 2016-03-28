@@ -34,14 +34,14 @@
 
 #include "vendors/OceanOptics/features/revision/RevisionFeatureInterface.h"
 #include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
     class RevisionFeature
-                : public Feature, public RevisionFeatureInterface {
+                : public FeatureImpl, public RevisionFeatureInterface {
     public:
         RevisionFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~RevisionFeature();

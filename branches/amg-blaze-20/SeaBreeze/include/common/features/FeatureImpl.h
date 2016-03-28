@@ -1,10 +1,10 @@
 /***************************************************//**
- * @file    Feature.h
- * @date    February 2009
+ * @file    FeatureImpl.h
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
- * This is an abstract interface that other feature types will
- * implement.  A Feature is taken to be some capability of
+ * This is a simple base class that other feature types will
+ * extend.  A Feature is taken to be some capability of
  * a Device that is relatively self-contained.  For instance,
  * an analog output voltage would be a Feature.  Features can
  * also contain multiple functions; for instance, a TEC may
@@ -14,7 +14,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -36,35 +36,53 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef FEATURE_H
-#define FEATURE_H
+#ifndef FEATUREIMPL_H
+#define FEATUREIMPL_H
 
 #include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "common/features/FeatureFamily.h"
-#include "common/protocols/Protocol.h"
+#include "common/exceptions/FeatureProtocolNotFoundException.h"
+#include "common/features/Feature.h"
+#include "common/protocols/ProtocolHelper.h"
 #include <vector>
 
 namespace seabreeze {
-
-    class Feature {
+    /* This does virtual inheritance from Feature because it is assumed that
+     * in some cases there will be diamond inheritance.  This will generally
+     * only happen where one top-level Feature is implemented by deriving from
+     * another Feature.
+     */
+    class FeatureImpl : public virtual Feature {
     public:
-        virtual ~Feature() = 0;
+        FeatureImpl();
+        virtual ~FeatureImpl();
 
         /* Allow the object that represents a given feature to initialize
          * itself by reading from the corresponding feature on the real
          * device, and/or put the real device feature into a known state.
-         * This should return true if the feature is ready to be used, and false
-         * otherwise.
+         * Overriding this is not required.  This should return true if
+         * the feature is ready to be used, and false otherwise.
          */
         virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) = 0;
+            throw (FeatureException);
 
         virtual FeatureFamily getFeatureFamily() = 0;
+
+    protected:
+        std::vector<ProtocolHelper *> protocols;
+
+        /* Protocols are described by their base class (Protocol)
+         * and may be designated that way.  However, different
+         * functionality within a given command set may be broken
+         * into different implementation types, all of which extend
+         * the base Protocol class.  This is a simple lookup mechanism
+         * to use the Protocol that some anonymous caller might
+         * provide as a point of reference to then find the extended
+         * Protocol class that can be used to access certain features.
+         */
+        ProtocolHelper *lookupProtocolImpl(const Protocol &protocol)
+                        throw (FeatureProtocolNotFoundException);
     };
 
-    /* Default implementation for (otherwise) pure virtual destructor */
-    inline Feature::~Feature() {}
 }
 
-#endif /* FEATURE_H */
+#endif /* FEATUREIMPL_H */

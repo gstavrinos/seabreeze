@@ -40,7 +40,7 @@
 #include "common/buses/Bus.h"
 #include "common/protocols/Protocol.h"
 #include "common/protocols/ProtocolHelper.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/exceptions/FeatureException.h"
 #include "common/exceptions/IllegalArgumentException.h"
 #include "vendors/OceanOptics/features/pixel_binning/PixelBinningFeatureInterface.h"
@@ -49,17 +49,21 @@ namespace seabreeze {
 
     class STSSpectrometerFeature;
 
-    class STSPixelBinningFeature : public Feature, public PixelBinningFeatureInterface {
+    class STSPixelBinningFeature : public FeatureImpl,
+            public PixelBinningFeatureInterface {
     public:
-        STSPixelBinningFeature(std::vector<ProtocolHelper *> helpers, STSSpectrometerFeature *spectroFeature);
+        STSPixelBinningFeature(std::vector<ProtocolHelper *> helpers,
+                STSSpectrometerFeature *spectroFeature);
         virtual ~STSPixelBinningFeature();
 
         virtual void setPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus, const unsigned char binningFactor) throw (FeatureException);
+                const Bus &bus, const unsigned char binningFactor)
+        throw (FeatureException);
         virtual unsigned char getPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus, const unsigned char binningFactor) throw (FeatureException);
+                const Bus &bus, const unsigned char binningFactor)
+        throw (FeatureException);
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
         virtual unsigned char getDefaultPixelBinningFactor(const Protocol &protocol,

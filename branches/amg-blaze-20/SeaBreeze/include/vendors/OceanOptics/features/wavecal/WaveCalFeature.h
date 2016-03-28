@@ -32,13 +32,13 @@
 
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeatureInterface.h"
 #include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
-    class WaveCalFeature : public Feature, public WaveCalFeatureInterface {
+    class WaveCalFeature : public FeatureImpl, public WaveCalFeatureInterface {
     public:
         WaveCalFeature(std::vector<ProtocolHelper *> helpers,
                 unsigned int numberOfPixels);

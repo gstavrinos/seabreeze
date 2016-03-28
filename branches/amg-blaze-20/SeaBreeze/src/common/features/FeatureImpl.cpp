@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    Feature.cpp
- * @date    February 2009
+ * @file    FeatureImpl.cpp
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -33,20 +33,16 @@
 using namespace seabreeze;
 using namespace std;
 
-Feature::Feature() {
+FeatureImpl::FeatureImpl() {
     /* TODO: if it can be done cleanly, this should take the
      * vector<ProtocolHelper *> list and apply it here.  This would make
      * the constructor symmetric with the destructor and remove a lot of
      * redundancy.  The only question is whether the list can be created
      * satisfactorily within the constructor chain.
-     * 
-     * Because of diamond inheritance, it might be necessary to split this into
-     * Feature and FeatureImpl, where the handling of the helpers would be in
-     * the FeatureImpl class.
      */
 }
 
-Feature::~Feature() {
+FeatureImpl::~FeatureImpl() {
 
     vector<ProtocolHelper *>::iterator iter;
 
@@ -55,13 +51,13 @@ Feature::~Feature() {
     }
 }
 
-bool Feature::initialize(const Protocol &protocol, const Bus &bus)
+bool FeatureImpl::initialize(const Protocol &protocol, const Bus &bus)
             throw (FeatureException) {
     /* Override this to initialize device, and/or return a different status */
     return true;
 }
 
-ProtocolHelper *Feature::lookupProtocolImpl(const Protocol &protocol)
+ProtocolHelper *FeatureImpl::lookupProtocolImpl(const Protocol &protocol)
         throw (FeatureProtocolNotFoundException) {
 
     vector<ProtocolHelper *>::iterator iter;

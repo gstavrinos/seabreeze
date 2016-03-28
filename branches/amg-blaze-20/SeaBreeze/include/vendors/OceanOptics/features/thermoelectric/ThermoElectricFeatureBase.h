@@ -40,14 +40,15 @@
 #include "common/buses/Bus.h"
 #include "common/protocols/Protocol.h"
 #include "common/protocols/ProtocolHelper.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/exceptions/FeatureException.h"
 #include "common/exceptions/IllegalArgumentException.h"
 #include "vendors/OceanOptics/features/thermoelectric/ThermoElectricFeatureInterface.h"
 
 namespace seabreeze {
 
-    class ThermoElectricFeatureBase : public Feature, public ThermoElectricFeatureInterface {
+    class ThermoElectricFeatureBase : public FeatureImpl,
+            public ThermoElectricFeatureInterface {
     public:
         ThermoElectricFeatureBase();
         virtual ~ThermoElectricFeatureBase();

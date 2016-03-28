@@ -30,7 +30,7 @@
 #ifndef ACQUISITION_DELAY_FEATURE_H
 #define ACQUISITION_DELAY_FEATURE_H
 
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
@@ -38,7 +38,8 @@
 
 namespace seabreeze {
 
-    class AcquisitionDelayFeature : public Feature, public AcquisitionDelayFeatureInterface {
+    class AcquisitionDelayFeature : public FeatureImpl,
+            public AcquisitionDelayFeatureInterface {
     public:
         AcquisitionDelayFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~AcquisitionDelayFeature();

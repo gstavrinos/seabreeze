@@ -35,8 +35,11 @@
 #include <vector>
 
 namespace seabreeze {
-    
-    class ProgrammableSaturationFeature : public Feature,
+    /* ProgrammableSaturationFeature might be implemented by extending another
+     * Feature, so this needs to use virtual inheritance to solve the
+     * diamond problem.
+     */
+    class ProgrammableSaturationFeature : public virtual Feature,
             public ProgrammableSaturationFeatureInterface {
         
     public:

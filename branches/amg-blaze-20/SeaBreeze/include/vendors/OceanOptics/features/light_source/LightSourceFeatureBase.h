@@ -38,7 +38,8 @@
 
 namespace seabreeze {
 
-    class LightSourceFeatureBase : public Feature, public LightSourceFeatureInterface {
+    class LightSourceFeatureBase : public FeatureImpl,
+            public LightSourceFeatureInterface {
     public:
         LightSourceFeatureBase(std::vector<ProtocolHelper *> helpers, int lampModuleIndex);
         virtual ~LightSourceFeatureBase();

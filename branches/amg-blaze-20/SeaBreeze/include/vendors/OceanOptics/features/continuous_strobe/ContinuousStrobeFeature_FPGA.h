@@ -30,7 +30,7 @@
 #ifndef SEABREEZE_CONTINUOUS_STROBE_FEATURE_FPGA_H
 #define SEABREEZE_CONTINUOUS_STROBE_FEATURE_FPGA_H
 
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
@@ -38,7 +38,8 @@
 
 namespace seabreeze {
 
-    class ContinuousStrobeFeature_FPGA : public Feature, public ContinuousStrobeFeatureInterface {
+    class ContinuousStrobeFeature_FPGA : public FeatureImpl,
+            public ContinuousStrobeFeatureInterface {
     public:
         ContinuousStrobeFeature_FPGA();
         virtual ~ContinuousStrobeFeature_FPGA();
