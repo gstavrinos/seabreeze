@@ -48,11 +48,11 @@ namespace seabreeze {
         
         virtual unsigned int getSaturation() throw (FeatureException) = 0;
         
+        /* Overriding from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus)
             throw (FeatureException) = 0;
         
-        /* Overriding from Feature */
-        virtual FeatureFamily getFeatureFamily();
+        virtual FeatureFamily getFeatureFamily() = 0;
     };
     
 } /* end namespace seabreeze */

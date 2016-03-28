@@ -36,7 +36,7 @@ namespace seabreeze {
     
     class ProgrammableSaturationFeatureInterface {
     public:
-        virtual ~ProgrammableSaturationFeatureInterface();
+        virtual ~ProgrammableSaturationFeatureInterface() = 0;
         
         /*
          * Get the detector saturation level from the device.

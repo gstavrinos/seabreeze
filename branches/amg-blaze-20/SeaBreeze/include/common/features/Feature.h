@@ -42,6 +42,7 @@
 #include "common/SeaBreeze.h"
 #include "common/buses/Bus.h"
 #include "common/features/FeatureFamily.h"
+#include "common/exceptions/FeatureException.h"
 #include "common/protocols/Protocol.h"
 #include <vector>
 

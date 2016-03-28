@@ -41,7 +41,7 @@ SaturationEEPROMSlotFeature_NIRQuest::~SaturationEEPROMSlotFeature_NIRQuest() {
     
 }
         
-unsigned int SaturationEEPROMSlotFeature_NIRQuest::readSaturation(
+unsigned int SaturationEEPROMSlotFeature_NIRQuest::getSaturation(
         const Protocol &protocol, const Bus &bus) throw (FeatureException) {
     
     unsigned int saturation;

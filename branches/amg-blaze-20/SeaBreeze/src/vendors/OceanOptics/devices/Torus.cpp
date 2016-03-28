@@ -67,7 +67,7 @@ Torus::Torus() {
     ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature(0x0011);
     
-    this->features.push_back(new USB2000PlusSpectrometerFeature());
+    this->features.push_back(new USB2000PlusSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));
 

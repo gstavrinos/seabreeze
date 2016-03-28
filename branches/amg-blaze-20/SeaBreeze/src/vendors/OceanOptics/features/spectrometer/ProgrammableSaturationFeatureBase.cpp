@@ -28,8 +28,10 @@
  *******************************************************/
 
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureBase.h"
+#include "api/seabreezeapi/FeatureFamilies.h"
 
 using namespace seabreeze;
+using namespace api;
 
 ProgrammableSaturationFeatureBase::ProgrammableSaturationFeatureBase() {
     this->saturation = 0;
@@ -48,6 +50,9 @@ bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
     } catch (FeatureException &fe) {
         this->valid = false;
     }
+    
+    /* Unreachable */
+    return false;
 }
 
 unsigned int ProgrammableSaturationFeatureBase::getSaturation()
@@ -57,4 +62,10 @@ unsigned int ProgrammableSaturationFeatureBase::getSaturation()
     }
     
     return this->saturation;
+}
+
+FeatureFamily ProgrammableSaturationFeatureBase::getFeatureFamily() {
+    FeatureFamilies families;
+
+    return families.UNDEFINED;
 }

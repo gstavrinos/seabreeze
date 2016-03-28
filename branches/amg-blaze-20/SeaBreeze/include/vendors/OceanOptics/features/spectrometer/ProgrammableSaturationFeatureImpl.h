@@ -27,10 +27,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef PROGRAMMABLESATURATIONFEATURE_H
-#define PROGRAMMABLESATURATIONFEATURE_H
+#ifndef PROGRAMMABLESATURATIONFEATUREIMPL_H
+#define PROGRAMMABLESATURATIONFEATUREIMPL_H
 
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureBase.h"
+#include "common/features/FeatureImpl.h"
+#include "common/protocols/ProtocolHelper.h"
 #include <vector>
 
 namespace seabreeze {
@@ -38,10 +40,15 @@ namespace seabreeze {
      * interface for reading out the saturation level directly.
      */
     class ProgrammableSaturationFeatureImpl
-            : public ProgrammableSaturationFeatureBase {
+            : public ProgrammableSaturationFeatureBase, FeatureImpl {
     public:
         ProgrammableSaturationFeatureImpl(std::vector<ProtocolHelper *> helpers);
         virtual ~ProgrammableSaturationFeatureImpl();
+        
+        virtual bool initialize(const Protocol &protocol, const Bus &bus)
+            throw (FeatureException);
+        
+        virtual FeatureFamily getFeatureFamily();
         
     protected:
         /* Inherited from ProgrammableSaturationFeatureBase */
@@ -51,4 +58,4 @@ namespace seabreeze {
     
 } /* end namespace seabreeze */
 
-#endif /* PROGRAMMABLESATURATIONFEATURE_H */
+#endif /* PROGRAMMABLESATURATIONFEATUREIMPL_H */

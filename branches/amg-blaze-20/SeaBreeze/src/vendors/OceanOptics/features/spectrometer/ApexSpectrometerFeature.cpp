@@ -108,15 +108,15 @@ bool ApexSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
      * version.
      */
 
-    int saturation;
+    int saturationLevel;
 
     EEPROMSlotFeature eeprom(18);
     vector<byte> *slot = eeprom.readEEPROMSlot(proto, bus, 0x0011);
 
-    saturation = ((*slot)[0] & 0x00FF)
+    saturationLevel = ((*slot)[0] & 0x00FF)
                  | (((*slot)[1] & 0x00FF) << 8);
 
-    if(saturation <= 32768 || saturation > this->maxIntensity) {
+    if(saturationLevel <= 32768 || saturationLevel > this->maxIntensity) {
         /* The gain adjustment was added to the Apex a bit after its
          * initial release, so there may be some units that have this slot
          * unprogrammed.  This may manifest as a value of 65535 (since
@@ -124,10 +124,10 @@ bool ApexSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
          * there was some other suspect value (zero or something small)
          * this also resets back to a safe value.
          */
-        saturation = this->maxIntensity;
+        saturationLevel = this->maxIntensity;
     }
 
-    this->saturationLevel = saturation;
+    this->saturation = saturationLevel;
     delete slot;
     return true;
 }

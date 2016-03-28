@@ -43,8 +43,11 @@ namespace seabreeze {
         /* Inherited from ProgrammableSaturationFeature */
         virtual unsigned int getSaturation() throw (FeatureException);
         
+        /* Overriding from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus)
             throw (FeatureException);
+        
+        virtual FeatureFamily getFeatureFamily();
         
     protected:
         /* Derived classes must implement this in whatever way is appropriate

@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 
 using namespace seabreeze;
 using namespace std;
