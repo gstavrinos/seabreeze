@@ -1,14 +1,11 @@
 /***************************************************//**
- * @file    USBFPGASpectrumExchange.cpp
- * @date    July 2009
+ * @file    OBPReadSpectrumWithGainExchange.cpp
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
- *
- * This is intended for the USB2000+ and USB4000 that
- * require gain (saturation level) adjustment
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -31,47 +28,47 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include <vector>
-#include "vendors/OceanOptics/protocols/ooi/exchanges/USBFPGASpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumWithGainExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPMessage.h"
 #include "common/UShortVector.h"
 #include "common/DoubleVector.h"
-#include "common/exceptions/ProtocolFormatException.h"
-#include "common/Log.h"
 
 using namespace seabreeze;
-using namespace seabreeze::ooiProtocol;
+using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-USBFPGASpectrumExchange::USBFPGASpectrumExchange(
-    unsigned int readoutLength, unsigned int numberOfPixels,
-            GainAdjustedSpectrometerFeature *spectrometer)
-        : FPGASpectrumExchange(readoutLength, numberOfPixels) {
-    this->spectrometerFeature = spectrometer;
+OBPReadSpectrumWithGainExchange::OBPReadSpectrumWithGainExchange(
+        unsigned int readoutLength, unsigned int numPixels,
+        GainAdjustedSpectrometerFeature *spec)
+        : OBPReadSpectrumExchange(readoutLength, numPixels) {
+    this->spectrometerFeature = spec;
 }
 
-USBFPGASpectrumExchange::~USBFPGASpectrumExchange() {
+OBPReadSpectrumWithGainExchange::~OBPReadSpectrumWithGainExchange() {
 
 }
 
-Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
+Data *OBPReadSpectrumWithGainExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
-
-    LOG(__FUNCTION__);
-
+    
     unsigned int i;
     Data *xfer;
     double maxIntensity;
     double saturationLevel;
 
-    /* Use the superclass to get an array of formatted by uncorrected values. */
-    xfer = FPGASpectrumExchange::transfer(helper);
+    /* This will use the superclass to transfer data from the device, and will
+     * then apply the intensity gain to the result.
+     */
+    xfer = OBPReadSpectrumExchange::transfer(helper);
     if(NULL == xfer) {
-        string error("Expected FPGASpectrumExchange::transfer to produce a non-null result "
-                "containing raw spectral data.  Without this data, it is not possible to "
-                "generate a valid formatted spectrum.");
-        logger.error(error.c_str());
+        string error("Expected Transfer::transfer to produce a non-null result "
+                        "containing spectral data.  Without this data, it is not "
+                        "possible to generate a valid formatted spectrum.");
         throw ProtocolException(error);
     }
+    /* xfer should contain a UShortVector */
 
     if(NULL == this->spectrometerFeature) {
         /* FIXME: should this throw an illegal state exception instead? */

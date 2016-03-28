@@ -32,7 +32,7 @@
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumWithGainExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
@@ -70,8 +70,8 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature(
     Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
+    Transfer *formattedSpectrum = new OBPReadSpectrumWithGainExchange(
+            (this->numberOfPixels * 2) + 64, this->numberOfPixels, this);
 
     Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
 
