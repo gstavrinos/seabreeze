@@ -252,6 +252,7 @@
 			<File RelativePath="..\..\..\..\include\common\exceptions\ProtocolTransactionException.h"></File>
 			<File RelativePath="..\..\..\..\include\common\features\Feature.h"></File>
 			<File RelativePath="..\..\..\..\include\common\features\FeatureFamily.h"></File>
+			<File RelativePath="..\..\..\..\include\common\features\FeatureImpl.h"></File>
 			<File RelativePath="..\..\..\..\include\common\globals.h"></File>
 			<File RelativePath="..\..\..\..\include\common\protocols\Exchange.h"></File>
 			<File RelativePath="..\..\..\..\include\common\protocols\Protocol.h"></File>
@@ -340,6 +341,10 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.h"></File>
@@ -383,6 +388,10 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeatureInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.h"></File>
@@ -415,6 +424,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.h"></File>
@@ -451,6 +461,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.h"></File>
@@ -472,13 +483,13 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCollectionAreaExchange.h"></File>
@@ -500,6 +511,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.h"></File>
@@ -614,8 +626,8 @@
 			<File RelativePath="..\..\..\..\src\common\exceptions\ProtocolException.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\exceptions\ProtocolFormatException.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\exceptions\ProtocolTransactionException.cpp"></File>
-			<File RelativePath="..\..\..\..\src\common\features\Feature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\features\FeatureFamily.cpp"></File>
+			<File RelativePath="..\..\..\..\src\common\features\FeatureImpl.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\protocols\Exchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\protocols\Protocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\common\protocols\ProtocolFamily.cpp"></File>
@@ -695,6 +707,10 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.cpp"></File>
@@ -727,6 +743,9 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp"></File>
@@ -754,6 +773,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInteface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInteface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInteface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.cpp"></File>
@@ -789,6 +809,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.cpp"></File>
@@ -810,6 +831,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp"></File>
@@ -837,6 +859,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.cpp"></File>
