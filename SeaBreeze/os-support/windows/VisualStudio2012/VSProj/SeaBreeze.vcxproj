@@ -448,6 +448,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\common\exceptions\ProtocolTransactionException.h" />
     <ClInclude Include="..\..\..\..\include\common\features\Feature.h" />
     <ClInclude Include="..\..\..\..\include\common\features\FeatureFamily.h" />
+    <ClInclude Include="..\..\..\..\include\common\features\FeatureImpl.h" />
     <ClInclude Include="..\..\..\..\include\common\globals.h" />
     <ClInclude Include="..\..\..\..\include\common\protocols\Exchange.h" />
     <ClInclude Include="..\..\..\..\include\common\protocols\Protocol.h" />
@@ -536,6 +537,10 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.h" />
@@ -579,6 +584,10 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeatureInterface.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.h" />
@@ -611,6 +620,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.h" />
@@ -647,6 +657,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.h" />
@@ -668,13 +679,13 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.h" />
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.cpp" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCollectionAreaExchange.h" />
@@ -696,6 +707,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.h" />
@@ -818,8 +830,8 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolException.cpp" />
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolFormatException.cpp" />
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolTransactionException.cpp" />
-    <ClCompile Include="..\..\..\..\src\common\features\Feature.cpp" />
     <ClCompile Include="..\..\..\..\src\common\features\FeatureFamily.cpp" />
+    <ClCompile Include="..\..\..\..\src\common\features\FeatureImpl.cpp" />
     <ClCompile Include="..\..\..\..\src\common\protocols\Exchange.cpp" />
     <ClCompile Include="..\..\..\..\src\common\protocols\Protocol.cpp" />
     <ClCompile Include="..\..\..\..\src\common\protocols\ProtocolFamily.cpp" />
@@ -899,6 +911,10 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.cpp" />
@@ -931,6 +947,9 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp" />
@@ -958,6 +977,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInteface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInteface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInteface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.cpp" />
@@ -993,6 +1013,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.cpp" />
@@ -1014,6 +1035,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp" />
@@ -1041,6 +1063,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.cpp" />

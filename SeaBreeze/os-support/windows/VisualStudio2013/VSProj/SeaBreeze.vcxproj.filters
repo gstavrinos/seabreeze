@@ -71,6 +71,7 @@
     <ClInclude Include="..\..\..\..\include\common\exceptions\ProtocolTransactionException.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\common\features\Feature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\common\features\FeatureFamily.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\common\features\FeatureImpl.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\common\globals.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\common\protocols\Exchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\common\protocols\Protocol.h"><Filter>Headers</Filter></ClInclude>
@@ -159,6 +160,10 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.h"><Filter>Headers</Filter></ClInclude>
@@ -202,6 +207,10 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
@@ -234,6 +243,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.h"><Filter>Headers</Filter></ClInclude>
@@ -270,6 +280,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.h"><Filter>Headers</Filter></ClInclude>
@@ -291,13 +302,13 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadataExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetAcquisitionDelayExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetBoxcarWidthExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDataBufferCapacityExchange.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.cpp"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDefaultPixelBinningExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCollectionAreaExchange.h"><Filter>Headers</Filter></ClInclude>
@@ -319,6 +330,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.h"><Filter>Headers</Filter></ClInclude>
@@ -434,8 +446,8 @@
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolException.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolFormatException.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\exceptions\ProtocolTransactionException.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\common\features\Feature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\features\FeatureFamily.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\common\features\FeatureImpl.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\protocols\Exchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\protocols\Protocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\common\protocols\ProtocolFamily.cpp"><Filter>Sources</Filter></ClCompile>
@@ -515,6 +527,10 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\EEPROMSlotFeatureBase.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\NonlinearityEEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_MayaPro.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeature_NIRQuest.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SerialNumberEEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\StrayLightEEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\WavelengthEEPROMSlotFeature.cpp"><Filter>Sources</Filter></ClCompile>
@@ -547,6 +563,9 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuest512SpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\NIRQuestSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\OOISpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QE65000SpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\QEProSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
@@ -574,6 +593,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInteface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\PixelBinningProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ProgrammableSaturationProtocolInteface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\RevisionProtocolInteface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\SerialNumberProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\ShutterProtocolInterface.cpp"><Filter>Sources</Filter></ClCompile>
@@ -609,6 +629,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSerialNumberExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetOpticalBenchSlitWidthMicronsExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetPixelBinningExchange.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSaturationExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetScansToAverageExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetSerialNumberMaximumLengthExchange.cpp"><Filter>Sources</Filter></ClCompile>
@@ -630,6 +651,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrumWithGainExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestBufferedSpectrum32AndMetadata.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestRawSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestSpectrumExchange.cpp"><Filter>Sources</Filter></ClCompile>
@@ -657,6 +679,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPPixelBinningProtocol.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPProgrammableSaturationProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPRevisionProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPSerialNumberProtocol.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPShutterProtocol.cpp"><Filter>Sources</Filter></ClCompile>
