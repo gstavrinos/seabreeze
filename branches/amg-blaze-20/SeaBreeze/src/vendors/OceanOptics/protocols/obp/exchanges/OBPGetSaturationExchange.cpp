@@ -61,7 +61,7 @@ unsigned int OBPGetSaturationExchange::querySaturationLevel(
         throw ProtocolException("Got a short read when querying saturation level.");
     }
 
-    saturation = (       ((*result)[0] & 0x00FF)
+    saturation = (     ((*result)[0] & 0x00FF)
                     | (((*result)[1] & 0x00FF) << 8)
                     | (((*result)[2] & 0x00FF) << 16)
                     | (((*result)[3] & 0x00FF) << 24));

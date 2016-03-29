@@ -58,21 +58,18 @@ namespace seabreeze {
 
         virtual void setPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus, const unsigned char binningFactor)
-        throw (FeatureException);
+                throw (FeatureException);
         virtual unsigned char getPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus, const unsigned char binningFactor)
-        throw (FeatureException);
+                throw (FeatureException);
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
         virtual unsigned char getDefaultPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
         virtual unsigned char getMaxPixelBinningFactor(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
-
-
-        //void setSpectrometerFeature(STSSpectrometerFeature * s);
 
         /* Inherited from Feature */
         /* This is still abstract in case the device needs to do anything

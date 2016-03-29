@@ -39,7 +39,7 @@ namespace seabreeze {
             OBPGetSaturationExchange();
             virtual ~OBPGetSaturationExchange();
             
-        unsigned int querySaturationLevel(TransferHelper *helper)
+            unsigned int querySaturationLevel(TransferHelper *helper)
                 throw (ProtocolException);
         };
     }

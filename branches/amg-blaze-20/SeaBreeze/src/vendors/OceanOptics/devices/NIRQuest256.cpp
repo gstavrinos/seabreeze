@@ -49,7 +49,6 @@
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeature.h"
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeature_FPGA.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
-#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature_NIRQuest.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;

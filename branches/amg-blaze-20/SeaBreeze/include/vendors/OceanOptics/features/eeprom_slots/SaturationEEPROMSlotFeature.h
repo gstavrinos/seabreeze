@@ -36,8 +36,8 @@ namespace seabreeze {
     
     /* This class is intended for most devices that store their saturation level
      * in EEPROM in the so-called "autonulling" configuration.  Note that the
-     * NIRQUEST does not do things quite the same way, so it should not use this
-     * class.
+     * NIRQuest, MayaPro, Apex and some others do not do things quite the same
+     * way, so they should not use this class.
      */
     class SaturationEEPROMSlotFeature
             : public SaturationEEPROMSlotFeatureBase {
