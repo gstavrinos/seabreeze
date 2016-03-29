@@ -48,6 +48,7 @@ using namespace std;
 #endif
 
 EEPROMSlotFeatureBase::EEPROMSlotFeatureBase() {
+    /* TODO: in the future, the protocol(s) should be passed in */
     this->protocols.push_back(new OOIEEPROMProtocol());
 }
 

@@ -36,7 +36,8 @@ namespace seabreeze {
 
     class NIRQuest256SpectrometerFeature : public NIRQuestSpectrometerFeature {
     public:
-        NIRQuest256SpectrometerFeature();
+        NIRQuest256SpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~NIRQuest256SpectrometerFeature();
     };
 

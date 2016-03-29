@@ -74,6 +74,7 @@ namespace seabreeze {
 //Spectra queries
         static const unsigned int OBP_GET_BUF_SPEC32_META           = 0x00100928;
         static const unsigned int OBP_GET_CORRECTED_SPECTRUM_NOW    = 0x00101000;
+        static const unsigned int OBP_GET_SATURATION_LEVEL          = 0x001010A0;
         static const unsigned int OBP_GET_RAW_SPECTRUM_NOW          = 0x00101100;
         static const unsigned int OBP_GET_PARTIAL_SPECTRUM_MODE     = 0x00102000;
         static const unsigned int OBP_SET_PARTIAL_SPECTRUM_MODE     = 0x00102010;

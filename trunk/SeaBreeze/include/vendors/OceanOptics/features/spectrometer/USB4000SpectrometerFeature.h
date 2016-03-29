@@ -36,7 +36,8 @@ namespace seabreeze {
 
     class USB4000SpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        USB4000SpectrometerFeature();
+        USB4000SpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~USB4000SpectrometerFeature();
 
     private:

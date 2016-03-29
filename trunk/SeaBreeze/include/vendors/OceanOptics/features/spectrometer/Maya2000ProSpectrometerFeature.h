@@ -34,14 +34,12 @@
 
 namespace seabreeze {
 
-    class Maya2000ProSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    class Maya2000ProSpectrometerFeature
+            : public GainAdjustedSpectrometerFeature {
     public:
-        Maya2000ProSpectrometerFeature();
+        Maya2000ProSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~Maya2000ProSpectrometerFeature();
-
-        /* Inherited from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
 
     private:
         static const long INTEGRATION_TIME_MINIMUM;

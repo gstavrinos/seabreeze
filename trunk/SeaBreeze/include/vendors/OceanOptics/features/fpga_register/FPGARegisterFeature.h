@@ -30,7 +30,7 @@
 #ifndef SEABREEZE_FPGA_REGISTER_FEATURE_H
 #define SEABREEZE_FPGA_REGISTER_FEATURE_H
 
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
@@ -38,7 +38,7 @@
 
 namespace seabreeze {
 
-    class FPGARegisterFeature : public Feature, public FPGARegisterFeatureInterface {
+    class FPGARegisterFeature : public FeatureImpl, public FPGARegisterFeatureInterface {
     public:
         FPGARegisterFeature();
         virtual ~FPGARegisterFeature();

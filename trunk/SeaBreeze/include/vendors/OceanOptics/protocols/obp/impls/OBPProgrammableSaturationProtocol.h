@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    Feature.cpp
- * @date    February 2009
+ * @file    OBPProgrammableSaturationProtocol.h
+ * @date    March 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,48 +27,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#include "common/globals.h"
-#include "common/features/Feature.h"
+#ifndef OBPPROGRAMMABLESATURATIONPROTOCOL_H
+#define OBPPROGRAMMABLESATURATIONPROTOCOL_H
 
-using namespace seabreeze;
-using namespace std;
+#include "common/SeaBreeze.h"
+#include "common/buses/Bus.h"
+#include "vendors/OceanOptics/protocols/interfaces/ProgrammableSaturationProtocolInterface.h"
 
-Feature::Feature() {
+namespace seabreeze {
+    namespace oceanBinaryProtocol {
+        class OBPProgrammableSaturationProtocol
+                : public ProgrammableSaturationProtocolInterface {
+        public:
+            OBPProgrammableSaturationProtocol();
+            virtual ~OBPProgrammableSaturationProtocol();
+            
+            /* Inherited from ProgrammableSaturationProtocolInterface */
+            virtual unsigned int getSaturation(const Bus &bus)
+                throw (ProtocolException);
+        };
+    } /* end namespace oceanBinaryProtocol */
+} /* end namespace seabreeze */
 
-}
+#endif /* OBPPROGRAMMABLESATURATIONPROTOCOL_H */
 
-Feature::~Feature() {
-
-    vector<ProtocolHelper *>::iterator iter;
-
-    for(iter = this->protocols.begin(); iter != this->protocols.end(); iter++) {
-        delete (*iter);
-    }
-}
-
-bool Feature::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
-    /* Override this to initialize device, and/or return a different status */
-    return true;
-}
-
-ProtocolHelper *Feature::lookupProtocolImpl(const Protocol &protocol)
-        throw (FeatureProtocolNotFoundException) {
-
-    vector<ProtocolHelper *>::iterator iter;
-    ProtocolHelper *retval = NULL;
-
-    for(iter = this->protocols.begin(); iter != this->protocols.end(); iter++) {
-        if((*iter)->getProtocol().equals(protocol)) {
-            retval = *iter;
-            break;
-        }
-    }
-
-    if(NULL == retval) {
-        string error("Could not find matching protocol implementation.");
-        throw FeatureProtocolNotFoundException(error);
-    }
-
-    return retval;
-}

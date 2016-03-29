@@ -44,7 +44,9 @@ const long JazSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 655350000;
 const long JazSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long JazSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-JazSpectrometerFeature::JazSpectrometerFeature() {
+JazSpectrometerFeature::JazSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2048;
     this->maxIntensity = 65535;

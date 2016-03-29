@@ -46,7 +46,9 @@ const long NIRQuestSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 1600000000;
 const long NIRQuestSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long NIRQuestSpectrometerFeature::INTEGRATION_TIME_BASE = 1000;
 
-NIRQuestSpectrometerFeature::NIRQuestSpectrometerFeature() {
+NIRQuestSpectrometerFeature::NIRQuestSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
     this->maxIntensity = 65535;
 
     this->integrationTimeMinimum = NIRQuestSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -66,32 +68,6 @@ NIRQuestSpectrometerFeature::NIRQuestSpectrometerFeature() {
 
 NIRQuestSpectrometerFeature::~NIRQuestSpectrometerFeature() {
 
-}
-
-bool NIRQuestSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
-        throw (FeatureException) {
-
-    /* This overrides the default GainAdjustedSpectrometerFeature::initialize
-     * because the saturation level is stored in a different location.
-     */
-
-    long saturation;
-
-    EEPROMSlotFeature eeprom(18);
-    vector<byte> *slot = eeprom.readEEPROMSlot(proto, bus, 0x0011);
-
-    saturation = ((*slot)[4] & 0x00FF)
-                 | (((*slot)[5] & 0x00FF) << 8)
-                 | (((*slot)[6] & 0x00FF) << 16)
-                 | (((*slot)[7] & 0x00FF) << 24);
-
-    if((saturation <= 0) || (saturation > this->maxIntensity)) {
-        /* May not be initialized right, or EEPROM may be unprogrammed */
-        saturation = this->maxIntensity;
-    }
-
-    this->saturationLevel = saturation;
-    return true;
 }
 
 /*

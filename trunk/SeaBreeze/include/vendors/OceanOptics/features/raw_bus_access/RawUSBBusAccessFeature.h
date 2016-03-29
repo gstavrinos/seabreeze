@@ -30,14 +30,15 @@
 #ifndef SEABREEZE_RAW_USB_BUS_ACCESS_FEATURE_H
 #define SEABREEZE_RAW_USB_BUS_ACCESS_FEATURE_H
 
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/exceptions/FeatureException.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 #include "common/buses/usb/USBInterface.h"
 
 namespace seabreeze {
 
-    class RawUSBBusAccessFeature : public Feature, public RawUSBBusAccessFeatureInterface {
+    class RawUSBBusAccessFeature : public FeatureImpl,
+            public RawUSBBusAccessFeatureInterface {
     public:
         RawUSBBusAccessFeature();
         virtual ~RawUSBBusAccessFeature();

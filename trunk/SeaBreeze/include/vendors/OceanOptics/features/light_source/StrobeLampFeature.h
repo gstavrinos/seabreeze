@@ -30,7 +30,7 @@
 #ifndef STROBELAMPFEATURE_H
 #define STROBELAMPFEATURE_H
 
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/protocols/Protocol.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
@@ -38,7 +38,7 @@
 
 namespace seabreeze {
 
-    class StrobeLampFeature : public Feature, public StrobeLampFeatureInterface {
+    class StrobeLampFeature : public FeatureImpl, public StrobeLampFeatureInterface {
     public:
         StrobeLampFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~StrobeLampFeature();

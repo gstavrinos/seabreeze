@@ -36,7 +36,8 @@ namespace seabreeze {
 
     class BlazeSpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        BlazeSpectrometerFeature();
+        BlazeSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~BlazeSpectrometerFeature();
 
         /* The Blaze gets wavelengths a bit differently */

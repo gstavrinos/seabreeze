@@ -40,6 +40,7 @@
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SerialNumberEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature_NIRQuest.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/NIRQuest256SpectrometerFeature.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
@@ -72,7 +73,11 @@ NIRQuest256::NIRQuest256() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new NIRQuest256SpectrometerFeature());
+    
+    ProgrammableSaturationFeature *saturation =
+            new SaturationEEPROMSlotFeature_NIRQuest(0x0011);
+    
+    this->features.push_back(new NIRQuest256SpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(20));
 

@@ -39,6 +39,7 @@
 #include "vendors/OceanOptics/buses/usb/JazUSB.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SerialNumberEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
@@ -70,7 +71,11 @@ Jaz::Jaz() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new JazSpectrometerFeature());
+    
+    ProgrammableSaturationFeature *saturation =
+            new SaturationEEPROMSlotFeature(0x0011);
+    
+    this->features.push_back(new JazSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));
 

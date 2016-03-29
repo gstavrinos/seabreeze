@@ -37,6 +37,7 @@
 #include "vendors/OceanOptics/buses/usb/Maya2000ProUSB.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
+#include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeature_MayaPro.h"
 #include "vendors/OceanOptics/features/eeprom_slots/SerialNumberEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/NonlinearityEEPROMSlotFeature.h"
 #include "vendors/OceanOptics/features/eeprom_slots/StrayLightEEPROMSlotFeature.h"
@@ -69,7 +70,11 @@ Maya2000Pro::Maya2000Pro() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    this->features.push_back(new Maya2000ProSpectrometerFeature());
+    
+    ProgrammableSaturationFeature *saturation =
+            new SaturationEEPROMSlotFeature_MayaPro(0x0011);
+    
+    this->features.push_back(new Maya2000ProSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));
 
