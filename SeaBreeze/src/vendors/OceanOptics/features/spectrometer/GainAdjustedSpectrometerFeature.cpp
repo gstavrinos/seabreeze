@@ -5,7 +5,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2014-2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -29,42 +29,43 @@
 
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
-#include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeature.h"
 
 using namespace seabreeze;
 using namespace std;
 
-GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature() {
-    this->saturationLevel = 65535;
+GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature) {
+    this->saturation = saturationFeature;
 }
 
 GainAdjustedSpectrometerFeature::~GainAdjustedSpectrometerFeature() {
-
+    delete this->saturation;
 }
 
 unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
-    return this->saturationLevel;
+    try {
+        unsigned int result = this->saturation->getSaturation();
+        if(0 == result || result > (unsigned)this->maxIntensity) {
+            /* The saturation setting was retrieved but appears to be invalid.
+             * Use the max intensity instead.
+             */
+            return this->maxIntensity;
+        }
+        return result;
+    } catch (FeatureException &fe) {
+        /* No valid saturation setting, so default to the max intensity */
+        return this->maxIntensity;
+    }
 }
-
 
 bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
         throw (FeatureException) {
 
-    unsigned int saturation;
-
-    EEPROMSlotFeature eeprom(18);
-    vector<byte> *slot = eeprom.readEEPROMSlot(proto, bus, 0x0011);
-
-    saturation = ((*slot)[4] & 0x00FF) | (((*slot)[5] & 0x00FF) << 8);
-
-    if(0 == saturation) {
-        /* May not be initialized right, but could cause division by zero */
-        saturation = this->maxIntensity;
+    bool result = this->saturation->initialize(proto, bus);
+    
+    if(false == result) {
+        return false;
     }
-
-    this->saturationLevel = saturation;
-
-    delete slot;
-
-    return true;
+    
+    return OOISpectrometerFeature::initialize(proto, bus);
 }

@@ -72,6 +72,8 @@ namespace seabreeze {
         
         // get the usb endpoints, according to the endpointType enumerator, 
         //  if the endpoint type is not used, a 0 is returned
+        // TODO: this should be delegated down into a Bus instance
+        // (e.g. found by getBusesByFamily()) for USB.  It is inappropriate here.
         unsigned char getEndpoint(int *errorCode, usbEndpointType endpointType);
 
         /* This will allow the driver to probe the device and initialize itself

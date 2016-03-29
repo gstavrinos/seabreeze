@@ -34,9 +34,11 @@
 
 namespace seabreeze {
 
-    class USB2000PlusSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    class USB2000PlusSpectrometerFeature
+            : public GainAdjustedSpectrometerFeature {
     public:
-        USB2000PlusSpectrometerFeature();
+        USB2000PlusSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~USB2000PlusSpectrometerFeature();
 
     private:

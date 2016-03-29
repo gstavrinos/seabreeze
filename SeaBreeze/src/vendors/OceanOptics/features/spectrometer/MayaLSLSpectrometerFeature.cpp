@@ -46,7 +46,9 @@ const long MayaLSLSpectrometerFeature::INTEGRATION_TIME_MAXIMUM   = 65000000; //
 const long MayaLSLSpectrometerFeature::INTEGRATION_TIME_INCREMENT =     1000;
 const long MayaLSLSpectrometerFeature::INTEGRATION_TIME_BASE      =        1;
 
-MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature() {
+MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2068;
     this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector
@@ -85,37 +87,4 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature() {
 
 MayaLSLSpectrometerFeature::~MayaLSLSpectrometerFeature() {
 
-}
-
-bool MayaLSLSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
-        throw (FeatureException) {
-
-    /* This overrides the default GainAdjustedSpectrometerFeature::initialize
-     * because the saturation level is stored in a different location.  Sadly,
-     * this is also different from the NIRQuest, so each of these gets its own
-     * version.
-     */
-
-    int saturation;
-
-    EEPROMSlotFeature eeprom(18);
-    vector<byte> *slot = eeprom.readEEPROMSlot(proto, bus, 0x0011);
-
-    saturation = ((*slot)[0] & 0x00FF)
-                 | (((*slot)[1] & 0x00FF) << 8);
-
-    if(saturation <= 32768 || saturation > this->maxIntensity) {
-        /* The gain adjustment was added to the Maya2000Pro a bit after its
-         * initial release, so there may be some units that have this slot
-         * unprogrammed.  This may manifest as a value of 65535 (since
-         * the EEPROM reads back 0xFF for all unprogrammed bytes).  In case
-         * there was some other suspect value (zero or something small)
-         * this also resets back to a safe value.
-         */
-        saturation = this->maxIntensity;
-    }
-
-    this->saturationLevel = saturation;
-    delete slot;
-    return true;
 }

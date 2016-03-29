@@ -44,7 +44,9 @@ const long USB4000SpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 655350000;
 const long USB4000SpectrometerFeature::INTEGRATION_TIME_INCREMENT = 10;
 const long USB4000SpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-USB4000SpectrometerFeature::USB4000SpectrometerFeature() {
+USB4000SpectrometerFeature::USB4000SpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
     int readoutLength = 7681;
 
     this->numberOfPixels = 3648;

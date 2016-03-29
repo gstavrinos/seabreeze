@@ -32,7 +32,7 @@
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumWithGainExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
@@ -47,10 +47,12 @@ const long BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
+BlazeSpectrometerFeature::BlazeSpectrometerFeature(
+        ProgrammableSaturationFeature *saturationFeature)
+            : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     /* In the future, much of this will need to be probed */
-    this->numberOfPixels = 2048;
+    this->numberOfPixels = 2088;
     this->maxIntensity = 65535;
 
     this->integrationTimeMinimum = BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -58,7 +60,9 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
     this->integrationTimeBase = BlazeSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    /* TODO: set up electric dark pixels when the indices are known */
+    for(int i = 14; i <= 29; i++) {
+        this->electricDarkPixelIndices.push_back(i);
+    }
 
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             BlazeSpectrometerFeature::INTEGRATION_TIME_BASE);
@@ -66,8 +70,8 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature() {
     Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
+    Transfer *formattedSpectrum = new OBPReadSpectrumWithGainExchange(
+            (this->numberOfPixels * 2) + 64, this->numberOfPixels, this);
 
     Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
 

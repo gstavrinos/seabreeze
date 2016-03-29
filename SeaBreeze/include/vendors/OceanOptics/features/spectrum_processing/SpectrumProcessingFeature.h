@@ -34,7 +34,7 @@
 
 #include "vendors/OceanOptics/features/spectrum_processing/SpectrumProcessingFeatureInterface.h"
 #include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 #include "common/exceptions/IllegalArgumentException.h"
@@ -42,7 +42,7 @@
 namespace seabreeze {
 
     class SpectrumProcessingFeature
-                : public Feature, public SpectrumProcessingFeatureInterface {
+                : public FeatureImpl, public SpectrumProcessingFeatureInterface {
     public:
         SpectrumProcessingFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~SpectrumProcessingFeature();

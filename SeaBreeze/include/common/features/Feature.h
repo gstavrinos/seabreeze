@@ -3,8 +3,8 @@
  * @date    February 2009
  * @author  Ocean Optics, Inc.
  *
- * This is a simple base class that other feature types will
- * extend.  A Feature is taken to be some capability of
+ * This is an abstract interface that other feature types will
+ * implement.  A Feature is taken to be some capability of
  * a Device that is relatively self-contained.  For instance,
  * an analog output voltage would be a Feature.  Features can
  * also contain multiple functions; for instance, a TEC may
@@ -41,46 +41,31 @@
 
 #include "common/SeaBreeze.h"
 #include "common/buses/Bus.h"
-#include "common/exceptions/FeatureProtocolNotFoundException.h"
 #include "common/features/FeatureFamily.h"
+#include "common/exceptions/FeatureException.h"
 #include "common/protocols/Protocol.h"
-#include "common/protocols/ProtocolHelper.h"
 #include <vector>
 
 namespace seabreeze {
 
     class Feature {
     public:
-        Feature();
-        virtual ~Feature();
+        virtual ~Feature() = 0;
 
         /* Allow the object that represents a given feature to initialize
          * itself by reading from the corresponding feature on the real
          * device, and/or put the real device feature into a known state.
-         * Overriding this is not required.  This should return true if
-         * the feature is ready to be used, and false otherwise.
+         * This should return true if the feature is ready to be used, and false
+         * otherwise.
          */
         virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
+            throw (FeatureException) = 0;
 
         virtual FeatureFamily getFeatureFamily() = 0;
-
-    protected:
-        std::vector<ProtocolHelper *> protocols;
-
-        /* Protocols are described by their base class (Protocol)
-         * and may be designated that way.  However, different
-         * functionality within a given command set may be broken
-         * into different implementation types, all of which extend
-         * the base Protocol class.  This is a simple lookup mechanism
-         * to use the Protocol that some anonymous caller might
-         * provide as a point of reference to then find the extended
-         * Protocol class that can be used to access certain features.
-         */
-        ProtocolHelper *lookupProtocolImpl(const Protocol &protocol)
-                        throw (FeatureProtocolNotFoundException);
     };
 
+    /* Default implementation for (otherwise) pure virtual destructor */
+    inline Feature::~Feature() {}
 }
 
 #endif /* FEATURE_H */

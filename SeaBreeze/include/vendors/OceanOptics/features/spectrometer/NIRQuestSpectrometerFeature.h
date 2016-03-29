@@ -36,12 +36,9 @@ namespace seabreeze {
 
     class NIRQuestSpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        NIRQuestSpectrometerFeature();
+        NIRQuestSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~NIRQuestSpectrometerFeature();
-
-        /* Inherited from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
 
     protected:
         void setupExchanges(int readoutLength);

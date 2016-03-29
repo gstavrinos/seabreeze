@@ -36,11 +36,9 @@ namespace seabreeze {
 
     class MayaLSLSpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        MayaLSLSpectrometerFeature();
+        MayaLSLSpectrometerFeature(
+                ProgrammableSaturationFeature *saturationFeature);
         virtual ~MayaLSLSpectrometerFeature();
-
-        // Inherited from Feature 
-        virtual bool initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
     private:
         static const long INTEGRATION_TIME_MINIMUM;

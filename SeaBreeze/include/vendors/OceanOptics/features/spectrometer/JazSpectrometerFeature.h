@@ -34,9 +34,10 @@
 
 namespace seabreeze {
 
-    class JazSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    class JazSpectrometerFeature
+            : public GainAdjustedSpectrometerFeature {
     public:
-        JazSpectrometerFeature();
+        JazSpectrometerFeature(ProgrammableSaturationFeature *saturationFeature);
         virtual ~JazSpectrometerFeature();
 
     private:

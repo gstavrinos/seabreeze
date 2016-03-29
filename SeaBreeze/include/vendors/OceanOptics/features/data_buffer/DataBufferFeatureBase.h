@@ -33,11 +33,11 @@
 #include <vector>
 
 #include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureInterface.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 
 namespace seabreeze {
 
-    class DataBufferFeatureBase : public Feature, public DataBufferFeatureInterface {
+    class DataBufferFeatureBase : public FeatureImpl, public DataBufferFeatureInterface {
     public:
         DataBufferFeatureBase();
         virtual ~DataBufferFeatureBase();

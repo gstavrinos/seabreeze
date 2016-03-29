@@ -94,7 +94,6 @@ Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
             temp = maxIntensity;
         }
         adjusted[i] = temp;
-        // logger.debug("USBFPGASpectrumExchange::transfer: autonulling adjusted pixel %4u from %8.2lf to %8.2lf (%5.2lf%)", i, shortVec[i], adjusted[i], 100.0 * adjusted[i] / shortVec[i]);
     }
 
     /* It might speed things up to dynamically allocate the buffer and

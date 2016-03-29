@@ -34,13 +34,13 @@
 
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeatureInterface.h"
 #include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
-    class SerialNumberFeature : public Feature, public SerialNumberFeatureInterface {
+    class SerialNumberFeature : public FeatureImpl, public SerialNumberFeatureInterface {
     public:
         SerialNumberFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~SerialNumberFeature();

@@ -34,13 +34,13 @@
 
 #include "vendors/OceanOptics/features/shutter/ShutterFeatureInterface.h"
 #include "common/protocols/Protocol.h"
-#include "common/features/Feature.h"
+#include "common/features/FeatureImpl.h"
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
 namespace seabreeze {
 
-    class ShutterFeature : public Feature, public ShutterFeatureInterface {
+    class ShutterFeature : public FeatureImpl, public ShutterFeatureInterface {
     public:
         ShutterFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~ShutterFeature();
