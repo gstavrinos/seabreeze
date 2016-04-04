@@ -61,8 +61,8 @@ FlameNIRSpectrometerFeature::FlameNIRSpectrometerFeature(
     //     this->electricDarkPixelIndices.push_back(i);
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(INTEGRATION_TIME_BASE);
-    Transfer *unformattedSpectrum = new ReadSpectrumExchange(numberOfPixels * 2 + 1, numberOfPixels);
-    Transfer *formattedSpectrum = new USBFPGASpectrumExchange(numberOfPixels * 2 + 1, numberOfPixels, this);
+    Transfer *unformattedSpectrum = new ReadSpectrumExchange(numberOfPixels * 2, numberOfPixels);
+    Transfer *formattedSpectrum = new USBFPGASpectrumExchange(numberOfPixels * 2, numberOfPixels, this);
     Transfer *requestSpectrum = new RequestSpectrumExchange(); 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
