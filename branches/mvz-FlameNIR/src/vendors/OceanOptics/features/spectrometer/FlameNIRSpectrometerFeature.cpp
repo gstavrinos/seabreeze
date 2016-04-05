@@ -56,9 +56,7 @@ FlameNIRSpectrometerFeature::FlameNIRSpectrometerFeature(
     integrationTimeBase      = INTEGRATION_TIME_BASE;
     integrationTimeIncrement = INTEGRATION_TIME_INCREMENT;
 
-    // Flame-NIR has no electrical dark pixels
-    // for(int i = _; i < _; i++) 
-    //     this->electricDarkPixelIndices.push_back(i);
+    // NB: Flame-NIR has no electrical dark pixels
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(INTEGRATION_TIME_BASE);
     Transfer *unformattedSpectrum = new ReadSpectrumExchange(numberOfPixels * 2, numberOfPixels);

@@ -534,7 +534,7 @@ int main(int argc, char **argv) {
                     seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes);
                     for (int i = 0; i < pixels; i++)
                     {
-                        unsigned value = spectrum[i * 2] | (spectrum[i * 2 + 1] << 8);
+                        unsigned value = (spectrum[i * 2] & 0x00ff) | ((spectrum[i * 2 + 1] << 8) & 0x00ff00);
                         printf("%.2lf, %u\n", wavelengths[i], value);
                     }
                     free(spectrum);

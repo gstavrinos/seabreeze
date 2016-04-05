@@ -105,8 +105,9 @@ ProtocolFamily FlameNIR::getSupportedProtocol(FeatureFamily family, BusFamily bu
     ProtocolFamilies protocols;
     BusFamilies busFamilies;
 
-    if(bus.equals(busFamilies.USB)) 
+    if(bus.equals(busFamilies.USB)) {
         return protocols.OOI_PROTOCOL;
+    }
 
     return protocols.UNDEFINED_PROTOCOL;
 }

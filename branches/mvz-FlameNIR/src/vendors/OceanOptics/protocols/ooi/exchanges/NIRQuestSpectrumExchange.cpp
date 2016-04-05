@@ -92,8 +92,6 @@ Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
             temp = maxIntensity;
         }
         adjusted[i] = temp;
-        if (i % 20 == 0)
-            logger.debug("pixel %u raw %hu adjusted %.2lf", i, shortVec[i], adjusted[i]);
     }
 
     /* It might speed things up to dynamically allocate the buffer and

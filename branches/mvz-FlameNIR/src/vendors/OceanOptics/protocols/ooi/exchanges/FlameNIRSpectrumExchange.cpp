@@ -85,9 +85,7 @@ Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper)
     for(i = 0; i < this->numberOfPixels; i++) {
         lsb = (*(this->buffer))[i * 2];
         msb = ((*(this->buffer))[(i * 2) + 1]);
-        // Flip bit 15 as it is copied out (MZ...?)
-        // msb ^= 0x80;
-        formatted[i] = ((msb << 8) & 0xff00) | (lsb & 0xff);
+        formatted[i] = ((msb << 8) & 0x00ff00) | (lsb & 0x00ff);
     }
 
     // confirm we can gain-adjust
@@ -115,8 +113,6 @@ Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper)
             temp = maxIntensity;
         }
         adjusted[i] = temp;
-        if (i % 20 == 0)
-            logger.debug("pixel %u raw %hu adjusted %.2lf", i, shortVec[i], adjusted[i]);
     }
 
     // It might speed things up to dynamically allocate the buffer and
