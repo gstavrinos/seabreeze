@@ -28,6 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
+#include "common/Log.h"
 #include <vector>
 #include "vendors/OceanOptics/protocols/ooi/exchanges/NIRQuestSpectrumExchange.h"
 #include "common/UShortVector.h"
@@ -51,6 +52,9 @@ NIRQuestSpectrumExchange::~NIRQuestSpectrumExchange() {
 
 Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
+
+    LOG(__FUNCTION__);
+
     unsigned int i;
     Data *xfer;
     double maxIntensity;
@@ -59,9 +63,11 @@ Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
     /* Use the superclass to get an array of formatted by uncorrected values. */
     xfer = QESpectrumExchange::transfer(helper);
     if(NULL == xfer) {
-        string error("Expected QESpectrumExchange::transfer to produce a non-null result "
+        string error("NIRQuestSpectrumExchange::transfer: "
+                "Expected QESpectrumExchange::transfer to produce a non-null result "
                 "containing raw spectral data.  Without this data, it is not possible to "
                 "generate a valid formatted spectrum.");
+        logger.error(error.c_str());
         throw ProtocolException(error);
     }
 
@@ -86,6 +92,8 @@ Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
             temp = maxIntensity;
         }
         adjusted[i] = temp;
+        if (i % 20 == 0)
+            logger.debug("pixel %u raw %hu adjusted %.2lf", i, shortVec[i], adjusted[i]);
     }
 
     /* It might speed things up to dynamically allocate the buffer and
