@@ -474,6 +474,8 @@ Toshiba-based spectrometers (the USB4000 and Flame-T).  This is being investigat
 \date ????-??-?? (version 3.????)
 - fixed NIRQuest EEPROM slot count (was 18, now 20)
 - increased USB2000+/Flame-S EEPROM slot count (was 17, now 30)
+- added support for Jaz and Blaze over ethernet
+- added Flame-NIR
 
 \date 2015-09-16 (version 3.0.10)
 - added Spark (tested under MacOS, VS2010)

@@ -354,6 +354,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\ApexUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameNIRUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000PlusUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000USB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR4000USB.h" />
@@ -381,6 +382,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\VentanaUSB.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Apex.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Blaze.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\FlameNIR.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000Plus.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR4000.h" />
@@ -447,6 +449,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000SpectrometerFeature.h" />
@@ -601,6 +604,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\FPGARegisterReadExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\FPGARegisterWriteExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\FPGASpectrumExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\FlameNIRSpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\HRFPGASpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\IntegrationTimeExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\ooi\exchanges\JazSpectrumExchange.h" />
@@ -733,6 +737,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\ApexUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameNIRUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000PlusUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000USB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR4000USB.cpp" />
@@ -759,6 +764,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\VentanaUSB.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Apex.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Blaze.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\FlameNIR.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000Plus.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR4000.cpp" />
@@ -811,6 +817,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\shutter\ShutterFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000SpectrometerFeature.cpp" />
@@ -956,6 +963,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\FPGARegisterReadExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\FPGARegisterWriteExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\FPGASpectrumExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\FlameNIRSpectrumExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\HRFPGASpectrumExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\IntegrationTimeExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\ooi\exchanges\JazSpectrumExchange.cpp" />
