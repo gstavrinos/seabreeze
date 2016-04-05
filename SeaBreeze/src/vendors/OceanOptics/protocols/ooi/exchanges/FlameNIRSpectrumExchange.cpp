@@ -1,11 +1,11 @@
 /***************************************************//**
- * @file    NIRQuestSpectrumExchange.cpp
- * @date    July 2009
+ * @file    FlameNIRSpectrumExchange.cpp
+ * @date    Apr 2016
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,30 +27,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
+#include <vector>
+
 #include "common/globals.h"
 #include "common/Log.h"
-#include <vector>
-#include "vendors/OceanOptics/protocols/ooi/exchanges/NIRQuestSpectrumExchange.h"
 #include "common/UShortVector.h"
 #include "common/DoubleVector.h"
 #include "common/exceptions/ProtocolFormatException.h"
+
+#include "vendors/OceanOptics/protocols/ooi/exchanges/FlameNIRSpectrumExchange.h"
 
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 using namespace std;
 
-NIRQuestSpectrumExchange::NIRQuestSpectrumExchange(
+FlameNIRSpectrumExchange::FlameNIRSpectrumExchange(
     unsigned int readoutLength, unsigned int numberOfPixels,
             GainAdjustedSpectrometerFeature *spectrometer)
-        : QESpectrumExchange(readoutLength, numberOfPixels) {
+        : ReadSpectrumExchange(readoutLength, numberOfPixels) {
     this->spectrometerFeature = spectrometer;
 }
 
-NIRQuestSpectrumExchange::~NIRQuestSpectrumExchange() {
+FlameNIRSpectrumExchange::~FlameNIRSpectrumExchange() { }
 
-}
-
-Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
+Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
 
     LOG(__FUNCTION__);
@@ -59,31 +59,52 @@ Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
     Data *xfer;
     double maxIntensity;
     double saturationLevel;
+    byte lsb;
+    byte msb;
 
-    /* Use the superclass to get an array of formatted by uncorrected values. */
-    xfer = QESpectrumExchange::transfer(helper);
+    // Use the superclass to move the data into a local buffer. 
+    // This transfer() may cause a ProtocolException to be thrown. 
+    xfer = Transfer::transfer(helper);
     if(NULL == xfer) {
-        string error("NIRQuestSpectrumExchange::transfer: "
-                "Expected QESpectrumExchange::transfer to produce a non-null result "
-                "containing raw spectral data.  Without this data, it is not possible to "
-                "generate a valid formatted spectrum.");
+        string error("FlameNIRSpectrumExchange::transfer: "
+            "Expected Transfer::transfer to produce a non-null result "
+            "containing raw spectral data.  Without this data, it is not possible to "
+            "generate a valid formatted spectrum.");
         logger.error(error.c_str());
         throw ProtocolException(error);
     }
 
+    // At this point, this->buffer should have the raw spectrum data. 
+
+    // We would normally check for synchronization byte here, but Flame-NIR 
+    // does not send one.
+
+    // Get a local variable by reference to point to that buffer 
+    logger.debug("demarshalling");
+    vector<unsigned short> formatted(this->numberOfPixels);
+    for(i = 0; i < this->numberOfPixels; i++) {
+        lsb = (*(this->buffer))[i * 2];
+        msb = ((*(this->buffer))[(i * 2) + 1]);
+        formatted[i] = ((msb << 8) & 0x00ff00) | (lsb & 0x00ff);
+    }
+
+    // confirm we can gain-adjust
     if(NULL == this->spectrometerFeature) {
-        /* FIXME: should this throw an illegal state exception instead? */
+        // FIXME: should this throw an illegal state exception instead? 
         return xfer;
     }
+
+    // xfer is just a copy of what is already stored in this, so delete it. 
+    delete xfer;
 
     maxIntensity = this->spectrometerFeature->getMaximumIntensity();
     saturationLevel = this->spectrometerFeature->getSaturationLevel();
 
-    /* Cast the formatted values so that we can get to the array of shorts */
-    UShortVector *usv = static_cast<UShortVector *>(xfer);
+    // Cast the formatted values so that we can get to the array of shorts 
+    UShortVector *usv = new UShortVector(formatted);
     vector<unsigned short> shortVec = usv->getUShortVector();
 
-    /* Create a buffer to store the gain-adjusted values.  This is local. */
+    // Create a local buffer to store the gain-adjusted values  
     vector<double> adjusted(this->numberOfPixels);
 
     for(i = 0; i < this->numberOfPixels; i++) {
@@ -94,12 +115,9 @@ Data *NIRQuestSpectrumExchange::transfer(TransferHelper *helper)
         adjusted[i] = temp;
     }
 
-    /* It might speed things up to dynamically allocate the buffer and
-     * hand it off to retval rather than letting it make a copy.
-     */
+    // It might speed things up to dynamically allocate the buffer and
+    // hand it off to retval rather than letting it make a copy.
     DoubleVector *retval = new DoubleVector(adjusted);
-
-    delete xfer;
 
     return retval;
 }

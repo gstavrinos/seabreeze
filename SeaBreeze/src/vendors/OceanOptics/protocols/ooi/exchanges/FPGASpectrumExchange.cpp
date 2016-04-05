@@ -28,6 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
+#include "common/Log.h"
 #include <vector>
 #include "vendors/OceanOptics/protocols/ooi/exchanges/FPGASpectrumExchange.h"
 #include "common/UShortVector.h"
@@ -49,6 +50,8 @@ FPGASpectrumExchange::~FPGASpectrumExchange() {
 
 Data *FPGASpectrumExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) {
+    LOG(__FUNCTION__);
+
     unsigned int i;
     Data *xfer;
     byte lsb;
@@ -57,9 +60,11 @@ Data *FPGASpectrumExchange::transfer(TransferHelper *helper)
     /* Use the superclass to move the data into a local buffer. */
     xfer = Transfer::transfer(helper);
     if(NULL == xfer) {
-        string error("Expected Transfer::transfer to produce a non-null result "
+        string error("FPGASpectrumExchange::transfer: " 
+                "Expected Transfer::transfer to produce a non-null result "
                 "containing raw spectral data.  Without this data, it is not possible to "
                 "generate a valid formatted spectrum.");
+        logger.error(error.c_str());
         throw ProtocolException(error);
     }
 
@@ -72,10 +77,12 @@ Data *FPGASpectrumExchange::transfer(TransferHelper *helper)
      * we have probably lost synchronization with the data stream.
      */
     if((*(this->buffer))[this->length - 1] != 0x69) {
-        string synchError("Did not find expected synch byte (0x69) at the end of spectral data "
+        string synchError("FPGASpectrumExchange::transfer: "
+                "Did not find expected synch byte (0x69) at the end of spectral data "
                 "transfer.  This suggests that the data stream is now out of synchronization, "
                 "or possibly that an underlying read operation failed prematurely due to bus "
                 "issues.");
+        logger.error(synchError.c_str());
         throw ProtocolFormatException(synchError);
     }
 

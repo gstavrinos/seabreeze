@@ -62,6 +62,7 @@ struct global_args_t {
     int         listEDCPixels;
     int         eepromIndex;
     int         getSpectrum;
+    int         raw;
     long        integrationTimeUS;
     const char *eepromValueHex;
     const char *eepromValueAscii;
@@ -77,6 +78,7 @@ static const struct option opts[] = {
     { "eeprom-value-hex",   required_argument,  NULL,  0  }, // long-only
     { "eeprom-value-ascii", required_argument,  NULL,  0  }, // long-only
     { "get-spectrum",       no_argument,        NULL,  0  }, // long-only
+    { "raw",                no_argument,        NULL,  0  }, // long-only
     { "index",              required_argument,  NULL, 'i' },
     { "integration-time-us",required_argument,  NULL,  0  }, // long-only
     { "list",               no_argument,        NULL, 'l' },
@@ -124,6 +126,7 @@ void parseArgs(int argc, char **argv) {
     // initialize
     gArgs.debug             = 0;
     gArgs.getSpectrum       = 0;
+    gArgs.raw               = 0;
     gArgs.integrationTimeUS = 100000; // default to 100ms
     gArgs.list              = 0;
     gArgs.listDescriptors   = 0;
@@ -154,6 +157,7 @@ void parseArgs(int argc, char **argv) {
                      if (!strcmp("set-serial-number",  opts[longIndex].name)) gArgs.serialNumberNew   = optarg; 
                 else if (!strcmp("set-irrad",          opts[longIndex].name)) gArgs.irradFilename     = optarg; 
                 else if (!strcmp("get-spectrum",       opts[longIndex].name)) gArgs.getSpectrum       = 1; 
+                else if (!strcmp("raw",                opts[longIndex].name)) gArgs.raw               = 1; 
                 else if (!strcmp("integration-time-us",opts[longIndex].name)) gArgs.integrationTimeUS = atol(optarg); 
                 else if (!strcmp("list-descriptors",   opts[longIndex].name)) gArgs.listDescriptors   = 1; 
                 else if (!strcmp("list-edc-pixels",    opts[longIndex].name)) gArgs.listEDCPixels     = 1; 
@@ -514,17 +518,40 @@ int main(int argc, char **argv) {
             free(buffer);
         }
 
-        // --get-spectrum and --integration-time-us
+        // --get-spectrum, --integration-time-us and --raw
         if (gArgs.getSpectrum)
         {
             double *wavelengths = (double*) malloc(pixels * sizeof(double));
-            double *spectrum = (double*) malloc(pixels * sizeof(double));
             seabreeze_get_wavelengths(index, &error, wavelengths, pixels);
             seabreeze_set_integration_time_microsec(index, &error, gArgs.integrationTimeUS);
-            seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels); // throwaway for stabilization
-            seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels);
-            for (int i = 0; i < pixels; i++)
-                printf("%.2lf, %.2lf\n", wavelengths[i], spectrum[i]);
+            if (gArgs.raw)
+            {
+                int bytes = seabreeze_get_unformatted_spectrum_length(index, &error);
+                unsigned char* spectrum = (unsigned char*) malloc(bytes);
+                if (spectrum != NULL)
+                {
+                    seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes); // throwaway for stabilization
+                    seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes);
+                    for (int i = 0; i < pixels; i++)
+                    {
+                        unsigned value = (spectrum[i * 2] & 0x00ff) | ((spectrum[i * 2 + 1] << 8) & 0x00ff00);
+                        printf("%.2lf, %u\n", wavelengths[i], value);
+                    }
+                    free(spectrum);
+                }
+            }
+            else
+            {
+                double* spectrum = (double*) malloc(pixels * sizeof(double));
+                if (spectrum != NULL)
+                {
+                    seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels); // throwaway for stabilization
+                    seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels);
+                    for (int i = 0; i < pixels; i++)
+                        printf("%.2lf, %.2lf\n", wavelengths[i], spectrum[i]);
+                    free(spectrum);
+                }
+            }
         }
 
         // other future commands here...
