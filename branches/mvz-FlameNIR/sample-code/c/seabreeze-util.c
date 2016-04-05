@@ -518,7 +518,7 @@ int main(int argc, char **argv) {
             free(buffer);
         }
 
-        // --get-spectrum and --integration-time-us
+        // --get-spectrum, --integration-time-us and --raw
         if (gArgs.getSpectrum)
         {
             double *wavelengths = (double*) malloc(pixels * sizeof(double));
@@ -527,22 +527,30 @@ int main(int argc, char **argv) {
             if (gArgs.raw)
             {
                 int bytes = seabreeze_get_unformatted_spectrum_length(index, &error);
-                unsigned char *spectrum = (unsigned char*) malloc(bytes);
-                seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes); // throwaway for stabilization
-                seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes);
-                for (int i = 0; i < pixels; i++)
+                unsigned char* spectrum = (unsigned char*) malloc(bytes);
+                if (spectrum != NULL)
                 {
-                    unsigned value = spectrum[i * 2] | (spectrum[i * 2 + 1] << 8);
-                    printf("%.2lf, %u\n", wavelengths[i], value);
+                    seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes); // throwaway for stabilization
+                    seabreeze_get_unformatted_spectrum(index, &error, spectrum, bytes);
+                    for (int i = 0; i < pixels; i++)
+                    {
+                        unsigned value = spectrum[i * 2] | (spectrum[i * 2 + 1] << 8);
+                        printf("%.2lf, %u\n", wavelengths[i], value);
+                    }
+                    free(spectrum);
                 }
             }
             else
             {
-                double *spectrum = (double*) malloc(pixels * sizeof(double));
-                seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels); // throwaway for stabilization
-                seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels);
-                for (int i = 0; i < pixels; i++)
-                    printf("%.2lf, %.2lf\n", wavelengths[i], spectrum[i]);
+                double* spectrum = (double*) malloc(pixels * sizeof(double));
+                if (spectrum != NULL)
+                {
+                    seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels); // throwaway for stabilization
+                    seabreeze_get_formatted_spectrum(index, &error, spectrum, pixels);
+                    for (int i = 0; i < pixels; i++)
+                        printf("%.2lf, %.2lf\n", wavelengths[i], spectrum[i]);
+                    free(spectrum);
+                }
             }
         }
 
