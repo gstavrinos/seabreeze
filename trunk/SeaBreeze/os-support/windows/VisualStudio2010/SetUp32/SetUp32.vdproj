@@ -435,6 +435,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_922526FFDB78492AB9ADF785EF32CAD7"
+        "OwnerKey" = "8:_9CE1C5E561814195B89C2CF3B51C5993"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_93E3C4A12C1F4021B49BE359D429E28C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -471,6 +477,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B43C309E993147699580F6AED97F6EB5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B6056D131C234DEF8D2726CCB1B3DCD5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -502,6 +514,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C4127A3D31104A679FDDC85EB5994148"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C84EAE368879424089E383985879E758"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2196,6 +2214,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B43C309E993147699580F6AED97F6EB5"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_FlameNIR.inf"
+            "TargetName" = "8:OOI_FlameNIR.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B6056D131C234DEF8D2726CCB1B3DCD5"
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Spark_XP.inf"
@@ -2300,6 +2338,26 @@
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QE65000_XP.inf"
             "TargetName" = "8:OOI_QE65000_XP.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C84EAE368879424089E383985879E758"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_FlameNIR.cat"
+            "TargetName" = "8:OOI_FlameNIR.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
             "Condition" = "8:"
@@ -3324,12 +3382,26 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_922526FFDB78492AB9ADF785EF32CAD7"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:Microsoft_VC100_DebugCRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9CE1C5E561814195B89C2CF3B51C5993"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\Debug\\SeaBreeze.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\x64\\Debug\\SeaBreeze.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"

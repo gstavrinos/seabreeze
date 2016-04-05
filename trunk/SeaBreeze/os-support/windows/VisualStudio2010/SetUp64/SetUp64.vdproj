@@ -111,6 +111,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_25FF0A3014F14464A86EC4D78EB2C7BA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2AA9590EF6D14CA7B1E6DA134537939B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -490,6 +496,12 @@
         "Entry"
         {
         "MsmKey" = "8:_BEC6EA65DD674CB8AFBD1F0D0B6A19F1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3DB0ED1A09A48EFB6A7D36243D49DDB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1024,6 +1036,26 @@
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_QEPRO.inf"
             "TargetName" = "8:OOI_QEPRO.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_25FF0A3014F14464A86EC4D78EB2C7BA"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_FlameNIR.cat"
+            "TargetName" = "8:OOI_FlameNIR.cat"
             "Tag" = "8:"
             "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
             "Condition" = "8:"
@@ -2300,6 +2332,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C3DB0ED1A09A48EFB6A7D36243D49DDB"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_FlameNIR.inf"
+            "TargetName" = "8:OOI_FlameNIR.inf"
+            "Tag" = "8:"
+            "Folder" = "8:_A3C70BCBA4A046F79A25F0957906FDE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C7EA11D11E904F6CA3834ECE58F5E6DE"
             {
             "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\FilesToInstall\\windows-support\\OOI_Jaz_XP.cat"
@@ -3444,7 +3496,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9CE1C5E561814195B89C2CF3B51C5993"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\Debug\\SeaBreeze.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\os-support\\windows\\VisualStudio2010\\x64\\Debug\\SeaBreeze.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3C598238542848DE9DA398834371C27B"
