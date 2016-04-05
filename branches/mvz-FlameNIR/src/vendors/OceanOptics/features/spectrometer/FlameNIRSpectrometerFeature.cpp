@@ -31,7 +31,7 @@
 #include "vendors/OceanOptics/features/spectrometer/FlameNIRSpectrometerFeature.h"
 #include "vendors/OceanOptics/protocols/ooi/exchanges/IntegrationTimeExchange.h"
 #include "vendors/OceanOptics/protocols/ooi/exchanges/ReadSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/ooi/exchanges/USBFPGASpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/ooi/exchanges/FlameNIRSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/ooi/exchanges/RequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/ooi/exchanges/TriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/ooi/impls/OOISpectrometerProtocol.h"
@@ -62,7 +62,7 @@ FlameNIRSpectrometerFeature::FlameNIRSpectrometerFeature(
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(INTEGRATION_TIME_BASE);
     Transfer *unformattedSpectrum = new ReadSpectrumExchange(numberOfPixels * 2, numberOfPixels);
-    Transfer *formattedSpectrum = new USBFPGASpectrumExchange(numberOfPixels * 2, numberOfPixels, this);
+    Transfer *formattedSpectrum = new FlameNIRSpectrumExchange(numberOfPixels * 2, numberOfPixels, this);
     Transfer *requestSpectrum = new RequestSpectrumExchange(); 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
