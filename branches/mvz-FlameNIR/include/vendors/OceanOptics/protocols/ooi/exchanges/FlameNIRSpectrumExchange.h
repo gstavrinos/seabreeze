@@ -36,6 +36,12 @@
 
 namespace seabreeze {
   namespace ooiProtocol {
+    /**
+     * @brief   Spectrum exchange for FlameNIR spectrometer
+     *
+     * This class was needed because unlike other FX2-era spectrometers,
+     * the Flame-NIR does not return a "sync byte" at the end of a spectrum.
+     */
     class FlameNIRSpectrumExchange : public ReadSpectrumExchange {
     public:
         FlameNIRSpectrumExchange(unsigned int readoutLength,
