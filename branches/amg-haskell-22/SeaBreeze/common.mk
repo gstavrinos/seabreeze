@@ -71,11 +71,11 @@ else
     SUFFIX      = so
     LIBBASENAME = libseabreeze
     LFLAGS_APP += -L/usr/lib \
-                  -lusb \
                   -lstdc++ \
                   -lm
     LFLAGS_LIB += -L/usr/lib \
-                  -shared
+                  -shared \
+                  -lusb
 endif
 
 # enable Logger
