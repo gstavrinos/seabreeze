@@ -1,0 +1,17 @@
+The STS Dev Kit software is a daemon, originally intended to run on a Raspberry Pi, that allows one or more
+Ocean Optics spectrometers to be controlled via a simple web API. In fact the code is portable and can be run
+on other platforms e.g. it is developed and tested on a Windows platform.
+
+The daemon listens on a port for connections, parses the input for a spectrometer command and any associated
+parameters and issues the appropriate command to the spectrometer using SeaBreeze, returning a success/failure
+code and any reponse from the spectrometer.
+The class that performs the basic connection handling is RequestHandler and this passes the commands to
+instances of a Spectrometer. The Spectrometer is based on an Active Object design pattern that means each spectrometer
+is handled in it's own thread of execution. This gives the basic functionality of the spectrometer.
+The class OceanHandler is derived from RequestHandler and provides the functionality to manage sequences of
+acquisitions per spectrometer i.e. how many, how frequently etc.
+
+Typically the daemon will service requests coming via a combination of a web server and scripts to query the daemon
+but it is possible to connect to the daemon directly, bypassing the web server.
+
+The code makes extensive use of Boost for much of the functionality from parsing to asynchronous IO.
