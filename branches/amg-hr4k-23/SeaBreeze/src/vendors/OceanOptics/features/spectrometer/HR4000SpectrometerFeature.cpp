@@ -55,7 +55,7 @@ HR4000SpectrometerFeature::HR4000SpectrometerFeature() {
     this->integrationTimeBase = HR4000SpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = HR4000SpectrometerFeature::INTEGRATION_TIME_INCREMENT;
     
-    for(int i = 2; i < 13; i++) {
+    for(int i = 5; i <= 17; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
 
