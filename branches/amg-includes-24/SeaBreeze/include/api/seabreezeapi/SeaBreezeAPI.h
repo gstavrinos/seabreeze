@@ -37,10 +37,9 @@
 #define SEABREEZEAPI_H
 
 #include "api/DllDecl.h"
+#include "api/USBEndpointTypes.h"
 
 #ifdef __cplusplus
-
-#include "api/seabreezeapi/DeviceAdapter.h"
 
 /*!
     @brief  This is an interface to SeaBreeze that allows
@@ -71,28 +70,28 @@ public:
      * such devices will not be available for use.  This should be used when
      * attempting to find USB devices.
      */
-    int probeDevices();
+    virtual int probeDevices() = 0;
     
     /**
      * Use the addIPv4DeviceLocation() method to specify that a device may be
      * found on a TCP/IPv4 network on a given port.  Once specified,
      * the typical openDevice() function can be used to access it.
      */
-    int addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr, int port);
+    virtual int addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr, int port) = 0;
 
     /**
      * Use the addRS232DeviceLocation() method to specify that a device may be
      * found on a particular serial bus with a given baud rate.  Once specified,
      * the typical openDevice() function can be used to access it.
      */
-    int addRS232DeviceLocation(char *deviceTypeName, char *deviceBusPath, unsigned int baud);
+    virtual int addRS232DeviceLocation(char *deviceTypeName, char *deviceBusPath, unsigned int baud) = 0;
 
     /**
      * This provides the number of devices that have either been probed or
      * manually specified.  Devices are not opened automatically, but this can
      * provide a bound for getDeviceIDs().
      */
-    int getNumberOfDeviceIDs();
+    virtual int getNumberOfDeviceIDs() = 0;
 
     /**
      * This provides a unique ID of each device that is detected or specified.
@@ -103,187 +102,183 @@ public:
      * same device for as long as the program is running.  This will return the
      * number of device IDs actually copied into the array or 0 on error.
      */
-    int getDeviceIDs(long *ids, unsigned long maxLength);
+    virtual int getDeviceIDs(long *ids, unsigned long maxLength) = 0;
 
     /**
-     * This will attempt to open the bus connetion to the device with the given ID.
+     * This will attempt to open the bus connection to the device with the given ID.
      * Returns 0 on success, other value on error.
      */
-    int openDevice(long id, int *errorCode);
+    virtual int openDevice(long id, int *errorCode) = 0;
 
     /**
      * This will attempt to close the bus connection to the device with the given ID.
      */
-    void closeDevice(long id, int *errorCode);
+    virtual void closeDevice(long id, int *errorCode) = 0;
 
     /* Get a string that describes the type of device */
-    int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length);
+    virtual int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length) = 0;
     
     /* Get the usb endpoint address for a specified type of endpoint */
-   	unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType);
+    virtual unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType) = 0;
 
     /* Get raw usb access capabilities */
-    int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode);
-    int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
-    int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
+    virtual int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) = 0;
+    virtual int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) = 0;
     
     /* Serial number capabilities */
-    int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode);
-    int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int getSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
-    unsigned char getSerialNumberMaximumLength(long deviceID, long featureID, int *errorCode);
+    virtual int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int getSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
+    virtual unsigned char getSerialNumberMaximumLength(long deviceID, long featureID, int *errorCode) = 0;
 
     /* Spectrometer capabilities */
-    int getNumberOfSpectrometerFeatures(long id, int *errorCode);
-    int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode);
-    void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
-    unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
-    unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode);
-    double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
-    int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
-    int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
-    int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength);
-    int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
-    int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);
-    int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length);
+    virtual int getNumberOfSpectrometerFeatures(long id, int *errorCode) = 0;
+    virtual int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode) = 0;
+    virtual void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros) = 0;
+    virtual unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength) = 0;
+    virtual int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength) = 0;
+    virtual int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length) = 0;
+    virtual int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length) = 0;
 
     /* Pixel binning capabilities */
-    int getNumberOfPixelBinningFeatures(long id, int *errorCode);
-    int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void binningSetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
-    unsigned char binningGetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
-    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor);
-    void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
-    unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
-    unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
+    virtual int getNumberOfPixelBinningFeatures(long id, int *errorCode) = 0;
+    virtual int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void binningSetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor) = 0;
+    virtual unsigned char binningGetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor) = 0;
+    virtual void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+    virtual unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
         
     /* TEC capabilities */
-    int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
-    int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    double tecReadTemperatureDegreesC(long deviceID, long featureID, int *errorCode);
-    void tecSetTemperatureSetpointDegreesC(long deviceID, long featureID, int *errorCode, double temperatureDegreesCelsius);
-    void tecSetEnable(long deviceID, long featureID, int *errorCode, unsigned char tecEnable);
+    virtual int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual double tecReadTemperatureDegreesC(long deviceID, long featureID, int *errorCode) = 0;
+    virtual void tecSetTemperatureSetpointDegreesC(long deviceID, long featureID, int *errorCode, double temperatureDegreesCelsius) = 0;
+    virtual void tecSetEnable(long deviceID, long featureID, int *errorCode, unsigned char tecEnable) = 0;
 
     /* Irradiance calibration features */
-    int getNumberOfIrradCalFeatures(long deviceID, int *errorCode);
-    int getIrradCalFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int irradCalibrationRead(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength);
-    int irradCalibrationWrite(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength);
-    int irradCalibrationHasCollectionArea(long deviceID, long featureID, int *errorCode);
-    float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode);
-    void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area);
+    virtual int getNumberOfIrradCalFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getIrradCalFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int irradCalibrationRead(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength) = 0;
+    virtual int irradCalibrationWrite(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength) = 0;
+    virtual int irradCalibrationHasCollectionArea(long deviceID, long featureID, int *errorCode) = 0;
+    virtual float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode) = 0;
+    virtual void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area) = 0;
 
     /* EEPROM capabilities */
-    int getNumberOfEEPROMFeatures(long deviceID, int *errorCode);
-    int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int eepromReadSlot(long deviceID, long featureID, int *errorCode, int slotNumber, unsigned char *buffer, int bufferLength);
+    virtual int getNumberOfEEPROMFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int eepromReadSlot(long deviceID, long featureID, int *errorCode, int slotNumber, unsigned char *buffer, int bufferLength) = 0;
 
     /* Light source capabilities */
-    int getNumberOfLightSourceFeatures(long deviceID, int *errorCode);
-    int getLightSourceFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int lightSourceGetCount(long deviceID, long featureID, int *errorCode);
-    bool lightSourceHasEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex);
-    bool lightSourceIsEnabled(long deviceID, long featureID, int *errorCode, int lightSourceIndex);
-    void lightSourceSetEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex, bool enable);
-    bool lightSourceHasVariableIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex);
-    double lightSourceGetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex);
-    void lightSourceSetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex, double intensity);
+    virtual int getNumberOfLightSourceFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getLightSourceFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int lightSourceGetCount(long deviceID, long featureID, int *errorCode) = 0;
+    virtual bool lightSourceHasEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex) = 0;
+    virtual bool lightSourceIsEnabled(long deviceID, long featureID, int *errorCode, int lightSourceIndex) = 0;
+    virtual void lightSourceSetEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex, bool enable) = 0;
+    virtual bool lightSourceHasVariableIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex) = 0;
+    virtual double lightSourceGetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex) = 0;
+    virtual void lightSourceSetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex, double intensity) = 0;
 
     /* Lamp capabilities */
-    int getNumberOfLampFeatures(long deviceID, int *errorCode);
-    int getLampFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void lampSetLampEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable);
+    virtual int getNumberOfLampFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getLampFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void lampSetLampEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable) = 0;
 
     /* Continuous strobe capabilities */
-    int getNumberOfContinuousStrobeFeatures(long deviceID, int *errorCode);
-    int getContinuousStrobeFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void continuousStrobeSetContinuousStrobeEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable);
-    void continuousStrobeSetContinuousStrobePeriodMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long strobePeriodMicroseconds);
+    virtual int getNumberOfContinuousStrobeFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getContinuousStrobeFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void continuousStrobeSetContinuousStrobeEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable) = 0;
+    virtual void continuousStrobeSetContinuousStrobePeriodMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long strobePeriodMicroseconds) = 0;
 
     /* Shutter capabilities */
-    int getNumberOfShutterFeatures(long deviceID, int *errorCode);
-    int getShutterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void shutterSetShutterOpen(long deviceID, long featureID, int *errorCode, bool opened);
+    virtual int getNumberOfShutterFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getShutterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void shutterSetShutterOpen(long deviceID, long featureID, int *errorCode, bool opened) = 0;
 
     /* Nonlinearity coefficient capabilities */
-    int getNumberOfNonlinearityCoeffsFeatures(long deviceID, int *errorCode);
-    int getNonlinearityCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+    virtual int getNumberOfNonlinearityCoeffsFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getNonlinearityCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength) = 0;
 
     /* Temperature capabilities */
-    int getNumberOfTemperatureFeatures(long deviceID, int *errorCode);
-    int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode);
-    double temperatureGet(long deviceID, long featureID, int *errorCode, int index);
-    int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+    virtual int getNumberOfTemperatureFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode) = 0;
+    virtual double temperatureGet(long deviceID, long featureID, int *errorCode, int index) = 0;
+    virtual int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength) = 0;
 
     /* Spectrum processing capabilities */
-    int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode);
-    int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode);
-    unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode);
-    void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth);
-    void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage);
+    virtual int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode) = 0;
+    virtual void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth) = 0;
+    virtual void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage) = 0;
  
     /* Revision capabilities */
-    int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
-    int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode);
-    unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode);
+    virtual int getNumberOfRevisionFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode) = 0;
 
     /* Optical Bench capabilities */
-    int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode);
-    int getOpticalBenchFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode);
-    unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode);
-    int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
-    int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
-    int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
-    int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
-    int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength);
+    virtual int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getOpticalBenchFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode) = 0;
+    virtual int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
+    virtual int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
+    virtual int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
+    virtual int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
+    virtual int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength) = 0;
 
     /* Stray light coefficient capabilities */
-    int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode);
-    int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength);
+    virtual int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength) = 0;
 
     /* Data buffer capabilities */
-    int getNumberOfDataBufferFeatures(long deviceID, int *errorCode);
-    int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void dataBufferClear(long deviceID, long featureID, int *errorCode);
-    unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode);
-    unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode);
-    unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode);
-    unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode);
-    void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity);
-
+    virtual int getNumberOfDataBufferFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void dataBufferClear(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode) = 0;
+    virtual unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode) = 0;
+    virtual void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity) = 0;
+;
     /* Acquisition delay capabilities */
-    int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode);
-    int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
-    void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID,
-            int *errorCode, unsigned long delay_usec);
-    unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID,
-            long featureID, int *errorCode);
-    unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID,
-            long featureID, int *errorCode);
-    unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID,
-            long featureID, int *errorCode);
-    unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
-            long featureID, int *errorCode);
+    virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID,
+            int *errorCode, unsigned long delay_usec) = 0;
+    virtual unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID,
+            long featureID, int *errorCode) = 0;
+    virtual unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID,
+            long featureID, int *errorCode) = 0;
+    virtual unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID,
+            long featureID, int *errorCode) = 0;
+    virtual unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
+            long featureID, int *errorCode) = 0;
 
-private:
+protected:
     SeaBreezeAPI();
     virtual ~SeaBreezeAPI();
 
-    seabreeze::api::DeviceAdapter *getDeviceByID(unsigned long id);
-
+private:
     static SeaBreezeAPI *instance;
-
-    std::vector<seabreeze::api::DeviceAdapter *> probedDevices;
-    std::vector<seabreeze::api::DeviceAdapter *> specifiedDevices;
 };
 
 extern "C" {
