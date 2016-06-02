@@ -1,14 +1,14 @@
 /***************************************************//**
- * @file    DeviceAdapter.h
- * @date    January 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @file    USBEndpointTypes.h
+ * @date    May 2016
+ * @author  Ocean Optics, Inc.
  *
- * This is a wrapper that allows
- * access to SeaBreeze Device instances.
+ * This provides a structure defining USB endpoints in a manner that
+ * can be used with the raw USB read/write capabilities of the API.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the

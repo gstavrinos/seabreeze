@@ -3,8 +3,7 @@
  * @date    May 2016
  * @author  Ocean Optics, Inc.
  *
- * This is a wrapper around the SeaBreeze driver.
- * Both C and C++ language interfaces are provided.  Please
+ * This is a wrapper around the SeaBreeze driver. Please
  * note that this wrapper should try very hard to recover
  * from errors -- like the user trying to read data before
  * opening the device -- and set an appropriate error code.

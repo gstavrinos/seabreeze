@@ -1,11 +1,13 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.h
- * @date    February 2016
+ * @date    May 2016
  * @author  Ocean Optics, Inc.
  *
- * This is an interface to SeaBreeze that allows
- * the user to connect to devices over USB and other buses.
- * This is intended as a usable and extensible API.
+ * This is an implementation of the SeaBreezeAPI interface.
+ * This has been split off of SeaBreezeAPI.h so that the
+ * #include tree for that file can be kept to a minimum.  This
+ * is important for non-C languages to more easily integrate
+ * with SeaBreeze.
  *
  * This provides a C interface to help with linkage.
  *
