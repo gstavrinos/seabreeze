@@ -47,18 +47,8 @@
 #include "common/features/Feature.h"
 #include "common/features/FeatureFamily.h"
 #include "common/protocols/Protocol.h"
+#include "api/USBEndpointTypes.h"
 
-
-// usb endpoints are associated with a particular device.
-typedef enum usbEndpointType 
-{ 
-	kEndpointTypePrimaryOut, // slow speed
-	kEndpointTypePrimaryIn,  // slow speed
-	kEndpointTypeSecondaryOut, // could be high speed
-	kEndpointTypeSecondaryIn,  // could be high speed
-	kEndpointTypeSecondaryIn2  // generally high speed
-} usbEndpointType;
-        	
 namespace seabreeze {
 
     class Device {
