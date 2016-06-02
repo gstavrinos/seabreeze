@@ -31,6 +31,7 @@
 #include "api/seabreezeapi/ProtocolFamilies.h"
 #include "common/buses/BusFamilies.h"
 #include "vendors/OceanOptics/buses/network/BlazeTCPIPv4.h"
+#include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/BlazeUSB.h"
 #include "vendors/OceanOptics/devices/Blaze.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
@@ -66,6 +67,7 @@ Blaze::Blaze() {
     /* Set up the available buses on this device */
     this->buses.push_back(new BlazeUSB());
     this->buses.push_back(new BlazeTCPIPv4());
+    this->buses.push_back(new OOIRS232Interface());
 
     /* Set up the available protocols understood by this device */
     this->protocols.push_back(new OceanBinaryProtocol());
