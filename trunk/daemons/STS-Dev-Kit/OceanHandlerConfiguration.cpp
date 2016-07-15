@@ -36,6 +36,23 @@
 #include "OceanHandlerConfiguration.h"
 #include "FileManager.h"
 
+namespace {
+    // remove leading/trailing quotes from a string
+    std::string StripQuotes(const std::string &input) {
+
+        std::string result(input);
+        if (result.size() > 0 && result[0] == '"') {
+            result.erase(0, 1);
+        }
+
+        if (result.size() > 0 && result[result.size() - 1] == '"') {
+            result.erase(result.size() - 1, 1);
+        }
+
+        return result;
+    }
+}
+
 /* Set the file extension for the sequence associated with the spectrometer with the specified serial number.
 */
 std::string OceanHandlerConfiguration::SaveFileExtension(const std::string &serialNumber) const {
@@ -44,6 +61,7 @@ std::string OceanHandlerConfiguration::SaveFileExtension(const std::string &seri
     key.append(ms_propertyFileExtension);
 
     std::string result = GetValue(key, ms_defaultFileExtension);
+    result = StripQuotes(result);
 
     return result;
 }
@@ -56,6 +74,7 @@ std::string OceanHandlerConfiguration::SaveFilePrefix(const std::string &serialN
     key.append(ms_propertyFilePrefix);
 
     std::string result = GetValue(key, ms_defaultFilePrefix);
+    result = StripQuotes(result);
 
     return result;
 }
@@ -136,6 +155,7 @@ std::string OceanHandlerConfiguration::SaveFormat(const std::string &serialNumbe
     key.append(ms_propertySaveFormat);
 
     std::string result = GetValue(key, DefaultSaveFormat());
+    result = StripQuotes(result);
 
     return result;
 }
