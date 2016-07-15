@@ -601,6 +601,7 @@ Sequence::Sequence(IResponseHandler *responseHandler,  boost::asio::io_service &
     m_filePrefix(m_configuration.SaveFilePrefix(m_serialNumber)),
     m_fileManager(m_configuration, m_serialNumber) {
 
+    m_fileManager.SetFilePrefix(m_filePrefix);
     m_fileManager.SetFileExtension(m_configuration.SaveFileExtension(m_serialNumber));
 
     m_configuration.DoUpdate();
