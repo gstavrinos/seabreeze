@@ -1010,10 +1010,12 @@ void Spectrometer::InitializeParameters() {
 
         m_integrationTime = m_configuration.IntegrationTime(m_serialNumber);
         if (spectrometerFeatureCount > 0) {
-            long minIntegrationTime = m_seabreezeApi->spectrometerGetMinimumIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error);
+            m_minIntegrationTime = m_seabreezeApi->spectrometerGetMinimumIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error);
             m_maxIntegrationTime = m_seabreezeApi->spectrometerGetMaximumIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error);
 
-            m_integrationTime = std::max(m_minIntegrationTime, minIntegrationTime);
+            m_integrationTime = std::max(m_minIntegrationTime, m_integrationTime);
+            m_integrationTime = std::min(m_maxIntegrationTime, m_integrationTime);
+
             m_seabreezeApi->spectrometerSetIntegrationTimeMicros(m_handle, m_spectrometerFeatures[0], &error, m_integrationTime);
 
             m_maxIntensity = m_seabreezeApi->spectrometerGetMaximumIntensity(m_handle, m_spectrometerFeatures[0], &error);
