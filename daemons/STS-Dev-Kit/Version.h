@@ -34,4 +34,5 @@
 #define VERSION_H
 const unsigned int mg_majorVersion = 2;
 const unsigned int mg_minorVersion = 1;
+const unsigned int mg_pointVersion = 2;
 #endif

@@ -51,7 +51,11 @@ bool OceanHandler::HandleRequest(boost::shared_ptr<Connection> connection, const
     //intercept the request for version number first
     if (command == GET_VERSION)
     {
-        std::string version = boost::lexical_cast<std::string>(mg_majorVersion).append(".").append(boost::lexical_cast<std::string>(mg_minorVersion));
+        std::string version = boost::lexical_cast<std::string>(mg_majorVersion).
+            append(".").
+            append(boost::lexical_cast<std::string>(mg_minorVersion)).
+            append(".").
+            append(boost::lexical_cast<std::string>(mg_pointVersion));
         NotifyResponse(connection, SUCCESS, version);
     }
     else if (m_sequence.find(args.first) == m_sequence.end()) {
