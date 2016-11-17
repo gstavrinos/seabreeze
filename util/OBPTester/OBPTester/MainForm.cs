@@ -148,6 +148,11 @@ namespace OBP_RS232
         // The list of available I2C buses
         protected string[] mI2CBusIndexes;
 
+        // Continuous Get Spectrum
+        protected bool bContinuous;
+        protected bool bStopContinuous;
+        protected int mContinuousCount;
+
 
         //----- Constructor -----
 
@@ -3334,6 +3339,16 @@ namespace OBP_RS232
         {
             if (!okToSend()) { return; }
 
+            if (isContinuous())
+            {
+                stopContinuous();
+                return;
+            }
+            else if (checkBoxContinuous.Checked)
+            {
+                startContinuous();
+            }
+
             mActiveButton = buttonReadCorrectedSpectrum;
             mActiveButton.Enabled = false;
 
@@ -3352,18 +3367,31 @@ namespace OBP_RS232
 
         private void doReadCorrectedSpectrum()
         {
-            // Send the command
-            OBPGetCorrectedSpectrum correctedSpectrum = new OBPGetCorrectedSpectrum(mActiveIO, mRequest, mResponse);
-            sendMessage(correctedSpectrum);
-
-            Invoke((MethodInvoker)delegate
+            do
             {
-                onReadCorrectedSpectrum(correctedSpectrum); // invoke on UI thread
-            });
+                // Send the command
+                OBPGetCorrectedSpectrum correctedSpectrum = new OBPGetCorrectedSpectrum(mActiveIO, mRequest, mResponse);
+                sendMessage(correctedSpectrum);
+
+                if (!correctedSpectrum.IsSuccess)
+                {
+                    bStopContinuous = true;
+                }
+
+                mContinuousCount++;
+
+                Invoke((MethodInvoker)delegate
+                {
+                    onReadCorrectedSpectrum(correctedSpectrum); // invoke on UI thread
+                });
+
+            } while (isContinuous());
         }
 
         private void onReadCorrectedSpectrum(OBPGetCorrectedSpectrum correctedSpectrum)
         {
+            updateContinuousStatus();
+
             Series s = chartSpectrum.Series[0];
 
             ushort[] yData = correctedSpectrum.CorrectedSpectrum;
@@ -3400,6 +3428,16 @@ namespace OBP_RS232
         {
             if (!okToSend()) { return; }
 
+            if (isContinuous())
+            {
+                stopContinuous();
+                return;
+            }
+            else if (checkBoxContinuous.Checked)
+            {
+                startContinuous();
+            }
+
             mActiveButton = buttonReadRawSpectrum;
             mActiveButton.Enabled = false;
 
@@ -3418,18 +3456,30 @@ namespace OBP_RS232
 
         private void doReadRawSpectrum()
         {
-            // Send the command
-            OBPGetRawSpectrum rawSpectrum = new OBPGetRawSpectrum(mActiveIO, mRequest, mResponse);
-            sendMessage(rawSpectrum);
+            do {
+                // Send the command
+                OBPGetRawSpectrum rawSpectrum = new OBPGetRawSpectrum(mActiveIO, mRequest, mResponse);
+                sendMessage(rawSpectrum);
 
-            Invoke((MethodInvoker)delegate
-            {
-                onReadRawSpectrum(rawSpectrum); // invoke on UI thread
-            });
+                if (!rawSpectrum.IsSuccess)
+                {
+                    bStopContinuous = true;
+                }
+
+                mContinuousCount++;
+
+                Invoke((MethodInvoker)delegate
+                {
+                    onReadRawSpectrum(rawSpectrum); // invoke on UI thread
+                });
+
+            } while (isContinuous());
         }
 
         private void onReadRawSpectrum(OBPGetRawSpectrum rawSpectrum)
         {
+            updateContinuousStatus();
+
             Series s = chartSpectrum.Series[0];
 
             ushort[] yData = rawSpectrum.RawSpectrum;
@@ -3466,6 +3516,16 @@ namespace OBP_RS232
         {
             if (!okToSend()) { return; }
 
+            if (isContinuous())
+            {
+                stopContinuous();
+                return;
+            }
+            else if (checkBoxContinuous.Checked)
+            {
+                startContinuous();
+            }
+
             mActiveButton = buttonReadPartialCorrectedSpectrum;
             mActiveButton.Enabled = false;
 
@@ -3484,18 +3544,32 @@ namespace OBP_RS232
 
         private void doReadPartialCorrectedSpectrum()
         {
-            // Send the command
-            OBPGetPartialCorrectedSpectrum partialCorrectedSpectrum = new OBPGetPartialCorrectedSpectrum(mActiveIO, mRequest, mResponse);
-            sendMessage(partialCorrectedSpectrum);
-
-            Invoke((MethodInvoker)delegate
+            do
             {
-                onReadPartialCorrectedSpectrum(partialCorrectedSpectrum); // invoke on UI thread
-            });
+                // Send the command
+                OBPGetPartialCorrectedSpectrum partialCorrectedSpectrum = new OBPGetPartialCorrectedSpectrum(mActiveIO, mRequest, mResponse);
+                sendMessage(partialCorrectedSpectrum);
+
+                if (!partialCorrectedSpectrum.IsSuccess)
+                {
+                    bStopContinuous = true;
+                }
+
+                mContinuousCount++;
+
+                Invoke((MethodInvoker)delegate
+                {
+                    onReadPartialCorrectedSpectrum(partialCorrectedSpectrum); // invoke on UI thread
+                });
+
+            } while (isContinuous());
+
         }
 
         private void onReadPartialCorrectedSpectrum(OBPGetPartialCorrectedSpectrum partialCorrectedSpectrum)
         {
+            updateContinuousStatus();
+
             Series s = chartSpectrum.Series[0];
 
             ushort[] yData = partialCorrectedSpectrum.PartialCorrectedSpectrum;
@@ -3526,11 +3600,69 @@ namespace OBP_RS232
         }
 
 
+        //--- Continuous Spectrum Control ---
+
+        private void startContinuous()
+        {
+            mContinuousCount = 0;
+            bContinuous = true;
+            bStopContinuous = false;
+        }
+
+        private void stopContinuous()
+        {
+            bStopContinuous = true;
+        }
+
+        private void stoppedContinuous()
+        {
+            bContinuous = false;
+        }
+
+        private bool isContinuous()
+        {
+            return bContinuous && !bStopContinuous;
+        }
+
+        private void updateContinuousStatus() {
+
+            if (bStopContinuous && bContinuous)
+            {
+                bContinuous = false;
+                checkBoxContinuous.Checked = false;
+            }
+
+            labelContinuousCount.Text = mContinuousCount.ToString("N0");
+        }
+
+        private void checkBoxContinuous_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxContinuous.Checked)
+            {
+                bStopContinuous = true;
+            }
+            else
+            {
+                labelContinuousCount.Text = "0";
+            }
+        }
+
+
         //--- ReadBufferedSpectrum ---
 
         private void buttonReadBufferedSpectrum_Click(object sender, EventArgs e)
         {
             if (!okToSend()) { return; }
+
+            if (isContinuous())
+            {
+                stopContinuous();
+                return;
+            }
+            else if (checkBoxContinuous.Checked)
+            {
+                startContinuous();
+            }
 
             mActiveButton = buttonReadBufferedSpectrum;
             mActiveButton.Enabled = false;
@@ -3550,18 +3682,31 @@ namespace OBP_RS232
 
         private void doReadBufferedSpectrum()
         {
-            // Send the command
-            OBPGetBufferedSpectrum bufferedSpectrum = new OBPGetBufferedSpectrum(mActiveIO, mRequest, mResponse);
-            sendMessage(bufferedSpectrum);
-
-            Invoke((MethodInvoker)delegate
+            do
             {
-                onReadBufferedSpectrum(bufferedSpectrum); // invoke on UI thread
-            });
+                // Send the command
+                OBPGetBufferedSpectrum bufferedSpectrum = new OBPGetBufferedSpectrum(mActiveIO, mRequest, mResponse);
+                sendMessage(bufferedSpectrum);
+
+                if (!bufferedSpectrum.IsSuccess)
+                {
+                    bStopContinuous = true;
+                }
+
+                mContinuousCount++;
+
+                Invoke((MethodInvoker)delegate
+                {
+                    onReadBufferedSpectrum(bufferedSpectrum); // invoke on UI thread
+                });
+            } while (isContinuous());
+
         }
 
         private void onReadBufferedSpectrum(OBPGetBufferedSpectrum bufferedSpectrum)
         {
+            updateContinuousStatus();
+
             Series s = chartSpectrum.Series[0];
 
             uint[] yData = bufferedSpectrum.BufferedSpectrum;
@@ -4740,5 +4885,11 @@ namespace OBP_RS232
                 }
             }
         }
+
+        private void textBoxI2CAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

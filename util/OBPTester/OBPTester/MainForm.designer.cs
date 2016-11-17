@@ -344,6 +344,8 @@
             this.dataGridViewUSBDeviceList = new System.Windows.Forms.DataGridView();
             this.ColumnDeviceDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnProductID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBoxContinuous = new System.Windows.Forms.CheckBox();
+            this.labelContinuousCount = new System.Windows.Forms.Label();
             this.tabControlContent.SuspendLayout();
             this.tabPageIOLog.SuspendLayout();
             this.tabPageInfo.SuspendLayout();
@@ -1937,6 +1939,8 @@
             // tabPageSpectrum
             // 
             this.tabPageSpectrum.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageSpectrum.Controls.Add(this.labelContinuousCount);
+            this.tabPageSpectrum.Controls.Add(this.checkBoxContinuous);
             this.tabPageSpectrum.Controls.Add(this.tabControlSpectrumInfo);
             this.tabPageSpectrum.Controls.Add(this.buttonReadBufferedSpectrum);
             this.tabPageSpectrum.Controls.Add(this.buttonReadPartialCorrectedSpectrum);
@@ -3264,6 +3268,7 @@
             this.textBoxI2CAddress.Name = "textBoxI2CAddress";
             this.textBoxI2CAddress.Size = new System.Drawing.Size(66, 20);
             this.textBoxI2CAddress.TabIndex = 31;
+            this.textBoxI2CAddress.TextChanged += new System.EventHandler(this.textBoxI2CAddress_TextChanged);
             // 
             // buttonWriteI2CBytes
             // 
@@ -3578,6 +3583,27 @@
             this.ColumnProductID.ReadOnly = true;
             this.ColumnProductID.Width = 75;
             // 
+            // checkBoxContinuous
+            // 
+            this.checkBoxContinuous.AutoSize = true;
+            this.checkBoxContinuous.Location = new System.Drawing.Point(519, 48);
+            this.checkBoxContinuous.Name = "checkBoxContinuous";
+            this.checkBoxContinuous.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxContinuous.TabIndex = 1;
+            this.checkBoxContinuous.Text = "Continuous";
+            this.checkBoxContinuous.UseVisualStyleBackColor = true;
+            this.checkBoxContinuous.CheckedChanged += new System.EventHandler(this.checkBoxContinuous_CheckedChanged);
+            // 
+            // labelContinuousCount
+            // 
+            this.labelContinuousCount.AutoSize = true;
+            this.labelContinuousCount.ForeColor = System.Drawing.Color.ForestGreen;
+            this.labelContinuousCount.Location = new System.Drawing.Point(599, 49);
+            this.labelContinuousCount.Name = "labelContinuousCount";
+            this.labelContinuousCount.Size = new System.Drawing.Size(13, 13);
+            this.labelContinuousCount.TabIndex = 84;
+            this.labelContinuousCount.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3609,6 +3635,7 @@
             this.tabPageAcquisitionParams.ResumeLayout(false);
             this.tabPageAcquisitionParams.PerformLayout();
             this.tabPageSpectrum.ResumeLayout(false);
+            this.tabPageSpectrum.PerformLayout();
             this.tabControlSpectrumInfo.ResumeLayout(false);
             this.tabPageChart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartSpectrum)).EndInit();
@@ -3958,6 +3985,8 @@
         private System.Windows.Forms.DataGridView dataGridViewInPipes;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPipes;
+        private System.Windows.Forms.CheckBox checkBoxContinuous;
+        private System.Windows.Forms.Label labelContinuousCount;
     }
 }
 
