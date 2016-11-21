@@ -508,40 +508,30 @@ namespace OBP_RS232
                     String serialNumber = USBIO.aSpectrometer.Descriptor.SerialNumber;
                     int vendorID = USBIO.aSpectrometer.Descriptor.VID;
 
-                    //         sts                       qe pro               pyreos                     spark
-                    if ((productId == 0x4000) || (productId == 0x4004) || (productId == 0x4005) || (productId == 0x4200))
-                    {
-                        // assume only one interface. This is normally a reasonable simplification. For Ocean Optics spectrometers
-                        USBIO.inPipe = (USBPipe)(dataGridViewInPipes.Rows[dataGridViewInPipes.SelectedRows[0].Index].Tag);
-                        inPipePolicy = USBIO.inPipe.Policy;
-                        inPipePolicy.AllowPartialReads = true; // Reads do not fail when device returns more data than expected
-                        inPipePolicy.AutoFlush = false; // when more data than expected is returned, do not discard remaining data
-                        inPipePolicy.IgnoreShortPackets = true; // read operations are completed only when the requested number of bytes is received
-                        inPipePolicy.AutoClearStall = true; // driver clears failed transfers
+                    // assume only one interface. This is normally a reasonable simplification. For Ocean Optics spectrometers
+                    USBIO.inPipe = (USBPipe)(dataGridViewInPipes.Rows[dataGridViewInPipes.SelectedRows[0].Index].Tag);
+                    inPipePolicy = USBIO.inPipe.Policy;
+                    inPipePolicy.AllowPartialReads = true; // Reads do not fail when device returns more data than expected
+                    inPipePolicy.AutoFlush = false; // when more data than expected is returned, do not discard remaining data
+                    inPipePolicy.IgnoreShortPackets = true; // read operations are completed only when the requested number of bytes is received
+                    inPipePolicy.AutoClearStall = true; // driver clears failed transfers
                         
-                        //inPipePolicy.PipeTransferTimeout = 2000; // two second timout
-                        mUSBIO.setReceiveTimeout(mReceiveTimeoutMS);
+                    //inPipePolicy.PipeTransferTimeout = 2000; // two second timout
+                    mUSBIO.setReceiveTimeout(mReceiveTimeoutMS);
 
-                        USBIO.outPipe = (USBPipe)(dataGridViewOutPipes.Rows[dataGridViewOutPipes.SelectedRows[0].Index].Tag);
-                        outPipePolicy = USBIO.outPipe.Policy;
-                        outPipePolicy.ShortPacketTerminate = false; // write requests that are multiples of the max packet size are no null terminated
-                        outPipePolicy.AutoClearStall = true;
+                    USBIO.outPipe = (USBPipe)(dataGridViewOutPipes.Rows[dataGridViewOutPipes.SelectedRows[0].Index].Tag);
+                    outPipePolicy = USBIO.outPipe.Policy;
+                    outPipePolicy.ShortPacketTerminate = false; // write requests that are multiples of the max packet size are no null terminated
+                    outPipePolicy.AutoClearStall = true;
                         
-                        //outPipePolicy.PipeTransferTimeout = 2000;
-                        mUSBIO.setSendTimeout(mSendTimeoutMS);
+                    //outPipePolicy.PipeTransferTimeout = 2000;
+                    mUSBIO.setSendTimeout(mSendTimeoutMS);
 
-                        Thread testThread = new Thread(doTestIO);
-                        testThread.Start();
-                        tabControlContent.Enabled = true;
-                        buttonTest.Enabled = false;
+                    Thread testThread = new Thread(doTestIO);
+                    testThread.Start();
+                    tabControlContent.Enabled = true;
+                    buttonTest.Enabled = false;
 
-
-                    }
-                    else
-                    {
-                        buttonTest.Enabled = true;
-                        setTestFailed("The chosen spectrometer does not use OBP.");
-                    }
                 }
                 else
                 {
