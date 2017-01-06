@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    Blaze.cpp
+ * @file    FlameX.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -30,17 +30,17 @@
 #include "common/globals.h"
 #include "api/seabreezeapi/ProtocolFamilies.h"
 #include "common/buses/BusFamilies.h"
-#include "vendors/OceanOptics/buses/network/BlazeTCPIPv4.h"
+#include "vendors/OceanOptics/buses/network/FlameXTCPIPv4.h"
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
-#include "vendors/OceanOptics/buses/usb/BlazeUSB.h"
-#include "vendors/OceanOptics/devices/Blaze.h"
+#include "vendors/OceanOptics/buses/usb/FlameXUSB.h"
+#include "vendors/OceanOptics/devices/FlameX.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureImpl.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
-#include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPProgrammableSaturationProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
@@ -53,20 +53,20 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-Blaze::Blaze() {
+FlameX::FlameX() {
 
-    this->name = "Blaze";
+    this->name = "FlameX";
         
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
-    this->usbEndpoint_secondary_out = 0x02;
-    this->usbEndpoint_secondary_in = 0x82;
+    this->usbEndpoint_secondary_out = 0;
+    this->usbEndpoint_secondary_in = 0;
     this->usbEndpoint_secondary_in2 = 0;
 
     /* Set up the available buses on this device */
-    this->buses.push_back(new BlazeUSB());
-    this->buses.push_back(new BlazeTCPIPv4());
+    this->buses.push_back(new FlameXUSB());
+    this->buses.push_back(new FlameXTCPIPv4());
     this->buses.push_back(new OOIRS232Interface());
 
     /* Set up the available protocols understood by this device */
@@ -79,7 +79,7 @@ Blaze::Blaze() {
     ProgrammableSaturationFeature *saturation =
             new ProgrammableSaturationFeatureImpl(saturationHelpers);
     
-    this->features.push_back(new BlazeSpectrometerFeature(saturation));
+    this->features.push_back(new FlameXSpectrometerFeature(saturation));
 
     /* Add serial number feature */
     vector<ProtocolHelper *> serialNumberHelpers;
@@ -105,12 +105,12 @@ Blaze::Blaze() {
     this->features.push_back(new RawUSBBusAccessFeature());
 }
 
-Blaze::~Blaze() {
+FlameX::~FlameX() {
 }
 
-ProtocolFamily Blaze::getSupportedProtocol(FeatureFamily family, BusFamily bus) {
+ProtocolFamily FlameX::getSupportedProtocol(FeatureFamily family, BusFamily bus) {
     ProtocolFamilies protocols;
 
-    /* The Blaze uses one protocol for all buses. */
+    /* The FlameX uses one protocol for all buses. */
     return protocols.OCEAN_BINARY_PROTOCOL;
 }

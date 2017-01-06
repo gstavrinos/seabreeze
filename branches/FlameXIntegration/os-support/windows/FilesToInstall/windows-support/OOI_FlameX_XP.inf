@@ -114,9 +114,9 @@ WdfCoInstaller01007.dll=2
 
 [Strings]
 ProviderName="Ocean Optics, Inc."
-USB\MyDevice.DeviceDesc="Ocean Optics Blaze (WinUSB)"
-USB\MS_COMP_WINUSB.DeviceDesc="Ocean Optics Blaze (WinUSB)"
-WinUSB_SvcDesc="Ocean Optics Blaze (WinUSB)"
+USB\MyDevice.DeviceDesc="Ocean Optics FlameX (WinUSB)"
+USB\MS_COMP_WINUSB.DeviceDesc="Ocean Optics FlameX (WinUSB)"
+WinUSB_SvcDesc="Ocean Optics FlameX (WinUSB)"
 DISK_NAME="My Install Disk"
 DeviceClassString="Ocean Optics USB Devices"
 

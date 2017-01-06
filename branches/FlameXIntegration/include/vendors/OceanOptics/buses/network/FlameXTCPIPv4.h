@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    BlazeTCPIPv4.h
+ * @file    FlameXTCPIPv4.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,20 +27,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_BLAZETCPIPV4_H
-#define SEABREEZE_BLAZETCPIPV4_H
+#ifndef SEABREEZE_FLAMEXTCPIPV4_H
+#define SEABREEZE_FLAMEXTCPIPV4_H
 
 #include "common/buses/network/TCPIPv4SocketBus.h"
 
 namespace seabreeze {
-    class BlazeTCPIPv4 : public TCPIPv4SocketBus {
+    class FlameXTCPIPv4 : public TCPIPv4SocketBus {
     public:
-        BlazeTCPIPv4();
-        virtual ~BlazeTCPIPv4();
+        FlameXTCPIPv4();
+        virtual ~FlameXTCPIPv4();
         
         virtual bool open();
         virtual void close();
     };
 }
 
-#endif /* SEABREEZE_BLAZETCPIPV4_H */
+#endif /* SEABREEZE_FLAMEXTCPIPV4_H */

@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    Blaze.h
+ * @file    FlameX.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,17 +27,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef BLAZE_H
-#define BLAZE_H
+#ifndef FLAMEX_H
+#define FLAMEX_H
 
 #include "common/devices/Device.h"
 
 namespace seabreeze {
 
-    class Blaze : public Device {
+    class FlameX : public Device {
     public:
-        Blaze();
-        virtual ~Blaze();
+        FlameX();
+        virtual ~FlameX();
 
         /* Must be overridden from Device */
         virtual ProtocolFamily getSupportedProtocol(FeatureFamily family, BusFamily bus);
@@ -45,4 +45,4 @@ namespace seabreeze {
 
 }
 
-#endif /* BLAZE_H */
+#endif /* FLAMEX_H */

@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    BlazeSpectrometerFeature.h
+ * @file    FlameXUSB.h
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -27,30 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef BLAZESPECTROMETERFEATURE_H
-#define BLAZESPECTROMETERFEATURE_H
+#ifndef FLAMEXUSB_H
+#define FLAMEXUSB_H
 
-#include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 
 namespace seabreeze {
 
-    class BlazeSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    class FlameXUSB : public OOIUSBInterface {
     public:
-        BlazeSpectrometerFeature(
-                ProgrammableSaturationFeature *saturationFeature);
-        virtual ~BlazeSpectrometerFeature();
+        FlameXUSB();
+        virtual ~FlameXUSB();
 
-        /* The Blaze gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);
-
-    private:
-        static const long INTEGRATION_TIME_MINIMUM;
-        static const long INTEGRATION_TIME_MAXIMUM;
-        static const long INTEGRATION_TIME_INCREMENT;
-        static const long INTEGRATION_TIME_BASE;
+        /* Inherited from OOIUSBInterface */
+        virtual bool open();
     };
 
 }
 
-#endif /* BLAZESPECTROMETERFEATURE_H */
+#endif /* FLAMEXUSB_H */

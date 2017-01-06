@@ -1,12 +1,7 @@
 /***************************************************//**
- * @file    BlazeUSBTransferHelper.h
+ * @file    FlameXUSB.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
- *
- * This class encapsulates the behavior of the USB4000 and HR4000
- * in the case where they are connected via a USB2.0 bus.  For the
- * case where the device is connected via USB 1.1, then the
- * OOIUSBSpectrumTransferHelper should be used instead.
  *
  * LICENSE:
  *
@@ -32,30 +27,47 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef BLAZEUSBTRANSFERHELPER_H
-#define BLAZEUSBTRANSFERHELPER_H
-
-#include "common/buses/usb/USBTransferHelper.h"
+#include "common/globals.h"
+#include "vendors/OceanOptics/buses/usb/FlameXUSB.h"
+#include "vendors/OceanOptics/buses/usb/OOIUSBProductID.h"
 #include "vendors/OceanOptics/buses/usb/OOIUSBEndpointMaps.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
+#include "vendors/OceanOptics/buses/usb/FlameXUSBTransferHelper.h"
 
-namespace seabreeze {
+using namespace seabreeze;
+using namespace oceanBinaryProtocol;
 
-    class BlazeUSBTransferHelper : public USBTransferHelper {
-    public:
-        BlazeUSBTransferHelper(USB *usb,
-            const OOIUSBBidrectionalEndpointMap &map);
-        virtual ~BlazeUSBTransferHelper();
+FlameXUSB::FlameXUSB() {
+    this->productID = BLAZE_USB_PID;
+}
 
-        /* Inherited */
-        virtual int receive(std::vector<byte> &buffer, unsigned int length)
-            throw (BusTransferException);
-        virtual int send(const std::vector<byte> &buffer, unsigned int length) const
-            throw (BusTransferException);
-        
-    private:
-        static const int WORD_SIZE_BYTES;
-    };
+FlameXUSB::~FlameXUSB() {
 
 }
 
-#endif /* BLAZEUSBTRANSFERHELPER_H */
+bool FlameXUSB::open() {
+    bool retval = false;
+
+    retval = OOIUSBInterface::open();
+
+    if(true == retval) {
+        OBPControlHint *controlHint = new OBPControlHint();
+        OBPSpectrumHint *spectrumHint = new OBPSpectrumHint();
+        OOIUSBSimpleDualEndpointMap endpointMap;
+
+        clearHelpers();
+
+        /* On the FlameX, there is only a single endpoint in
+         * each direction.  All hints map to the same kind of helper.
+         * The helper is special because there is a certain minimum block
+         * size that must be respected when communicating over USB.
+         */
+        addHelper(spectrumHint, new FlameXUSBTransferHelper(
+            (this->usb), endpointMap));
+        addHelper(controlHint, new FlameXUSBTransferHelper(
+            (this->usb), endpointMap));
+    }
+
+    return retval;
+}

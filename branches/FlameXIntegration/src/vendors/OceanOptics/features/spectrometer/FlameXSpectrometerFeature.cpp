@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    BlazeSpectrometerFeature.cpp
+ * @file    FlameXSpectrometerFeature.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/spectrometer/BlazeSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
@@ -42,30 +42,33 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-const long BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 1000;
-const long BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
-const long BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
-const long BlazeSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
+/* In the future, much of this will need to be probed */
+/* This value should have been located in constants file for non-probable */
+/* spectrometer characteristics, not buried here */
 
-BlazeSpectrometerFeature::BlazeSpectrometerFeature(
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 1000;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
+
+FlameXSpectrometerFeature::FlameXSpectrometerFeature(
         ProgrammableSaturationFeature *saturationFeature)
             : GainAdjustedSpectrometerFeature(saturationFeature) {
-
-    /* In the future, much of this will need to be probed */
-    this->numberOfPixels = 2088;
+    
+    this->numberOfPixels = 2136;
     this->maxIntensity = 65535;
 
-    this->integrationTimeMinimum = BlazeSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
-    this->integrationTimeMaximum = BlazeSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
-    this->integrationTimeBase = BlazeSpectrometerFeature::INTEGRATION_TIME_BASE;
-    this->integrationTimeIncrement = BlazeSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
+    this->integrationTimeMinimum = FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
+    this->integrationTimeMaximum = FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
+    this->integrationTimeBase = FlameXSpectrometerFeature::INTEGRATION_TIME_BASE;
+    this->integrationTimeIncrement = FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
     for(int i = 14; i <= 29; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
 
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
-            BlazeSpectrometerFeature::INTEGRATION_TIME_BASE);
+            FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
 
     Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
             (this->numberOfPixels * 2) + 64, this->numberOfPixels);
@@ -88,11 +91,11 @@ BlazeSpectrometerFeature::BlazeSpectrometerFeature(
 
 }
 
-BlazeSpectrometerFeature::~BlazeSpectrometerFeature() {
+FlameXSpectrometerFeature::~FlameXSpectrometerFeature() {
 
 }
 
-vector<double> *BlazeSpectrometerFeature::getWavelengths(const Protocol &protocol,
+vector<double> *FlameXSpectrometerFeature::getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException) {
 
     /* FIXME: this probably ought to attempt to create an instance based on

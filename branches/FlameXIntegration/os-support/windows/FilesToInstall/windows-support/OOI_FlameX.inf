@@ -1,5 +1,5 @@
 ;;
-;; OOI_Blaze.inf
+;; OOI_FlameX.inf
 ;; Copyright (C) 2015 Ocean Optics, Inc.  All rights reserved.
 
 ; Adapted from the example INF in the Microsoft document "How to Use WinUSB to Communicate with a USB Device"
@@ -95,8 +95,8 @@ WdfCoInstaller01007.dll=2
 
 [Strings]
 ProviderName="Ocean Optics, Inc."
-USB\MyDevice.DeviceDesc="Ocean Optics Blaze (WinUSB)"
-WinUSB_SvcDesc="Ocean Optics Blaze (WinUSB)"
+USB\MyDevice.DeviceDesc="Ocean Optics FlameX (WinUSB)"
+WinUSB_SvcDesc="Ocean Optics FlameX (WinUSB)"
 DISK_NAME="My Install Disk"
 DeviceClassString="Ocean Optics USB Devices"
 

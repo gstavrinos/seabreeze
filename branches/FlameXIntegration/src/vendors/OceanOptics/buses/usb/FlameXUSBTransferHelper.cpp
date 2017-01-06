@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    BlazeUSBTransferHelper.cpp
+ * @file    FlameXUSBTransferHelper.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -28,25 +28,25 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/buses/usb/BlazeUSBTransferHelper.h"
+#include "vendors/OceanOptics/buses/usb/FlameXUSBTransferHelper.h"
 #include <string.h> /* for memcpy() */
 
 using namespace seabreeze;
 using namespace std;
 
-const int BlazeUSBTransferHelper::WORD_SIZE_BYTES = 4;
+const int FlameXUSBTransferHelper::WORD_SIZE_BYTES = 4;
 
-BlazeUSBTransferHelper::BlazeUSBTransferHelper(USB *usb,
+FlameXUSBTransferHelper::FlameXUSBTransferHelper(USB *usb,
         const OOIUSBBidrectionalEndpointMap &map) : USBTransferHelper(usb) {
     this->sendEndpoint = map.getPrimaryOutEndpoint();
     this->receiveEndpoint = map.getPrimaryInEndpoint();
 }
 
-BlazeUSBTransferHelper::~BlazeUSBTransferHelper() {
+FlameXUSBTransferHelper::~FlameXUSBTransferHelper() {
 
 }
 
-int BlazeUSBTransferHelper::receive(vector<byte> &buffer,
+int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
         unsigned int length) throw (BusTransferException) {
     if(0 != (length % WORD_SIZE_BYTES)) {
         vector<byte> *inBuffer;
@@ -71,7 +71,7 @@ int BlazeUSBTransferHelper::receive(vector<byte> &buffer,
     }
 }
 
-int BlazeUSBTransferHelper::send(const std::vector<byte> &buffer,
+int FlameXUSBTransferHelper::send(const std::vector<byte> &buffer,
         unsigned int length) const throw (BusTransferException) {
     
     if(0 != (length % WORD_SIZE_BYTES)) {

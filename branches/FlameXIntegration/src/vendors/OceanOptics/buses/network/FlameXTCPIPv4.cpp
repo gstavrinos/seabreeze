@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    BlazeTCPIPv4.cpp
+ * @file    FlameXTCPIPv4.cpp
  * @date    February 2016
  * @author  Ocean Optics, Inc.
  *
@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include <cstddef>
-#include "vendors/OceanOptics/buses/network/BlazeTCPIPv4.h"
+#include "vendors/OceanOptics/buses/network/FlameXTCPIPv4.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
 #include "common/buses/network/IPv4SocketDeviceLocator.h"
@@ -38,11 +38,11 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-BlazeTCPIPv4::BlazeTCPIPv4() {
+FlameXTCPIPv4::FlameXTCPIPv4() {
     this->socket = Socket::create();
 }
 
-BlazeTCPIPv4::~BlazeTCPIPv4() {
+FlameXTCPIPv4::~FlameXTCPIPv4() {
     if(NULL != this->socket) {
         if(false == this->socket->isClosed()) {
             this->socket->close();
@@ -51,7 +51,7 @@ BlazeTCPIPv4::~BlazeTCPIPv4() {
     }
 }
 
-bool BlazeTCPIPv4::open() {
+bool FlameXTCPIPv4::open() {
     if(NULL == this->deviceLocator || NULL == this->socket) {
         return false;
     }
@@ -83,7 +83,7 @@ bool BlazeTCPIPv4::open() {
     return true;
 }
 
-void BlazeTCPIPv4::close() {
+void FlameXTCPIPv4::close() {
     if(NULL != this->socket) {
         this->socket->close();
     }
