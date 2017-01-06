@@ -165,6 +165,12 @@ namespace seabreeze {
             virtual ~PixelBinningFeatureFamily();
         };
 
+		class IntrospectionFeatureFamily : public FeatureFamily {
+		public:
+			IntrospectionFeatureFamily();
+			virtual ~IntrospectionFeatureFamily();
+		};
+
         class FeatureFamilies {
         public:
             const UndefinedFeatureFamily UNDEFINED;
@@ -188,6 +194,7 @@ namespace seabreeze {
             const DataBufferFeatureFamily DATA_BUFFER;
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
             const PixelBinningFeatureFamily PIXEL_BINNING;
+			const IntrospectionFeatureFamily INTROSPECTION;
 
             FeatureFamilies();
             ~FeatureFamilies();

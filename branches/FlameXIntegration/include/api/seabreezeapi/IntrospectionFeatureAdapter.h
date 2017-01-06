@@ -1,14 +1,14 @@
 /***************************************************//**
- * @file    AcquisitionDelayFeatureAdapter.h
- * @date    November 2015
+ * @file    IntrospectionFeatureAdapter.h
+ * @date    January 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows access to SeaBreeze
- * AcquisitionDelayFeatureInterface instances.
+ * IntrospectionFeatureInterface instances.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -30,34 +30,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H
-#define SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H
+#ifndef INTROSPECTION_FEATURE_ADAPTER_H
+#define INTROSPECTION_FEATURE_ADAPTER_H
 
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
+#include "vendors/OceanOptics/features/introspection/IntrospectionFeatureInterface.h"
 
 namespace seabreeze {
     namespace api {
 
-        class AcquisitionDelayFeatureAdapter
-                : public FeatureAdapterTemplate<AcquisitionDelayFeatureInterface> {
+        class IntrospectionFeatureAdapter
+                : public FeatureAdapterTemplate<IntrospectionFeatureInterface> {
         public:
-            AcquisitionDelayFeatureAdapter(AcquisitionDelayFeatureInterface *intf,
+            IntrospectionFeatureAdapter(IntrospectionFeatureInterface *intf,
                 const FeatureFamily &f, Protocol *p, Bus *b,
                 unsigned short instanceIndex);
 
-            virtual ~AcquisitionDelayFeatureAdapter();
+            virtual ~IntrospectionFeatureAdapter();
 
-            /* Acquisition delay functions */
-            unsigned long getAcquisitionDelayIncrementMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMaximumMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMinimumMicroseconds(int *errorCode);
-            unsigned long getAcquisitionDelayMicroseconds(int *errorCode);
-            void setAcquisitionDelayMicroseconds(int *errorCode, const unsigned long delay_usec);
+            /* example functions */
+            unsigned long getIntrospection_example(int *errorCode);
+            void setIntrospection_example(int *errorCode, const unsigned long delay_usec);
         };
 
     } /* end namespace api */
 } /* end namespace seabreeze */
 
-#endif /* SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H */
+#endif /* INTROSPECTION_FEATURE_ADAPTER_H */
 
