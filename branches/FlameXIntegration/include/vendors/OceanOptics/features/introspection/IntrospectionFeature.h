@@ -38,35 +38,23 @@
 
 namespace seabreeze {
 
-    class IntrospectionFeature : public FeatureImpl,
-            public IntrospectionFeatureInterface {
+    class IntrospectionFeature : public FeatureImpl, public IntrospectionFeatureInterface {
     public:
-        IntrospectionFeature(std::vector<ProtocolHelper *> helpers);
+		IntrospectionFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~IntrospectionFeature();
 
-        virtual void setIntrospection_example(
-                    const Protocol &protocol, const Bus &bus,
-                    const unsigned long test)
-                    throw (FeatureException);
+		virtual uint16_t getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
-		virtual unsigned long getIntrospection_example(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
+		virtual std::vector<uint32_t> *getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual std::vector<uint32_t> *getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual std::vector<uint32_t> *getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();
 
-        /* Methods that remain pure virtual since the protocol interface does
-         * not necessarily provide clean methods for these.  A derived
-         * class will be necessary to specify the limits.
-         */
-        virtual unsigned long anotherIntrospectionExample(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-
-
     protected:
-        unsigned long bogus;
+        
     };
 
 } /* end namespace seabreeze */

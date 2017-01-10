@@ -40,7 +40,8 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-TemperatureFeature::TemperatureFeature(vector<ProtocolHelper *> helpers) {
+TemperatureFeature::TemperatureFeature(vector<ProtocolHelper *> helpers) 
+{
     vector<ProtocolHelper *>::iterator iter;
 
     for(iter = helpers.begin(); iter != helpers.end(); iter++) {
@@ -56,7 +57,8 @@ TemperatureFeature::~TemperatureFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned char TemperatureFeature::readTemperatureCount(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+unsigned char TemperatureFeature::readTemperatureCount(const Protocol &protocol, const Bus &bus) throw (FeatureException) 
+{
 
     TemperatureProtocolInterface *temperaturePI = NULL;
 	unsigned char temperatureCount;

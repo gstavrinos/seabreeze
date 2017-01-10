@@ -80,17 +80,31 @@ namespace seabreeze {
         static const unsigned int OBP_SET_PARTIAL_SPECTRUM_MODE     = 0x00102010;
         static const unsigned int OBP_GET_PARTIAL_SPECTRUM_NOW      = 0x00102080;
 
-// Integration, binning, lamps, shutters etc.
+// trigger modes
         static const unsigned int OBP_SET_ITIME_USEC                = 0x00110010;
         static const unsigned int OBP_SET_TRIG_MODE                 = 0x00110110;
         static const unsigned int OBP_SIMULATE_TRIG_PULSE           = 0x00110120;
+
+// optical detector characteristics
+		static const unsigned int OBP_GET_NUMBER_OF_PIXELS			= 0x00110220;
+		static const unsigned int OBP_GET_ACTIVE_PIXEL_RANGES		= 0x00110221;
+		static const unsigned int OBP_GET_OPTICAL_DARK_PIXEL_RANGES	= 0x00110222;
+		static const unsigned int OBP_GET_ELECTRIC_DARK_PIXEL_RANGES= 0x00110223;
+
+// Pixel binning
         static const unsigned int OBP_GET_PIXEL_BINNING_FACTOR      = 0x00110280;
         static const unsigned int OBP_GET_MAX_BINNING_FACTOR        = 0x00110281;
         static const unsigned int OBP_GET_DEFAULT_BINNING_FACTOR    = 0x00110285;
         static const unsigned int OBP_SET_PIXEL_BINNING_FACTOR      = 0x00110290;
         static const unsigned int OBP_SET_DEFAULT_BINNING_FACTOR    = 0x00110295;
+
+// lamp enable
         static const unsigned int OBP_SET_LAMP_ENABLE               = 0x00110410;
+
+// acquisition (trigger) delay
         static const unsigned int OBP_SET_TRIG_DELAY_USEC           = 0x00110510;
+
+// shutter control 
         static const unsigned int OBP_SET_SHUTTER                   = 0x00110610;
 
 // Spectrum filtering and averaging

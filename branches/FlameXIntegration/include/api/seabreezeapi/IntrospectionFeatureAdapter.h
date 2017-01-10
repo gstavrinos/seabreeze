@@ -43,14 +43,18 @@ namespace seabreeze {
                 : public FeatureAdapterTemplate<IntrospectionFeatureInterface> {
         public:
             IntrospectionFeatureAdapter(IntrospectionFeatureInterface *intf,
-                const FeatureFamily &f, Protocol *p, Bus *b,
+                const FeatureFamily &f, 
+				Protocol *p, 
+				Bus *b,
                 unsigned short instanceIndex);
 
             virtual ~IntrospectionFeatureAdapter();
 
-            /* example functions */
-            unsigned long getIntrospection_example(int *errorCode);
-            void setIntrospection_example(int *errorCode, const unsigned long delay_usec);
+			uint16_t getNumberOfPixels(int *errorCode);
+			int getActivePixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
+			int getElectricDarkPixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
+			int getOpticalDarkPixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
+
         };
 
     } /* end namespace api */

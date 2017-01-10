@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPIntrospectionProtocol.h
+ * @file    OBPGetElectricDarkPixelRangesExchange.cpp
  * @date    January 2017
  * @author  Ocean Optics, Inc.
  *
@@ -27,34 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPINTROSPECTIONPROTOCOL_H
-#define OBPINTROSPECTIONPROTOCOL_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetElectricDarkPixelRangesExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/IntrospectionProtocolInterface.h"
-#include <vector>
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
 
-namespace seabreeze 
-{
-    namespace oceanBinaryProtocol 
-	{
-        class OBPIntrospectionProtocol : public IntrospectionProtocolInterface 
-		{
-			public:
-				OBPIntrospectionProtocol();
-				virtual ~OBPIntrospectionProtocol();
+OBPGetElectricDarkPixelRangesExchange::OBPGetElectricDarkPixelRangesExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_ELECTRIC_DARK_PIXEL_RANGES;
+    this->payload.resize(sizeof(int));
+}
 
-				virtual uint16_t getNumberOfPixels(const Bus &bus) throw (ProtocolException);
+OBPGetElectricDarkPixelRangesExchange::~OBPGetElectricDarkPixelRangesExchange() {
 
-				virtual std::vector<uint32_t> *getActivePixelRanges(const Bus &bus) throw (ProtocolException);
-
-				virtual std::vector<uint32_t> *getElectricDarkPixelRanges(const Bus &bus) throw (ProtocolException);
-
-				virtual std::vector<uint32_t> *getOpticalDarkPixelRanges(const Bus &bus) throw (ProtocolException);
-        };
-    } /* end namespace oceanBinaryProtocol */
-} /* end namespace seabreeze */
-
-#endif /* OBPINTROSPECTIONPROTOCOL_H */
+}
 

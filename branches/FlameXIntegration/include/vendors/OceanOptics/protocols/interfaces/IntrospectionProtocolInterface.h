@@ -46,15 +46,10 @@ namespace seabreeze {
         IntrospectionProtocolInterface(Protocol *protocol);
         virtual ~IntrospectionProtocolInterface();
 
-        virtual void setIntrospection_example(const Bus &bus,
-            const unsigned long delayMicros) throw (ProtocolException) = 0;
-
-        /* At this point, the supported devices don't have protocol
-         * messages to get the current delay or the range of valid
-         * settings.  Later, such functions could be added here if
-         * they are needed, but for now the protocol interface is
-         * being kept to a minimum.
-         */
+		virtual uint16_t getNumberOfPixels(const Bus &bus) throw (ProtocolException) = 0;
+		virtual std::vector<uint32_t> *getActivePixelRanges(const Bus &bus) throw (ProtocolException) = 0;
+		virtual std::vector<uint32_t> *getElectricDarkPixelRanges(const Bus &bus) throw (ProtocolException) = 0;
+		virtual std::vector<uint32_t> *getOpticalDarkPixelRanges(const Bus &bus) throw (ProtocolException) = 0;
 
     };
 

@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPIntrospectionProtocol.h
+ * @file    OBPGetNumberOfPixelsExchange.h
  * @date    January 2017
  * @author  Ocean Optics, Inc.
  *
@@ -27,34 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef OBPINTROSPECTIONPROTOCOL_H
-#define OBPINTROSPECTIONPROTOCOL_H
+#ifndef OBPGETNUMBEROFPIXELSEXCHANGE_H
+#define OBPGETNUMBEROFPIXELSEXCHANGE_H
 
-#include "common/SeaBreeze.h"
-#include "common/buses/Bus.h"
-#include "vendors/OceanOptics/protocols/interfaces/IntrospectionProtocolInterface.h"
-#include <vector>
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
-namespace seabreeze 
-{
-    namespace oceanBinaryProtocol 
-	{
-        class OBPIntrospectionProtocol : public IntrospectionProtocolInterface 
-		{
-			public:
-				OBPIntrospectionProtocol();
-				virtual ~OBPIntrospectionProtocol();
-
-				virtual uint16_t getNumberOfPixels(const Bus &bus) throw (ProtocolException);
-
-				virtual std::vector<uint32_t> *getActivePixelRanges(const Bus &bus) throw (ProtocolException);
-
-				virtual std::vector<uint32_t> *getElectricDarkPixelRanges(const Bus &bus) throw (ProtocolException);
-
-				virtual std::vector<uint32_t> *getOpticalDarkPixelRanges(const Bus &bus) throw (ProtocolException);
+namespace seabreeze {
+    namespace oceanBinaryProtocol {
+        class OBPGetNumberOfPixelsExchange : public OBPQuery {
+        public:
+            OBPGetNumberOfPixelsExchange();
+            virtual ~OBPGetNumberOfPixelsExchange();
         };
-    } /* end namespace oceanBinaryProtocol */
-} /* end namespace seabreeze */
+    }
+}
 
-#endif /* OBPINTROSPECTIONPROTOCOL_H */
-
+#endif /* OBPGETNUMBEROFPIXELSEXCHANGE_H */

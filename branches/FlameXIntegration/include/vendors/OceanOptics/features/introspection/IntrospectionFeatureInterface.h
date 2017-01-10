@@ -41,13 +41,11 @@ namespace seabreeze {
     public:
         virtual ~IntrospectionFeatureInterface();
 		
-        virtual unsigned long getIntrospection_example(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) = 0;
-        virtual void setIntrospection_example(
-                    const Protocol &Protocol, const Bus &bus,
-                    const unsigned long delayMicros)
-                    throw (FeatureException) = 0;
+		virtual unsigned short int getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
+		virtual std::vector<unsigned int> *getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
+		virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
+		virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
+
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */
