@@ -51,10 +51,10 @@ const long FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-FlameXSpectrometerFeature::FlameXSpectrometerFeature(
-        ProgrammableSaturationFeature *saturationFeature)
+FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *introspection, ProgrammableSaturationFeature *saturationFeature)
             : GainAdjustedSpectrometerFeature(saturationFeature) {
     
+	myIntrospection = introspection;
     this->numberOfPixels = 2136;
     this->maxIntensity = 65535;
 

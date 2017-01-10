@@ -31,13 +31,13 @@
 #define FLAMEXSPECTROMETERFEATURE_H
 
 #include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
 
 namespace seabreeze {
 
     class FlameXSpectrometerFeature : public GainAdjustedSpectrometerFeature {
     public:
-        FlameXSpectrometerFeature(
-                ProgrammableSaturationFeature *saturationFeature);
+        FlameXSpectrometerFeature(IntrospectionFeature *introspection, ProgrammableSaturationFeature *saturationFeature);
         virtual ~FlameXSpectrometerFeature();
 
         /* The FlameX gets wavelengths a bit differently */
@@ -49,6 +49,7 @@ namespace seabreeze {
         static const long INTEGRATION_TIME_MAXIMUM;
         static const long INTEGRATION_TIME_INCREMENT;
         static const long INTEGRATION_TIME_BASE;
+
     };
 
 }

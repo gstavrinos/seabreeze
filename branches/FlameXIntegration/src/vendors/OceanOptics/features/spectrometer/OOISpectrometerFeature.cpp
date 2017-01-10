@@ -256,8 +256,16 @@ vector<SpectrometerTriggerMode *> OOISpectrometerFeature::getTriggerModes() cons
     return this->triggerModes;
 }
 
-vector<int> OOISpectrometerFeature::getElectricDarkPixelIndices() const {
+vector<unsigned int> OOISpectrometerFeature::getElectricDarkPixelIndices() const {
     return this->electricDarkPixelIndices;
+}
+
+vector<unsigned int> OOISpectrometerFeature::getOpticalDarkPixelIndices() const {
+	return this->opticalDarkPixelIndices;
+}
+
+vector<unsigned int> OOISpectrometerFeature::getActivePixelIndices() const {
+	return this->activePixelIndices;
 }
 
 long OOISpectrometerFeature::getIntegrationTimeMinimum() const {
@@ -278,6 +286,22 @@ int OOISpectrometerFeature::getNumberOfPixels() const {
 
 int OOISpectrometerFeature::getMaximumIntensity() const {
     return this->maxIntensity;
+}
+
+
+
+bool OOISpectrometerFeature::initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+{
+	bool result = false;
+	if (myIntrospection != nullptr)
+	{
+		this->numberOfPixels = myIntrospection->getNumberOfPixels(protocol, bus);
+		this->activePixelIndices = *(myIntrospection->getActivePixelRanges(protocol, bus));
+		this->electricDarkPixelIndices = *(myIntrospection->getElectricDarkPixelRanges(protocol, bus));
+		this->opticalDarkPixelIndices = *(myIntrospection->getOpticalDarkPixelRanges(protocol, bus));
+		result = true;
+	}
+	return result;
 }
 
 FeatureFamily OOISpectrometerFeature::getFeatureFamily() {

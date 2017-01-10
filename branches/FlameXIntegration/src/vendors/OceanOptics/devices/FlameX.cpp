@@ -75,12 +75,21 @@ FlameX::FlameX() {
     this->protocols.push_back(new OceanBinaryProtocol());
 
     /* Set up the features that comprise this device */
-    
+  
+
+	/* Add programmable saturation protocol*/
     vector<ProtocolHelper *> saturationHelpers;
-    saturationHelpers.push_back(new OBPProgrammableSaturationProtocol());
-    ProgrammableSaturationFeature *saturation =
-            new ProgrammableSaturationFeatureImpl(saturationHelpers);  
-    this->features.push_back(new FlameXSpectrometerFeature(saturation));
+	ProgrammableSaturationFeature *saturation =
+		new ProgrammableSaturationFeatureImpl(saturationHelpers);
+    saturationHelpers.push_back(new OBPProgrammableSaturationProtocol()); 
+
+	/* Add introspection feature*/
+	vector<ProtocolHelper *> introspectionHelpers;
+	introspectionHelpers.push_back(new OBPIntrospectionProtocol());
+	IntrospectionFeature *introspection = new IntrospectionFeature(introspectionHelpers);
+	this->features.push_back(introspection);
+
+    this->features.push_back(new FlameXSpectrometerFeature(introspection, saturation));
 
     /* Add serial number feature */
     vector<ProtocolHelper *> serialNumberHelpers;
@@ -101,11 +110,6 @@ FlameX::FlameX() {
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());
     this->features.push_back(new StrobeLampFeature(lampHelpers));
-
-	/*Add introspection feature*/
-	vector<ProtocolHelper *> introspectionHelpers;
-	introspectionHelpers.push_back(new OBPIntrospectionProtocol());
-	this->features.push_back(new IntrospectionFeature(introspectionHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }

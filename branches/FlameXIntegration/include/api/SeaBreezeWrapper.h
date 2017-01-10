@@ -84,6 +84,9 @@ public:
 
     // advanced features
     int    getElectricDarkPixelIndices(int index, int *errorCode, int *indices, int length);
+	int    getOpticalDarkPixelIndices(int index, int *errorCode, int *indices, int length);
+	int    getActivePixelIndices(int index, int *errorCode, int *indices, int length);
+	int    getNumberOfPixels(int index, int *errorCode);
     void   setTriggerMode            (int index, int *errorCode, int mode);
     void   setStrobeEnable           (int index, int *errorCode, unsigned char strobe_enable);
     void   setShutterOpen            (int index, int *errorCode, unsigned char opened);
@@ -611,6 +614,19 @@ extern "C" {
     DLL_DECL int
     seabreeze_get_serial_number(int index, int *error_code, char *buffer, int buffer_length);
 
+	/**
+	* @brief This returns the number of pixels provided by the detector
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*        error codes.
+	* @return unsigned int: An integer denoting the number of pixels provided by the detector
+	*
+	* Note that not all spectrometers provide the number of detector pixels; in that case,
+	* this function will return zero.
+	*/
+	DLL_DECL unsigned int
+		seabreeze_get_number_of_pixels(int index, int *error_code);
+
     /**
      * @brief This fills in the provided array (up to the given length) with the indices
      *        of the pixels that are electrically active but optically masked
@@ -624,12 +640,50 @@ extern "C" {
      *        be no larger than the number of ints allocated in the indices array)
      * @return int: An integer denoting the number of indices written into the indices buffer
      *
-     * Note that not all detectors have optically masked pixels; in that case,
+     * Note that not all detectors have electrically dark pixels; in that case,
      * this function will return zero.
      */
     DLL_DECL int
     seabreeze_get_electric_dark_pixel_indices(int index, int *error_code,
         int *indices, int length);
+
+	/**
+	* @brief This fills in the provided array (up to the given length) with the indices
+	*        of the pixels that are optically active and  masked
+	*        (a.k.a. optical dark pixels).
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*        error codes.
+	* @param indices (Output) A pre-allocated array of ints into which the pixel indices
+	*        will be copied
+	* @param length (Input) The number of values to copy into the indices array (this should
+	*        be no larger than the number of ints allocated in the indices array)
+	* @return int: An integer denoting the number of indices written into the indices buffer
+	*
+	* Note that not all detectors have optically dark pixels; in that case,
+	* this function will return zero.
+	*/
+	DLL_DECL int
+		seabreeze_get_optical_dark_pixel_indices(int index, int *error_code,
+			int *indices, int length);
+
+	/**
+	* @brief This fills in the provided array (up to the given length) with the indices
+	*        of the active pixels
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*        error codes.
+	* @param indices (Output) A pre-allocated array of ints into which the pixel indices
+	*        will be copied
+	* @param length (Input) The number of values to copy into the indices array (this should
+	*        be no larger than the number of ints allocated in the indices array)
+	* @return int: An integer denoting the number of indices written into the indices buffer
+	*
+	* Note that not all detectors provide indicies of active pixels.
+	*/
+	DLL_DECL int
+		seabreeze_get_active_pixel_indices(int index, int *error_code,
+			int *indices, int length);
 
     /**
      * @brief Shutdown SeaBreeze completely, releasing all resources and destroying
