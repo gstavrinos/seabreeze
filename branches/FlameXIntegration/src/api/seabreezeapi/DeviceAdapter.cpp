@@ -1037,7 +1037,7 @@ IntrospectionFeatureAdapter *DeviceAdapter::getIntrospectionFeatureByID(long fea
 		introspectionFeatures, featureID);
 }
 
-unsigned short DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode)
+uint16_t DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode)
 {
 	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
 	if (NULL == feature) {

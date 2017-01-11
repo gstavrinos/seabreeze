@@ -37,8 +37,8 @@ using namespace seabreeze::oceanBinaryProtocol;
 
 OBPGetNumberOfPixelsExchange::OBPGetNumberOfPixelsExchange() {
     this->hints->push_back(new OBPControlHint());
-    this->messageType = OBPMessageTypes::OBP_GET_ACTIVE_PIXEL_RANGES;
-    this->payload.resize(sizeof(int));
+    this->messageType = OBPMessageTypes::OBP_GET_NUMBER_OF_PIXELS;
+    this->payload.resize(0);
 }
 
 OBPGetNumberOfPixelsExchange::~OBPGetNumberOfPixelsExchange() {
