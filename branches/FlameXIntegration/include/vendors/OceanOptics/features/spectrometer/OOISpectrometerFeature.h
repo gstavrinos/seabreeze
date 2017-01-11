@@ -40,6 +40,8 @@
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
 #include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
 
+
+
 namespace seabreeze {
 
     class OOISpectrometerFeature : public FeatureImpl,
@@ -50,7 +52,7 @@ namespace seabreeze {
         /* Request and read out a spectrum formatted into intensity (A/D counts) */
         virtual std::vector<double> *getSpectrum(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
-
+		
         /* Request and read out the raw spectrum data stream */
         virtual std::vector<byte> *getUnformattedSpectrum(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
@@ -77,8 +79,8 @@ namespace seabreeze {
         /* Setting the external trigger mode for the spectrometer */
         virtual void setTriggerMode(const Protocol &protocol,
                 const Bus &bus, SpectrometerTriggerMode &mode) throw (FeatureException);
-
-        virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const;
+	
+		virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const;
 
 		virtual std::vector<unsigned int> getActivePixelIndices() const;
         virtual std::vector<unsigned int> getElectricDarkPixelIndices() const;
@@ -90,8 +92,6 @@ namespace seabreeze {
 
         virtual int getNumberOfPixels() const;
         virtual int getMaximumIntensity() const;
-
-		virtual bool initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

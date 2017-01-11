@@ -61,6 +61,7 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 
 /* Create a type called "testfunc_t" that is just a pointer to any function that
 * has this signature:  void func(long)
@@ -87,7 +88,8 @@ static testfunc_t __test_functions[] = {
 	test_continuous_strobe_feature,
 	test_data_buffer_feature,
 	test_acquisition_delay_feature,
-	test_pixel_binning_feature
+	test_pixel_binning_feature,
+	test_miscellaneous_commands
 };
 
 /* Utilities to count errors and unsupported features */
@@ -1772,6 +1774,17 @@ void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int
 	free(pixel_binning_ids);
 
 	printf("\tFinished testing pixel binning capabilities\n");
+}
+
+
+void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+	printf("\n\tTesting miscellaneous commands:\n");
+	char ipAddress[] = "192.168.1.1";
+	int port = 54321;
+
+	int result = sbapi_add_TCPIPv4_device_location("FLAMEX", ipAddress, port);
+	printf("\tFinished testing miscellaneous commands. \n");
 }
 
 

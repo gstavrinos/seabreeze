@@ -63,6 +63,44 @@ OBPSpectrometerProtocol::~OBPSpectrometerProtocol() {
     delete this->triggerModeExchange;
 }
 
+void OBPSpectrometerProtocol::Initialize(
+	OBPIntegrationTimeExchange *integrationTime,
+	Transfer *requestSpectrum,
+	Transfer *unformattedSpectrum,
+	Transfer *spectrumTransfer,
+	OBPTriggerModeExchange *triggerMode)
+{
+	if (this->integrationTimeExchange != nullptr)
+	{
+		delete integrationTimeExchange;
+	}
+	this->integrationTimeExchange = integrationTime;
+
+	if (this->unformattedSpectrumExchange != nullptr)
+	{
+		delete unformattedSpectrumExchange;
+	}
+	this->unformattedSpectrumExchange = unformattedSpectrum;
+
+	if (this->requestSpectrumExchange != nullptr)
+	{
+		delete requestSpectrumExchange;
+	}
+	this->requestSpectrumExchange = requestSpectrum;
+
+	if (this->spectrumTransferExchange != nullptr)
+	{
+		delete spectrumTransferExchange;
+	}
+	this->spectrumTransferExchange = spectrumTransfer;
+
+	if (this->triggerModeExchange != nullptr)
+	{
+		delete triggerModeExchange;
+	}
+	this->triggerModeExchange = triggerMode;
+
+}
 vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
         throw (ProtocolException) {
     Data *result;

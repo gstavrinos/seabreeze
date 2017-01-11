@@ -50,6 +50,13 @@ namespace seabreeze {
                 OBPTriggerModeExchange *triggerMode);
         virtual ~OBPSpectrometerProtocol();
 
+		void Initialize(
+			OBPIntegrationTimeExchange *integrationTimeExchange,
+			Transfer *requestSpectrumExchange,
+			Transfer *unformattedSpectrumExchange,
+			Transfer *spectrumTransferExchange,
+			OBPTriggerModeExchange *triggerMode);
+
         /* FIXME: instead of returning primitive vectors, should this return Data* so that
          * metadata (units, etc.) can also be attached?
          */
@@ -64,14 +71,14 @@ namespace seabreeze {
             SpectrometerTriggerMode &mode) throw (ProtocolException);
 
     private:
-        OBPIntegrationTimeExchange *integrationTimeExchange;
+        OBPIntegrationTimeExchange *integrationTimeExchange = nullptr;
         /* These are Transfers instead of Exchanges so that we can call getHints() on them.
          * if getHints is promoted up to the level of Exchange, then these can revert back.
          */
-        Transfer *unformattedSpectrumExchange;
-        Transfer *requestSpectrumExchange;
-        Transfer *spectrumTransferExchange;
-        OBPTriggerModeExchange *triggerModeExchange;
+        Transfer *unformattedSpectrumExchange = nullptr;
+        Transfer *requestSpectrumExchange = nullptr;
+        Transfer *spectrumTransferExchange = nullptr;
+        OBPTriggerModeExchange *triggerModeExchange = nullptr;
     };
   }
 }

@@ -63,31 +63,36 @@ FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *intro
     this->integrationTimeBase = FlameXSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 14; i <= 29; i++) {
+    for(int i = 14; i <= 29; i++) 
+	{
         this->electricDarkPixelIndices.push_back(i);
     }
 
-    OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
-            FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
+	OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
+		(numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *formattedSpectrum = new OBPReadSpectrumWithGainExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels, this);
+	Transfer *formattedSpectrum = new OBPReadSpectrumWithGainExchange((numberOfPixels * 2) + 64, this->numberOfPixels, this);
 
-    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
 
-    OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
+	OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
-    this->protocols.push_back(obpProtocol);
+	OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(
+		intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
+		triggerMode);
+	
+	this->protocols.push_back(obpProtocol);
     
-    this->triggerModes.push_back(
-        new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
+	this->triggerModes.push_back(
+		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
+	this->triggerModes.push_back(
+		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_LEVEL));
+	this->triggerModes.push_back(
+		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SYNCHRONIZATION));
+	this->triggerModes.push_back(
+		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_EDGE));
 
 }
 
@@ -108,3 +113,43 @@ vector<double> *FlameXSpectrometerFeature::getWavelengths(const Protocol &protoc
 
     return WaveCal.readWavelengths(protocol, bus);
 }
+
+bool FlameXSpectrometerFeature::initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+{
+	bool result = false;
+	if (myIntrospection != nullptr)
+	{
+		this->numberOfPixels = myIntrospection->getNumberOfPixels(protocol, bus);
+		this->activePixelIndices = *(myIntrospection->getActivePixelRanges(protocol, bus));
+		this->electricDarkPixelIndices = *(myIntrospection->getElectricDarkPixelRanges(protocol, bus));
+		this->opticalDarkPixelIndices = *(myIntrospection->getOpticalDarkPixelRanges(protocol, bus));
+		
+		for (auto myProtocol : this->protocols)
+		{
+			if (myProtocol->getProtocol().equals(protocol))
+			{
+
+				OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
+
+				Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
+					(numberOfPixels * 2) + 64, this->numberOfPixels);
+
+				Transfer *formattedSpectrum = new OBPReadSpectrumWithGainExchange((numberOfPixels * 2) + 64, this->numberOfPixels, this);
+
+				Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+
+				OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
+
+				OBPSpectrometerProtocol *anOBP = (OBPSpectrometerProtocol *)myProtocol;
+				
+				anOBP->Initialize(intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum, triggerMode);
+
+			}
+		}
+		
+		result = true;
+	}
+	return result;
+}
+
+

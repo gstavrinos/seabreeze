@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetElectricDarkPixelRangesExchange::OBPGetElectricDarkPixelRangesExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_ELECTRIC_DARK_PIXEL_RANGES;
-    this->payload.resize(sizeof(int));
+    this->payload.resize(0); //no data to be sent
 }
 
 OBPGetElectricDarkPixelRangesExchange::~OBPGetElectricDarkPixelRangesExchange() {
