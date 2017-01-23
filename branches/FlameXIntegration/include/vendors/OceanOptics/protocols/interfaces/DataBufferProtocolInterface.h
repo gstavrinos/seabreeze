@@ -56,6 +56,10 @@ namespace seabreeze {
         virtual unsigned long getBufferCapacity(const Bus &bus,
                 unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
+                
+        virtual unsigned char getBufferingEnable(const Bus &bus,
+                unsigned char bufferIndex)
+                throw (ProtocolException) = 0;
 
         virtual unsigned long getBufferCapacityMinimum(const Bus &bus,
                 unsigned char bufferIndex)
@@ -68,6 +72,11 @@ namespace seabreeze {
         virtual void setBufferCapacity(const Bus &bus,
                 unsigned char bufferIndex,
                 const unsigned long capacity)
+                throw (ProtocolException) = 0;
+                
+        virtual void setBufferingEnable(const Bus &bus,
+                unsigned char bufferIndex,
+                const unsigned char capacity)
                 throw (ProtocolException) = 0;
     };
 

@@ -60,6 +60,7 @@
   OBPIrradCalProtocol.cpp
   OBPIntrospectionProtocol.cpp
   OBPDataBufferProtocol.cpp
+..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPDataBufferProtocol.cpp(159): warning C4244: 'return': conversion from 'unsigned long' to 'unsigned char', possible loss of data
   OBPContinuousStrobeProtocol.cpp
   OBPAcquisitionDelayProtocol.cpp
   Generating Code...
@@ -76,6 +77,7 @@
   OBPSetIrradCollectionAreaExchange.cpp
   OBPSetIrradCalExchange.cpp
   OBPSetDefaultPixelBinningFactorExchange.cpp
+  OBPSetDataBufferingEnableExchange.cpp
   OBPSetDataBufferCapacityExchange.cpp
   OBPSetBoxcarWidthExchange.cpp
   OBPSetAcquisitionDelayExchange.cpp
@@ -83,9 +85,9 @@
   OBPRequestRawSpectrumExchange.cpp
   OBPRequestBufferedSpectrum32AndMetadata.cpp
   OBPReadSpectrumWithGainExchange.cpp
-  OBPReadSpectrumExchange.cpp
   Generating Code...
   Compiling...
+  OBPReadSpectrumExchange.cpp
   OBPReadSpectrum32AndMetadataExchange.cpp
   OBPReadRawSpectrumExchange.cpp
   OBPReadRawSpectrum32AndMetadataExchange.cpp
@@ -105,9 +107,9 @@
   OBPGetStrayLightCoeffExchange.cpp
   OBPGetSerialNumberMaximumLengthExchange.cpp
   OBPGetSerialNumberExchange.cpp
-  OBPGetScansToAverageExchange.cpp
   Generating Code...
   Compiling...
+  OBPGetScansToAverageExchange.cpp
   OBPGetSaturationExchange.cpp
   OBPGetPixelBinningExchange.cpp
   OBPGetOpticalDarkPixelRangesExchange.cpp
@@ -127,10 +129,11 @@
   OBPGetHardwareRevisionExchange.cpp
   OBPGetFirmwareRevisionExchange.cpp
   OBPGetElectricDarkPixelRangesExchange.cpp
-  OBPGetDefaultPixelBinningExchange.cpp
   Generating Code...
   Compiling...
+  OBPGetDefaultPixelBinningExchange.cpp
   OBPGetDataBufferMaximumCapacityExchange.cpp
+  OBPGetDataBufferingEnableExchange.cpp
   OBPGetDataBufferCountExchange.cpp
   OBPGetDataBufferCapacityExchange.cpp
   OBPGetBoxcarWidthExchange.cpp
@@ -148,10 +151,10 @@
   SpectrumProcessingProtocolInteface.cpp
   SpectrometerProtocolInterface.cpp
   ShutterProtocolInterface.cpp
-  SerialNumberProtocolInterface.cpp
-  RevisionProtocolInteface.cpp
   Generating Code...
   Compiling...
+  SerialNumberProtocolInterface.cpp
+  RevisionProtocolInteface.cpp
   ProgrammableSaturationProtocolInteface.cpp
   PixelBinningProtocolInterface.cpp
   OpticalBenchProtocolInteface.cpp
@@ -170,10 +173,10 @@
   ThermoElectricFeatureBase.cpp
   QEProThermoElectricFeature.cpp
   TemperatureFeature.cpp
-  StrayLightCoeffsFeature.cpp
-  SpectrumProcessingFeature.cpp
   Generating Code...
   Compiling...
+  StrayLightCoeffsFeature.cpp
+  SpectrumProcessingFeature.cpp
   VentanaSpectrometerFeature.cpp
   USB4000SpectrometerFeature.cpp
   USB2000SpectrometerFeature.cpp
@@ -198,10 +201,10 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   NIRQuest256SpectrometerFeature.cpp
   MayaLSLSpectrometerFeature.cpp
   Maya2000SpectrometerFeature.cpp
-  Maya2000ProSpectrometerFeature.cpp
-  JazSpectrometerFeature.cpp
   Generating Code...
   Compiling...
+  Maya2000ProSpectrometerFeature.cpp
+  JazSpectrometerFeature.cpp
   HR4000SpectrometerFeature.cpp
   HR2000SpectrometerFeature.cpp
   HR2000PlusSpectrometerFeature.cpp
@@ -221,10 +224,10 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   VentanaLightSourceFeature.cpp
   StrobeLampFeature.cpp
   LightSourceFeatureImpl.cpp
-  LightSourceFeatureBase.cpp
-  IrradCalFeature.cpp
   Generating Code...
   Compiling...
+  LightSourceFeatureBase.cpp
+  IrradCalFeature.cpp
   IntrospectionFeature.cpp
   FPGARegisterFeature.cpp
   WavelengthEEPROMSlotFeature_QE65000.cpp
@@ -244,14 +247,17 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   EEPROMSlotFeatureBase.cpp
   EEPROMSlotFeature.cpp
   QEProDataBufferFeature.cpp
+  FlameXDataBufferFeature.cpp
   DataBufferFeatureBase.cpp
+..\..\..\..\src\vendors\OceanOptics\features\data_buffer\DataBufferFeatureBase.cpp(176): warning C4244: 'return': conversion from 'seabreeze::DataBufferElementCount_t' to 'seabreeze::DataBufferIndex_t', possible loss of data
+..\..\..\..\src\vendors\OceanOptics\features\data_buffer\DataBufferFeatureBase.cpp(285): warning C4244: 'argument': conversion from 'const seabreeze::DataBufferElementCount_t' to 'const unsigned char', possible loss of data
   ContinuousStrobeFeature_FPGA.cpp
   ContinuousStrobeFeature.cpp
+  Generating Code...
+  Compiling...
   STSAcquisitionDelayFeature.cpp
   AcquisitionDelayFeature_FPGA.cpp
   AcquisitionDelayFeature.cpp
-  Generating Code...
-  Compiling...
   Ventana.cpp
   USB4000.cpp
   USB2000Plus.cpp
@@ -269,11 +275,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   Jaz.cpp
   HR4000.cpp
   HR2000Plus.cpp
+  Generating Code...
+  Compiling...
   HR2000.cpp
   FlameNIR.cpp
   FlameX.cpp
-  Generating Code...
-  Compiling...
   Apex.cpp
   VentanaUSB.cpp
   USB4000USB.cpp
@@ -291,11 +297,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   OOIUSBControlTransferHelper.cpp
   OOIUSB4KSpectrumTransferHelper.cpp
   NIRQuest512USB.cpp
+  Generating Code...
+  Compiling...
   NIRQuest256USB.cpp
   MayaLSLUSB.cpp
   Maya2000USB.cpp
-  Generating Code...
-  Compiling...
   Maya2000ProUSB.cpp
   JazUSB.cpp
   HR4000USB.cpp
@@ -315,11 +321,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   NativeSocketWindows.cpp
 ..\..\..\..\src\native\network\windows\NativeSocketWindows.cpp(88): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
   C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(2238): note: see declaration of 'gethostbyname'
+  Generating Code...
+  Compiling...
   UnknownHostException.cpp
   SocketTimeoutException.cpp
   SocketException.cpp
-  Generating Code...
-  Compiling...
   Inet4Address.cpp
 ..\..\..\..\src\native\network\Inet4Address.cpp(52): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
   C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(1850): note: see declaration of 'inet_addr'
@@ -341,11 +347,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   NumberFormatException.cpp
   IllegalArgumentException.cpp
   FeatureProtocolNotFoundException.cpp
+  Generating Code...
+  Compiling...
   FeatureException.cpp
   FeatureControlException.cpp
   BusTransferException.cpp
-  Generating Code...
-  Compiling...
   BusException.cpp
   BusConnectException.cpp
   Device.cpp
@@ -363,11 +369,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   DeviceLocationProberInterface.cpp
   BusFamily.cpp
   BusFamilies.cpp
+  Generating Code...
+  Compiling...
   Bus.cpp
   UnitDescriptor.cpp
   UShortVector.cpp
-  Generating Code...
-  Compiling...
   U32Vector.cpp
   Log.cpp
   FloatVector.cpp
@@ -385,11 +391,11 @@ Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXInt
   SeaBreezeAPI.cpp
   RevisionFeatureAdapter.cpp
   RawUSBBusAccessFeatureAdapter.cpp
+  Generating Code...
+  Compiling...
   ProtocolFamilies.cpp
   PixelBinningFeatureAdapter.cpp
   OpticalBenchFeatureAdapter.cpp
-  Generating Code...
-  Compiling...
   NonlinearityCoeffsFeatureAdapter.cpp
   LightSourceFeatureAdapter.cpp
   IrradCalFeatureAdapter.cpp
