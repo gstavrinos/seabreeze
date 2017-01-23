@@ -1184,8 +1184,7 @@ int SeaBreezeAPI_Impl::getNumberOfTemperatureFeatures(long deviceID, int *errorC
     return adapter->getNumberOfTemperatureFeatures();
 }
 
-int SeaBreezeAPI_Impl::getTemperatureFeatures(long deviceID, int *errorCode,
-        long *buffer, unsigned int maxLength) {
+int SeaBreezeAPI_Impl::getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {
         SET_ERROR_CODE(ERROR_NO_DEVICE);
@@ -1227,6 +1226,81 @@ int SeaBreezeAPI_Impl::temperatureGetAll(long deviceID, long temperatureFeatureI
     }
 
     return adapter->temperatureGetAll(temperatureFeatureID, errorCode, buffer, maxLength);
+}
+
+/**************************************************************************************/
+//  Introspection Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfIntrospectionFeatures(long deviceID, int *errorCode) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) 
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfIntrospectionFeatures();
+}
+
+int SeaBreezeAPI_Impl::getIntrospectionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) 
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getIntrospectionFeatures(buffer, maxLength);
+}
+
+
+unsigned short int SeaBreezeAPI_Impl::introspectionNumberOfPixelsGet(long deviceID, long introspectionFeatureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->introspectionNumberOfPixelsGet(introspectionFeatureID, errorCode);
+}
+
+int SeaBreezeAPI_Impl::introspectionActivePixelRangesGet(long deviceID, long introspectionFeatureID, int *errorCode, uint32_t *buffer, int maxLength) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->introspectionActivePixelRangesGet(introspectionFeatureID, errorCode, buffer, maxLength);
+}
+
+int SeaBreezeAPI_Impl::introspectionElectricDarkPixelRangesGet(long deviceID, long introspectionFeatureID, int *errorCode, uint32_t *buffer, int maxLength) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->introspectionElectricDarkPixelRangesGet(introspectionFeatureID, errorCode, buffer, maxLength);
+}
+
+int SeaBreezeAPI_Impl::introspectionOpticalDarkPixelRangesGet(long deviceID, long introspectionFeatureID, int *errorCode, uint32_t *buffer, int maxLength) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->introspectionOpticalDarkPixelRangesGet(introspectionFeatureID, errorCode, buffer, maxLength);
 }
 
 /**************************************************************************************/

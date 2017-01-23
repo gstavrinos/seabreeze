@@ -879,15 +879,16 @@ int sbapi_get_number_of_temperature_features(long deviceID, int *error_code) {
 //  be helpful for those just starting to use SeaBreeze to see not just the word Features 
 //  for the feature ID arguments, but type of features, such as temperatureFeatureID. 
 
-int sbapi_get_temperature_features(long deviceID, int *error_code, long *temperatureFeatures,
-        int max_features) {
+int sbapi_get_temperature_features(long deviceID, int *error_code, long *temperatureFeatures, int max_features) 
+{
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->getTemperatureFeatures(deviceID, error_code,
             temperatureFeatures, max_features);
 }
 
-unsigned char sbapi_temperature_count_get(long deviceID, long temperatureFeatureID, int *error_code) {
+unsigned char sbapi_temperature_count_get(long deviceID, long temperatureFeatureID, int *error_code) 
+{
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->temperatureCountGet(deviceID, temperatureFeatureID, error_code);
@@ -900,14 +901,59 @@ double sbapi_temperature_get(long deviceID, long temperatureFeatureID, int *erro
     return wrapper->temperatureGet(deviceID, temperatureFeatureID, error_code, index);
 }
 
-int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code,
-        double *buffer, int max_length) {
+int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code,double *buffer, int max_length) 
+{
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->temperatureGetAll(deviceID, temperatureFeatureID, error_code,
             buffer, max_length);
 }
 
+/**************************************************************************************/
+//  C language wrapper for introspection features
+/**************************************************************************************/
+
+int sbapi_get_number_of_introspection_features(long deviceID, int *error_code) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfIntrospectionFeatures(deviceID, error_code);
+}
+
+int sbapi_get_introspection_features(long deviceID, int *error_code, long *features, unsigned int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getIntrospectionFeatures(deviceID, error_code, features, max_features);
+}
+
+unsigned short sbapi_introspection_number_of_pixels_get(long deviceID, long introspectionFeatureID, int *error_code) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->introspectionNumberOfPixelsGet(deviceID, introspectionFeatureID, error_code);
+}
+
+int sbapi_introspection_active_pixel_ranges_get(long deviceID, long introspectionFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->introspectionActivePixelRangesGet(deviceID, introspectionFeatureID, error_code, pixelIndexPairs, max_length);
+}
+
+int sbapi_introspection_electric_dark_pixel_ranges_get(long deviceID, long introspectionFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->introspectionElectricDarkPixelRangesGet(deviceID, introspectionFeatureID, error_code, pixelIndexPairs, max_length);
+}
+
+int sbapi_introspection_optical_dark_pixel_ranges_get(long deviceID, long introspectionFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->introspectionOpticalDarkPixelRangesGet(deviceID, introspectionFeatureID, error_code, pixelIndexPairs, max_length);
+}
 
 /**************************************************************************************/
 //  C language wrapper for revision features
@@ -1191,4 +1237,9 @@ unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long device
     return wrapper->acquisitionDelayGetDelayMinimumMicroseconds(deviceID, featureID,
             error_code);
 }
+
+
+
+
+
 

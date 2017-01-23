@@ -1,0 +1,420 @@
+﻿  OOITECProtocol.cpp
+  OOIStrobeLampProtocol.cpp
+  OOISpectrometerProtocol.cpp
+  OOIProtocol.cpp
+  OOIIrradCalProtocol.cpp
+  OOIEEPROMProtocol.cpp
+  FPGARegisterProtocol.cpp
+  SpectrumHint.cpp
+  ControlHint.cpp
+  WriteTECSetPointExchange.cpp
+  WriteTECQESetPointExchange.cpp
+  WriteEEPROMSlotExchange.cpp
+  USBFPGASpectrumExchange.cpp
+  TriggerModeExchange.cpp
+  TECQEEnableExchange.cpp
+  TECEnableExchange.cpp
+  StrobeEnableExchange.cpp
+  RequestSpectrumExchange.cpp
+  ReadTECTemperatureExchange.cpp
+  ReadTECQETemperatureExchange.cpp
+  Generating Code...
+  Compiling...
+  ReadSpectrumExchange.cpp
+  ReadEEPROMSlotExchange.cpp
+  QESpectrumExchange.cpp
+  OOIWriteIrradCalExchange.cpp
+  OOIReadIrradCalExchange.cpp
+  OOIIrradCalExchange.cpp
+  OOI2KSpectrumExchange.cpp
+  NIRQuestSpectrumExchange.cpp
+  MayaProSpectrumExchange.cpp
+  JazSpectrumExchange.cpp
+  IntegrationTimeExchange.cpp
+  HRFPGASpectrumExchange.cpp
+  FlameNIRSpectrumExchange.cpp
+  FPGASpectrumExchange.cpp
+  FPGARegisterWriteExchange.cpp
+  FPGARegisterReadExchange.cpp
+  OpCodes.cpp
+  FPGARegisterCodes.cpp
+  OceanBinaryProtocol.cpp
+  OBPWaveCalProtocol.cpp
+  Generating Code...
+  Compiling...
+  OBPThermoElectricProtocol.cpp
+  OBPTemperatureProtocol.cpp
+  OBPStrobeLampProtocol.cpp
+  OBPStrayLightCoeffsProtocol.cpp
+  OBPSpectrumProcessingProtocol.cpp
+  OBPSpectrometerProtocol.cpp
+  OBPShutterProtocol.cpp
+  OBPSerialNumberProtocol.cpp
+  OBPRevisionProtocol.cpp
+  OBPProgrammableSaturationProtocol.cpp
+  OBPPixelBinningProtocol.cpp
+  OBPOpticalBenchProtocol.cpp
+  OBPNonlinearityCoeffsProtocol.cpp
+  OBPLightSourceProtocol_Ventana.cpp
+  OBPLightSourceProtocol.cpp
+  OBPIrradCalProtocol.cpp
+  OBPIntrospectionProtocol.cpp
+  OBPDataBufferProtocol.cpp
+  OBPContinuousStrobeProtocol.cpp
+  OBPAcquisitionDelayProtocol.cpp
+  Generating Code...
+  Compiling...
+  OBPSpectrumHint.cpp
+  OBPControlHint.cpp
+  OBPTriggerModeExchange.cpp
+  OBPTransaction.cpp
+  OBPShutterExchange.cpp
+  OBPSetThermoElectricSetpointExchange.cpp
+  OBPSetThermoElectricEnableExchange.cpp
+  OBPSetScansToAverageExchange.cpp
+  OBPSetPixelBinningExchange.cpp
+  OBPSetIrradCollectionAreaExchange.cpp
+  OBPSetIrradCalExchange.cpp
+  OBPSetDefaultPixelBinningFactorExchange.cpp
+  OBPSetDataBufferCapacityExchange.cpp
+  OBPSetBoxcarWidthExchange.cpp
+  OBPSetAcquisitionDelayExchange.cpp
+  OBPRequestSpectrumExchange.cpp
+  OBPRequestRawSpectrumExchange.cpp
+  OBPRequestBufferedSpectrum32AndMetadata.cpp
+  OBPReadSpectrumWithGainExchange.cpp
+  OBPReadSpectrumExchange.cpp
+  Generating Code...
+  Compiling...
+  OBPReadSpectrum32AndMetadataExchange.cpp
+  OBPReadRawSpectrumExchange.cpp
+  OBPReadRawSpectrum32AndMetadataExchange.cpp
+  OBPQuery.cpp
+  OBPMessage.cpp
+  OBPLightSourceIntensityQuery.cpp
+  OBPLightSourceIntensityCommand.cpp
+  OBPLightSourceEnabledQuery.cpp
+  OBPLightSourceEnableCommand.cpp
+  OBPLampEnableCommand.cpp
+  OBPIntegrationTimeExchange.cpp
+  OBPGetWaveCalExchange.cpp
+  OBPGetThermoElectricTemperatureExchange.cpp
+  OBPGetTemperatureExchange.cpp
+  OBPGetTemperatureCountExchange.cpp
+  OBPGetStrayLightCoeffsCountExchange.cpp
+  OBPGetStrayLightCoeffExchange.cpp
+  OBPGetSerialNumberMaximumLengthExchange.cpp
+  OBPGetSerialNumberExchange.cpp
+  OBPGetScansToAverageExchange.cpp
+  Generating Code...
+  Compiling...
+  OBPGetSaturationExchange.cpp
+  OBPGetPixelBinningExchange.cpp
+  OBPGetOpticalDarkPixelRangesExchange.cpp
+  OBPGetOpticalBenchSlitWidthMicronsExchange.cpp
+  OBPGetOpticalBenchSerialNumberExchange.cpp
+  OBPGetOpticalBenchIDExchange.cpp
+  OBPGetOpticalBenchGratingExchange.cpp
+  OBPGetOpticalBenchFilterExchange.cpp
+  OBPGetOpticalBenchFiberDiameterMicronsExchange.cpp
+  OBPGetOpticalBenchCoatingExchange.cpp
+  OBPGetNumberOfPixelsExchange.cpp
+  OBPGetNonlinearityCoeffsCountExchange.cpp
+  OBPGetNonlinearityCoeffExchange.cpp
+  OBPGetMaxPixelBinningExchange.cpp
+  OBPGetIrradCollectionAreaExchange.cpp
+  OBPGetIrradCalExchange.cpp
+  OBPGetHardwareRevisionExchange.cpp
+  OBPGetFirmwareRevisionExchange.cpp
+  OBPGetElectricDarkPixelRangesExchange.cpp
+  OBPGetDefaultPixelBinningExchange.cpp
+  Generating Code...
+  Compiling...
+  OBPGetDataBufferMaximumCapacityExchange.cpp
+  OBPGetDataBufferCountExchange.cpp
+  OBPGetDataBufferCapacityExchange.cpp
+  OBPGetBoxcarWidthExchange.cpp
+  OBPGetAllTemperaturesExchange.cpp
+  OBPGetActivePixelRangesExchange.cpp
+  OBPDataBufferClearExchange.cpp
+  OBPContinuousStrobePeriodExchange.cpp
+  OBPContinuousStrobeEnableExchange.cpp
+  OBPCommand.cpp
+  WaveCalProtocolInterface.cpp
+  ThermoElectricProtocolInterface.cpp
+  TemperatureProtocolInteface.cpp
+  StrobeLampProtocolInterface.cpp
+  StrayLightCoeffsProtocolInterface.cpp
+  SpectrumProcessingProtocolInteface.cpp
+  SpectrometerProtocolInterface.cpp
+  ShutterProtocolInterface.cpp
+  SerialNumberProtocolInterface.cpp
+  RevisionProtocolInteface.cpp
+  Generating Code...
+  Compiling...
+  ProgrammableSaturationProtocolInteface.cpp
+  PixelBinningProtocolInterface.cpp
+  OpticalBenchProtocolInteface.cpp
+  NonlinearityCoeffsProtocolInterface.cpp
+  LightSourceProtocolInterface.cpp
+  IrradCalProtocolInterface.cpp
+  IntrospectionProtocolInterface.cpp
+  FPGARegisterProtocolInterface.cpp
+  EEPROMProtocolInterface.cpp
+  DataBufferProtocolInterface.cpp
+  ContinuousStrobeProtocolInterface.cpp
+  AcquisitionDelayProtocolInterface.cpp
+  WaveCalFeature.cpp
+  VentanaThermoElectricFeature.cpp
+  ThermoElectricQEFeature.cpp
+  ThermoElectricFeatureBase.cpp
+  QEProThermoElectricFeature.cpp
+  TemperatureFeature.cpp
+  StrayLightCoeffsFeature.cpp
+  SpectrumProcessingFeature.cpp
+  Generating Code...
+  Compiling...
+  VentanaSpectrometerFeature.cpp
+  USB4000SpectrometerFeature.cpp
+  USB2000SpectrometerFeature.cpp
+  USB2000PlusSpectrometerFeature.cpp
+  SpectrometerTriggerMode.cpp
+  SparkSpectrometerFeature.cpp
+  STSSpectrometerFeature.cpp
+..\..\..\..\src\vendors\OceanOptics\features\spectrometer\STSSpectrometerFeature.cpp(115): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+  QEProSpectrometerFeature.cpp
+  QE65000SpectrometerFeature.cpp
+  ProgrammableSaturationFeatureImpl.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureImpl.cpp(69): warning C4101: 'e': unreferenced local variable
+  ProgrammableSaturationFeatureBase.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ProgrammableSaturationFeatureBase.cpp(50): warning C4101: 'fe': unreferenced local variable
+  ProgrammableSaturationFeature.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+  OOISpectrometerFeature.cpp
+  NIRQuestSpectrometerFeature.cpp
+  NIRQuest512SpectrometerFeature.cpp
+  NIRQuest256SpectrometerFeature.cpp
+  MayaLSLSpectrometerFeature.cpp
+  Maya2000SpectrometerFeature.cpp
+  Maya2000ProSpectrometerFeature.cpp
+  JazSpectrometerFeature.cpp
+  Generating Code...
+  Compiling...
+  HR4000SpectrometerFeature.cpp
+  HR2000SpectrometerFeature.cpp
+  HR2000PlusSpectrometerFeature.cpp
+  GainAdjustedSpectrometerFeature.cpp
+..\..\..\..\src\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.cpp(55): warning C4101: 'fe': unreferenced local variable
+  FlameNIRSpectrometerFeature.cpp
+  FlameXSpectrometerFeature.cpp
+  ApexSpectrometerFeature.cpp
+  ShutterFeature.cpp
+  SerialNumberFeature.cpp
+  RevisionFeature.cpp
+  RawUSBBusAccessFeature.cpp
+  STSPixelBinningFeature.cpp
+  PixelBinningFeatureInterface.cpp
+  OpticalBenchFeature.cpp
+  NonlinearityCoeffsFeature.cpp
+  VentanaLightSourceFeature.cpp
+  StrobeLampFeature.cpp
+  LightSourceFeatureImpl.cpp
+  LightSourceFeatureBase.cpp
+  IrradCalFeature.cpp
+  Generating Code...
+  Compiling...
+  IntrospectionFeature.cpp
+  FPGARegisterFeature.cpp
+  WavelengthEEPROMSlotFeature_QE65000.cpp
+  WavelengthEEPROMSlotFeature.cpp
+  StrayLightEEPROMSlotFeature.cpp
+  SerialNumberEEPROMSlotFeature.cpp
+  SaturationEEPROMSlotFeature_NIRQuest.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+  SaturationEEPROMSlotFeature_MayaPro.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+  SaturationEEPROMSlotFeatureBase.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+..\..\..\..\src\vendors\OceanOptics\features\eeprom_slots\SaturationEEPROMSlotFeatureBase.cpp(48): warning C4101: 'fe': unreferenced local variable
+  SaturationEEPROMSlotFeature.cpp
+Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\include\vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureInterface.h(44): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+  NonlinearityEEPROMSlotFeature.cpp
+  EEPROMSlotFeatureBase.cpp
+  EEPROMSlotFeature.cpp
+  QEProDataBufferFeature.cpp
+  DataBufferFeatureBase.cpp
+  ContinuousStrobeFeature_FPGA.cpp
+  ContinuousStrobeFeature.cpp
+  STSAcquisitionDelayFeature.cpp
+  AcquisitionDelayFeature_FPGA.cpp
+  AcquisitionDelayFeature.cpp
+  Generating Code...
+  Compiling...
+  Ventana.cpp
+  USB4000.cpp
+  USB2000Plus.cpp
+  USB2000.cpp
+  Torus.cpp
+  Spark.cpp
+  STS.cpp
+  QEPro.cpp
+  QE65000.cpp
+  NIRQuest512.cpp
+  NIRQuest256.cpp
+  MayaLSL.cpp
+  Maya2000Pro.cpp
+  Maya2000.cpp
+  Jaz.cpp
+  HR4000.cpp
+  HR2000Plus.cpp
+  HR2000.cpp
+  FlameNIR.cpp
+  FlameX.cpp
+  Generating Code...
+  Compiling...
+  Apex.cpp
+  VentanaUSB.cpp
+  USB4000USB.cpp
+  USB2000USB.cpp
+  USB2000PlusUSB.cpp
+  TorusUSB.cpp
+  SparkUSB.cpp
+  STSUSB.cpp
+  QEProUSB.cpp
+  QE65000USB.cpp
+  OOIUSBTrivialTransferHelper.cpp
+  OOIUSBSpectrumTransferHelper.cpp
+  OOIUSBInterface.cpp
+  OOIUSBEndpointMaps.cpp
+  OOIUSBControlTransferHelper.cpp
+  OOIUSB4KSpectrumTransferHelper.cpp
+  NIRQuest512USB.cpp
+  NIRQuest256USB.cpp
+  MayaLSLUSB.cpp
+  Maya2000USB.cpp
+  Generating Code...
+  Compiling...
+  Maya2000ProUSB.cpp
+  JazUSB.cpp
+  HR4000USB.cpp
+  HR2000USB.cpp
+  HR2000PlusUSB.cpp
+  FlameNIRUSB.cpp
+  FlameXUSBTransferHelper.cpp
+  FlameXUSB.cpp
+  ApexUSB.cpp
+  OOIRS232Interface.cpp
+  JazTCPIPv4.cpp
+  FlameXTCPIPv4.cpp
+  USBDiscovery.cpp
+  USB.cpp
+  System.cpp
+  RS232.cpp
+  NativeSocketWindows.cpp
+..\..\..\..\src\native\network\windows\NativeSocketWindows.cpp(88): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(2238): note: see declaration of 'gethostbyname'
+  UnknownHostException.cpp
+  SocketTimeoutException.cpp
+  SocketException.cpp
+  Generating Code...
+  Compiling...
+  Inet4Address.cpp
+..\..\..\..\src\native\network\Inet4Address.cpp(52): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(1850): note: see declaration of 'inet_addr'
+..\..\..\..\src\native\network\Inet4Address.cpp(77): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(1868): note: see declaration of 'inet_ntoa'
+  Transfer.cpp
+  Transaction.cpp
+  ProtocolHint.cpp
+  ProtocolHelper.cpp
+  ProtocolFamily.cpp
+  Protocol.cpp
+  Exchange.cpp
+  FeatureImpl.cpp
+  FeatureFamily.cpp
+  ProtocolTransactionException.cpp
+  ProtocolFormatException.cpp
+  ProtocolException.cpp
+  ProtocolBusMismatchException.cpp
+  NumberFormatException.cpp
+  IllegalArgumentException.cpp
+  FeatureProtocolNotFoundException.cpp
+  FeatureException.cpp
+  FeatureControlException.cpp
+  BusTransferException.cpp
+  Generating Code...
+  Compiling...
+  BusException.cpp
+  BusConnectException.cpp
+  Device.cpp
+  USBTransferHelper.cpp
+  USBInterface.cpp
+  USBDeviceLocator.cpp
+  RS232TransferHelper.cpp
+  RS232Interface.cpp
+  RS232DeviceLocator.cpp
+  TCPIPv4SocketTransferHelper.cpp
+  TCPIPv4SocketBus.cpp
+  IPv4SocketDeviceLocator.cpp
+  IPv4NetworkProtocol.cpp
+  TransferHelper.cpp
+  DeviceLocationProberInterface.cpp
+  BusFamily.cpp
+  BusFamilies.cpp
+  Bus.cpp
+  UnitDescriptor.cpp
+  UShortVector.cpp
+  Generating Code...
+  Compiling...
+  U32Vector.cpp
+  Log.cpp
+  FloatVector.cpp
+  DoubleVector.cpp
+  Data.cpp
+  ByteVector.cpp
+  ThermoElectricCoolerFeatureAdapter.cpp
+  TemperatureFeatureAdapter.cpp
+  StrobeLampFeatureAdapter.cpp
+  StrayLightCoeffsFeatureAdapter.cpp
+  SpectrumProcessingFeatureAdapter.cpp
+  SpectrometerFeatureAdapter.cpp
+  ShutterFeatureAdapter.cpp
+  SerialNumberFeatureAdapter.cpp
+  SeaBreezeAPI.cpp
+  RevisionFeatureAdapter.cpp
+  RawUSBBusAccessFeatureAdapter.cpp
+  ProtocolFamilies.cpp
+  PixelBinningFeatureAdapter.cpp
+  OpticalBenchFeatureAdapter.cpp
+  Generating Code...
+  Compiling...
+  NonlinearityCoeffsFeatureAdapter.cpp
+  LightSourceFeatureAdapter.cpp
+  IrradCalFeatureAdapter.cpp
+  FeatureFamilies.cpp
+  EEPROMFeatureAdapter.cpp
+  DeviceAdapter.cpp
+  DataBufferFeatureAdapter.cpp
+  ContinuousStrobeFeatureAdapter.cpp
+  AcquisitionDelayFeatureAdapter.cpp
+  SeaBreezeWrapper.cpp
+  SeaBreezeAPI_Impl.cpp
+  IntrospectionFeatureAdapter.cpp
+  DeviceFactory.cpp
+  Generating Code...
+  NativeUSBWinUSB.c
+  NativeSystemWindows.c
+  NativeRS232Windows.c
+  Generating Code...
+     Creating library Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.lib and object Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.exp
+  SeaBreeze.vcxproj -> Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.dll
+  SeaBreeze.vcxproj -> Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.pdb (Full PDB)
+  A subdirectory or file ..\..\..\..\lib already exists.
+  ..\x64\Debug\SeaBreeze.dll
+  ..\x64\Debug\SeaBreeze.exp
+  ..\x64\Debug\SeaBreeze.ilk
+  ..\x64\Debug\SeaBreeze.lib
+  ..\x64\Debug\SeaBreeze.pdb
+          5 file(s) copied.

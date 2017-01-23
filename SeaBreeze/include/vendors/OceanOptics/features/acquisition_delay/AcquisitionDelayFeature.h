@@ -38,8 +38,7 @@
 
 namespace seabreeze {
 
-    class AcquisitionDelayFeature : public FeatureImpl,
-            public AcquisitionDelayFeatureInterface {
+    class AcquisitionDelayFeature : public FeatureImpl, public AcquisitionDelayFeatureInterface {
     public:
         AcquisitionDelayFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~AcquisitionDelayFeature();

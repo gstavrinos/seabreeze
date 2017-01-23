@@ -85,6 +85,22 @@ sub main
         SOURCE_TEMPLATE  => "    <ClCompile Include=\"..\\..\\..\\..\\FILE_GOES_HERE\"><Filter>Sources</Filter></ClCompile>",
     );
 
+    updateProj(
+        PATHNAME         => "$SeaBreezeDir/os-support/windows/VisualStudio2015/VSProj/SeaBreeze.vcxproj",
+        INCLUDES         => $includes, 
+        SOURCES          => $sources, 
+        INCLUDE_TEMPLATE => "    <ClInclude Include=\"..\\..\\..\\..\\FILE_GOES_HERE\" />",
+        SOURCE_TEMPLATE  => "    <ClCompile Include=\"..\\..\\..\\..\\FILE_GOES_HERE\" />",
+    );
+
+    updateProj(
+        PATHNAME         => "$SeaBreezeDir/os-support/windows/VisualStudio2015/VSProj/SeaBreeze.vcxproj.filters",
+        INCLUDES         => $includes, 
+        SOURCES          => $sources, 
+        INCLUDE_TEMPLATE => "    <ClInclude Include=\"..\\..\\..\\..\\FILE_GOES_HERE\"><Filter>Headers</Filter></ClInclude>",
+        SOURCE_TEMPLATE  => "    <ClCompile Include=\"..\\..\\..\\..\\FILE_GOES_HERE\"><Filter>Sources</Filter></ClCompile>",
+    );
+
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2010/SetUp32/SetUp32.vdproj",
         OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
@@ -105,6 +121,18 @@ sub main
 
     fixSetupPaths(
         PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2013/SetUp64/SetUp64.vdproj",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
+        NEW      => "..\\\\..\\\\..\\\\.."
+    );
+
+    fixSetupPaths(
+        PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2015/SetUp32/SetUp32.vdproj",
+        OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
+        NEW      => "..\\\\..\\\\..\\\\.."
+    );
+
+    fixSetupPaths(
+        PATHNAME => "$SeaBreezeDir/os-support/windows/VisualStudio2015/SetUp64/SetUp64.vdproj",
         OLD      => "\\\\\\\\vmware-host\\\\Shared Folders\\\\work\\\\gforge\\\\seabreeze\\\\SeaBreeze",
         NEW      => "..\\\\..\\\\..\\\\.."
     );

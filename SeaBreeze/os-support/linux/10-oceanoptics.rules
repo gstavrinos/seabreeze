@@ -49,6 +49,8 @@ ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1044", SYMLINK+="apex-%n", MODE:="06
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="104b", SYMLINK+="flame-nir-%n", MODE:="0666"
 # Ocean Optics Inc. Jaz spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="2000", SYMLINK+="jaz-%n", MODE:="0666"
+# Ocean Optics Inc. FlameX spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="2001", SYMLINK+="flame-x-%n", MODE:="0666"
 # Ocean Optics Inc. STS spectrometer
 ATTRS{idVendor}=="2457", ATTRS{idProduct}=="4000", SYMLINK+="sts-%n", MODE:="0666"
 # Ocean Optics Inc. QE-PRO spectrometer

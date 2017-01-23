@@ -40,6 +40,7 @@
 #include "api/seabreezeapi/RawUSBBusAccessFeatureAdapter.h"
 #include "api/seabreezeapi/NonlinearityCoeffsFeatureAdapter.h"
 #include "api/seabreezeapi/TemperatureFeatureAdapter.h"
+#include "api/seabreezeapi/IntrospectionFeatureAdapter.h"
 #include "api/seabreezeapi/RevisionFeatureAdapter.h"
 #include "api/seabreezeapi/OpticalBenchFeatureAdapter.h"
 #include "api/seabreezeapi/SpectrumProcessingFeatureAdapter.h"
@@ -203,8 +204,15 @@ namespace seabreeze {
             int getTemperatureFeatures(long *buffer, int maxFeatures);
             unsigned char temperatureCountGet(long temperatureFeatureID, int *errorCode);
             double temperatureGet(long temperatureFeatureID, int *errorCode, int index);
-            int temperatureGetAll(long temperatureFeatureID, int *errorCode,
-                    double *buffer, int bufferLength);
+            int temperatureGetAll(long temperatureFeatureID, int *errorCode, double *buffer, int bufferLength);
+
+			/* Get one or more introspection features */
+			int getNumberOfIntrospectionFeatures();
+			int getIntrospectionFeatures(long *buffer, int maxFeatures);
+			unsigned short introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode);
+			int  introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount );
+			int  introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount);
+			int  introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount);
 
             /* Get one or more revision features */
             int getNumberOfRevisionFeatures();
@@ -258,6 +266,7 @@ namespace seabreeze {
             unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long featureID, int *errorCode);
             unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long featureID, int *errorCode);
 
+
         protected:
             unsigned long instanceID;
             seabreeze::Device *device;
@@ -273,6 +282,7 @@ namespace seabreeze {
             std::vector<ShutterFeatureAdapter *> shutterFeatures;
             std::vector<NonlinearityCoeffsFeatureAdapter *> nonlinearityFeatures;
             std::vector<TemperatureFeatureAdapter *> temperatureFeatures;
+			std::vector<IntrospectionFeatureAdapter *> introspectionFeatures;
             std::vector<RevisionFeatureAdapter *> revisionFeatures;
             std::vector<OpticalBenchFeatureAdapter *> opticalBenchFeatures;
             std::vector<SpectrumProcessingFeatureAdapter *> spectrumProcessingFeatures;
@@ -280,6 +290,7 @@ namespace seabreeze {
             std::vector<PixelBinningFeatureAdapter *> pixelBinningFeatures;
             std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
             std::vector<AcquisitionDelayFeatureAdapter *> acquisitionDelayFeatures;
+
             
             RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
@@ -293,6 +304,7 @@ namespace seabreeze {
             ShutterFeatureAdapter *getShutterFeatureByID(long featureID);
             NonlinearityCoeffsFeatureAdapter *getNonlinearityCoeffsFeatureByID(long featureID);
             TemperatureFeatureAdapter *getTemperatureFeatureByID(long featureID);
+			IntrospectionFeatureAdapter *getIntrospectionFeatureByID(long featureID);
             RevisionFeatureAdapter *getRevisionFeatureByID(long featureID);
             OpticalBenchFeatureAdapter *getOpticalBenchFeatureByID(long featureID);
             SpectrumProcessingFeatureAdapter *getSpectrumProcessingFeatureByID(long featureID);

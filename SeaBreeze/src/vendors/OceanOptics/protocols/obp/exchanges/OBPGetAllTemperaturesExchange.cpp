@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetAllTemperaturesExchange::OBPGetAllTemperaturesExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_TEMPERATURE_ALL;
-    this->payload.resize(1);
+    this->payload.resize(0); // no data to be sent
 }
 
 OBPGetAllTemperaturesExchange::~OBPGetAllTemperaturesExchange() {

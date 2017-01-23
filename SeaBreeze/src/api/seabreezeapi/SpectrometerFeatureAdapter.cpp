@@ -195,8 +195,16 @@ int SpectrometerFeatureAdapter::getWavelengths(int *errorCode,
     return valuesCopied;
 }
 
+unsigned int SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) {
+
+	unsigned int numberOfPixels = this->feature->getNumberOfPixels();
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return numberOfPixels;
+}
+
 int SpectrometerFeatureAdapter::getElectricDarkPixelCount(int *errorCode) {
-    vector<int> pixelVector;
+    vector<unsigned int> pixelVector;
 
     pixelVector = this->feature->getElectricDarkPixelIndices();
 
@@ -208,8 +216,8 @@ int SpectrometerFeatureAdapter::getElectricDarkPixelIndices(int *errorCode,
                     int *indices, int length) {
     int valuesCopied = 0;
     int i;
-    vector<int> pixelVector;
-    vector<int>::iterator iter;
+    vector<unsigned int> pixelVector;
+    vector<unsigned int>::iterator iter;
 
     pixelVector = this->feature->getElectricDarkPixelIndices();
 
@@ -225,6 +233,70 @@ int SpectrometerFeatureAdapter::getElectricDarkPixelIndices(int *errorCode,
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return valuesCopied;
+}
+
+int SpectrometerFeatureAdapter::getOpticalDarkPixelCount(int *errorCode) {
+	vector<unsigned int> pixelVector;
+
+	pixelVector = this->feature->getOpticalDarkPixelIndices();
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return (int)pixelVector.size();
+}
+
+int SpectrometerFeatureAdapter::getOpticalDarkPixelIndices(int *errorCode,
+	int *indices, int length) {
+	int valuesCopied = 0;
+	int i;
+	vector<unsigned int> pixelVector;
+	vector<unsigned int>::iterator iter;
+
+	pixelVector = this->feature->getOpticalDarkPixelIndices();
+
+	/* It might be possible to do a memcpy() of the underlying vector into
+	* the array, but that isn't the safest thing to do.  As long as this is
+	* called once and the result cached, the inefficiency won't hurt.
+	*/
+	for (iter = pixelVector.begin(), i = 0;
+		iter != pixelVector.end() && i < length; iter++, i++) {
+		indices[i] = *iter;
+		valuesCopied++;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return valuesCopied;
+}
+
+int SpectrometerFeatureAdapter::getActivePixelCount(int *errorCode) {
+	vector<unsigned int> pixelVector;
+
+	pixelVector = this->feature->getActivePixelIndices();
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return (int)pixelVector.size();
+}
+
+int SpectrometerFeatureAdapter::getActivePixelIndices(int *errorCode,
+	int *indices, int length) {
+	int valuesCopied = 0;
+	int i;
+	vector<unsigned int> pixelVector;
+	vector<unsigned int>::iterator iter;
+
+	pixelVector = this->feature->getActivePixelIndices();
+
+	/* It might be possible to do a memcpy() of the underlying vector into
+	* the array, but that isn't the safest thing to do.  As long as this is
+	* called once and the result cached, the inefficiency won't hurt.
+	*/
+	for (iter = pixelVector.begin(), i = 0;
+		iter != pixelVector.end() && i < length; iter++, i++) {
+		indices[i] = *iter;
+		valuesCopied++;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return valuesCopied;
 }
 
 void SpectrometerFeatureAdapter::setIntegrationTimeMicros(int *errorCode,

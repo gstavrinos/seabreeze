@@ -166,6 +166,14 @@ public:
     virtual int temperatureGetAll(long deviceID, long featureID, int *errorCode,
         double *buffer, int maxLength);
 
+	/* Introspection capabilities */
+	virtual int getNumberOfIntrospectionFeatures(long deviceID, int *errorCode);
+	virtual int getIntrospectionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual unsigned short int introspectionNumberOfPixelsGet(long deviceID, long featureID, int *errorCode);
+	virtual int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelRangePairs, int maxLength);
+	virtual int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelRangePairs, int maxLength);
+	virtual int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelRangePairs, int maxLength);
+
     /* Spectrum processing capabilities */
     virtual int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode);
     virtual int getSpectrumProcessingFeatures(long deviceID, int *errorCode,

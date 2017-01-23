@@ -1379,12 +1379,32 @@ int SeaBreezeWrapper::getWavelengths(int index, int *errorCode,
     return valuesCopied;
 }
 
+int SeaBreezeWrapper::getNumberOfPixels(int index, int *errorCode) {
+	unsigned int numberOfPixels = 0;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		numberOfPixels = spec->getNumberOfPixels();
+
+		SET_ERROR_CODE(ERROR_SUCCESS);
+	}
+	return numberOfPixels;
+}
+
 int SeaBreezeWrapper::getElectricDarkPixelIndices(int index, int *errorCode,
         int *indices, int length) {
     int valuesCopied = 0;
     int i;
-    vector<int> pixelVector;
-    vector<int>::iterator iter;
+    vector<unsigned int> pixelVector;
+    vector<unsigned int>::iterator iter;
 
     if(NULL == this->devices[index]) {
         SET_ERROR_CODE(ERROR_NO_DEVICE);
@@ -1411,6 +1431,74 @@ int SeaBreezeWrapper::getElectricDarkPixelIndices(int index, int *errorCode,
         SET_ERROR_CODE(ERROR_SUCCESS);
     }
     return valuesCopied;
+}
+
+int SeaBreezeWrapper::getOpticalDarkPixelIndices(int index, int *errorCode,
+	int *indices, int length) {
+	int valuesCopied = 0;
+	int i;
+	vector<unsigned int> pixelVector;
+	vector<unsigned int>::iterator iter;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		pixelVector = spec->getOpticalDarkPixelIndices();
+
+		/* It might be possible to do a memcpy() of the underlying vector into
+		* the array, but that isn't the safest thing to do.  As long as this is
+		* called once and the result cached, the inefficiency won't hurt.
+		*/
+		for (iter = pixelVector.begin(), i = 0;
+			iter != pixelVector.end() && i < length; iter++, i++) {
+			indices[i] = *iter;
+			valuesCopied++;
+		}
+
+		SET_ERROR_CODE(ERROR_SUCCESS);
+	}
+	return valuesCopied;
+}
+
+int SeaBreezeWrapper::getActivePixelIndices(int index, int *errorCode,
+	int *indices, int length) {
+	int valuesCopied = 0;
+	int i;
+	vector<unsigned int> pixelVector;
+	vector<unsigned int>::iterator iter;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		pixelVector = spec->getActivePixelIndices();
+
+		/* It might be possible to do a memcpy() of the underlying vector into
+		* the array, but that isn't the safest thing to do.  As long as this is
+		* called once and the result cached, the inefficiency won't hurt.
+		*/
+		for (iter = pixelVector.begin(), i = 0;
+			iter != pixelVector.end() && i < length; iter++, i++) {
+			indices[i] = *iter;
+			valuesCopied++;
+		}
+
+		SET_ERROR_CODE(ERROR_SUCCESS);
+	}
+	return valuesCopied;
 }
 
 int SeaBreezeWrapper::getErrorString(int error_code, char *buffer, int buffer_length) {
@@ -1859,12 +1947,34 @@ seabreeze_get_serial_number(int index, int *error_code, char *buffer,
     return wrapper->getSerialNumber(index, error_code, buffer, buffer_length);
 }
 
+unsigned int
+seabreeze_get_number_of_pixels(int index, int *error_code) {
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getNumberOfPixels(index, error_code);
+}
+
 int
 seabreeze_get_electric_dark_pixel_indices(int index, int *error_code,
     int *indices, int length) {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->getElectricDarkPixelIndices(index, error_code,
         indices, length);
+}
+
+int
+seabreeze_get_optical_dark_pixel_indices(int index, int *error_code,
+	int *indices, int length) {
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getOpticalDarkPixelIndices(index, error_code,
+		indices, length);
+}
+
+int
+seabreeze_get_active_pixel_indices(int index, int *error_code,
+	int *indices, int length) {
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getActivePixelIndices(index, error_code,
+		indices, length);
 }
 
 void
