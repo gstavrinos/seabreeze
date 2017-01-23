@@ -41,9 +41,11 @@ using namespace seabreeze::api;
 using namespace std;
 
 TemperatureFeatureAdapter::TemperatureFeatureAdapter(
-        TemperatureFeatureInterface *intf, const FeatureFamily &f,
-                    Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<TemperatureFeatureInterface>(intf, f, p, b, instanceIndex) {
+	TemperatureFeatureInterface *intf, 
+	const FeatureFamily &f, 
+	Protocol *p, 
+	Bus *b, 
+	unsigned short instanceIndex) : FeatureAdapterTemplate<TemperatureFeatureInterface>(intf, f, p, b, instanceIndex) {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
@@ -56,8 +58,8 @@ TemperatureFeatureAdapter::~TemperatureFeatureAdapter() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-// these function are here to follow the same class hierarchy as readAllTemperatures so
-//  that data flow is easier to see. The function need no free()
+// these functions are here to follow the same class hierarchy as readAllTemperatures so
+//  that data flow is easier to see. The function needs no free()
 
 unsigned char TemperatureFeatureAdapter::readTemperatureCount(int *errorCode) {
 	unsigned char returnValue;

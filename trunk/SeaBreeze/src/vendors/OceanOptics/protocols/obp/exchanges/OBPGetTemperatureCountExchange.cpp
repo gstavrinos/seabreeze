@@ -39,6 +39,8 @@ OBPGetTemperatureCountExchange::OBPGetTemperatureCountExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_TEMPERATURE_COUNT;
 
     this->hints->push_back(new OBPControlHint());
+
+	// no data sent
 }
 
 OBPGetTemperatureCountExchange::~OBPGetTemperatureCountExchange() {

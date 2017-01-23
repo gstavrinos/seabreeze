@@ -62,6 +62,7 @@ bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bu
         throw (FeatureException) {
 
     bool result = this->saturation->initialize(proto, bus);
+	
     
     if(false == result) {
         return false;

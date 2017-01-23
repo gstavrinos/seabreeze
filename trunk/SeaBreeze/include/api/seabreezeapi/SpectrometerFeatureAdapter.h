@@ -59,8 +59,12 @@ namespace seabreeze {
             void setTriggerMode(int *errorCode, int mode);
             int getWavelengths(int *errorCode, double *wavelengths, int length);
             int getElectricDarkPixelCount(int *errorCode);
-            int getElectricDarkPixelIndices(int *errorCode,
-                    int *indices, int length);
+            int getElectricDarkPixelIndices(int *errorCode, int *indices, int length);
+			int getOpticalDarkPixelCount(int *errorCode);
+			int getOpticalDarkPixelIndices(int *errorCode, int *indices, int length);
+			int getActivePixelCount(int *errorCode);
+			int getActivePixelIndices(int *errorCode, int *indices, int length);
+			unsigned int getNumberOfPixels(int *errorCode);
             void setIntegrationTimeMicros(int *errorCode,
                     unsigned long integrationTimeMicros);
             long getMinimumIntegrationTimeMicros(int *errorCode);

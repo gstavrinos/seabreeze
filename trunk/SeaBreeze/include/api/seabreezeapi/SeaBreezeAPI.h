@@ -219,6 +219,15 @@ public:
     virtual double temperatureGet(long deviceID, long featureID, int *errorCode, int index) = 0;
     virtual int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength) = 0;
 
+	/* Introspection capabilities */
+	virtual int getNumberOfIntrospectionFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getIntrospectionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	virtual unsigned short int introspectionNumberOfPixelsGet(long deviceID, long featureID, int *errorCode) = 0;
+	virtual int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength) = 0;
+	virtual int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength) = 0;
+	virtual int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength) = 0;
+
+
     /* Spectrum processing capabilities */
     virtual int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode) = 0;
     virtual int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -258,7 +267,7 @@ public:
     virtual unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode) = 0;
     virtual unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode) = 0;
     virtual void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity) = 0;
-;
+
     /* Acquisition delay capabilities */
     virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) = 0;
     virtual int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -272,6 +281,8 @@ public:
             long featureID, int *errorCode) = 0;
     virtual unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
             long featureID, int *errorCode) = 0;
+
+
 
 protected:
     SeaBreezeAPI();
@@ -1815,9 +1826,7 @@ extern "C" {
      *
      * @return the number of temperature feature IDs that were copied.
      */
-    DLL_DECL int
-    sbapi_get_temperature_features(long deviceID, int *error_code,
-            long *temperatureFeatures, int max_features);
+    DLL_DECL int sbapi_get_temperature_features(long deviceID, int *error_code, long *temperatureFeatures, int max_features);
 
     /**
      * This function reads out an the number of indexed temperatures available from the
@@ -1867,6 +1876,99 @@ extern "C" {
      */
     DLL_DECL int sbapi_temperature_get_all(long deviceID, long temperatureFeatureID, int *error_code, double *buffer, int max_length);
 
+
+	/**
+	* This function returns the total number of introspection
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of features that will be returned by a call to
+	*      sbapi_get_introspection_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_introspection_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each introspection
+	* feature instance for this device.  The IDs are only valid when used with
+	* the deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param features (Output) preallocated array to hold returned feature handles
+	* @param max_features (Input) size of preallocated array
+	*
+	* @return the number of introspection feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_introspection_features(long deviceID, int *error_code, long *introspectionFeatures, int max_features);
+
+	/**
+	* This function reads out an the number of detector pixels available from the
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an introspection
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_introspection_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of detector pixels available as an unsigned short
+	*/
+	DLL_DECL unsigned short int sbapi_introspection_number_of_pixels_get(long deviceID, long introspectionFeatureID, int *error_code);
+
+
+	/**
+	* This function gets all the active inclusive pixel range indicies 
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an introspection
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_introspection_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param buffer (Output) preallocated buffer to store active pixel index pairs
+	* @param max_length (Input) size of preallocated buffer
+	*
+	* @return the number of doubles read from the device into the buffer
+	*/
+	DLL_DECL int sbapi_introspection_active_pixel_ranges_get(long deviceID, long introspectiveFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length);
+
+
+	/**
+	* This function gets all the optical dark inclusive pixel range indicies
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an introspection
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_introspection_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param buffer (Output) preallocated buffer to store active pixel index pairs
+	* @param max_length (Input) size of preallocated buffer
+	*
+	* @return the number of doubles read from the device into the buffer
+	*/
+	DLL_DECL int sbapi_introspection_optical_dark_pixel_ranges_get(long deviceID, long introspectiveFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length);
+
+
+	/**
+	* This function gets all the electric dark inclusive pixel range indicies
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an introspection
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_introspection_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param buffer (Output) preallocated buffer to store active pixel index pairs
+	* @param max_length (Input) size of preallocated buffer
+	*
+	* @return the number of doubles read from the device into the buffer
+	*/
+	DLL_DECL int sbapi_introspection_electric_dark_pixel_ranges_get(long deviceID, long introspectiveFeatureID, int *error_code, unsigned int *pixelIndexPairs, int max_length);
 
 
 /**

@@ -38,6 +38,9 @@
 #include "common/exceptions/IllegalArgumentException.h"
 #include "vendors/OceanOptics/features/spectrometer/SpectrometerTriggerMode.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
+#include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
+
+
 
 namespace seabreeze {
 
@@ -49,7 +52,7 @@ namespace seabreeze {
         /* Request and read out a spectrum formatted into intensity (A/D counts) */
         virtual std::vector<double> *getSpectrum(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
-
+		
         /* Request and read out the raw spectrum data stream */
         virtual std::vector<byte> *getUnformattedSpectrum(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException);
@@ -76,10 +79,12 @@ namespace seabreeze {
         /* Setting the external trigger mode for the spectrometer */
         virtual void setTriggerMode(const Protocol &protocol,
                 const Bus &bus, SpectrometerTriggerMode &mode) throw (FeatureException);
+	
+		virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const;
 
-        virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const;
-
-        virtual std::vector<int> getElectricDarkPixelIndices() const;
+		virtual std::vector<unsigned int> getActivePixelIndices() const;
+        virtual std::vector<unsigned int> getElectricDarkPixelIndices() const;
+		virtual std::vector<unsigned int> getOpticalDarkPixelIndices() const;
 
         virtual long getIntegrationTimeMinimum() const;
         virtual long getIntegrationTimeMaximum() const;
@@ -92,9 +97,13 @@ namespace seabreeze {
         virtual FeatureFamily getFeatureFamily();
 
     protected:
+
+		/* introspection feature */
+		IntrospectionFeature *myIntrospection;
+
         /* Detector details */
-        int numberOfPixels;
-        int maxIntensity;
+        uint16_t numberOfPixels;
+        uint32_t maxIntensity;
 
         /* Integration time parameters (measured in microseconds) */
         long integrationTimeMinimum;
@@ -103,7 +112,9 @@ namespace seabreeze {
         long integrationTimeIncrement;
 
         std::vector<SpectrometerTriggerMode *> triggerModes;
-        std::vector<int> electricDarkPixelIndices;
+        std::vector<unsigned int> electricDarkPixelIndices;
+		std::vector<unsigned int> opticalDarkPixelIndices;
+		std::vector<unsigned int> activePixelIndices;
     };
 
 }

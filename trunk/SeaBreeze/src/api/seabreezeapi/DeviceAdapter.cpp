@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DeviceAdapter.cpp
- * @date    January 2015
+ * @date    January 2017
  * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * This is a wrapper that allows
@@ -8,7 +8,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -90,6 +90,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ShutterFeatureAdapter>(shutterFeatures);
     __delete_feature_adapters<NonlinearityCoeffsFeatureAdapter>(nonlinearityFeatures);
     __delete_feature_adapters<TemperatureFeatureAdapter>(temperatureFeatures);
+	__delete_feature_adapters<IntrospectionFeatureAdapter>(introspectionFeatures);
     __delete_feature_adapters<RevisionFeatureAdapter>(revisionFeatures);
     __delete_feature_adapters<OpticalBenchFeatureAdapter>(opticalBenchFeatures);
     __delete_feature_adapters<SpectrumProcessingFeatureAdapter>(spectrumProcessingFeatures);
@@ -216,6 +217,11 @@ int DeviceAdapter::open(int *errorCode) {
                     TemperatureFeatureAdapter>(this->device,
             temperatureFeatures, bus, featureFamilies.TEMPERATURE);
 
+	/* Create introspection feature list */
+	__create_feature_adapters<IntrospectionFeatureInterface,
+		IntrospectionFeatureAdapter>(this->device,
+			introspectionFeatures, bus, featureFamilies.INTROSPECTION);
+
     /* Create revision feature list */
     __create_feature_adapters<RevisionFeatureInterface,
                     RevisionFeatureAdapter>(this->device,
@@ -241,13 +247,16 @@ int DeviceAdapter::open(int *errorCode) {
                     PixelBinningFeatureAdapter>(this->device,
             pixelBinningFeatures, bus, featureFamilies.PIXEL_BINNING);
 
+	/* Create data buffer feature list */
     __create_feature_adapters<DataBufferFeatureInterface,
                     DataBufferFeatureAdapter>(this->device,
             dataBufferFeatures, bus, featureFamilies.DATA_BUFFER);
 
+	/* Create acquisition feature list */
     __create_feature_adapters<AcquisitionDelayFeatureInterface,
                     AcquisitionDelayFeatureAdapter>(this->device,
             acquisitionDelayFeatures, bus, featureFamilies.ACQUISITION_DELAY);
+
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return 0;
@@ -1013,6 +1022,67 @@ int DeviceAdapter::temperatureGetAll(long temperatureFeatureID, int *errorCode,
     return feature->readAllTemperatures(errorCode, buffer, bufferLength);
 }
 
+/* Introspection feature wrappers */
+int DeviceAdapter::getNumberOfIntrospectionFeatures() {
+	return (int) this->introspectionFeatures.size();
+}
+
+int DeviceAdapter::getIntrospectionFeatures(long *buffer, int maxFeatures) {
+	return __getFeatureIDs<IntrospectionFeatureAdapter>(
+		introspectionFeatures, buffer, maxFeatures);
+}
+
+IntrospectionFeatureAdapter *DeviceAdapter::getIntrospectionFeatureByID(long featureID) {
+	return __getFeatureByID<IntrospectionFeatureAdapter>(
+		introspectionFeatures, featureID);
+}
+
+uint16_t DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode)
+{
+	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getNumberOfPixels(errorCode);
+}
+
+
+int DeviceAdapter::introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+{
+	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getActivePixelRanges(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+{
+	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getElectricDarkPixelRanges(errorCode, buffer, bufferLength);
+}
+
+int DeviceAdapter::introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+{
+	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getOpticalDarkPixelRanges(errorCode, buffer, bufferLength);
+}
+
+
 /* Revision feature wrappers */
 int DeviceAdapter::getNumberOfRevisionFeatures() {
     return (int) this->revisionFeatures.size();
@@ -1366,4 +1436,5 @@ unsigned long DeviceAdapter::acquisitionDelayGetDelayMinimumMicroseconds(long fe
 
     return feature->getAcquisitionDelayMinimumMicroseconds(errorCode);
 }
+
 

@@ -28,7 +28,6 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/SpectrometerProtocolInterface.h"
 #include "vendors/OceanOptics/features/eeprom_slots/WavelengthEEPROMSlotFeature.h"
 #include "common/exceptions/FeatureProtocolNotFoundException.h"
@@ -36,6 +35,13 @@
 #include "vendors/OceanOptics/protocols/ooi/impls/OOISpectrometerProtocol.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
 #include "common/Log.h"
+#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
+
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumWithGainExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -256,8 +262,16 @@ vector<SpectrometerTriggerMode *> OOISpectrometerFeature::getTriggerModes() cons
     return this->triggerModes;
 }
 
-vector<int> OOISpectrometerFeature::getElectricDarkPixelIndices() const {
+vector<unsigned int> OOISpectrometerFeature::getElectricDarkPixelIndices() const {
     return this->electricDarkPixelIndices;
+}
+
+vector<unsigned int> OOISpectrometerFeature::getOpticalDarkPixelIndices() const {
+	return this->opticalDarkPixelIndices;
+}
+
+vector<unsigned int> OOISpectrometerFeature::getActivePixelIndices() const {
+	return this->activePixelIndices;
 }
 
 long OOISpectrometerFeature::getIntegrationTimeMinimum() const {
@@ -279,6 +293,7 @@ int OOISpectrometerFeature::getNumberOfPixels() const {
 int OOISpectrometerFeature::getMaximumIntensity() const {
     return this->maxIntensity;
 }
+
 
 FeatureFamily OOISpectrometerFeature::getFeatureFamily() {
     FeatureFamilies families;

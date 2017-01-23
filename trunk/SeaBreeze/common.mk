@@ -43,7 +43,7 @@ ifeq ($(UNAME), Darwin)
 # Cygwin-32 configuration 
 else ifeq ($(findstring CYGWIN, $(UNAME)), CYGWIN)
     # caller can override this, but this is the current Ocean Optics default
-    VISUALSTUDIO_PROJ ?= VisualStudio2010
+    VISUALSTUDIO_PROJ ?= VisualStudio2013
     LIBBASENAME = SeaBreeze
     SUFFIX      = dll
     CFLAGS_BASE = -I${SEABREEZE}/include \
@@ -110,7 +110,8 @@ OBJS_C   := $(patsubst %.c,%.o,$(SRCS_C))
 VISUALSTUDIO_PROJECTS = VisualStudio2005 \
                         VisualStudio2010 \
                         VisualStudio2012 \
-                        VisualStudio2013
+                        VisualStudio2013 \
+                        VisualStudio2015
 
 ifneq ($(MAKECMDGOALS),clean)
     -include $(DEPFILES)

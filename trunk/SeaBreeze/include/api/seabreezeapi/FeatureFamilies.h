@@ -117,6 +117,12 @@ namespace seabreeze {
             virtual ~TemperatureFeatureFamily();
         };
 
+		class IntrospectionFeatureFamily : public FeatureFamily {
+		public:
+			IntrospectionFeatureFamily();
+			virtual ~IntrospectionFeatureFamily();
+		};
+
         class RevisionFeatureFamily : public FeatureFamily {
         public:
             RevisionFeatureFamily();
@@ -180,6 +186,7 @@ namespace seabreeze {
             const WaveCalFeatureFamily WAVELENGTH_CAL;
             const NonlinearityCoeffsFeatureFamily NONLINEARITY_COEFFS;
             const TemperatureFeatureFamily TEMPERATURE;
+			const IntrospectionFeatureFamily INTROSPECTION;
             const RevisionFeatureFamily REVISION;
             const OpticalBenchFeatureFamily OPTICAL_BENCH;
             const SpectrumProcessingFeatureFamily SPECTRUM_PROCESSING;
@@ -188,6 +195,7 @@ namespace seabreeze {
             const DataBufferFeatureFamily DATA_BUFFER;
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
             const PixelBinningFeatureFamily PIXEL_BINNING;
+
 
             FeatureFamilies();
             ~FeatureFamilies();

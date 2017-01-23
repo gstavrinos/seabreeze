@@ -4,7 +4,7 @@
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows access to SeaBreeze
- * DataBufferFeatureInterface instances.
+ * AcquisitionDelayFeatureInterface instances.
  *
  * LICENSE:
  *
