@@ -16,7 +16,8 @@ namespace FlameX_SeaBreeze_Command_Test
     public partial class FlameX_SeaBreeze_Test : Form
     {
 
-        List<SeaBreezeSpectrometerClass> spectrometerList = new List<SeaBreezeSpectrometerClass>();
+        SeaBreezeSpectrometerClass spectrometerUnderTest;
+        Boolean isConnected = false;
 
         public FlameX_SeaBreeze_Test()
         {
@@ -27,28 +28,30 @@ namespace FlameX_SeaBreeze_Command_Test
 
         private void buttonFindFlameX_Click(object sender, EventArgs e)
         {
-            int index = 0;
-            int zero_on_success = 0;
-            int errorCode = 0;
-
-            do
+            if (isConnected)
             {
-                zero_on_success = SeaBreezeWrapper.seabreeze_open_spectrometer(index, ref errorCode);
-                if ((zero_on_success == 0) && (errorCode == 0))
-                {
-                    spectrometerList.Add(new SeaBreezeSpectrometerClass(index));
-                    index++;
-                }
-            } while (zero_on_success == 0);
-            
-            foreach(SeaBreezeSpectrometerClass aSpectrometer in spectrometerList)
-            {
-                string spectrometerID = aSpectrometer.GetNameAndSerialNumber();
-                if (spectrometerID.Contains("FLAMEX"))
-                    listBoxFlameXFound.Items.Add(spectrometerID);
-                else
-                    aSpectrometer.Close();
+                spectrometerUnderTest.Close();
+                spectrometerUnderTest = null;
+                buttonFindFlameX.Text = "Connect";
+                isConnected = false;
             }
+            else
+            {
+                listBoxTestLog.Items.Clear();
+                spectrometerUnderTest = new SeaBreezeSpectrometerClass(listBoxTestLog, ref isConnected);
+                if(isConnected)
+                {
+                    buttonFindFlameX.Text = "Disconnect";
+                    spectrometerUnderTest.RunTests();
+                }
+            }
+
+        }
+
+        private void FlameX_SeaBreeze_Test_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (spectrometerUnderTest != null)
+                spectrometerUnderTest.Close();
         }
     }
 }

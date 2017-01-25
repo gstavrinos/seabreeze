@@ -45,7 +45,7 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_CHECKSUM_TYPE					= 0x00000010;
 		static const unsigned int OBP_SET_PROTOCOL_REVISION				= 0x00000020;
         static const unsigned int OBP_GET_HARDWARE_REVISION				= 0x00000080;
-		static const unsigned int OBP_GET_RECOVERY_ASTATUS				= 0x00000081;
+		static const unsigned int OBP_GET_RECOVERY_STATUS				= 0x00000081;
 		static const unsigned int OBP_GET_SUPPORTED_COMMAND_LIST		= 0x00000082;
         static const unsigned int OBP_GET_FIRMWARE_REVISION			    = 0x00000090;
 		static const unsigned int OBP_GET_FIRMWARE_2_REVISION			= 0x00000091;

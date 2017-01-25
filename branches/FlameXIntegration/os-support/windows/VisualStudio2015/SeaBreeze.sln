@@ -12,6 +12,9 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FlameX_Seabreeze_Test_Insta
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlameX_SeaBreeze_Command_Test", "..\..\..\test\VisualStudio2015\FlameX_SeaBreeze_Command_Test\FlameX_SeaBreeze_Command_Test.csproj", "{9CC138F7-EF02-4DC4-8DFD-ADDDD454A7B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F6857325-8FAB-49A1-987A-E045706DE551} = {F6857325-8FAB-49A1-987A-E045706DE551}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
