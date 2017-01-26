@@ -9,6 +9,7 @@ CFLAGS_BASE = -I${SEABREEZE}/include \
               -Wunused \
               -Wmissing-include-dirs \
               -Werror \
+              -g \
               -O0 \
               -fpic \
               -fno-stack-protector \
@@ -44,7 +45,7 @@ ifeq ($(UNAME), Darwin)
 # Cygwin-32 configuration 
 else ifeq ($(findstring CYGWIN, $(UNAME)), CYGWIN)
     # caller can override this, but this is the current Ocean Optics default
-    VISUALSTUDIO_PROJ ?= VisualStudio2013
+    VISUALSTUDIO_PROJ ?= VisualStudio2015bbbbbbb
     LIBBASENAME = SeaBreeze
     SUFFIX      = dll
     CFLAGS_BASE = -I${SEABREEZE}/include \
