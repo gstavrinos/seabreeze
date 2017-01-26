@@ -12,7 +12,8 @@ CFLAGS_BASE = -I${SEABREEZE}/include \
               -O0 \
               -fpic \
               -fno-stack-protector \
-              -shared
+              -shared	
+
  
 
 export UNAME = $(shell uname)
@@ -72,6 +73,7 @@ else
     LIBBASENAME = libseabreeze
     LFLAGS_APP += -L/usr/lib \
                   -lstdc++ \
+                  -lusb \
                   -lm
     LFLAGS_LIB += -L/usr/lib \
                   -shared \
@@ -82,7 +84,7 @@ endif
 CFLAGS_BASE += -DOOI_DEBUG
 
 # these are for the .o files making up libseabreeze
-CPPFLAGS     = $(CFLAGS_BASE)
+CPPFLAGS     = $(CFLAGS_BASE) -std=c++11
 CFLAGS       = $(CFLAGS_BASE) -std=gnu99
 
 	# allow for a 32 bit build
