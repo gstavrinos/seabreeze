@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.cpp
- * @date    January 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @date    January 2017
+ * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver.
  * Both C and C++ language interfaces are provided.  Please
@@ -16,7 +16,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -1143,6 +1143,12 @@ void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code) {
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     wrapper->dataBufferClear(deviceID, featureID, error_code);
+}
+
+void sbapi_data_buffer_remove_oldest_spectra(long deviceID, long featureID, int *error_code, unsigned int numberOfSpectra) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->dataBufferRemoveOldestSpectra(deviceID, featureID, error_code, numberOfSpectra);
 }
 
 unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,

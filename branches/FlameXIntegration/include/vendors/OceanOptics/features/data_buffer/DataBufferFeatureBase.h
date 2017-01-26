@@ -44,7 +44,10 @@ namespace seabreeze {
 
         virtual DataBufferCount_t getNumberOfBuffers();
         virtual void clearBuffer(const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex)
+                const DataBufferCount_t bufferIndex)
+                throw (FeatureException);
+        virtual void removeOldestSpectraFromBuffer(const Protocol &protocol, const Bus &bus,
+                const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra)
                 throw (FeatureException);
         virtual DataBufferElementCount_t getNumberOfElements(
                 const Protocol &protocol, const Bus &bus,

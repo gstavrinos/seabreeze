@@ -533,6 +533,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobePeriodExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPDataBufferClearExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPDataBufferRemoveOldestExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetActivePixelRangesExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetAllTemperaturesExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetBoxcarWidthExchange.h" />
@@ -905,6 +906,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobeEnableExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPContinuousStrobePeriodExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPDataBufferClearExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPDataBufferRemoveOldestExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetActivePixelRangesExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetAllTemperaturesExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetBoxcarWidthExchange.cpp" />

@@ -195,7 +195,7 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_INTEGRATION_TIME_STEP_SIZE_US	= 0x00110003;	
         static const unsigned int OBP_SET_ITIME_USEC					= 0x00110010;
 
-		// trigger modes
+// trigger modes
 		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;	
 		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110102;	
         static const unsigned int OBP_SET_TRIG_MODE						= 0x00110110;

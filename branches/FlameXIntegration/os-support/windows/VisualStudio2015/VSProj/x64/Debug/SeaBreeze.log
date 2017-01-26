@@ -1,72 +1,8 @@
-﻿  OBPContinuousStrobeEnableExchange.cpp
+﻿  SeaBreezeAPI_Impl.cpp
+  SeaBreezeAPI.cpp
+  DeviceAdapter.cpp
   Generating Code...
-  Compiling...
-  OBPGetActivePixelRangesExchange.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  OBPTriggerModeExchange.cpp
-  OBPShutterExchange.cpp
-  OBPSetThermoElectricSetpointExchange.cpp
-  OBPSetThermoElectricEnableExchange.cpp
-  OBPSetScansToAverageExchange.cpp
-  OBPSetPixelBinningExchange.cpp
-  OBPSetIrradCollectionAreaExchange.cpp
-  OBPSetIrradCalExchange.cpp
-  OBPSetDefaultPixelBinningFactorExchange.cpp
-  OBPSetDataBufferingEnableExchange.cpp
-  OBPSetDataBufferCapacityExchange.cpp
-  OBPSetBoxcarWidthExchange.cpp
-  OBPSetAcquisitionDelayExchange.cpp
-  OBPRequestSpectrumExchange.cpp
-  OBPRequestRawSpectrumExchange.cpp
-  OBPRequestBufferedSpectrum32AndMetadata.cpp
-  OBPReadSpectrumWithGainExchange.cpp
-  OBPReadSpectrumExchange.cpp
-  OBPReadRawSpectrumExchange.cpp
-  OBPReadRawSpectrum32AndMetadataExchange.cpp
-  OBPLightSourceIntensityQuery.cpp
-  OBPLightSourceIntensityCommand.cpp
-  OBPLightSourceEnabledQuery.cpp
-  OBPLightSourceEnableCommand.cpp
-  OBPLampEnableCommand.cpp
-  OBPIntegrationTimeExchange.cpp
-  OBPGetWaveCalExchange.cpp
-  OBPGetThermoElectricTemperatureExchange.cpp
-  OBPGetTemperatureExchange.cpp
-  OBPGetTemperatureCountExchange.cpp
-  OBPGetStrayLightCoeffsCountExchange.cpp
-  OBPGetStrayLightCoeffExchange.cpp
-  OBPGetSerialNumberMaximumLengthExchange.cpp
-  OBPGetSerialNumberExchange.cpp
-  OBPGetScansToAverageExchange.cpp
-  OBPGetSaturationExchange.cpp
-  OBPGetPixelBinningExchange.cpp
-  OBPGetOpticalDarkPixelRangesExchange.cpp
-  OBPGetOpticalBenchSlitWidthMicronsExchange.cpp
-  OBPGetOpticalBenchSerialNumberExchange.cpp
-  OBPGetOpticalBenchIDExchange.cpp
-  OBPGetOpticalBenchGratingExchange.cpp
-  OBPGetOpticalBenchFilterExchange.cpp
-  OBPGetOpticalBenchFiberDiameterMicronsExchange.cpp
-  OBPGetOpticalBenchCoatingExchange.cpp
-  OBPGetNumberOfPixelsExchange.cpp
-  OBPGetNonlinearityCoeffsCountExchange.cpp
-  OBPGetNonlinearityCoeffExchange.cpp
-  OBPGetMaxPixelBinningExchange.cpp
-  OBPGetIrradCollectionAreaExchange.cpp
-  OBPGetIrradCalExchange.cpp
-  OBPGetHardwareRevisionExchange.cpp
-  OBPGetFirmwareRevisionExchange.cpp
-  OBPGetElectricDarkPixelRangesExchange.cpp
-  OBPGetDefaultPixelBinningExchange.cpp
-  OBPGetDataBufferingEnableExchange.cpp
-  OBPGetDataBufferMaximumCapacityExchange.cpp
-  OBPGetDataBufferCountExchange.cpp
-  OBPGetDataBufferCapacityExchange.cpp
-  OBPGetBoxcarWidthExchange.cpp
-  OBPGetAllTemperaturesExchange.cpp
-  OBPDataBufferClearExchange.cpp
-  OBPContinuousStrobePeriodExchange.cpp
+     Creating library Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.lib and object Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.exp
   SeaBreeze.vcxproj -> Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.dll
   SeaBreeze.vcxproj -> Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.pdb (Full PDB)
   A subdirectory or file ..\..\..\..\lib already exists.

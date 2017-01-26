@@ -1321,6 +1321,17 @@ void DeviceAdapter::dataBufferClear(long featureID, int *errorCode) {
     feature->clearBuffer(errorCode);
 }
 
+void DeviceAdapter::dataBufferRemoveOldestSpectra(long featureID, int *errorCode, unsigned int numberOfSpectra) 
+{
+    DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+    if(NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->removeOldestSpectraFromBuffer(errorCode, numberOfSpectra);
+}
+
 unsigned long DeviceAdapter::dataBufferGetNumberOfElements(long featureID, int *errorCode) {
     DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
     if(NULL == feature) {

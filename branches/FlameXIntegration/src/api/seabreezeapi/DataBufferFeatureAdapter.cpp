@@ -65,6 +65,18 @@ void DataBufferFeatureAdapter::clearBuffer(int *errorCode)
     }
 }
 
+void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra) 
+{
+    try 
+    {
+        this->feature->removeOldestSpectraFromBuffer(*this->protocol, *this->bus, 0, numberOfSpectra);
+        SET_ERROR_CODE(ERROR_SUCCESS);
+    } catch (FeatureException &fe) 
+    {
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+    }
+}
+
 unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode) 
 {
     unsigned long retval;

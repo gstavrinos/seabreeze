@@ -84,6 +84,34 @@ void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
 
 }
 
+void DataBufferFeatureBase::removeOldestSpectraFromBuffer(const Protocol &protocol,
+        const Bus &bus, const DataBufferIndex_t bufferIndex, unsigned int numberOfSpectra)
+        throw (FeatureException) {
+
+    DataBufferProtocolInterface *buffer = NULL;
+    ProtocolHelper *proto = NULL;
+
+    try {
+        proto = lookupProtocolImpl(protocol);
+        buffer = static_cast<DataBufferProtocolInterface *>(proto);
+    } catch (FeatureProtocolNotFoundException fpnfe) {
+        string error(
+                "Could not find matching protocol implementation to remove the oldest spectra from the data buffer.");
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureProtocolNotFoundException(error);
+    }
+
+    try {
+        buffer->removeOldestSpectraFromBuffer(bus, bufferIndex, numberOfSpectra);
+    } catch (ProtocolException &pe) {
+        string error("Caught protocol exception: ");
+        error += pe.what();
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureControlException(error);
+    }
+
+}
+
 DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
     const Protocol &protocol, const Bus &bus,
     const DataBufferIndex_t bufferIndex) throw (FeatureException) {

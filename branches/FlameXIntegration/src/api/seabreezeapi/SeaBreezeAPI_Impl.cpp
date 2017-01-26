@@ -1600,6 +1600,16 @@ void SeaBreezeAPI_Impl::dataBufferClear(long deviceID, long featureID, int *erro
     adapter->dataBufferClear(featureID, errorCode);
 }
 
+void SeaBreezeAPI_Impl::dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra) {
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if(NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    adapter->dataBufferRemoveOldestSpectra(featureID, errorCode, numberOfSpectra);
+}
+
 unsigned long SeaBreezeAPI_Impl::dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {

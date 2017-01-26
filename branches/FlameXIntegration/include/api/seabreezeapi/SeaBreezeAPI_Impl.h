@@ -213,6 +213,7 @@ public:
     virtual int getNumberOfDataBufferFeatures(long deviceID, int *errorCode);
     virtual int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     virtual void dataBufferClear(long deviceID, long featureID, int *errorCode);
+    virtual void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra);
     virtual unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode);
     virtual unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode);
 	virtual unsigned char dataBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode);

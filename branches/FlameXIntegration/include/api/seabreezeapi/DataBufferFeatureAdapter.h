@@ -49,6 +49,7 @@ namespace seabreeze {
 
             /* Data buffer functions */
             void clearBuffer(int *errorCode);
+            void removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra);
             unsigned long getNumberOfElements(int *errorCode);
             unsigned long getBufferCapacity(int *errorCode);
             unsigned char getBufferingEnable(int *errorCode);

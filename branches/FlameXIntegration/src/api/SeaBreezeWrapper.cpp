@@ -783,6 +783,28 @@ void SeaBreezeWrapper::clearBuffer(int index, int *errorCode) {
     }
 }
 
+void SeaBreezeWrapper::removeOldestSpectraFromBuffer(int index, int *errorCode, unsigned int numberOfSpectra) {
+    if(NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    DataBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    if(NULL != buffer) {
+        try {
+            buffer->removeOldestSpectraFromBuffer(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]), 0,
+                    numberOfSpectra);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+}
+
+
 unsigned long SeaBreezeWrapper::getBufferElementCount(int index, int *errorCode) {
     unsigned long retval = 0;
 
@@ -2100,6 +2122,12 @@ void seabreeze_clear_buffer(int index, int *error_code)
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     wrapper->clearBuffer(index, error_code);
+}
+
+void seabreeze_remove_oldest_spectra_from_buffer(int index, int *error_code, unsigned int numberOfSpectra) 
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    wrapper->removeOldestSpectraFromBuffer(index, error_code, numberOfSpectra);
 }
 
 unsigned long seabreeze_get_buffer_element_count(int index, int *error_code) 

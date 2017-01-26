@@ -106,6 +106,7 @@ public:
 
     // Buffering features
     void   clearBuffer               (int index, int *errorCode);
+    void   removeOldestSpectraFromBuffer	(int index, int *errorCode, unsigned int numberOfSpectra);
     unsigned long getBufferElementCount(int index, int *errorCode);
     unsigned long getBufferCapacity  (int index, int *errorCode);
     unsigned char getBufferingEnable  (int index, int *errorCode);
@@ -825,6 +826,15 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
     DLL_DECL void seabreeze_clear_buffer(int index, int *error_code);
+
+    /**
+    * @brief remove the oldest spectrum from the buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer cleared
+    + @param numberOfSpectra (Input) how many of the oldest spectra to be removed
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    */
+    DLL_DECL void seabreeze_remove_oldest_spectra_from_buffer(int index, int *error_code, int numberOfSpectra);
+
 
     /**
     * @brief Get the number of spectra presently in the buffer (if equipped)

@@ -48,6 +48,9 @@ namespace seabreeze {
 
         virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
+                
+        virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra)
+                throw (ProtocolException) = 0;
 
         virtual unsigned long getNumberOfElements(const Bus &bus,
                 unsigned char bufferIndex)
