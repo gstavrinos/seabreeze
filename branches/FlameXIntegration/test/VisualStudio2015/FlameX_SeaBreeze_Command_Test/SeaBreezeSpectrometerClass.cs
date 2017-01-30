@@ -10,8 +10,8 @@ namespace FlameX_SeaBreeze_Command_Test
     class SeaBreezeSpectrometerClass
     {
         ListBox logListBox;
+        TestClass myTests;
         string myName;
-        string mySerialNumber;
         Boolean isActive = false;
         const int SEABREEZE_ID = 0;
 
@@ -27,21 +27,23 @@ namespace FlameX_SeaBreeze_Command_Test
             {
                 isActive = true;
                 myName = GetName();
+                logListBox.Items.Add("Connected to: " + myName);
+                isConnected = true;
 
                 if (myName.StartsWith("FLAMEX"))
                 {
-                    isConnected = true;
-                    mySerialNumber = GetSerialNumber();
-
-                    Log("Connected to:" + myName + " " + mySerialNumber);
-
-                    Log("Executed Command: 0x00110220  Get number of pixels");
-                    Log("Executed Command: 0x00110221  Get active pixel ranges");
-                    Log("Executed Command: 0x00110222  Get optical dark pixel ranges");
-                    Log("Executed Command: 0x00110223  Get electrical dark pixel ranges");
+                    myTests = new FlameTestClass(logListBox);
+                }
+                else if(myName.StartsWith("STS"))
+                {
+                    myTests = new STSTestClass(logListBox);
+                }
+                else if (myName.StartsWith("QEPRO"))
+                {
+                    myTests = new QEPROTestClass(logListBox);
                 }
                 else
-                    Log(string.Format("The spectrometer found was a {0}, not a Flame X.", myName));
+                    logListBox.Items.Add(string.Format("A spectrometer test class was not found for {0}.", myName));
             }
             isConnected = isActive;
         }
@@ -49,16 +51,6 @@ namespace FlameX_SeaBreeze_Command_Test
         ~SeaBreezeSpectrometerClass()
         {
             Close();
-        }
-
-        public void RunTests()
-        {
-            if (isActive)
-            {
-
-            }
-            else
-                Log("Could not run any tests because there was no active Flame X.");
         }
 
         public void Close()
@@ -75,17 +67,9 @@ namespace FlameX_SeaBreeze_Command_Test
 
 
                 if (myErrorCode == 0)
-                    Log("Disconnected from spectrometer.");
+                    logListBox.Items.Add("Disconnected from spectrometer.");
                 else
-                    Log("Error disconnecting: "+myErrorString);
-            }
-        }
-
-        public void Log(string message)
-        {
-            if(logListBox != null)
-            {
-                logListBox.Items.Add(message);
+                    logListBox.Items.Add("Error disconnecting: "+myErrorString);
             }
         }
 
@@ -115,30 +99,14 @@ namespace FlameX_SeaBreeze_Command_Test
             return result;
         }
 
-        public string GetSerialNumber()
+       public void RunTests()
         {
-            string result = "Not Connected";
-
-            if(isActive)
+            if (myTests != null)
             {
-                Int32 myErrorCode = 0;
-
-                Int32 errorStringLength = SeaBreezeWrapper.seabreeze_get_error_string_maximum_length();
-                byte[] errorStringBuffer = new byte[errorStringLength];
-
-                Int32 serialNumberStringLength = SeaBreezeWrapper.seabreeze_get_serial_number_max_length(SEABREEZE_ID, ref myErrorCode);
-                byte[] mySerialNumberBuffer = new byte[serialNumberStringLength];
-
-                int bytesInBuffer = SeaBreezeWrapper.seabreeze_get_serial_number(SEABREEZE_ID, ref myErrorCode, ref mySerialNumberBuffer[0], serialNumberStringLength);
-                if (myErrorCode != 0)
-                {
-                    bytesInBuffer = SeaBreezeWrapper.seabreeze_get_error_string(myErrorCode, ref errorStringBuffer[0], errorStringLength);
-                    string myErrorString = "Exception getting model description: " + System.Text.Encoding.Default.GetString(errorStringBuffer);
-                    throw (new Exception(myErrorString));
-                }
-                result =  System.Text.Encoding.UTF8.GetString(mySerialNumberBuffer).TrimEnd((char)0);
+                myTests.RunCommonTests();
+                myTests.RunSpectrometerSpecificTests();
             }
-            return result;
+
         }
     }
 }

@@ -1,1 +1,0 @@
-Z:\Windows_Share\OceanOpticsProjects\working\SeaBreezeFlameX\SeaBreeze\FlameXIntegration\test\VisualStudio2015\FlameX_SeaBreeze_Command_Test\bin\Debug\FlameX_SeaBreeze_Command_Test.exe.config
