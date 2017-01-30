@@ -258,7 +258,6 @@ copy /b /v ..\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\..\..\..\lib
-
 copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     </PostBuildEvent>
     <ProjectReference>
