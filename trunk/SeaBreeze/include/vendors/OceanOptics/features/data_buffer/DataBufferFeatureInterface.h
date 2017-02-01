@@ -1,11 +1,11 @@
 /***************************************************//**
  * @file    DataBufferFeatureInterface.h
- * @date    October 2015
+ * @date    October 2017
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -47,9 +47,14 @@ namespace seabreeze {
         virtual DataBufferCount_t getNumberOfBuffers() = 0;
         virtual void clearBuffer(const Protocol &protocol, const Bus &bus,
                 const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
+        virtual void removeOldestSpectraFromBuffer(const Protocol &protocol, const Bus &bus,
+                const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra) throw (FeatureException) = 0;
         virtual DataBufferElementCount_t getBufferCapacity(const Protocol &protocol,
                 const Bus &bus, const DataBufferIndex_t bufferIndex)
                 throw (FeatureException) = 0;
+		virtual DataBufferIndex_t getBufferingEnable(const Protocol &protocol,
+			const Bus &bus, const DataBufferIndex_t bufferIndex)
+			throw (FeatureException) = 0;
         virtual DataBufferElementCount_t getBufferCapacityMaximum(
                 const Protocol &protocol, const Bus &bus,
                 const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
@@ -63,6 +68,10 @@ namespace seabreeze {
                 const DataBufferIndex_t bufferIndex,
                 const DataBufferElementCount_t bufferSize)
                 throw (FeatureException) = 0;
+		virtual void setBufferingEnable(const Protocol &protocol, const Bus &bus,
+			const DataBufferIndex_t bufferIndex,
+			const DataBufferElementCount_t bufferSize)
+			throw (FeatureException) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.h
- * @date    February 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @date    February 2017
+ * @author  Ocean Optics, Inc.
  *
  * This is an interface to SeaBreeze that allows
  * the user to connect to devices over USB and other buses.
@@ -11,7 +11,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -262,11 +262,14 @@ public:
     virtual int getNumberOfDataBufferFeatures(long deviceID, int *errorCode) = 0;
     virtual int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
     virtual void dataBufferClear(long deviceID, long featureID, int *errorCode) = 0;
+    virtual void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra) = 0;
     virtual unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode) = 0;
     virtual unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode) = 0;
-    virtual unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode) = 0;
+	virtual unsigned char dataBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode) = 0;
+	virtual unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode) = 0;
     virtual unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode) = 0;
     virtual void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity) = 0;
+	virtual void dataBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled) = 0;
 
     /* Acquisition delay capabilities */
     virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) = 0;
@@ -2394,6 +2397,18 @@ extern "C" {
      *        error codes.
      */
     DLL_DECL void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code);
+
+    /**
+     * @brief remove the oldest data from the buffer
+     * @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+     * @param featureID (Input) The ID of a particular instance of a data buffer
+     *        feature.  Valid IDs can be found with the
+     *        sbapi_get_data_buffer_features() function.
+     * @param error_code (Output) A pointer to an integer that can be used for storing
+     *        error codes.
+     * @param numberOfSpectraToRemove (Input) Number of spectra from oldest to newest to remove.
+     */
+    DLL_DECL void sbapi_data_buffer_remove_oldest_spectra(long deviceID, long featureID, int *error_code, int numberOfSpectraToRemove);
 
     /**
      * @brief Get the number of data elements currently in the buffer

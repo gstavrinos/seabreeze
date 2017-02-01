@@ -10,6 +10,7 @@ SUBDIRS = \
     fpga_register       \
     irradcal            \
     light_source        \
+    introspection		\
     nonlinearity        \
     temperature         \
     revision            \

@@ -250,11 +250,14 @@ namespace seabreeze {
             int getNumberOfDataBufferFeatures();
             int getDataBufferFeatures(long *buffer, int maxFeatures);
             void dataBufferClear(long featureID, int *errorCode);
+            void dataBufferRemoveOldestSpectra(long featureID, int *errorCode, unsigned int numberOfSpectra);
             unsigned long dataBufferGetNumberOfElements(long featureID, int *errorCode);
             unsigned long dataBufferGetBufferCapacity(long featureID, int *errorCode);
+			unsigned char dataBufferGetBufferingEnable(long featureID, int *errorCode);
             unsigned long dataBufferGetBufferCapacityMaximum(long featureID, int *errorCode);
             unsigned long dataBufferGetBufferCapacityMinimum(long featureID, int *errorCode);
             void dataBufferSetBufferCapacity(long featureID, int *errorCode, unsigned long capacity);
+			void dataBufferSetBufferingEnable(long featureID, int *errorCode, unsigned char isEnabled);
 
             /* Get one or more acquisition delay features */
             int getNumberOfAcquisitionDelayFeatures();

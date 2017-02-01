@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeWrapper.h
- * @date    July 2009
+ * @date    January 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a trivial interface to SeaBreeze that allows
@@ -11,7 +11,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -67,9 +67,20 @@ public:
     int    openSpectrometer          (int index, int *errorCode);
     int    closeSpectrometer         (int index, int *errorCode);
 
+	// Wrapper features
+	void   setVerbose(bool flag);
+	void   setLogfile(char *path, int length);
+	int    getAPIVersionString(char *buffer, int length);
+	int    getErrorString(int errorCode, char *buffer, int buffer_length);
+	int	   getErrorStringMaximumLength(void);
+
     // metadata
     int    getModel                  (int index, int *errorCode, char *buf, int len);
+	int	   getModelStringMaximumLength(void);
     int    getSerialNumber           (int index, int *errorCode, char *buf, int len);
+	unsigned char   getSerialNumberMaximumLength(int index, int *errorCode);
+
+		
 
     // basic acquisitions
     void   setIntegrationTimeMicrosec(int index, int *errorCode, unsigned long integration_time_micros);
@@ -95,11 +106,14 @@ public:
 
     // Buffering features
     void   clearBuffer               (int index, int *errorCode);
+    void   removeOldestSpectraFromBuffer	(int index, int *errorCode, unsigned int numberOfSpectra);
     unsigned long getBufferElementCount(int index, int *errorCode);
     unsigned long getBufferCapacity  (int index, int *errorCode);
+    unsigned char getBufferingEnable  (int index, int *errorCode);
     unsigned long getBufferCapacityMaximum(int index, int *errorCode);
     unsigned long getBufferCapacityMinimum(int index, int *errorCode);
     void   setBufferCapacity         (int index, int *errorCode, unsigned long capacity);
+    void   setBufferingEnable         (int index, int *errorCode, unsigned char isEnabled);
 
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);
@@ -117,12 +131,6 @@ public:
     void   setTECTemperature         (int index, int *errorCode, double temperature_degrees_celsius);
     void   setTECEnable              (int index, int *errorCode, unsigned char tec_enable);
     void   setTECFanEnable           (int index, int *errorCode, unsigned char tec_fan_enable);
-
-    // Wrapper features
-    void   setVerbose                (bool flag);
-    void   setLogfile                (char *path, int length);
-    int    getAPIVersionString       (char *buffer, int length);
-    int    getErrorString            (int errorCode, char *buffer, int buffer_length);
 
     // raw USB access
     int    writeUSB                  (int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length);
@@ -169,8 +177,7 @@ extern "C" {
      * be used to communicate with that same device in the other functions
      * provided here.
      */
-    DLL_DECL int
-    seabreeze_open_spectrometer(int index, int *error_code);
+    DLL_DECL int seabreeze_open_spectrometer(int index, int *error_code);
 
     /**
      * @brief This function closes the spectrometer attached to the system.
@@ -180,8 +187,13 @@ extern "C" {
      *        for storing error codes.
      * @return int: This function will return 1 no matter what!  (MZ)
      */
-    DLL_DECL int
-    seabreeze_close_spectrometer(int index, int *error_code);
+    DLL_DECL int seabreeze_close_spectrometer(int index, int *error_code);
+
+	/**
+	* @brief This function returns a the maximum length for an error string.
+	* @return int: Maximum size of an error string.
+	*/
+	DLL_DECL int seabreeze_get_error_string_maximum_length(void);
 
     /**
      * @brief This function returns a description of the error denoted by
@@ -195,8 +207,7 @@ extern "C" {
      * @param buffer_length (Input) allocated size of the output buffer
      * @return int: Number of bytes written to buffer.
      */
-    DLL_DECL int
-    seabreeze_get_error_string(int error_code, char *buffer, int buffer_length);
+    DLL_DECL int seabreeze_get_error_string(int error_code, char *buffer, int buffer_length);
 
     /**
      * @brief This function returns a string denoting the type of the device.
@@ -213,6 +224,7 @@ extern "C" {
      *
      * \verbatim
      *      NONE:        Used if no spectrometer is found (error_code will also be set)
+	 *      FLAMEX:		 Represents a Flame X Spectrometer
      *      HR2000:      Represents an HR2000 Spectrometer
      *      HR2000PLUS:  Represents an HR2000+ Spectrometer
      *      HR4000:      Represents an HR4000 Spectrometer
@@ -231,8 +243,13 @@ extern "C" {
      *      USB4000:     Represents a USB4000 Spectrometer
      * \endverbatim
      */
-    DLL_DECL int
-    seabreeze_get_model(int index, int *error_code, char *buffer, int buffer_length);
+    DLL_DECL int seabreeze_get_model(int index, int *error_code, char *buffer, int buffer_length);
+
+	/**
+	* @brief This function returns a the maximum length for a model string.
+	* @return int: Maximum size of a model string.
+	*/
+	DLL_DECL int seabreeze_get_model_string_maximum_length(void);
 
     /**
      * @brief This function sets the trigger mode for the specified device.
@@ -245,8 +262,7 @@ extern "C" {
      * Note that requesting an unsupported mode will result in an error.
      */
 
-    DLL_DECL void
-    seabreeze_set_trigger_mode(int index, int *error_code, int mode);
+    DLL_DECL void seabreeze_set_trigger_mode(int index, int *error_code, int mode);
 
     /**
      * @brief This function sets the integration time for the specified device.
@@ -260,9 +276,7 @@ extern "C" {
      * If your application requires a stability scan following a change
      * in integration time, you need to command that yourself.
      */
-    DLL_DECL void
-    seabreeze_set_integration_time_microsec(int index, int *error_code,
-            unsigned long integration_time_micros);
+    DLL_DECL void seabreeze_set_integration_time_microsec(int index, int *error_code, unsigned long integration_time_micros);
 
     /**
      * @brief This function returns the smallest integration time setting,
@@ -273,8 +287,7 @@ extern "C" {
      * @return Returns minimum legal integration time in microseconds if > 0.
      *        On error, returns -1 and error_code will be set accordingly.
      */
-    DLL_DECL long
-    seabreeze_get_min_integration_time_microsec(int index, int *error_code);
+    DLL_DECL long seabreeze_get_min_integration_time_microsec(int index, int *error_code);
 
     /**
      * @brief This function sets the shutter state on the spectrometer.
@@ -286,8 +299,7 @@ extern "C" {
      *      non-zero, then the shutter will open.  If the value of opened is
      *      zero, then the shutter will close.
      */
-    DLL_DECL void
-    seabreeze_set_shutter_open(int index, int *error_code, unsigned char opened);
+    DLL_DECL void seabreeze_set_shutter_open(int index, int *error_code, unsigned char opened);
 
     /**
      * @brief This function sets the strobe enable on the spectrometer.  Note that
@@ -309,8 +321,7 @@ extern "C" {
      *      strobe_enable is zero, then the pin should be set low.  If the value
      *      of strobe_enable is non-zero, then the pin should be set high.
      */
-    DLL_DECL void
-    seabreeze_set_strobe_enable(int index, int *error_code, unsigned char strobe_enable);
+    DLL_DECL void seabreeze_set_strobe_enable(int index, int *error_code, unsigned char strobe_enable);
 
     /**
      * @brief This function gets the number of attached light sources that can
@@ -320,8 +331,7 @@ extern "C" {
      *        error codes.
      * @return The number of light sources that can be controlled
      */
-    DLL_DECL int
-    seabreeze_get_light_source_count(int index, int *error_code);
+    DLL_DECL int seabreeze_get_light_source_count(int index, int *error_code);
 
     /**
      * @brief This function sets the enable status on a connected light source.
@@ -337,9 +347,7 @@ extern "C" {
      *      enable is zero, then the light source should be disabled.  If the value
      *      of enable is non-zero, then the light source should be enabled.
      */
-    DLL_DECL void
-    seabreeze_set_light_source_enable(int index, int *error_code,
-            int light_index, unsigned char enable);
+    DLL_DECL void seabreeze_set_light_source_enable(int index, int *error_code, int light_index, unsigned char enable);
 
     /**
      * @brief This function sets the intensity of a connected light source.
@@ -362,9 +370,7 @@ extern "C" {
      *      seabreeze_set_light_source_enable() function or provide the
      *      operator with another way to disable or block the light source.
      */
-    DLL_DECL void
-    seabreeze_set_light_source_intensity(int index, int *error_code,
-            int light_index, double intensity);
+    DLL_DECL void seabreeze_set_light_source_intensity(int index, int *error_code, int light_index, double intensity);
 
     /**
      * @brief This function reads a string out of the spectrometer's EEPROM slot
@@ -383,9 +389,7 @@ extern "C" {
      *     slots on your spectrometer, see EEPROMSlotFeature instantiation in appropriate
      *     device file under src/vendors/OceanOptics/devices.
      */
-    DLL_DECL int
-    seabreeze_read_eeprom_slot(int index, int *error_code, int slot_number, unsigned char *buffer,
-            int buffer_length);
+    DLL_DECL int seabreeze_read_eeprom_slot(int index, int *error_code, int slot_number, unsigned char *buffer, int buffer_length);
 
     /**
      * @brief This function writes a string to a spectrometer's EEPROM slot
@@ -402,9 +406,7 @@ extern "C" {
      *
      * (*) See note in seabreeze_read_eeprom_slot() regarding per-device slot limits.
      */
-    DLL_DECL int
-    seabreeze_write_eeprom_slot(int index, int *error_code, int slot_number, unsigned char *buffer,
-            int buffer_length);
+    DLL_DECL int seabreeze_write_eeprom_slot(int index, int *error_code, int slot_number, unsigned char *buffer, int buffer_length);
 
     /**
      * @brief This function reads out an irradiance calibration from the spectrometer's
@@ -416,9 +418,7 @@ extern "C" {
      * @param buffer_length (Input) maximum number of values to copy from the device into buffer
      * @return int: the number of floats read from the device into the buffer
      */
-    DLL_DECL int
-    seabreeze_read_irrad_calibration(int index, int *error_code, float *buffer,
-        int buffer_length);
+    DLL_DECL int seabreeze_read_irrad_calibration(int index, int *error_code, float *buffer, int buffer_length);
 
     /**
      * @brief This function writes an irradiance calibration to the spectrometer's
@@ -430,9 +430,7 @@ extern "C" {
      * @param buffer_length (Input) number of calibration factors to write
      * @return int: the number of floats written from the buffer to the device
      */
-    DLL_DECL int
-    seabreeze_write_irrad_calibration(int index, int *error_code, float *buffer,
-        int buffer_length);
+    DLL_DECL int seabreeze_write_irrad_calibration(int index, int *error_code, float *buffer, int buffer_length);
 
     /**
      * @brief This function checks for an irradiance collection area in the spectrometer's
@@ -442,8 +440,7 @@ extern "C" {
      *        error codes.
      * @return int: 0 if no collection area available, 1 if available.
      */
-    DLL_DECL int
-    seabreeze_has_irrad_collection_area(int index, int *error_code);
+    DLL_DECL int seabreeze_has_irrad_collection_area(int index, int *error_code);
 
     /**
      * @brief This function reads an irradiance collection area from the spectrometer's
@@ -453,8 +450,7 @@ extern "C" {
      *        error codes.
      * @return float: collection area (typically in units of cm^2) read from device
      */
-    DLL_DECL float
-    seabreeze_read_irrad_collection_area(int index, int *error_code);
+    DLL_DECL float seabreeze_read_irrad_collection_area(int index, int *error_code);
 
     /**
      * @brief This function writes an irradiance collection area to the spectrometer's
@@ -464,8 +460,7 @@ extern "C" {
      *        error codes.
      * @param area (Input) collection area to save to the EEPROM (presumably cm^2)
      */
-    DLL_DECL void
-    seabreeze_write_irrad_collection_area(int index, int *error_code, float area);
+    DLL_DECL void seabreeze_write_irrad_collection_area(int index, int *error_code, float area);
 
     /**
      * @brief This function reads the value of the TEC and returns the value in
@@ -475,8 +470,7 @@ extern "C" {
      *        error codes.
      * @return int: The TEC temperature in degrees Celsius.
      */
-    DLL_DECL double
-    seabreeze_read_tec_temperature(int index, int *error_code);
+    DLL_DECL double seabreeze_read_tec_temperature(int index, int *error_code);
 
     /**
      * @brief This function sets the TEC temperature.
@@ -486,9 +480,7 @@ extern "C" {
      * @param temperature_degrees_celsius (Input) The desired temperature, in degrees
      *        Celsius.
      */
-    DLL_DECL void
-    seabreeze_set_tec_temperature(int index, int *error_code,
-            double temperature_degrees_celsius);
+    DLL_DECL void seabreeze_set_tec_temperature(int index, int *error_code, double temperature_degrees_celsius);
 
     /**
      * @brief This function enables the TEC feature on the spectrometer.
@@ -499,8 +491,7 @@ extern "C" {
      *        state.  If the value of tec_enable is zero, the TEC should be disabled.
      *        If the value of tec_enable is non-zero, the TEC should be enabled.
      */
-    DLL_DECL void
-    seabreeze_set_tec_enable(int index, int *error_code, unsigned char tec_enable);
+    DLL_DECL void seabreeze_set_tec_enable(int index, int *error_code, unsigned char tec_enable);
 
     /**
      * @brief This function enables the TEC Fan on the spectrometer.
@@ -511,8 +502,7 @@ extern "C" {
      *        state.  If the value of tec_fan_enable is zero, the TEC fan should be disabled.
      *        If the value of tec_fan_enable is non-zero, the TEC fan should be enabled.
      */
-    DLL_DECL void
-    seabreeze_set_tec_fan_enable(int index, int *error_code, unsigned char tec_fan_enable);
+    DLL_DECL void seabreeze_set_tec_fan_enable(int index, int *error_code, unsigned char tec_fan_enable);
 
     /**
      * @brief This acquires a spectrum and returns the answer in raw, unformatted bytes.
@@ -531,9 +521,7 @@ extern "C" {
      * to know how many bytes are returned by each spectrometer model, which bytes indicate 
      * synchronization points or whatever, etc.  
      */
-    DLL_DECL int
-    seabreeze_get_unformatted_spectrum(int index, int *error_code,
-            unsigned char *buffer, int buffer_length);
+    DLL_DECL int seabreeze_get_unformatted_spectrum(int index, int *error_code, unsigned char *buffer, int buffer_length);
 
     /**
      * @brief This acquires a spectrum and returns the answer in formatted
@@ -552,9 +540,7 @@ extern "C" {
      * applied, meaning it has been scaled up to the spectrometer's full dynamic range using 
      * the gain setting recorded in that spectrometer’s EEPROM.
      */
-    DLL_DECL int
-    seabreeze_get_formatted_spectrum(int index, int *error_code,
-            double* buffer, int buffer_length);
+    DLL_DECL int seabreeze_get_formatted_spectrum(int index, int *error_code, double* buffer, int buffer_length);
 
     /**
      * @brief This returns an integer denoting the length of a raw spectrum
@@ -567,8 +553,7 @@ extern "C" {
      * The caller is expected to know the number of bytes per pixel and the endian
      * ordering, but it will normally be 2 bytes per pixel, LSB-MSB order.
      */
-    DLL_DECL int
-    seabreeze_get_unformatted_spectrum_length(int index, int *error_code);
+    DLL_DECL int seabreeze_get_unformatted_spectrum_length(int index, int *error_code);
 
     /**
      * @brief This returns an integer denoting the number of pixels in a
@@ -594,8 +579,7 @@ extern "C" {
      *        array)
      * @return int: An integer denoting the number of wavelengths written to the buffer
      */
-    DLL_DECL int
-    seabreeze_get_wavelengths(int index, int *error_code, double *wavelengths, int length);
+    DLL_DECL int seabreeze_get_wavelengths(int index, int *error_code, double *wavelengths, int length);
 
     /**
      * @brief This reads the device's serial number and fills the
@@ -611,8 +595,18 @@ extern "C" {
      *
      * Note that "serial numbers" may include both digits and letters
      */
-    DLL_DECL int
-    seabreeze_get_serial_number(int index, int *error_code, char *buffer, int buffer_length);
+    DLL_DECL int seabreeze_get_serial_number(int index, int *error_code, char *buffer, int buffer_length);
+
+	/**
+	* @brief This reads the device's maximum serial number length
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*        error codes.
+	* @return int: An integer denoting the maximum size of the device serial number
+	*
+	*/
+	DLL_DECL unsigned char seabreeze_get_serial_number_max_length(int index, int *error_code);
+
 
 	/**
 	* @brief This returns the number of pixels provided by the detector
@@ -624,8 +618,7 @@ extern "C" {
 	* Note that not all spectrometers provide the number of detector pixels; in that case,
 	* this function will return zero.
 	*/
-	DLL_DECL unsigned int
-		seabreeze_get_number_of_pixels(int index, int *error_code);
+	DLL_DECL unsigned int seabreeze_get_number_of_pixels(int index, int *error_code);
 
     /**
      * @brief This fills in the provided array (up to the given length) with the indices
@@ -643,9 +636,7 @@ extern "C" {
      * Note that not all detectors have electrically dark pixels; in that case,
      * this function will return zero.
      */
-    DLL_DECL int
-    seabreeze_get_electric_dark_pixel_indices(int index, int *error_code,
-        int *indices, int length);
+    DLL_DECL int seabreeze_get_electric_dark_pixel_indices(int index, int *error_code, int *indices, int length);
 
 	/**
 	* @brief This fills in the provided array (up to the given length) with the indices
@@ -663,9 +654,7 @@ extern "C" {
 	* Note that not all detectors have optically dark pixels; in that case,
 	* this function will return zero.
 	*/
-	DLL_DECL int
-		seabreeze_get_optical_dark_pixel_indices(int index, int *error_code,
-			int *indices, int length);
+	DLL_DECL int seabreeze_get_optical_dark_pixel_indices(int index, int *error_code, int *indices, int length);
 
 	/**
 	* @brief This fills in the provided array (up to the given length) with the indices
@@ -681,9 +670,7 @@ extern "C" {
 	*
 	* Note that not all detectors provide indicies of active pixels.
 	*/
-	DLL_DECL int
-		seabreeze_get_active_pixel_indices(int index, int *error_code,
-			int *indices, int length);
+	DLL_DECL int seabreeze_get_active_pixel_indices(int index, int *error_code, int *indices, int length);
 
     /**
      * @brief Shutdown SeaBreeze completely, releasing all resources and destroying
@@ -693,8 +680,7 @@ extern "C" {
      * at process end), but calling this explicitly can resolve some spurious warnings
      * in highly paranoid memory leak profilers.
      */
-    DLL_DECL void
-    seabreeze_shutdown();
+    DLL_DECL void seabreeze_shutdown();
 
     /**
     * @brief Write a raw array of bytes to a USB spectrometer.
@@ -767,8 +753,7 @@ extern "C" {
     * characters would not print or display on a screen but would make a file
     * name invalid.
     */
-    DLL_DECL int
-    seabreeze_write_usb(int index, int *errorCode, unsigned char endpoint, unsigned char* buffer, unsigned int length);
+    DLL_DECL int seabreeze_write_usb(int index, int *errorCode, unsigned char endpoint, unsigned char* buffer, unsigned int length);
 
     /**
     * @brief Read a raw array of bytes from a USB spectrometer.
@@ -792,8 +777,7 @@ extern "C" {
     * managed by SeaBreeze. USB has a concept of "end points". These are implicitly
     * addressed by the seabreeze_read_usb and seabreeze_write_usb functions.
     */
-    DLL_DECL int
-    seabreeze_read_usb(int index, int *errorCode, unsigned char endpoint, unsigned char* buffer, unsigned int length);
+    DLL_DECL int seabreeze_read_usb(int index, int *errorCode, unsigned char endpoint, unsigned char* buffer, unsigned int length);
 
     /**
     * @brief Get the SeaBreeze library's internal version identifier.
@@ -802,8 +786,7 @@ extern "C" {
     * @param len    (Input)  size of the allocated buffer
     * @return number of bytes written to buffer
     */
-    DLL_DECL int
-    seabreeze_get_api_version_string(char *buffer, int len);
+    DLL_DECL int seabreeze_get_api_version_string(char *buffer, int len);
 
     /**
     * @brief Get a USB descriptor string by number
@@ -815,8 +798,7 @@ extern "C" {
     * @param len       (Input)  size of the allocated buffer
     * @return number of bytes written to buffer
     */
-    DLL_DECL int
-    seabreeze_get_usb_descriptor_string(int index, int *errorCode, int id, unsigned char *buffer, int len);
+    DLL_DECL int seabreeze_get_usb_descriptor_string(int index, int *errorCode, int id, unsigned char *buffer, int len);
 
     /**
     * @brief Set the continuous strobe period in microseconds
@@ -824,13 +806,11 @@ extern "C" {
     * @param errorCode (Output) pointer to allocated integer to receive error code
     * @param strobe_id (Input) index of the strobe generator (currently always zero)
     * @param period_usec (Input) total period of the strobe, in microseconds
-    * @return zero (on success or failure; check errorCode)
+    * @return no return
     *
     * The resolution is 0.1 milliseconds (100 microseconds).
     */
-    DLL_DECL void
-    seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode,
-        unsigned short strobe_id, unsigned long period_usec);
+    DLL_DECL void seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec);
 
     /**
     * @brief Set the acquisition delay (trigger delay) in microseconds.  This
@@ -838,17 +818,23 @@ extern "C" {
     *        (usually a request for spectrum or an external trigger pulse)
     *        and the start of acquisition.
     */
-    DLL_DECL void
-    seabreeze_set_acquisition_delay_microsec(int index,
-        int *errorCode, unsigned long delay_usec);
+    DLL_DECL void seabreeze_set_acquisition_delay_microsec(int index, int *errorCode, unsigned long delay_usec);
 
     /**
     * @brief Clear the spectrum buffer (if equipped)
     * @param index (Input) Which spectrometer should have its buffer cleared
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
-    DLL_DECL void
-    seabreeze_clear_buffer(int index, int *error_code);
+    DLL_DECL void seabreeze_clear_buffer(int index, int *error_code);
+
+    /**
+    * @brief remove the oldest spectrum from the buffer (if equipped)
+    * @param index (Input) Which spectrometer should have its buffer cleared
+    + @param numberOfSpectra (Input) how many of the oldest spectra to be removed
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    */
+    DLL_DECL void seabreeze_remove_oldest_spectra_from_buffer(int index, int *error_code, int numberOfSpectra);
+
 
     /**
     * @brief Get the number of spectra presently in the buffer (if equipped)
@@ -856,8 +842,7 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Number of spectra in the buffer
     */
-    DLL_DECL unsigned long
-    seabreeze_get_buffer_element_count(int index, int *error_code);
+    DLL_DECL unsigned long seabreeze_get_buffer_element_count(int index, int *error_code);
 
     /**
     * @brief Get the currently configured size of the data buffer (if equipped)
@@ -865,17 +850,23 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     * @return The present limit on the number of spectra that will be retained.
     */
-    DLL_DECL unsigned long
-    seabreeze_get_buffer_capacity(int index, int *error_code);
+    DLL_DECL unsigned long seabreeze_get_buffer_capacity(int index, int *error_code);
 
+    /**
+    * @brief Get buffer enable value (if equipped)
+    * @param index (Input) Which spectrometer should have its buffering enable bit read
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return The value of the buffering enable bit
+    */
+    DLL_DECL unsigned char seabreeze_get_buffering_enable(int index, int *error_code);
+    
     /**
     * @brief Get the maximum possible configurable size for the data buffer (if equipped)
     * @param index (Input) Which spectrometer should have its buffer queried
     * @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Maximum allowed value for the buffer size
     */
-    DLL_DECL unsigned long
-    seabreeze_get_buffer_capacity_maximum(int index, int *error_code);
+    DLL_DECL unsigned long seabreeze_get_buffer_capacity_maximum(int index, int *error_code);
 
     /**
     * @brief Get the minimum possible configurable size for the data buffer (if equipped)
@@ -883,8 +874,7 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Minimum allowed value for the buffer size
     */
-    DLL_DECL unsigned long
-    seabreeze_get_buffer_capacity_minimum(int index, int *error_code);
+    DLL_DECL unsigned long seabreeze_get_buffer_capacity_minimum(int index, int *error_code);
 
     /**
     * @brief Set the number of spectra that the buffer should keep
@@ -894,22 +884,28 @@ extern "C" {
     *        Note that this must be within the range defined by the capacity minimum
     *        and maximum values.
     */
-    DLL_DECL void
-    seabreeze_set_buffer_capacity(int index, int *error_code, unsigned long capacity);
+    DLL_DECL void seabreeze_set_buffer_capacity(int index, int *error_code, unsigned long capacity);
+
+    /**
+    * @brief Set the buffering enable bit
+    * @param index (Input) Which spectrometer should have its buffering enable bit set
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @param isEnabled (Input) The state of the buffering enable bit
+    */
+    DLL_DECL void seabreeze_set_buffering_enable(int index, int *error_code, unsigned char isEnabled);
+
 
     /**
     * @brief Programmatically enable debug outputs to stderr
     * @param flag (Input) zero to disable (default), non-zero to enable
     */
-    DLL_DECL void
-    seabreeze_set_verbose(int flag);
+    DLL_DECL void seabreeze_set_verbose(int flag);
 
     /**
     * @brief redirect verbose logging to named file
     * @param flag (Input) NULL for default behavior (stderr), non-null for valid OS path
     */
-    DLL_DECL void
-    seabreeze_set_logfile(char* pathname, int len);
+    DLL_DECL void seabreeze_set_logfile(char* pathname, int len);
 
 #ifdef __cplusplus
 };

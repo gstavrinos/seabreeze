@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.cpp
- * @date    January 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @date    January 2017
+ * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver.
  * Both C and C++ language interfaces are provided.  Please
@@ -16,7 +16,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -1145,6 +1145,12 @@ void sbapi_data_buffer_clear(long deviceID, long featureID, int *error_code) {
     wrapper->dataBufferClear(deviceID, featureID, error_code);
 }
 
+void sbapi_data_buffer_remove_oldest_spectra(long deviceID, long featureID, int *error_code, unsigned int numberOfSpectra) {
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->dataBufferRemoveOldestSpectra(deviceID, featureID, error_code, numberOfSpectra);
+}
+
 unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,
             long featureID, int *error_code) {
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
@@ -1152,11 +1158,18 @@ unsigned long sbapi_data_buffer_get_number_of_elements(long deviceID,
     return wrapper->dataBufferGetNumberOfElements(deviceID, featureID, error_code);
 }
 
-unsigned long sbapi_data_buffer_get_buffer_capacity(long deviceID,
-            long featureID, int *error_code) {
+unsigned long sbapi_data_buffer_get_buffer_capacity(long deviceID, long featureID, int *error_code) 
+{
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     return wrapper->dataBufferGetBufferCapacity(deviceID, featureID, error_code);
+}
+
+unsigned char sbapi_data_buffer_get_buffering_enable(long deviceID, long featureID, int *error_code) 
+{
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->dataBufferGetBufferingEnable(deviceID, featureID, error_code);
 }
 
 unsigned long sbapi_data_buffer_get_buffer_capacity_maximum(
@@ -1173,11 +1186,18 @@ unsigned long sbapi_data_buffer_get_buffer_capacity_minimum(
     return wrapper->dataBufferGetBufferCapacityMinimum(deviceID, featureID, error_code);
 }
 
-void sbapi_data_buffer_set_buffer_capacity(long deviceID,
-            long featureID, int *error_code, unsigned long capacity) {
+void sbapi_data_buffer_set_buffer_capacity(long deviceID, long featureID, int *error_code, unsigned long capacity) 
+{
     SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
     wrapper->dataBufferSetBufferCapacity(deviceID, featureID, error_code, capacity);
+}
+
+void sbapi_data_buffer_set_buffering_enable(long deviceID, long featureID, int *error_code, unsigned char isEnabled) 
+{
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    wrapper->dataBufferSetBufferingEnable(deviceID, featureID, error_code, isEnabled);
 }
 
 /**************************************************************************************/

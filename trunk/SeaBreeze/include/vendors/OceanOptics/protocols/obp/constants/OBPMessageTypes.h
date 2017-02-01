@@ -45,7 +45,7 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_CHECKSUM_TYPE					= 0x00000010;
 		static const unsigned int OBP_SET_PROTOCOL_REVISION				= 0x00000020;
         static const unsigned int OBP_GET_HARDWARE_REVISION				= 0x00000080;
-		static const unsigned int OBP_GET_RECOVERY_ASTATUS				= 0x00000081;
+		static const unsigned int OBP_GET_RECOVERY_STATUS				= 0x00000081;
 		static const unsigned int OBP_GET_SUPPORTED_COMMAND_LIST		= 0x00000082;
         static const unsigned int OBP_GET_FIRMWARE_REVISION			    = 0x00000090;
 		static const unsigned int OBP_GET_FIRMWARE_2_REVISION			= 0x00000091;
@@ -163,7 +163,7 @@ namespace seabreeze {
 		static const unsigned int OBP_ACQUIRE_SPECTRA_INTO_BUFFER		= 0x00100902;	
 		static const unsigned int OBP_GET_DEVICE_IDLE_STATE				= 0x00100908;
         static const unsigned int OBP_GET_BUF_SPEC32_META				= 0x00100928;
-		static const unsigned int OBP_GET_RAW_SPECTRUM_AND_META_DATA	= 0x00100980;	
+		static const unsigned int OBP_GET_NUMBER_OF_RAW_SPECTRUM_META	= 0x00100980;	
         static const unsigned int OBP_GET_CORRECTED_SPECTRUM_NOW		= 0x00101000;
 		static const unsigned int OBP_GET_MAXIMUM_ADC_COUNTS			= 0x00101010;
 
@@ -195,7 +195,7 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_INTEGRATION_TIME_STEP_SIZE_US	= 0x00110003;	
         static const unsigned int OBP_SET_ITIME_USEC					= 0x00110010;
 
-		// trigger modes
+// trigger modes
 		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;	
 		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110102;	
         static const unsigned int OBP_SET_TRIG_MODE						= 0x00110110;
