@@ -30,10 +30,13 @@
 #include "common/globals.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPDataBufferProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferClearExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferRemoveOldestExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferingEnableExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferElementCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferMaximumCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferCapacityExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferingEnableExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 #include "common/exceptions/ProtocolBusMismatchException.h"
 
@@ -75,6 +78,35 @@ void OBPDataBufferProtocol::clearBuffer(const Bus &bus,
 
     if(false == retval) {
         string error("Device rejected buffer clear command.  Is it supported in this hardware?");
+        throw ProtocolException(error);
+    }
+}
+
+void OBPDataBufferProtocol::removeOldestSpectraFromBuffer(const Bus &bus,
+        unsigned char bufferIndex, unsigned int numberOfSpectra) throw (ProtocolException) {
+
+    if(0 != bufferIndex) {
+        /* At present, this protocol only knows how to deal with one buffer
+         * in the device.  Just do a sanity check to make sure it is zero.
+         */
+        string error("This protocol only supports a single buffer.  The buffer "
+                     "index should be zero.");
+        throw ProtocolException(error);
+    }
+
+    TransferHelper *helper;
+    OBPDataBufferRemoveOldestExchange exchange;
+
+    helper = bus.getHelper(exchange.getHints());
+    if (NULL == helper) {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
+
+    bool retval = exchange.sendCommandToDevice(helper);
+
+    if(false == retval) {
+        string error("Device rejected buffer remove oldest command.  Is it supported in this hardware?");
         throw ProtocolException(error);
     }
 }
@@ -129,6 +161,32 @@ unsigned long OBPDataBufferProtocol::getBufferCapacity(const Bus &bus,
     capacity = exchange.queryBufferCapacity(helper);
 
     return capacity;
+}
+
+unsigned char OBPDataBufferProtocol::getBufferingEnable(const Bus &bus,
+        unsigned char bufferIndex) throw (ProtocolException) {
+
+    unsigned long isEnabled;
+    OBPGetDataBufferingEnableExchange exchange;
+
+    if(0 != bufferIndex) {
+        /* At present, this protocol only knows how to deal with one buffer
+         * in the device.  Just do a sanity check to make sure it is zero.
+         */
+        string error("This protocol only supports a single buffer.  The buffer "
+                     "index should be zero.");
+        throw ProtocolException(error);
+    }
+
+    TransferHelper *helper = bus.getHelper(exchange.getHints());
+    if(NULL == helper) {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
+
+    isEnabled = exchange.queryBufferingEnable(helper);
+
+    return isEnabled;
 }
 
 unsigned long OBPDataBufferProtocol::getBufferCapacityMinimum(
@@ -202,6 +260,32 @@ void OBPDataBufferProtocol::setBufferCapacity(const Bus &bus,
     }
 
     exchange.setBufferCapacity(capacity);
+    exchange.sendCommandToDevice(helper);
+}
+
+void OBPDataBufferProtocol::setBufferingEnable(const Bus &bus,
+        unsigned char bufferIndex, const unsigned char isEnabled)
+        throw (ProtocolException) {
+
+    if(0 != bufferIndex) {
+        /* At present, this protocol only knows how to deal with one buffer
+         * in the device.  Just do a sanity check to make sure it is zero.
+         */
+        string error("This protocol only supports a single buffer.  The buffer "
+                     "index should be zero.");
+        throw ProtocolException(error);
+    }
+
+    TransferHelper *helper;
+    OBPSetDataBufferingEnableExchange exchange;
+
+    helper = bus.getHelper(exchange.getHints());
+    if (NULL == helper) {
+        string error("Failed to find a helper to bridge given protocol and bus.");
+        throw ProtocolBusMismatchException(error);
+    }
+
+    exchange.setBufferingEnable(isEnabled);
     exchange.sendCommandToDevice(helper);
 }
 

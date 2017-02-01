@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DataBufferFeatureAdapter.cpp
- * @date    October 2015
+ * @date    October 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
@@ -8,7 +8,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -40,83 +40,143 @@ using namespace seabreeze::api;
 DataBufferFeatureAdapter::DataBufferFeatureAdapter(
     DataBufferFeatureInterface *intf, const FeatureFamily &f,
         Protocol *p, Bus *b, unsigned short instanceIndex)
-    : FeatureAdapterTemplate<DataBufferFeatureInterface>(intf, f, p, b, instanceIndex) {
+    : FeatureAdapterTemplate<DataBufferFeatureInterface>(intf, f, p, b, instanceIndex) 
+{
     
 }
 
-DataBufferFeatureAdapter::~DataBufferFeatureAdapter() {
+DataBufferFeatureAdapter::~DataBufferFeatureAdapter() 
+{
 
 }
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
-void DataBufferFeatureAdapter::clearBuffer(int *errorCode) {
-    try {
+void DataBufferFeatureAdapter::clearBuffer(int *errorCode) 
+{
+    try 
+    {
         this->feature->clearBuffer(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode) {
+void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra) 
+{
+    try 
+    {
+        this->feature->removeOldestSpectraFromBuffer(*this->protocol, *this->bus, 0, numberOfSpectra);
+        SET_ERROR_CODE(ERROR_SUCCESS);
+    } catch (FeatureException &fe) 
+    {
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+    }
+}
+
+unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode) 
+{
     unsigned long retval;
 
-    try {
+    try 
+    {
         retval = this->feature->getNumberOfElements(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode) {
+unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode) 
+{
     unsigned long retval;
 
-    try {
+    try 
+    {
         retval = this->feature->getBufferCapacity(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode) {
+unsigned char DataBufferFeatureAdapter::getBufferingEnable(int *errorCode) 
+{
+    unsigned char retval;
+
+    try 
+    {
+        retval = this->feature->getBufferingEnable(*this->protocol, *this->bus, 0);
+        SET_ERROR_CODE(ERROR_SUCCESS);
+        return retval;
+    } catch (FeatureException &fe) 
+    {
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        return 0;
+    }
+}
+
+unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode) 
+{
     unsigned long retval;
 
-    try {
+    try 
+    {
         retval = this->feature->getBufferCapacityMaximum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode) {
+unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode) 
+{
     unsigned long retval;
 
-    try {
+    try 
+    {
         retval = this->feature->getBufferCapacityMinimum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
 }
 
-void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long capacity) {
-    try {
+void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long capacity) 
+{
+    try 
+    {
         this->feature->setBufferCapacity(*this->protocol, *this->bus, 0, capacity);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (FeatureException &fe) 
+    {
+        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+    }
+}
+
+void DataBufferFeatureAdapter::setBufferingEnable(int *errorCode, unsigned char isEnabled) 
+{
+    try 
+    {
+        this->feature->setBufferingEnable(*this->protocol, *this->bus, 0, isEnabled);
+        SET_ERROR_CODE(ERROR_SUCCESS);
+    } catch (FeatureException &fe) 
+    {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }

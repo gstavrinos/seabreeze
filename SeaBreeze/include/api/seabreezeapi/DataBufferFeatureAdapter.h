@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DataBufferFeatureAdapter.h
- * @date    October 2015
+ * @date    October 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows access to SeaBreeze
@@ -8,7 +8,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -49,11 +49,14 @@ namespace seabreeze {
 
             /* Data buffer functions */
             void clearBuffer(int *errorCode);
+            void removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra);
             unsigned long getNumberOfElements(int *errorCode);
             unsigned long getBufferCapacity(int *errorCode);
+            unsigned char getBufferingEnable(int *errorCode);
             unsigned long getBufferCapacityMaximum(int *errorCode);
             unsigned long getBufferCapacityMinimum(int *errorCode);
             void setBufferCapacity(int *errorCode, unsigned long capacity);
+            void setBufferingEnable(int *errorCode, unsigned char capacity);
         };
 
     } /* end namespace api */

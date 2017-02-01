@@ -46,7 +46,7 @@
 #define APEX_USB_PID            0x1044
 #define FLAMENIR_USB_PID        0x104b
 #define JAZ_USB_PID             0x2000
-#define BLAZE_USB_PID           0x2001
+#define FLAMEX_USB_PID          0x2001
 #define STS_USB_PID             0x4000
 #define QEPRO_USB_PID           0x4004
 #define SPARK_USB_PID           0x4200

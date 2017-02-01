@@ -48,12 +48,19 @@ namespace seabreeze {
 
         virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
+                
+        virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra)
+                throw (ProtocolException) = 0;
 
         virtual unsigned long getNumberOfElements(const Bus &bus,
                 unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
 
         virtual unsigned long getBufferCapacity(const Bus &bus,
+                unsigned char bufferIndex)
+                throw (ProtocolException) = 0;
+                
+        virtual unsigned char getBufferingEnable(const Bus &bus,
                 unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
 
@@ -68,6 +75,11 @@ namespace seabreeze {
         virtual void setBufferCapacity(const Bus &bus,
                 unsigned char bufferIndex,
                 const unsigned long capacity)
+                throw (ProtocolException) = 0;
+                
+        virtual void setBufferingEnable(const Bus &bus,
+                unsigned char bufferIndex,
+                const unsigned char capacity)
                 throw (ProtocolException) = 0;
     };
 

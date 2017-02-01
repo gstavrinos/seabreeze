@@ -39,7 +39,7 @@ using namespace seabreeze;
 using namespace oceanBinaryProtocol;
 
 FlameXUSB::FlameXUSB() {
-    this->productID = BLAZE_USB_PID;
+    this->productID = FLAMEX_USB_PID;
 }
 
 FlameXUSB::~FlameXUSB() {

@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DataBufferFeatureBase.cpp
- * @date    October 2015
+ * @date    October 2017
  * @author  Ocean Optics, Inc.
  *
  * This feature provides an interface to the data buffer
@@ -11,7 +11,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -84,6 +84,34 @@ void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
 
 }
 
+void DataBufferFeatureBase::removeOldestSpectraFromBuffer(const Protocol &protocol,
+        const Bus &bus, const DataBufferIndex_t bufferIndex, unsigned int numberOfSpectra)
+        throw (FeatureException) {
+
+    DataBufferProtocolInterface *buffer = NULL;
+    ProtocolHelper *proto = NULL;
+
+    try {
+        proto = lookupProtocolImpl(protocol);
+        buffer = static_cast<DataBufferProtocolInterface *>(proto);
+    } catch (FeatureProtocolNotFoundException fpnfe) {
+        string error(
+                "Could not find matching protocol implementation to remove the oldest spectra from the data buffer.");
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureProtocolNotFoundException(error);
+    }
+
+    try {
+        buffer->removeOldestSpectraFromBuffer(bus, bufferIndex, numberOfSpectra);
+    } catch (ProtocolException &pe) {
+        string error("Caught protocol exception: ");
+        error += pe.what();
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        throw FeatureControlException(error);
+    }
+
+}
+
 DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
     const Protocol &protocol, const Bus &bus,
     const DataBufferIndex_t bufferIndex) throw (FeatureException) {
@@ -142,6 +170,38 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
         throw FeatureControlException(error);
     }
     return retval;
+}
+
+DataBufferIndex_t DataBufferFeatureBase::getBufferingEnable(
+	const Protocol &protocol, const Bus &bus,
+	const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+
+	DataBufferProtocolInterface *buffer = NULL;
+	ProtocolHelper *proto = NULL;
+
+	try {
+		proto = lookupProtocolImpl(protocol);
+		buffer = static_cast<DataBufferProtocolInterface *>(proto);
+	}
+	catch (FeatureProtocolNotFoundException fpnfe) {
+		string error(
+			"Could not find matching protocol implementation to get data buffer capacity.");
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureProtocolNotFoundException(error);
+	}
+
+	DataBufferElementCount_t retval = 0;
+
+	try {
+		retval = buffer->getBufferingEnable(bus, bufferIndex);
+	}
+	catch (ProtocolException &pe) {
+		string error("Caught protocol exception: ");
+		error += pe.what();
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureControlException(error);
+	}
+	return retval;
 }
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
@@ -231,6 +291,34 @@ void DataBufferFeatureBase::setBufferCapacity(const Protocol &protocol,
     }
 }
 
+void DataBufferFeatureBase::setBufferingEnable(const Protocol &protocol,
+	const Bus &bus, const DataBufferIndex_t bufferIndex,
+	const DataBufferElementCount_t bufferSize) throw (FeatureException) {
+
+	DataBufferProtocolInterface *buffer = NULL;
+	ProtocolHelper *proto = NULL;
+
+	try {
+		proto = lookupProtocolImpl(protocol);
+		buffer = static_cast<DataBufferProtocolInterface *>(proto);
+	}
+	catch (FeatureProtocolNotFoundException fpnfe) {
+		string error(
+			"Could not find matching protocol implementation to set data buffer capacity.");
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureProtocolNotFoundException(error);
+	}
+
+	try {
+		buffer->setBufferingEnable(bus, bufferIndex, bufferSize);
+	}
+	catch (ProtocolException &pe) {
+		string error("Caught protocol exception: ");
+		error += pe.what();
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureControlException(error);
+	}
+}
 
 FeatureFamily DataBufferFeatureBase::getFeatureFamily() {
     FeatureFamilies families;

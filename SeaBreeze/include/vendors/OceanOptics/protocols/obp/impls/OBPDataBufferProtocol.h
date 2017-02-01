@@ -1,11 +1,11 @@
 /***************************************************//**
  * @file    OBPDataBufferProtocol.h
- * @date    October 2015
+ * @date    October 2017
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2015, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -44,6 +44,9 @@ namespace seabreeze {
             virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex)
                     throw (ProtocolException);
 
+            virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra)
+                    throw (ProtocolException);
+                    
             virtual unsigned long getNumberOfElements(const Bus &bus,
                     unsigned char bufferIndex)
                     throw (ProtocolException);
@@ -51,6 +54,10 @@ namespace seabreeze {
             virtual unsigned long getBufferCapacity(const Bus &bus,
                     unsigned char bufferIndex)
                     throw (ProtocolException);
+
+			virtual unsigned char getBufferingEnable(const Bus &bus,
+				unsigned char bufferIndex)
+				throw (ProtocolException);
 
             virtual unsigned long getBufferCapacityMinimum(const Bus &bus,
                     unsigned char bufferIndex)
@@ -64,6 +71,11 @@ namespace seabreeze {
                     unsigned char bufferIndex,
                     const unsigned long capacity)
                     throw (ProtocolException);
+
+			virtual void setBufferingEnable(const Bus &bus,
+				unsigned char bufferIndex,
+				const unsigned char isEnabled)
+				throw (ProtocolException);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
