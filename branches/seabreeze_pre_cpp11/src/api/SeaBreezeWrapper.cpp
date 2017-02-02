@@ -1449,7 +1449,7 @@ int SeaBreezeWrapper::getWavelengths(int index, int *errorCode,
     return valuesCopied;
 }
 
-int SeaBreezeWrapper::getNumberOfPixels(int index, int *errorCode) {
+unsigned short SeaBreezeWrapper::getNumberOfPixels(int index, int *errorCode) {
 	unsigned int numberOfPixels = 0;
 
 	if (NULL == this->devices[index]) {
@@ -2091,7 +2091,7 @@ int seabreeze_get_serial_number(int index, int *error_code, char *buffer, int bu
     return wrapper->getSerialNumber(index, error_code, buffer, buffer_length);
 }
 
-unsigned int seabreeze_get_number_of_pixels(int index, int *error_code) 
+unsigned short seabreeze_get_number_of_pixels(int index, int *error_code) 
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getNumberOfPixels(index, error_code);

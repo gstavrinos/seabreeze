@@ -70,31 +70,31 @@ void OBPSpectrometerProtocol::Initialize(
 	Transfer *spectrumTransfer,
 	OBPTriggerModeExchange *triggerMode)
 {
-	if (this->integrationTimeExchange != nullptr)
+	if (this->integrationTimeExchange != NULL)
 	{
 		delete integrationTimeExchange;
 	}
 	this->integrationTimeExchange = integrationTime;
 
-	if (this->unformattedSpectrumExchange != nullptr)
+	if (this->unformattedSpectrumExchange != NULL)
 	{
 		delete unformattedSpectrumExchange;
 	}
 	this->unformattedSpectrumExchange = unformattedSpectrum;
 
-	if (this->requestSpectrumExchange != nullptr)
+	if (this->requestSpectrumExchange != NULL)
 	{
 		delete requestSpectrumExchange;
 	}
 	this->requestSpectrumExchange = requestSpectrum;
 
-	if (this->spectrumTransferExchange != nullptr)
+	if (this->spectrumTransferExchange != NULL)
 	{
 		delete spectrumTransferExchange;
 	}
 	this->spectrumTransferExchange = spectrumTransfer;
 
-	if (this->triggerModeExchange != nullptr)
+	if (this->triggerModeExchange != NULL)
 	{
 		delete triggerModeExchange;
 	}
