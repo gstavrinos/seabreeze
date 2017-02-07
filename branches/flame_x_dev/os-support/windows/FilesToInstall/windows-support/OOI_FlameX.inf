@@ -10,7 +10,7 @@ Class = OceanOpticsUSBDevice
 ClassGUID={BAD36DAB-A3D2-4a0e-8B2E-DA36202187D4}
 Provider = %ProviderName%
 DriverVer=08/23/2012,1.2.1
-CatalogFile=ooi_blaze.cat
+CatalogFile=ooi_FlameX.cat
 
 ; =================== Class section ==================
 

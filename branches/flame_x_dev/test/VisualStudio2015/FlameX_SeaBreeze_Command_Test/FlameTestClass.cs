@@ -78,6 +78,8 @@ namespace FlameX_SeaBreeze_Command_Test
             {
                 Log("Failure getting pixel count: " + GetErrorDescription(errorCode));
             }
+
+            
         }
 
         public override void RunSpectrometerSpecificTests()

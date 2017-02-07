@@ -278,12 +278,12 @@
 			<File RelativePath="..\..\..\..\include\native\usb\USBDiscovery.h"></File>
 			<File RelativePath="..\..\..\..\include\native\usb\USB.h"></File>
 			<File RelativePath="..\..\..\..\include\native\usb\winusb\WindowsGUID.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\network\BlazeTCPIPv4.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\network\FlameXTCPIPv4.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\network\JazTCPIPv4.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\rs232\OOIRS232Interface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\ApexUSB.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSB.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameXUSB.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameXUSBTransferHelper.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameNIRUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000PlusUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000USB.h"></File>
@@ -311,7 +311,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB4000USB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\buses\usb\VentanaUSB.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Apex.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\Blaze.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\FlameX.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\FlameNIR.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\HR2000.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\devices\HR2000Plus.h"></File>
@@ -378,7 +378,7 @@
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeatureInterface.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.h"></File>
-			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.h"></File>
+			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\FlameXSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.h"></File>
 			<File RelativePath="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.h"></File>
@@ -654,12 +654,12 @@
 			<File RelativePath="..\..\..\..\src\native\usb\USB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\native\usb\USBDiscovery.cpp"></File>
 			<File RelativePath="..\..\..\..\src\native\usb\winusb\NativeUSBWinUSB.c"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\network\BlazeTCPIPv4.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\network\FlameXTCPIPv4.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\network\JazTCPIPv4.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\rs232\OOIRS232Interface.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\ApexUSB.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSB.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameXUSB.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameXUSBTransferHelper.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameNIRUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000PlusUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000USB.cpp"></File>
@@ -686,7 +686,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB4000USB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\buses\usb\VentanaUSB.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Apex.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\Blaze.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\FlameX.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\FlameNIR.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\HR2000.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\devices\HR2000Plus.cpp"></File>
@@ -739,7 +739,7 @@
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\serial_number\SerialNumberFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\shutter\ShutterFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.cpp"></File>
-			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.cpp"></File>
+			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\FlameXSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.cpp"></File>
 			<File RelativePath="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.cpp"></File>
