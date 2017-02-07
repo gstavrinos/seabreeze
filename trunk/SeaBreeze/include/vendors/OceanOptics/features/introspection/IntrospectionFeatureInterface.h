@@ -41,7 +41,7 @@ namespace seabreeze {
     public:
         virtual ~IntrospectionFeatureInterface();
 		
-		virtual uint16_t getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
+		virtual unsigned short getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
 		virtual std::vector<unsigned int> *getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
 		virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;
 		virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) = 0;

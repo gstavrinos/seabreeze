@@ -85,7 +85,7 @@ endif
 CFLAGS_BASE += -DOOI_DEBUG
 
 # these are for the .o files making up libseabreeze
-CPPFLAGS     = $(CFLAGS_BASE) -std=c++11
+CPPFLAGS     = $(CFLAGS_BASE)
 CFLAGS       = $(CFLAGS_BASE) -std=gnu99
 
 	# allow for a 32 bit build

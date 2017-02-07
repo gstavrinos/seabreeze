@@ -148,8 +148,14 @@ int main() {
     
     /* This shows how to add network devices (note that most use TCP/IP) */
     //sbapi_add_TCPIPv4_device_location("Jaz", "192.168.1.150", 7654);
-    //sbapi_add_TCPIPv4_device_location("Blaze", "192.168.1.151", 57357);
+    //sbapi_add_TCPIPv4_device_location("FlameX", "192.168.1.151", 57357);
 
+    char ipAddress[] = "192.168.254.254";
+    int port = 57357;
+
+    int result = sbapi_add_TCPIPv4_device_location("FlameX", ipAddress, port);
+    printf("Add tcp result.. 0x%04x", result);
+    
     printf("Getting device count...\n"); fflush(stdout);
     number_of_devices = sbapi_get_number_of_device_ids();
 
@@ -1780,10 +1786,10 @@ void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
 {
 	printf("\n\tTesting miscellaneous commands:\n");
-	char ipAddress[] = "192.168.1.1";
-	int port = 54321;
+	char ipAddress[] = "192.168.254.254";
+	int port = 57357;
 
-	int result = sbapi_add_TCPIPv4_device_location("FLAMEX", ipAddress, port);
+	int result = sbapi_add_TCPIPv4_device_location("FlameX", ipAddress, port);
 	if (result == 0)
 	{
 		printf("\t\t\t\tAdded a TCP IPv4 device location: %s, %d \n", ipAddress, port);

@@ -43,11 +43,11 @@ namespace seabreeze {
 		IntrospectionFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~IntrospectionFeature();
 
-		virtual uint16_t getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual unsigned short getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
-		virtual std::vector<uint32_t> *getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
-		virtual std::vector<uint32_t> *getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
-		virtual std::vector<uint32_t> *getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual std::vector<unsigned int> *getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+		virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
 
         /* Overriding from Feature */

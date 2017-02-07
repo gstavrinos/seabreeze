@@ -40,7 +40,7 @@
 #ifdef _MSC_VER
 /* Visual Studio */
 typedef __int32 int32_t;
-typedef unsigned __int32 uint32_t;
+typedef unsigned __int32 unsigned int;
 #else
 /* C99 compatible */
 #include <stdint.h>
@@ -53,7 +53,7 @@ namespace seabreeze {
     public:
         U32Vector();
         /* Constructor that makes a copy of the given vector for internal use */
-        U32Vector(const std::vector<uint32_t> &that);
+        U32Vector(const std::vector<unsigned int> &that);
         U32Vector(unsigned int length);
         virtual ~U32Vector();
         /* Dimensionality of data.  0 for scalar, 1 for vector,
@@ -66,10 +66,10 @@ namespace seabreeze {
         virtual std::vector<UnitDescriptor *> *getUnits();
 
         /* Get the data associated with this instance */
-        std::vector<uint32_t> &getU32Vector();
+        std::vector<unsigned int> &getU32Vector();
 
     private:
-        std::vector<uint32_t> *data;
+        std::vector<unsigned int> *data;
     };
 
 }
