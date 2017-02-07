@@ -119,7 +119,7 @@ int main(void)
 
 	int number_of_devices = 0;
 	int devices_available = 0;
-	long *device_ids = nullptr;
+	long *device_ids = NULL;
 	int i = 0;
 	int test_index = 0;
 	int flag = 0;

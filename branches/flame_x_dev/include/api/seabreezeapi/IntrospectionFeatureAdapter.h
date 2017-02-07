@@ -50,7 +50,7 @@ namespace seabreeze {
 
             virtual ~IntrospectionFeatureAdapter();
 
-			uint16_t getNumberOfPixels(int *errorCode);
+			unsigned short getNumberOfPixels(int *errorCode);
 			int getActivePixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
 			int getElectricDarkPixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
 			int getOpticalDarkPixelRanges(int *errorCode, unsigned int *buffer, int bufferLength);
