@@ -286,7 +286,7 @@ long OOISpectrometerFeature::getIntegrationTimeIncrement() const {
     return this->integrationTimeIncrement;
 }
 
-int OOISpectrometerFeature::getNumberOfPixels() const {
+unsigned short OOISpectrometerFeature::getNumberOfPixels() const {
     return this->numberOfPixels;
 }
 

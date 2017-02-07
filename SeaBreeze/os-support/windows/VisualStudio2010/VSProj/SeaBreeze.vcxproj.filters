@@ -97,12 +97,12 @@
     <ClInclude Include="..\..\..\..\include\native\usb\USBDiscovery.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\native\usb\USB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\native\usb\winusb\WindowsGUID.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\network\BlazeTCPIPv4.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\network\FlameXTCPIPv4.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\network\JazTCPIPv4.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\rs232\OOIRS232Interface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\ApexUSB.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSB.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameXUSB.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameXUSBTransferHelper.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\FlameNIRUSB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000PlusUSB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\HR2000USB.h"><Filter>Headers</Filter></ClInclude>
@@ -130,7 +130,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\USB4000USB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\buses\usb\VentanaUSB.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Apex.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\Blaze.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\FlameX.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\FlameNIR.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\devices\HR2000Plus.h"><Filter>Headers</Filter></ClInclude>
@@ -197,7 +197,7 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\shutter\ShutterFeatureInterface.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\FlameXSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.h"><Filter>Headers</Filter></ClInclude>
@@ -474,12 +474,12 @@
     <ClCompile Include="..\..\..\..\src\native\usb\USB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\native\usb\USBDiscovery.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\native\usb\winusb\NativeUSBWinUSB.c"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\network\BlazeTCPIPv4.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\network\FlameXTCPIPv4.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\network\JazTCPIPv4.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\rs232\OOIRS232Interface.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\ApexUSB.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSB.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\BlazeUSBTransferHelper.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameXUSB.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameXUSBTransferHelper.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\FlameNIRUSB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000PlusUSB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\HR2000USB.cpp"><Filter>Sources</Filter></ClCompile>
@@ -506,7 +506,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\USB4000USB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\buses\usb\VentanaUSB.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Apex.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\Blaze.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\FlameX.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\FlameNIR.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\devices\HR2000Plus.cpp"><Filter>Sources</Filter></ClCompile>
@@ -559,7 +559,7 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\serial_number\SerialNumberFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\shutter\ShutterFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\ApexSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\BlazeSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\FlameXSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\FlameNIRSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\GainAdjustedSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\spectrometer\HR2000PlusSpectrometerFeature.cpp"><Filter>Sources</Filter></ClCompile>

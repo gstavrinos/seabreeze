@@ -90,7 +90,7 @@ namespace seabreeze {
         virtual long getIntegrationTimeMaximum() const;
         virtual long getIntegrationTimeIncrement() const;
 
-        virtual int getNumberOfPixels() const;
+        virtual unsigned short getNumberOfPixels() const;
         virtual int getMaximumIntensity() const;
 
         /* Overriding from Feature */
@@ -102,8 +102,8 @@ namespace seabreeze {
 		IntrospectionFeature *myIntrospection;
 
         /* Detector details */
-        uint16_t numberOfPixels;
-        uint32_t maxIntensity;
+        unsigned short numberOfPixels;
+        unsigned int maxIntensity;
 
         /* Integration time parameters (measured in microseconds) */
         long integrationTimeMinimum;

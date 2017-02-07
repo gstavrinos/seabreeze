@@ -13,7 +13,7 @@ public partial class SeaBreezeWrapper
 
     // NOTE: To Debug SeaBreeze.dll set the full absolute path to your debug build of SeaBreeze.dll
     // Remember to build seabreeze with the /DEBUG:FULL symbol.
-    const string DLL = @"Z:\\Windows_Share\OceanOpticsProjects\working\SeaBreezeDevelopment\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.dll";
+    public const string DLL = @"Z:\\Linux_Share\flameXdevBranch\os-support\windows\VisualStudio2015\x64\Debug\SeaBreeze.dll";
     
     // for a relase version of the software use
     //const string DLL = @"SeaBreeze.dll";

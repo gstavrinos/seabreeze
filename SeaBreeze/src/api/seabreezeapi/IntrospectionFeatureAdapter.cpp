@@ -61,7 +61,7 @@ IntrospectionFeatureAdapter::~IntrospectionFeatureAdapter() {
 // this function is here to follow the same class hierarchy as readActivePixelRanges() etc. so
 //  that data flow is easier to see. The function needs no free()
 
-uint16_t IntrospectionFeatureAdapter::getNumberOfPixels(int *errorCode) {
+unsigned short IntrospectionFeatureAdapter::getNumberOfPixels(int *errorCode) {
 	unsigned short int returnValue;
 
 	// no memory allocated, just pass it through

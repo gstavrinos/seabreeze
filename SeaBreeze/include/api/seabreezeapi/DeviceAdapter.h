@@ -210,9 +210,9 @@ namespace seabreeze {
 			int getNumberOfIntrospectionFeatures();
 			int getIntrospectionFeatures(long *buffer, int maxFeatures);
 			unsigned short introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode);
-			int  introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount );
-			int  introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount);
-			int  introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *pixelIndexPairs, int pixelpairIndexCount);
+			int  introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *pixelIndexPairs, int pixelpairIndexCount );
+			int  introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *pixelIndexPairs, int pixelpairIndexCount);
+			int  introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *pixelIndexPairs, int pixelpairIndexCount);
 
             /* Get one or more revision features */
             int getNumberOfRevisionFeatures();

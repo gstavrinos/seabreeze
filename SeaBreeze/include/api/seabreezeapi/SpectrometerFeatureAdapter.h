@@ -64,9 +64,9 @@ namespace seabreeze {
 			int getOpticalDarkPixelIndices(int *errorCode, int *indices, int length);
 			int getActivePixelCount(int *errorCode);
 			int getActivePixelIndices(int *errorCode, int *indices, int length);
-			unsigned int getNumberOfPixels(int *errorCode);
+			unsigned short getNumberOfPixels(int *errorCode);
             void setIntegrationTimeMicros(int *errorCode,
-                    unsigned long integrationTimeMicros);
+            unsigned long integrationTimeMicros);
             long getMinimumIntegrationTimeMicros(int *errorCode);
             long getMaximumIntegrationTimeMicros(int *errorCode);
             double getMaximumIntensity(int *errorCode);

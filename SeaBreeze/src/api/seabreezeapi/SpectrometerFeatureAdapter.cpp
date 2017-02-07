@@ -195,9 +195,9 @@ int SpectrometerFeatureAdapter::getWavelengths(int *errorCode,
     return valuesCopied;
 }
 
-unsigned int SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) {
+unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) {
 
-	unsigned int numberOfPixels = this->feature->getNumberOfPixels();
+	unsigned short numberOfPixels = this->feature->getNumberOfPixels();
 
 	SET_ERROR_CODE(ERROR_SUCCESS);
 	return numberOfPixels;

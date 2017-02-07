@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace FlameX_SeaBreeze_Command_Test
 {
@@ -13,7 +14,7 @@ namespace FlameX_SeaBreeze_Command_Test
         TestClass myTests;
         string myName;
         Boolean isActive = false;
-        const int SEABREEZE_ID = 0;
+        public const int SEABREEZE_ID = 0;
 
         // opens the first spectrometer found. It will have a SeaBreeze ID of 0
         public SeaBreezeSpectrometerClass(ListBox listBoxForLogging, ref Boolean isConnected)
@@ -22,30 +23,36 @@ namespace FlameX_SeaBreeze_Command_Test
             int errorCode = 0;
 
             logListBox = listBoxForLogging;
-            zero_on_success = SeaBreezeWrapper.seabreeze_open_spectrometer(SEABREEZE_ID, ref errorCode);
-            if ((zero_on_success == 0) && (errorCode == 0))
+            if (File.Exists(SeaBreezeWrapper.DLL))
             {
-                isActive = true;
-                myName = GetName();
-                logListBox.Items.Add("Connected to: " + myName);
-                isConnected = true;
+                zero_on_success = SeaBreezeWrapper.seabreeze_open_spectrometer(SEABREEZE_ID, ref errorCode);
+                if ((zero_on_success == 0) && (errorCode == 0))
+                {
+                    isActive = true;
+                    myName = GetName();
+                    logListBox.Items.Add("Connected to: " + myName);
+                    isConnected = true;
 
-                if (myName.StartsWith("FLAMEX"))
-                {
-                    myTests = new FlameTestClass(logListBox);
+                    if (myName.StartsWith("FLAMEX"))
+                    {
+                        myTests = new FlameTestClass(logListBox, SEABREEZE_ID);
+                    }
+                    else if (myName.StartsWith("STS"))
+                    {
+                        myTests = new STSTestClass(logListBox);
+                    }
+                    else if (myName.StartsWith("QEPRO"))
+                    {
+                        myTests = new QEPROTestClass(logListBox);
+                    }
+                    else
+                        logListBox.Items.Add(string.Format("A spectrometer test class was not found for {0}.", myName));
                 }
-                else if(myName.StartsWith("STS"))
-                {
-                    myTests = new STSTestClass(logListBox);
-                }
-                else if (myName.StartsWith("QEPRO"))
-                {
-                    myTests = new QEPROTestClass(logListBox);
-                }
-                else
-                    logListBox.Items.Add(string.Format("A spectrometer test class was not found for {0}.", myName));
+                isConnected = isActive;
             }
-            isConnected = isActive;
+            else
+                throw (new Exception("The DLL library link was incorrect in the SeaBreezeWrapper.cs file."));
+           
         }
 
         ~SeaBreezeSpectrometerClass()

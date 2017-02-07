@@ -1037,7 +1037,7 @@ IntrospectionFeatureAdapter *DeviceAdapter::getIntrospectionFeatureByID(long fea
 		introspectionFeatures, featureID);
 }
 
-uint16_t DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode)
+unsigned short DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeatureID, int *errorCode)
 {
 	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
 	if (NULL == feature) {
@@ -1049,7 +1049,7 @@ uint16_t DeviceAdapter::introspectionNumberOfPixelsGet(long introspectionFeature
 }
 
 
-int DeviceAdapter::introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+int DeviceAdapter::introspectionActivePixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *buffer, int bufferLength)
 {
 	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
 	if (NULL == feature) {
@@ -1060,7 +1060,7 @@ int DeviceAdapter::introspectionActivePixelRangesGet(long introspectionFeatureID
 	return feature->getActivePixelRanges(errorCode, buffer, bufferLength);
 }
 
-int DeviceAdapter::introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+int DeviceAdapter::introspectionElectricDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *buffer, int bufferLength)
 {
 	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
 	if (NULL == feature) {
@@ -1071,7 +1071,7 @@ int DeviceAdapter::introspectionElectricDarkPixelRangesGet(long introspectionFea
 	return feature->getElectricDarkPixelRanges(errorCode, buffer, bufferLength);
 }
 
-int DeviceAdapter::introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, uint32_t *buffer, int bufferLength)
+int DeviceAdapter::introspectionOpticalDarkPixelRangesGet(long introspectionFeatureID, int *errorCode, unsigned int *buffer, int bufferLength)
 {
 	IntrospectionFeatureAdapter *feature = getIntrospectionFeatureByID(introspectionFeatureID);
 	if (NULL == feature) {

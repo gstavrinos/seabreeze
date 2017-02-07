@@ -70,31 +70,31 @@ void OBPSpectrometerProtocol::Initialize(
 	Transfer *spectrumTransfer,
 	OBPTriggerModeExchange *triggerMode)
 {
-	if (this->integrationTimeExchange != nullptr)
+	if (this->integrationTimeExchange != NULL)
 	{
 		delete integrationTimeExchange;
 	}
 	this->integrationTimeExchange = integrationTime;
 
-	if (this->unformattedSpectrumExchange != nullptr)
+	if (this->unformattedSpectrumExchange != NULL)
 	{
 		delete unformattedSpectrumExchange;
 	}
 	this->unformattedSpectrumExchange = unformattedSpectrum;
 
-	if (this->requestSpectrumExchange != nullptr)
+	if (this->requestSpectrumExchange != NULL)
 	{
 		delete requestSpectrumExchange;
 	}
 	this->requestSpectrumExchange = requestSpectrum;
 
-	if (this->spectrumTransferExchange != nullptr)
+	if (this->spectrumTransferExchange != NULL)
 	{
 		delete spectrumTransferExchange;
 	}
 	this->spectrumTransferExchange = spectrumTransfer;
 
-	if (this->triggerModeExchange != nullptr)
+	if (this->triggerModeExchange != NULL)
 	{
 		delete triggerModeExchange;
 	}
@@ -175,7 +175,7 @@ vector<double> *OBPSpectrometerProtocol::readSpectrum(const Bus &bus)
             (*retval)[i] = shortVec[i];
         }
     } else if(NULL != u32v) {
-        vector<uint32_t> u32Vec = u32v->getU32Vector();
+        vector<unsigned int> u32Vec = u32v->getU32Vector();
 
         retval = new vector<double>(u32Vec.size());
         for (i = 0; i < u32Vec.size(); i++) {

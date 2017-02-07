@@ -35,15 +35,15 @@ using namespace seabreeze;
 using namespace std;
 
 U32Vector::U32Vector() {
-    this->data = new vector<uint32_t>;
+    this->data = new vector<unsigned int>;
 }
 
-U32Vector::U32Vector(const vector<uint32_t> &that) {
-    this->data = new vector<uint32_t>(that);
+U32Vector::U32Vector(const vector<unsigned int> &that) {
+    this->data = new vector<unsigned int>(that);
 }
 
 U32Vector::U32Vector(unsigned int length) {
-    this->data = new vector<uint32_t>(length);
+    this->data = new vector<unsigned int>(length);
 }
 
 U32Vector::~U32Vector() {
@@ -61,6 +61,6 @@ vector<UnitDescriptor *> *U32Vector::getUnits() {
     return NULL;
 }
 
-vector<uint32_t> &U32Vector::getU32Vector() {
+vector<unsigned int> &U32Vector::getU32Vector() {
     return *(this->data);
 }
