@@ -91,7 +91,7 @@ static testfunc_t __test_functions[] = {
     test_data_buffer_feature,
     test_acquisition_delay_feature,
     test_pixel_binning_feature,
-    test_miscellaneous_commands
+    //test_miscellaneous_commands
 };
 
 /* Utilities to count errors and unsupported features */
@@ -150,11 +150,15 @@ int main() {
     //sbapi_add_TCPIPv4_device_location("Jaz", "192.168.1.150", 7654);
     //sbapi_add_TCPIPv4_device_location("FlameX", "192.168.1.151", 57357);
 
+#define USE_TCP
+#ifdef USE_TCP
     char ipAddress[] = "192.168.254.254";
     int port = 57357;
 
+    printf("Attempting to add a TCP/IPv4 device.\n");
     int result = sbapi_add_TCPIPv4_device_location("FlameX", ipAddress, port);
-    printf("Add tcp result.. 0x%04x", result);
+    printf("Add tcp result.. 0x%04x\n", result);
+#endif 
     
     printf("Getting device count...\n"); fflush(stdout);
     number_of_devices = sbapi_get_number_of_device_ids();
@@ -1786,18 +1790,9 @@ void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
 {
 	printf("\n\tTesting miscellaneous commands:\n");
-	char ipAddress[] = "192.168.254.254";
-	int port = 57357;
 
-	int result = sbapi_add_TCPIPv4_device_location("FlameX", ipAddress, port);
-	if (result == 0)
-	{
-		printf("\t\t\t\tAdded a TCP IPv4 device location: %s, %d \n", ipAddress, port);
-	}
-	else
-	{
-		printf("\t\t\t\tCould not add a TCP IPv4 device location: %s, %d \n", ipAddress, port);
-		(*testFailureCount)++;
-	}
+
+	// miscellaneous tests go here
+
 	printf("\tFinished testing miscellaneous commands. \n");
 }
