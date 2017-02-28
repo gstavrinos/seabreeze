@@ -4,7 +4,7 @@
  * @author  Ocean Optics, Inc.
  *
  * This feature provides an interface to the spectral 
- * data buffer in the QE-PRO.
+ * data buffer in the Flame X
  *
  * LICENSE:
  *

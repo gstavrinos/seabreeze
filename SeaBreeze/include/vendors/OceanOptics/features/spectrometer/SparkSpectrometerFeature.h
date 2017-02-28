@@ -46,8 +46,8 @@ namespace seabreeze {
         SparkSpectrometerFeature();
         virtual ~SparkSpectrometerFeature();
 
-        /* The Spark gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
+		/* Using OBP wavelength coefficient commands */
+		virtual std::vector<double> *getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException);       
 
     private:

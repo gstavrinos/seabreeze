@@ -150,20 +150,23 @@ namespace seabreeze {
 
 		// Buffering
 		static const unsigned int OBP_ABORT_ACQUISITION					= 0x00100000;
-		static const unsigned int OBP_GET_BUFFERING_ENABLED				= 0x00100800;
-		static const unsigned int OBP_SET_BUFFERING_ENABLED				= 0x00100810;
         static const unsigned int OBP_GET_BUFFER_SIZE_MAX				= 0x00100820;
         static const unsigned int OBP_GET_BUFFER_SIZE_ACTIVE			= 0x00100822;
         static const unsigned int OBP_CLEAR_BUFFER_ALL					= 0x00100830;
-		static const unsigned int OBP_REMOVE_OLDEST_SPECTRA				= 0x00100831;
         static const unsigned int OBP_SET_BUFFER_SIZE_ACTIVE			= 0x00100832;
         static const unsigned int OBP_GET_BUFFERED_SPEC_COUNT			= 0x00100900;
+
+// Fast Buffering
+		static const unsigned int OBP_GET_BUFFERING_ENABLED				= 0x00100800;
+		static const unsigned int OBP_SET_BUFFERING_ENABLED				= 0x00100810;
+		static const unsigned int OBP_REMOVE_OLDEST_SPECTRA				= 0x00100831;
+
 
 //Spectra queries
 		static const unsigned int OBP_ACQUIRE_SPECTRA_INTO_BUFFER		= 0x00100902;	
 		static const unsigned int OBP_GET_DEVICE_IDLE_STATE				= 0x00100908;
         static const unsigned int OBP_GET_BUF_SPEC32_META				= 0x00100928;
-		static const unsigned int OBP_GET_NUMBER_OF_RAW_SPECTRUM_META	= 0x00100980;	
+		static const unsigned int OBP_GET_N_BUF_RAW_SPECTRA_META		= 0x00100980;	
         static const unsigned int OBP_GET_CORRECTED_SPECTRUM_NOW		= 0x00101000;
 		static const unsigned int OBP_GET_MAXIMUM_ADC_COUNTS			= 0x00101010;
 
@@ -189,7 +192,7 @@ namespace seabreeze {
 
 
 // Integration time
-		static const unsigned int OBP_GET_INTEGRATOIN_TIME_US			= 0x00110000;	
+		static const unsigned int OBP_GET_INTEGRATION_TIME_US			= 0x00110000;	
 		static const unsigned int OBP_GET_MINIMUM_INTEGRATION_TIME_US	= 0x00110001;	
 		static const unsigned int OBP_GET_MAXIMUM_INTEGRATION_TIME_US	= 0x00110002;	
 		static const unsigned int OBP_GET_INTEGRATION_TIME_STEP_SIZE_US	= 0x00110003;	

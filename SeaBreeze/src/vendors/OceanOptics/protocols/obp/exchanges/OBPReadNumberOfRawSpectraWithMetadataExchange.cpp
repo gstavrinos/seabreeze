@@ -71,7 +71,7 @@ void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfPixels(int pixels
 }
 
 unsigned int OBPReadNumberOfRawSpectraWithMetadataExchange::isLegalMessageType(unsigned int t) {
-    if(OBPMessageTypes::OBP_GET_NUMBER_OF_RAW_SPECTRUM_META == t) {
+    if(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META == t) {
         return 1;
     }
 

@@ -98,6 +98,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<LightSourceFeatureAdapter>(lightSourceFeatures);
     __delete_feature_adapters<PixelBinningFeatureAdapter>(pixelBinningFeatures);
     __delete_feature_adapters<DataBufferFeatureAdapter>(dataBufferFeatures);
+	__delete_feature_adapters<FastBufferFeatureAdapter>(fastBufferFeatures);
     __delete_feature_adapters<AcquisitionDelayFeatureAdapter>(acquisitionDelayFeatures);
 
     delete this->device;
@@ -251,6 +252,11 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<DataBufferFeatureInterface,
                     DataBufferFeatureAdapter>(this->device,
             dataBufferFeatures, bus, featureFamilies.DATA_BUFFER);
+
+	/* Create fast buffer feature list */
+	__create_feature_adapters<FastBufferFeatureInterface,
+		FastBufferFeatureAdapter>(this->device,
+			fastBufferFeatures, bus, featureFamilies.FAST_BUFFER);
 
 	/* Create acquisition feature list */
     __create_feature_adapters<AcquisitionDelayFeatureInterface,
@@ -1296,6 +1302,8 @@ int DeviceAdapter::strayLightCoeffsGet(long featureID, int *errorCode,
 PixelBinningFeatureAdapter *DeviceAdapter::getPixelBinningFeatureByID(long featureID) {
     return __getFeatureByID<PixelBinningFeatureAdapter>(pixelBinningFeatures, featureID);
 }
+
+
 /* Data buffer feature wrappers */
 int DeviceAdapter::getNumberOfDataBufferFeatures() {
     return (int) this->dataBufferFeatures.size();
@@ -1352,16 +1360,6 @@ unsigned long DeviceAdapter::dataBufferGetBufferCapacity(long featureID, int *er
     return feature->getBufferCapacity(errorCode);
 }
 
-unsigned char DeviceAdapter::dataBufferGetBufferingEnable(long featureID, int *errorCode) {
-	DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
-	if (NULL == feature) {
-		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-		return 0;
-	}
-
-	return feature->getBufferingEnable(errorCode);
-}
-
 
 unsigned long DeviceAdapter::dataBufferGetBufferCapacityMaximum(long featureID, int *errorCode) {
     DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
@@ -1393,8 +1391,35 @@ void DeviceAdapter::dataBufferSetBufferCapacity(long featureID, int *errorCode, 
     feature->setBufferCapacity(errorCode, capacity);
 }
 
-void DeviceAdapter::dataBufferSetBufferingEnable(long featureID, int *errorCode, unsigned char isEnabled) {
-	DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
+/* Fast buffer feature wrappers*/
+
+int DeviceAdapter::getNumberOfFastBufferFeatures() {
+	return (int) this->fastBufferFeatures.size();
+}
+
+int DeviceAdapter::getFastBufferFeatures(long *buffer, int maxFeatures) {
+	return __getFeatureIDs<FastBufferFeatureAdapter>(
+		fastBufferFeatures, buffer, maxFeatures);
+}
+
+FastBufferFeatureAdapter *DeviceAdapter::getFastBufferFeatureByID(long featureID) {
+	return __getFeatureByID<FastBufferFeatureAdapter>(
+		fastBufferFeatures, featureID);
+}
+
+
+unsigned char DeviceAdapter::fastBufferGetBufferingEnable(long featureID, int *errorCode) {
+	FastBufferFeatureAdapter *feature = getFastBufferFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getBufferingEnable(errorCode);
+}
+
+void DeviceAdapter::fastBufferSetBufferingEnable(long featureID, int *errorCode, unsigned char isEnabled) {
+	FastBufferFeatureAdapter *feature = getFastBufferFeatureByID(featureID);
 	if (NULL == feature) {
 		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
 		return;

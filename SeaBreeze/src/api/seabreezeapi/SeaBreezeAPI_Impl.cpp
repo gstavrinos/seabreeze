@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.cpp
- * @date    May 2016
+ * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver. Please
@@ -15,7 +15,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -1632,17 +1632,6 @@ unsigned long SeaBreezeAPI_Impl::dataBufferGetBufferCapacity(long deviceID, long
     return adapter->dataBufferGetBufferCapacity(featureID, errorCode);
 }
 
-unsigned char SeaBreezeAPI_Impl::dataBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode) 
-{
-    DeviceAdapter *adapter = getDeviceByID(deviceID);
-    if(NULL == adapter) 
-    {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return 0;
-    }
-
-    return adapter->dataBufferGetBufferingEnable(featureID, errorCode);
-}
 
 unsigned long SeaBreezeAPI_Impl::dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
@@ -1676,18 +1665,63 @@ void SeaBreezeAPI_Impl::dataBufferSetBufferCapacity(long deviceID, long featureI
     adapter->dataBufferSetBufferCapacity(featureID, errorCode, capacity);
 }
 
-void SeaBreezeAPI_Impl::dataBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled) 
-{
-    DeviceAdapter *adapter = getDeviceByID(deviceID);
-    if(NULL == adapter) 
-    {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return;
-    }
 
-    adapter->dataBufferSetBufferingEnable(featureID, errorCode, isEnabled);
+
+/**************************************************************************************/
+//  Fast buffer Features for the SeaBreeze API class
+/**************************************************************************************/
+
+
+int SeaBreezeAPI_Impl::getNumberOfFastBufferFeatures(long deviceID, int *errorCode) {
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfFastBufferFeatures();
 }
 
+int SeaBreezeAPI_Impl::getFastBufferFeatures(long deviceID, int *errorCode, long *buffer,
+	unsigned int maxLength) {
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getFastBufferFeatures(buffer, maxLength);
+}
+
+unsigned char SeaBreezeAPI_Impl::fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->fastBufferGetBufferingEnable(featureID, errorCode);
+}
+
+void SeaBreezeAPI_Impl::fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->fastBufferSetBufferingEnable(featureID, errorCode, isEnabled);
+}
+
+/**************************************************************************************/
+//  Acquisition delay Features for the SeaBreeze API class
+/**************************************************************************************/
 int SeaBreezeAPI_Impl::getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);
     if(NULL == adapter) {

@@ -46,7 +46,7 @@ OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBuffere
 
     this->direction = Transfer::TO_DEVICE;
 
-    message.setMessageType(OBPMessageTypes::OBP_GET_NUMBER_OF_RAW_SPECTRUM_META);
+    message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
     stream = message.toByteStream();
 
     this->length = (unsigned) stream->size();
