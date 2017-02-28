@@ -43,6 +43,7 @@
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/data_buffer/FlameXDataBufferFeature.h"
+#include "vendors/OceanOptics/features/fast_buffer/FlameXFastBufferFeature.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPProgrammableSaturationProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
@@ -90,8 +91,10 @@ FlameX::FlameX() {
 	IntrospectionFeature *introspection = new IntrospectionFeature(introspectionHelpers);
 	this->features.push_back(introspection);
 
+	/* spectrometer and databuffer features*/
     this->features.push_back(new FlameXSpectrometerFeature(introspection, saturation));
 	this->features.push_back(new FlameXDataBufferFeature());
+	this->features.push_back(new FlameXFastBufferFeature());
 
     /* Add serial number feature */
     vector<ProtocolHelper *> serialNumberHelpers;

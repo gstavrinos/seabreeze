@@ -159,6 +159,12 @@ namespace seabreeze {
             virtual ~DataBufferFeatureFamily();
         };
 
+		class FastBufferFeatureFamily : public FeatureFamily {
+		public:
+			FastBufferFeatureFamily();
+			virtual ~FastBufferFeatureFamily();
+		};
+
         class AcquisitionDelayFeatureFamily : public FeatureFamily {
         public:
             AcquisitionDelayFeatureFamily();
@@ -193,6 +199,7 @@ namespace seabreeze {
             const StrayLightCoeffsFeatureFamily STRAY_LIGHT_COEFFS;
             const RawUSBBusAccessFeatureFamily RAW_USB_BUS_ACCESS;
             const DataBufferFeatureFamily DATA_BUFFER;
+			const FastBufferFeatureFamily FAST_BUFFER;
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
             const PixelBinningFeatureFamily PIXEL_BINNING;
 

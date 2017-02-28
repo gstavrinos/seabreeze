@@ -32,6 +32,7 @@
 
 #include "common/globals.h"
 #include "api/seabreezeapi/DataBufferFeatureAdapter.h"
+#include "api/seabreezeapi/FastBufferFeatureAdapter.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 using namespace seabreeze;
@@ -109,22 +110,6 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode)
     }
 }
 
-unsigned char DataBufferFeatureAdapter::getBufferingEnable(int *errorCode) 
-{
-    unsigned char retval;
-
-    try 
-    {
-        retval = this->feature->getBufferingEnable(*this->protocol, *this->bus, 0);
-        SET_ERROR_CODE(ERROR_SUCCESS);
-        return retval;
-    } catch (FeatureException &fe) 
-    {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-        return 0;
-    }
-}
-
 unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode) 
 {
     unsigned long retval;
@@ -169,15 +154,4 @@ void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long c
     }
 }
 
-void DataBufferFeatureAdapter::setBufferingEnable(int *errorCode, unsigned char isEnabled) 
-{
-    try 
-    {
-        this->feature->setBufferingEnable(*this->protocol, *this->bus, 0, isEnabled);
-        SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) 
-    {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-    }
-}
 

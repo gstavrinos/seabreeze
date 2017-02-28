@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    OBPDataBufferRemoveOldestExchange.cpp
- * @date    October 2017
+ * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:

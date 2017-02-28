@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.h
- * @date    May 2016
+ * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
  * This is an implementation of the SeaBreezeAPI interface.
@@ -13,7 +13,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -216,11 +216,15 @@ public:
     virtual void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra);
     virtual unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode);
     virtual unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode);
-	virtual unsigned char dataBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode);
     virtual unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode);
     virtual unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode);
     virtual void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity);
-	virtual void dataBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled);
+
+	/* Fast Buffer capabilities*/
+	virtual int getNumberOfFastBufferFeatures(long deviceID, int *errorCode);
+	virtual int getFastBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode);
+	virtual void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled);
 
     /* Acquisition delay capabilities */
     virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode);

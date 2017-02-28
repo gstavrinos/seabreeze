@@ -53,8 +53,8 @@ namespace seabreeze {
 
         void setPixelBinningFactor(unsigned char binningFactor);
 
-        /* The STS gets wavelengths a bit differently */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol,
+		/* Using OBP wavelength coefficient commands */
+		virtual std::vector<double> *getWavelengths(const Protocol &protocol,
             const Bus &bus) throw (FeatureException);       
 
     private:

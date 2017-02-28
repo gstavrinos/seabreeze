@@ -114,6 +114,7 @@ vector<double> *FlameXSpectrometerFeature::getWavelengths(const Protocol &protoc
     return WaveCal.readWavelengths(protocol, bus);
 }
 
+
 bool FlameXSpectrometerFeature::initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException)
 {
 	bool result = false;

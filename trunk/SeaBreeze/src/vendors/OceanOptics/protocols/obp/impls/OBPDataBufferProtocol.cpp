@@ -32,11 +32,11 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferClearExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferRemoveOldestExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferCapacityExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferingEnableExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetFastBufferingEnableExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferElementCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferMaximumCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferCapacityExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferingEnableExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetFastBufferingEnableExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 #include "common/exceptions/ProtocolBusMismatchException.h"
 
@@ -163,32 +163,6 @@ unsigned long OBPDataBufferProtocol::getBufferCapacity(const Bus &bus,
     return capacity;
 }
 
-unsigned char OBPDataBufferProtocol::getBufferingEnable(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
-
-    unsigned long isEnabled;
-    OBPGetDataBufferingEnableExchange exchange;
-
-    if(0 != bufferIndex) {
-        /* At present, this protocol only knows how to deal with one buffer
-         * in the device.  Just do a sanity check to make sure it is zero.
-         */
-        string error("This protocol only supports a single buffer.  The buffer "
-                     "index should be zero.");
-        throw ProtocolException(error);
-    }
-
-    TransferHelper *helper = bus.getHelper(exchange.getHints());
-    if(NULL == helper) {
-        string error("Failed to find a helper to bridge given protocol and bus.");
-        throw ProtocolBusMismatchException(error);
-    }
-
-    isEnabled = exchange.queryBufferingEnable(helper);
-
-    return isEnabled;
-}
-
 unsigned long OBPDataBufferProtocol::getBufferCapacityMinimum(
         const Bus &bus, unsigned char bufferIndex)
         throw (ProtocolException){
@@ -263,29 +237,5 @@ void OBPDataBufferProtocol::setBufferCapacity(const Bus &bus,
     exchange.sendCommandToDevice(helper);
 }
 
-void OBPDataBufferProtocol::setBufferingEnable(const Bus &bus,
-        unsigned char bufferIndex, const unsigned char isEnabled)
-        throw (ProtocolException) {
 
-    if(0 != bufferIndex) {
-        /* At present, this protocol only knows how to deal with one buffer
-         * in the device.  Just do a sanity check to make sure it is zero.
-         */
-        string error("This protocol only supports a single buffer.  The buffer "
-                     "index should be zero.");
-        throw ProtocolException(error);
-    }
-
-    TransferHelper *helper;
-    OBPSetDataBufferingEnableExchange exchange;
-
-    helper = bus.getHelper(exchange.getHints());
-    if (NULL == helper) {
-        string error("Failed to find a helper to bridge given protocol and bus.");
-        throw ProtocolBusMismatchException(error);
-    }
-
-    exchange.setBufferingEnable(isEnabled);
-    exchange.sendCommandToDevice(helper);
-}
 

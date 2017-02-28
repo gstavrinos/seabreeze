@@ -47,6 +47,7 @@
 #include "vendors/OceanOptics/buses/usb/OOIUSBInterface.h"
 #include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeatureInterface.h"
 #include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureInterface.h"
+#include "vendors/OceanOptics/features/fast_buffer/FastBufferFeatureInterface.h"
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeatureInterface.h"
 #include "vendors/OceanOptics/features/shutter/ShutterFeatureInterface.h"
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeatureInterface.h"
@@ -866,8 +867,8 @@ unsigned char SeaBreezeWrapper::getBufferingEnable(int index, int *errorCode) {
     }
 
     SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-    DataBufferFeatureInterface *buffer =
-            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    FastBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<FastBufferFeatureInterface>(this->devices[index]);
     if(NULL != buffer) {
         try {
             retval = buffer->getBufferingEnable(
@@ -961,8 +962,8 @@ void SeaBreezeWrapper::setBufferingEnable(int index, int *errorCode, unsigned ch
         return;
     }
     SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-    DataBufferFeatureInterface *buffer =
-            __seabreeze_getFeature<DataBufferFeatureInterface>(this->devices[index]);
+    FastBufferFeatureInterface *buffer =
+            __seabreeze_getFeature<FastBufferFeatureInterface>(this->devices[index]);
     if(NULL != buffer) {
         try {
             buffer->setBufferingEnable(

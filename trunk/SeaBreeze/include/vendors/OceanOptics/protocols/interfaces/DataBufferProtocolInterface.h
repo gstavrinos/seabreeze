@@ -3,7 +3,7 @@
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
- * This is a generic interface into thermoelectric functionality
+ * This is a generic interface into buffer functionality
  * at the protocol level, agnostic to any particular protocol.
  * Each Protocol offering this functionality should implement
  * this interface.
@@ -51,16 +51,12 @@ namespace seabreeze {
                 
         virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra)
                 throw (ProtocolException) = 0;
-
+                
         virtual unsigned long getNumberOfElements(const Bus &bus,
                 unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
 
         virtual unsigned long getBufferCapacity(const Bus &bus,
-                unsigned char bufferIndex)
-                throw (ProtocolException) = 0;
-                
-        virtual unsigned char getBufferingEnable(const Bus &bus,
                 unsigned char bufferIndex)
                 throw (ProtocolException) = 0;
 
@@ -77,10 +73,6 @@ namespace seabreeze {
                 const unsigned long capacity)
                 throw (ProtocolException) = 0;
                 
-        virtual void setBufferingEnable(const Bus &bus,
-                unsigned char bufferIndex,
-                const unsigned char capacity)
-                throw (ProtocolException) = 0;
     };
 
 } /* end namespace */

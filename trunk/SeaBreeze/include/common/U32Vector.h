@@ -40,7 +40,7 @@
 #ifdef _MSC_VER
 /* Visual Studio */
 typedef __int32 int32_t;
-typedef unsigned __int32 unsigned int;
+typedef unsigned __int32 UInt32;
 #else
 /* C99 compatible */
 #include <stdint.h>

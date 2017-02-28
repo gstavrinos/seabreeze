@@ -52,11 +52,9 @@ namespace seabreeze {
             void removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra);
             unsigned long getNumberOfElements(int *errorCode);
             unsigned long getBufferCapacity(int *errorCode);
-            unsigned char getBufferingEnable(int *errorCode);
             unsigned long getBufferCapacityMaximum(int *errorCode);
             unsigned long getBufferCapacityMinimum(int *errorCode);
             void setBufferCapacity(int *errorCode, unsigned long capacity);
-            void setBufferingEnable(int *errorCode, unsigned char capacity);
         };
 
     } /* end namespace api */

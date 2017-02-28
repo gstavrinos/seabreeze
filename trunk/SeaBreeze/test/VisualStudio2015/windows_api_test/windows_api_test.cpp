@@ -59,6 +59,7 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_fast_buffer_feature(long devideID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -87,6 +88,7 @@ static testfunc_t __test_functions[] = {
 	test_stray_light_coeffs_feature,
 	test_continuous_strobe_feature,
 	test_data_buffer_feature,
+	test_fast_buffer_feature,
 	test_acquisition_delay_feature,
 	test_pixel_binning_feature,
 	test_miscellaneous_commands
@@ -1366,7 +1368,7 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {
 	int error = 0;
-	int number_of_data_buffers = 0;
+	int number_of_data_buffer_features = 0;
 	long *data_buffer_ids = 0;
 	int i;
 	unsigned long capacity = 0;
@@ -1380,27 +1382,26 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	printf("\n\tTesting data buffer features:\n");
 
 	printf("\t\tGetting number of data buffer features:\n");
-	number_of_data_buffers = sbapi_get_number_of_data_buffer_features(deviceID, &error);
-	printf("\t\t\tResult is %d [%s]\n", number_of_data_buffers,
-		sbapi_get_error_string(error));
+	number_of_data_buffer_features = sbapi_get_number_of_data_buffer_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_data_buffer_features, sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
-	if (0 == number_of_data_buffers) {
+	if (0 == number_of_data_buffer_features) {
 		printf("\tNo data buffer capabilities found.\n");
 		tallyUnsupportedFeatures(unsupportedFeatureCount);
 
 		return;
 	}
 
-	data_buffer_ids = (long *)calloc(number_of_data_buffers, sizeof(long));
+	data_buffer_ids = (long *)calloc(number_of_data_buffer_features, sizeof(long));
 	printf("\t\tGetting data buffer feature IDs...\n");
-	number_of_data_buffers = sbapi_get_data_buffer_features(deviceID, &error,
-		data_buffer_ids, number_of_data_buffers);
-	printf("\t\t\tResult is %d [%s]\n", number_of_data_buffers,
+	number_of_data_buffer_features = sbapi_get_data_buffer_features(deviceID, &error,
+		data_buffer_ids, number_of_data_buffer_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_data_buffer_features,
 		sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
-	for (i = 0; i < number_of_data_buffers; i++) {
+	for (i = 0; i < number_of_data_buffer_features; i++) {
 		printf("\t\t%d: Testing device 0x%02lX, data buffer 0x%02lX\n",
 			i, deviceID, data_buffer_ids[i]);
 
@@ -1532,6 +1533,106 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	free(data_buffer_ids);
 
 	printf("\tFinished testing data buffer capabilities.\n");
+}
+
+void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+	int number_of_fast_buffer_features = 0;
+	int error = 0;
+	long *fast_buffer_ids = 0;
+	int i = 0;
+	unsigned char fastBufferEnableState = 0;
+
+	printf("\n\tTesting fast buffer features:\n");
+
+	printf("\t\tGetting number of fast buffer features:\n");
+	number_of_fast_buffer_features = sbapi_get_number_of_fast_buffer_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_fast_buffer_features) {
+		printf("\tNo fast buffer capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+
+		return;
+	}
+
+	fast_buffer_ids = (long *)calloc(number_of_fast_buffer_features, sizeof(long));
+	printf("\t\tGetting data buffer feature IDs...\n");
+	number_of_fast_buffer_features = sbapi_get_fast_buffer_features(deviceID, &error, fast_buffer_ids, number_of_fast_buffer_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features,
+		sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_fast_buffer_features; i++) {
+		printf("\t\t%d: Testing device 0x%02lX, fast buffer 0x%02lX\n", i, deviceID, fast_buffer_ids[i]);
+
+		printf("\t\t\tAttempting to get the fast buffering enable state...\n");
+		fastBufferEnableState = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_ids[i], &error);
+		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		if (0 == error) {
+			printf("\t\t\t\tFast buffer enable state is: %d\n", fastBufferEnableState);
+		}
+		tallyErrors(error, testFailureCount);
+
+		if (fastBufferEnableState == 0)
+			fastBufferEnableState = 1;
+		else
+			fastBufferEnableState = 0;
+
+		printf("\t\t\tAttempting to change the fast buffering enable state...\n");
+		sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, fastBufferEnableState);
+		if (0 == error) {
+			unsigned char newFastBufferEnableState = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_ids[i], &error);
+			if (0 == error)
+			{
+				if (newFastBufferEnableState == fastBufferEnableState)
+				{
+					printf("\t\t\t\tFast buffer enable state change was successful.\n");
+					sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, 1);
+					if (0 == error)
+					{
+						printf("\t\t\t\tFast buffer is enabled.\n");
+					}
+					else
+					{
+						printf("\t\t\t\tFast buffer enable failed.\n");
+					}
+				}
+				else
+				{
+					error = 1;
+					printf("\t\t\t\tFast buffer enable state change was unsuccessful.\n");
+				}
+			}
+			else
+			{
+				printf("\t\t\t\tFast buffer enable state retrieval was unsuccessful.\n");
+			}	
+		}
+		printf("\t\t\t\tError code is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		if (error = 0)
+		{
+			printf("\t\t\tFast buffering will be tested here...\n");
+
+			printf("\t\t\tWaiting to allow data to be buffered...\n");
+			/* This assumes that the spectrometer and data buffer tests occurred before this, so the
+			* integration time and trigger mode were set in a way that this will
+			* keep acquiring a few spectra.
+			*/
+
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+
+			sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, 0); // turn off buffering
+		}
+
+
+		printf("\t\t%d: Finished testing device 0x%02lX, fast buffer 0x%02lX\n", i, deviceID, fast_buffer_ids[i]);
+	}
+	free(fast_buffer_ids);
+	printf("\tFinished testing fast buffer capabilities.\n");
 }
 
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {

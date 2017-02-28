@@ -40,7 +40,7 @@ namespace seabreeze {
         FlameXSpectrometerFeature(IntrospectionFeature *introspection, ProgrammableSaturationFeature *saturationFeature);
         virtual ~FlameXSpectrometerFeature();
 
-        /* The FlameX gets wavelengths a bit differently */
+        /* Using OBP wavelength coefficient commands */
         virtual std::vector<double> *getWavelengths(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 		virtual bool initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException);
 
