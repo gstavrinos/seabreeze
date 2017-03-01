@@ -263,7 +263,8 @@ namespace seabreeze {
 			int getFastBufferFeatures(long *buffer, int maxFeatures);
 			unsigned char fastBufferGetBufferingEnable(long featureID, int *errorCode);
 			void fastBufferSetBufferingEnable(long featureID, int *errorCode, unsigned char isEnabled);
-
+			unsigned int fastBufferGetConsecutiveSampleCount(long featureID, int *errorCode);
+			void fastBufferSetConsecutiveSampleCount(long featureID, int *errorCode, unsigned int consecutiveSampleCount);
 			
             /* Get one or more acquisition delay features */
             int getNumberOfAcquisitionDelayFeatures();

@@ -33,10 +33,12 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPDataBufferRemoveOldestExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetFastBufferingEnableExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetConsecutiveSampleCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferElementCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetDataBufferMaximumCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetDataBufferCapacityExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetFastBufferingEnableExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetConsecutiveSampleCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 #include "common/exceptions/ProtocolBusMismatchException.h"
 

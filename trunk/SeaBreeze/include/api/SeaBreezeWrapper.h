@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeWrapper.h
- * @date    January 2017
+ * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a trivial interface to SeaBreeze that allows
@@ -109,11 +109,15 @@ public:
     void   removeOldestSpectraFromBuffer	(int index, int *errorCode, unsigned int numberOfSpectra);
     unsigned long getBufferElementCount(int index, int *errorCode);
     unsigned long getBufferCapacity  (int index, int *errorCode);
-    unsigned char getBufferingEnable  (int index, int *errorCode);
     unsigned long getBufferCapacityMaximum(int index, int *errorCode);
     unsigned long getBufferCapacityMinimum(int index, int *errorCode);
     void   setBufferCapacity         (int index, int *errorCode, unsigned long capacity);
+
+	// fast buffer features
+	unsigned char getBufferingEnable(int index, int *errorCode);
     void   setBufferingEnable         (int index, int *errorCode, unsigned char isEnabled);
+	unsigned int getConsecutiveSampleCount(int index, int *errorCode);
+	void   setConsecutiveSampleCount(int index, int *errorCode, unsigned int consecutiveSampleCount);
 
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);

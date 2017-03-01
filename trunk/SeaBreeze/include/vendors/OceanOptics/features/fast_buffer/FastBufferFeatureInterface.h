@@ -38,6 +38,7 @@ namespace seabreeze {
 
     typedef unsigned char FastBufferIndex_t;
     typedef FastBufferIndex_t FastBufferCount_t;
+    typedef unsigned int FastBufferSampleCount_t;
     typedef unsigned long FastBufferElementCount_t;
 
     class FastBufferFeatureInterface {
@@ -51,6 +52,14 @@ namespace seabreeze {
 			const FastBufferIndex_t bufferIndex,
 			const FastBufferElementCount_t bufferSize)
 			throw (FeatureException) = 0;
+		virtual FastBufferSampleCount_t getConsecutiveSampleCount(const Protocol &protocol,
+			const Bus &bus, const FastBufferIndex_t bufferIndex)
+			throw (FeatureException) = 0;
+		virtual void setConsecutiveSampleCount(const Protocol &protocol, const Bus &bus,
+			const FastBufferIndex_t bufferIndex,
+			const FastBufferSampleCount_t consecutiveSampleCount)
+			throw (FeatureException) = 0;
+			
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

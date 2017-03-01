@@ -160,7 +160,7 @@ void SpectrometerFeatureAdapter::setTriggerMode(int *errorCode, int mode) {
         this->feature->setTriggerMode(*this->protocol, *this->bus, triggerMode);
         SET_ERROR_CODE(ERROR_SUCCESS);
     } catch (FeatureException &fe) {
-        SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        SET_ERROR_CODE(ERROR_INVALID_TRIGGER_MODE);
         return;
     }
 }

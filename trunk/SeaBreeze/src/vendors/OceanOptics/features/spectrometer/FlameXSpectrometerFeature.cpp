@@ -93,6 +93,8 @@ FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *intro
 		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_SYNCHRONIZATION));
 	this->triggerModes.push_back(
 		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_EDGE));
+	this->triggerModes.push_back(
+		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_DISABLED));
 
 }
 

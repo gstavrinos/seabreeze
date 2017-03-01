@@ -1719,6 +1719,30 @@ void SeaBreezeAPI_Impl::fastBufferSetBufferingEnable(long deviceID, long feature
 	adapter->fastBufferSetBufferingEnable(featureID, errorCode, isEnabled);
 }
 
+unsigned int SeaBreezeAPI_Impl::fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->fastBufferGetConsecutiveSampleCount(featureID, errorCode);
+}
+
+void SeaBreezeAPI_Impl::fastBufferSetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->fastBufferSetConsecutiveSampleCount(featureID, errorCode, consecutiveSampleCount);
+}
+
 /**************************************************************************************/
 //  Acquisition delay Features for the SeaBreeze API class
 /**************************************************************************************/
