@@ -41,6 +41,7 @@
 #include <chrono>
 #include <thread>
 #include "api/seabreezeapi/SeaBreezeAPI.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 /* Prototypes */
 void test_serial_number_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -460,33 +461,30 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
 		sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
+	// this really only works for Jaz...
 	for (i = 0; i < number_of_spectrometers; i++) {
 		printf("\t\t%d: Testing device 0x%02lX, spectrometer 0x%02lX\n",
 			i, deviceID, spectrometer_ids[i]);
 
 		printf("\t\t\tAttempting to set trigger mode to 0\n");
-		sbapi_spectrometer_set_trigger_mode(deviceID,
-			spectrometer_ids[i], &error, 0);
+		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_ids[i], &error, 0);
 		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 
 		printf("\t\t\tGetting maximum intensity\n");
-		max_intensity = sbapi_spectrometer_get_maximum_intensity(
-			deviceID, spectrometer_ids[i], &error);
+		max_intensity = sbapi_spectrometer_get_maximum_intensity(deviceID, spectrometer_ids[i], &error);
 		printf("\t\t\t\tResult is %1.2f [%s]\n", max_intensity,
 			sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 
 		printf("\t\t\tGetting minimum integration time\n");
-		integration_time = sbapi_spectrometer_get_minimum_integration_time_micros(
-			deviceID, spectrometer_ids[i], &error);
+		integration_time = sbapi_spectrometer_get_minimum_integration_time_micros(deviceID, spectrometer_ids[i], &error);
 		printf("\t\t\t\tResult is %ld [%s]\n", integration_time,
 			sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 
 		printf("\t\t\tSetting integration time to minimum:\n");
-		sbapi_spectrometer_set_integration_time_micros(
-			deviceID, spectrometer_ids[i], &error, integration_time);
+		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometer_ids[i], &error, integration_time);
 		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 
@@ -1537,10 +1535,11 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
 {
+	// assumes one spectrometer id must be obtained, but there is only one data buffer id=0
+
 	int number_of_fast_buffer_features = 0;
 	int error = 0;
 	long *fast_buffer_ids = 0;
-	int i = 0;
 	unsigned char fastBufferEnableState = 0;
 
 	printf("\n\tTesting fast buffer features:\n");
@@ -1557,80 +1556,134 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 		return;
 	}
 
+	printf("\t\t%d: Testing device 0x%02lX, fast buffer 0x%02lX\n", 0, deviceID, 0);
+
+	// this is just to test the command. There is only one fast buffer feature at this point. use id=0
+
 	fast_buffer_ids = (long *)calloc(number_of_fast_buffer_features, sizeof(long));
-	printf("\t\tGetting data buffer feature IDs...\n");
+	printf("\t\tGetting fast buffer feature IDs...\n");
 	number_of_fast_buffer_features = sbapi_get_fast_buffer_features(deviceID, &error, fast_buffer_ids, number_of_fast_buffer_features);
-	printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features,
-		sbapi_get_error_string(error));
+	printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features, sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
-	for (i = 0; i < number_of_fast_buffer_features; i++) {
-		printf("\t\t%d: Testing device 0x%02lX, fast buffer 0x%02lX\n", i, deviceID, fast_buffer_ids[i]);
+	long spectrometerID = 0;
+	if (error == 0)
+	{
+		int number_of_spectrometers = sbapi_get_spectrometer_features(deviceID, &error, &spectrometerID, 1);
+	}
 
-		printf("\t\t\tAttempting to get the fast buffering enable state...\n");
-		fastBufferEnableState = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_ids[i], &error);
-		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		if (0 == error) {
-			printf("\t\t\t\tFast buffer enable state is: %d\n", fastBufferEnableState);
-		}
-		tallyErrors(error, testFailureCount);
+	if (error == 0)
+	{
+		printf("\t\t\tDisable all triggers\n");
+		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
+	}
+	
+	if (error == 0)
+	{
+		printf("\t\t\tFast buffering, set buffer to maximum capacity ...\n");
 
-		if (fastBufferEnableState == 0)
-			fastBufferEnableState = 1;
-		else
-			fastBufferEnableState = 0;
-
-		printf("\t\t\tAttempting to change the fast buffering enable state...\n");
-		sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, fastBufferEnableState);
-		if (0 == error) {
-			unsigned char newFastBufferEnableState = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_ids[i], &error);
+		int maxCapacity = sbapi_data_buffer_get_buffer_capacity_maximum(deviceID, 0, &error); // data buffer id = 0
+		if (0 == error)
+		{
+			sbapi_data_buffer_set_buffer_capacity(deviceID, 0, &error, maxCapacity);
 			if (0 == error)
 			{
-				if (newFastBufferEnableState == fastBufferEnableState)
-				{
-					printf("\t\t\t\tFast buffer enable state change was successful.\n");
-					sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, 1);
-					if (0 == error)
-					{
-						printf("\t\t\t\tFast buffer is enabled.\n");
-					}
-					else
-					{
-						printf("\t\t\t\tFast buffer enable failed.\n");
-					}
-				}
-				else
-				{
-					error = 1;
-					printf("\t\t\t\tFast buffer enable state change was unsuccessful.\n");
-				}
+				printf("\t\t\t\tFast buffer capacity was set to: %d\n", maxCapacity);
 			}
-			else
-			{
-				printf("\t\t\t\tFast buffer enable state retrieval was unsuccessful.\n");
-			}	
 		}
-		printf("\t\t\t\tError code is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-
-		if (error = 0)
-		{
-			printf("\t\t\tFast buffering will be tested here...\n");
-
-			printf("\t\t\tWaiting to allow data to be buffered...\n");
-			/* This assumes that the spectrometer and data buffer tests occurred before this, so the
-			* integration time and trigger mode were set in a way that this will
-			* keep acquiring a few spectra.
-			*/
-
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-
-			sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_ids[i], &error, 0); // turn off buffering
-		}
-
-
-		printf("\t\t%d: Finished testing device 0x%02lX, fast buffer 0x%02lX\n", i, deviceID, fast_buffer_ids[i]);
 	}
+
+	if (error == 0)
+	{
+		printf("\t\t\tSetting integration time to 1ms\n");
+		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000); // 1ms integration time, spectrometer ID = 0
+	}
+
+	if (error == 0)
+	{
+		printf("\t\t\tSetting consecutive sample count to 1000:\n");
+		sbapi_fast_buffer_set_consecutive_sample_count(deviceID, 0, &error, 1000);
+		if (error == 0)
+		{
+			unsigned int sampleCount = sbapi_fast_buffer_get_consecutive_sample_count(deviceID, 0, &error); // fast buffer id = 0
+			if (error == 0)
+			{
+				if (sampleCount != 1000)
+					error = ERROR_VALUE_NOT_EXPECTED;
+			}
+		}
+	}
+
+	if (0 == error)
+	{
+		printf("\t\t\t\tEnable fast buffer.\n");
+		sbapi_fast_buffer_set_buffering_enable(deviceID, 0, &error, 1);
+		if (error == 0)
+		{
+			unsigned char bufferEnabled = sbapi_fast_buffer_get_buffering_enable(deviceID, 0, &error); // fast buffer id = 0
+			if (error == 0)
+			{
+				if (bufferEnabled != 1)
+					error = ERROR_VALUE_NOT_EXPECTED;
+			}
+		}
+	}
+
+	if (error == 0)
+	{
+		printf("\t\t\tClear the spectrum buffer\n");
+		sbapi_data_buffer_clear(deviceID, 0, &error);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (error == 0)
+		{
+			printf("\t\t\tTake three spectral consecutive sample scans \n");
+			printf("\t\t\Set trigger to free running\n");
+			sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+		}
+
+		// send a get spectrum request only for a trigger
+
+		// disable all triggers
+		if (error == 0)
+		{
+			printf("\t\t\Set trigger to free running\n");
+			sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
+		}
+
+		// call get spectrum until the buffer is empty
+
+
+		if (error != 0)
+			break;
+	}
+
+	if (0 == error)
+	{
+		printf("\t\t\t\tDisable fast buffer.\n");
+		sbapi_fast_buffer_set_buffering_enable(deviceID, 0, &error, 0);
+	}
+
+	if(0==error)
+	{
+		printf("\t\t\tClear the spectrum buffer\n");
+		sbapi_data_buffer_clear(deviceID, 0, &error);
+	}
+
+	if (error == 0)
+	{
+		printf("\t\t\Set trigger to free running\n");
+		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+	}
+
+	printf("\t\t\t\tResult code is [%s]\n", sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+
+	printf("\t\t%d: Finished testing device 0x%02lX, fast buffer 0x%02lX\n", 0, deviceID, 0);
+
 	free(fast_buffer_ids);
 	printf("\tFinished testing fast buffer capabilities.\n");
 }

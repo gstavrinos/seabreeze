@@ -1428,6 +1428,26 @@ void DeviceAdapter::fastBufferSetBufferingEnable(long featureID, int *errorCode,
 	feature->setBufferingEnable(errorCode, isEnabled);
 }
 
+unsigned int DeviceAdapter::fastBufferGetConsecutiveSampleCount(long featureID, int *errorCode) {
+	FastBufferFeatureAdapter *feature = getFastBufferFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getConsecutiveSampleCount(errorCode);
+}
+
+void DeviceAdapter::fastBufferSetConsecutiveSampleCount(long featureID, int *errorCode, unsigned int consecutiveSampleCount) {
+	FastBufferFeatureAdapter *feature = getFastBufferFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setConsecutiveSampleCount(errorCode, consecutiveSampleCount);
+}
+
 /* Acquisition delay feature wrappers */
 int DeviceAdapter::getNumberOfAcquisitionDelayFeatures() {
     return (int) this->acquisitionDelayFeatures.size();

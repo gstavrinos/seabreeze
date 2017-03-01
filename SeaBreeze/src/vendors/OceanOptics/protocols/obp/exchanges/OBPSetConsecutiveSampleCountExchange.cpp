@@ -1,10 +1,7 @@
 /***************************************************//**
- * @file    FastBufferFeatureAdapter.h
+ * @file    OBPSetConsecutiveSampleCountExchange.cpp
  * @date    February 2017
  * @author  Ocean Optics, Inc.
- *
- * This is a wrapper that allows access to SeaBreeze
- * DataBufferFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -30,32 +27,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
-#define SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetConsecutiveSamplecountExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/fast_buffer/FastBufferFeatureInterface.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace api {
+OBPSetConsecutiveSampleCountExchange::OBPSetConsecutiveSampleCountExchange()
+{
+    this->hints->push_back(new OBPControlHint());
 
-        class FastBufferFeatureAdapter
-                : public FeatureAdapterTemplate<FastBufferFeatureInterface> {
-        public:
-            FastBufferFeatureAdapter(FastBufferFeatureInterface *intf,
-                const FeatureFamily &f,
-                Protocol *p, Bus *b, unsigned short instanceIndex);
-            virtual ~FastBufferFeatureAdapter();
+	this->messageType = OBPMessageTypes::OBP_SET_BACK_TO_BACK_SAMPLE_COUNT;
 
-            /* Data buffer functions */
-            unsigned char getBufferingEnable(int *errorCode);
-            void setBufferingEnable(int *errorCode, unsigned char capacity);
-			unsigned int getConsecutiveSampleCount(int *errorCode);
-			void setConsecutiveSampleCount(int *errorCode, unsigned int consecutiveSampleCount);
-        };
+    this->payload.resize(sizeof(unsigned int)); 
+}
 
-    } /* end namespace api */
-} /* end namespace seabreeze */
+OBPSetConsecutiveSampleCountExchange::~OBPSetConsecutiveSampleCountExchange()
+{
 
-#endif /* SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H */
+}
+
+void OBPSetConsecutiveSampleCountExchange::setConsecutiveSampleCount(unsigned int consecutiveSampleCount)
+{
+        this->payload[0] = consecutiveSampleCount;
+}
 

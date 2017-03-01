@@ -274,7 +274,8 @@ public:
 	virtual int getFastBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
 	virtual unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode) = 0;
 	virtual void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled) = 0;
-
+	virtual unsigned int fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode) = 0;
+	virtual void fastBufferSetConsecutiveSampleCount (long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount) = 0;
 
     /* Acquisition delay capabilities */
     virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode) = 0;
@@ -1911,8 +1912,7 @@ extern "C" {
 	*
 	* @return the number of introspection feature IDs that were copied.
 	*/
-	DLL_DECL int sbapi_get_introspection_features(long deviceID, int *error_code, long *introspectionFeatures, int max_features);
-
+	DLL_DECL int sbapi_get_introspection_features(long deviceID, int *error_code, long *introspectionFeatures, unsigned int max_features);
 	/**
 	* This function reads out an the number of detector pixels available from the
 	*
@@ -2537,6 +2537,30 @@ extern "C" {
 	*
 	*/
 	DLL_DECL void sbapi_fast_buffer_set_buffering_enable(long deviceID, long featureID, int *error_code, unsigned char isEnabled);
+
+	/**
+	* This function returns the number of consecutive samples for each fast buffer 
+	* feature instance for this device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The index of a specific feature obtained by sbapi_get_fast_buffer_features()
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	*
+	* @return unsigned char indicating the enable state, 0 is false, 1 is true
+	*/
+	DLL_DECL unsigned int sbapi_fast_buffer_get_consecutive_sample_count(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function sets the number of consecutive samples for each fast buffer
+	* feature instance for this device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The index of a specific feature obtained by sbapi_get_fast_buffer_features()
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param isEnabled (Input) unsigned int value representing the number of consecutive samples for each trigger
+	*
+	*/
+	DLL_DECL void sbapi_fast_buffer_set_consecutive_sample_count(long deviceID, long featureID, int *error_code, unsigned int consecutiveSampleCount);
 
 
     /**

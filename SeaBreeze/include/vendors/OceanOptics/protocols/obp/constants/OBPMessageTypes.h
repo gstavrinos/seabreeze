@@ -148,19 +148,21 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_STATUS_LED_PATTERN			= 0x00001010;
 		static const unsigned int OBP_SET_STATUS_LED_MODE				= 0x00001011;
 
-		// Buffering
+// Buffering
 		static const unsigned int OBP_ABORT_ACQUISITION					= 0x00100000;
         static const unsigned int OBP_GET_BUFFER_SIZE_MAX				= 0x00100820;
         static const unsigned int OBP_GET_BUFFER_SIZE_ACTIVE			= 0x00100822;
         static const unsigned int OBP_CLEAR_BUFFER_ALL					= 0x00100830;
+		static const unsigned int OBP_REMOVE_OLDEST_SPECTRA				= 0x00100831;
         static const unsigned int OBP_SET_BUFFER_SIZE_ACTIVE			= 0x00100832;
         static const unsigned int OBP_GET_BUFFERED_SPEC_COUNT			= 0x00100900;
+
 
 // Fast Buffering
 		static const unsigned int OBP_GET_BUFFERING_ENABLED				= 0x00100800;
 		static const unsigned int OBP_SET_BUFFERING_ENABLED				= 0x00100810;
-		static const unsigned int OBP_REMOVE_OLDEST_SPECTRA				= 0x00100831;
-
+		static const unsigned int OBP_SET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110112;
+		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110102;
 
 //Spectra queries
 		static const unsigned int OBP_ACQUIRE_SPECTRA_INTO_BUFFER		= 0x00100902;	
@@ -199,10 +201,8 @@ namespace seabreeze {
         static const unsigned int OBP_SET_ITIME_USEC					= 0x00110010;
 
 // trigger modes
-		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;	
-		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110102;	
+		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;		
         static const unsigned int OBP_SET_TRIG_MODE						= 0x00110110;
-		static const unsigned int OBP_SET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110112;	
         static const unsigned int OBP_SIMULATE_TRIG_PULSE				= 0x00110120;
 
 // optical detector characteristics

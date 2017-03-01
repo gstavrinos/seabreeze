@@ -50,6 +50,14 @@ namespace seabreeze {
 			const FastBufferIndex_t bufferIndex,
 			const FastBufferElementCount_t bufferSize)
 			throw (FeatureException);
+		virtual FastBufferSampleCount_t getConsecutiveSampleCount(
+			const Protocol &protocol,
+			const Bus &bus, const FastBufferIndex_t bufferIndex)
+			throw (FeatureException);
+		virtual void setConsecutiveSampleCount(const Protocol &protocol, const Bus &bus,
+			const FastBufferIndex_t bufferIndex,
+			const FastBufferSampleCount_t consecutiveSampleCount)
+			throw (FeatureException);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

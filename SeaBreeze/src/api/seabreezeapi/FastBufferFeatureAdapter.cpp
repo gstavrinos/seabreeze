@@ -82,3 +82,33 @@ void FastBufferFeatureAdapter::setBufferingEnable(int *errorCode, unsigned char 
     }
 }
 
+unsigned int FastBufferFeatureAdapter::getConsecutiveSampleCount(int *errorCode)
+{
+	unsigned int retval;
+
+	try
+	{
+		retval = this->feature->getConsecutiveSampleCount(*this->protocol, *this->bus, 0);
+		SET_ERROR_CODE(ERROR_SUCCESS);
+		return retval;
+	}
+	catch (FeatureException &fe)
+	{
+		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		return 0;
+	}
+}
+
+void FastBufferFeatureAdapter::setConsecutiveSampleCount(int *errorCode, unsigned int consecutiveSampleCount)
+{
+	try
+	{
+		this->feature->setConsecutiveSampleCount(*this->protocol, *this->bus, 0, consecutiveSampleCount);
+		SET_ERROR_CODE(ERROR_SUCCESS);
+	}
+	catch (FeatureException &fe)
+	{
+		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+	}
+}
+

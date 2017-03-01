@@ -69,10 +69,12 @@ public partial class SeaBreezeWrapper
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern ulong  seabreeze_get_buffer_element_count           (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern ulong  seabreeze_get_buffer_capacity                (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern byte   seabreeze_get_buffering_enable               (int index, ref int error_code);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern uint    seabreeze_get_consecutive_sample_count      (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern ulong  seabreeze_get_buffer_capacity_maximum        (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern ulong  seabreeze_get_buffer_capacity_minimum        (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void  seabreeze_set_buffer_capacity                 (int index, ref int error_code, ulong capacity);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void  seabreeze_set_buffering_enable                (int index, ref int error_code, byte isEnabled);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void seabreeze_set_consecutive_sample_count         (int index, ref int error_code, uint consecutiveSampleCount);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void  seabreeze_clear_buffer                       (int index, ref int error_code);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void seabreeze_set_verbose                          (int flag);
     [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)] public static extern void seabreeze_set_logfile                          (ref byte pathname, int length);

@@ -1,10 +1,7 @@
 /***************************************************//**
- * @file    FastBufferFeatureAdapter.h
+ * @file    OBPGetConsecutiveSampleCountExchange.cpp
  * @date    February 2017
  * @author  Ocean Optics, Inc.
- *
- * This is a wrapper that allows access to SeaBreeze
- * DataBufferFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -30,32 +27,40 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
-#define SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
+#include "common/globals.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetConsecutiveSampleCountExchange.h"
+#include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <vector>
 
-#include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/fast_buffer/FastBufferFeatureInterface.h"
+using namespace seabreeze;
+using namespace seabreeze::oceanBinaryProtocol;
+using namespace std;
 
-namespace seabreeze {
-    namespace api {
+OBPGetConsecutiveSampleCountExchange::OBPGetConsecutiveSampleCountExchange() {
+    this->hints->push_back(new OBPControlHint());
+    this->messageType = OBPMessageTypes::OBP_GET_BACK_TO_BACK_SAMPLE_COUNT;
+}
 
-        class FastBufferFeatureAdapter
-                : public FeatureAdapterTemplate<FastBufferFeatureInterface> {
-        public:
-            FastBufferFeatureAdapter(FastBufferFeatureInterface *intf,
-                const FeatureFamily &f,
-                Protocol *p, Bus *b, unsigned short instanceIndex);
-            virtual ~FastBufferFeatureAdapter();
+OBPGetConsecutiveSampleCountExchange::~OBPGetConsecutiveSampleCountExchange() {
 
-            /* Data buffer functions */
-            unsigned char getBufferingEnable(int *errorCode);
-            void setBufferingEnable(int *errorCode, unsigned char capacity);
-			unsigned int getConsecutiveSampleCount(int *errorCode);
-			void setConsecutiveSampleCount(int *errorCode, unsigned int consecutiveSampleCount);
-        };
+}
 
-    } /* end namespace api */
-} /* end namespace seabreeze */
+unsigned int OBPGetConsecutiveSampleCountExchange::queryConsecutiveSampleCount(
+        TransferHelper *helper) throw (ProtocolException) {
 
-#endif /* SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H */
+    unsigned int consecutiveSampleCount;
+    vector<byte> *result;
+
+    result = this->queryDevice(helper);
+    if(NULL == result || result->size() < 1) {
+        throw ProtocolException("Got a short read when querying consecutive sample count.");
+    }
+
+	 consecutiveSampleCount = ((*result)[0] & 0x00FF);
+
+    delete result;
+
+    return consecutiveSampleCount;
+}
 

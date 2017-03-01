@@ -1,10 +1,7 @@
 /***************************************************//**
- * @file    FastBufferFeatureAdapter.h
+ * @file    OBPGetConsecutiveSampleCountExchange.h
  * @date    February 2017
  * @author  Ocean Optics, Inc.
- *
- * This is a wrapper that allows access to SeaBreeze
- * DataBufferFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -30,32 +27,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
-#ifndef SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
-#define SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H
+#ifndef OBPGETCONSECUTIVESAMPLECOUNTEXCHANGE_H
+#define OBPGETCONSECUTIVESAMPLECOUNTEXCHANGE_H
 
-#include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/fast_buffer/FastBufferFeatureInterface.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
 namespace seabreeze {
-    namespace api {
-
-        class FastBufferFeatureAdapter
-                : public FeatureAdapterTemplate<FastBufferFeatureInterface> {
+    namespace oceanBinaryProtocol {
+        class OBPGetConsecutiveSampleCountExchange : public OBPQuery {
         public:
-            FastBufferFeatureAdapter(FastBufferFeatureInterface *intf,
-                const FeatureFamily &f,
-                Protocol *p, Bus *b, unsigned short instanceIndex);
-            virtual ~FastBufferFeatureAdapter();
+            OBPGetConsecutiveSampleCountExchange();
+            virtual ~OBPGetConsecutiveSampleCountExchange();
 
-            /* Data buffer functions */
-            unsigned char getBufferingEnable(int *errorCode);
-            void setBufferingEnable(int *errorCode, unsigned char capacity);
-			unsigned int getConsecutiveSampleCount(int *errorCode);
-			void setConsecutiveSampleCount(int *errorCode, unsigned int consecutiveSampleCount);
+            unsigned int queryConsecutiveSampleCount(TransferHelper *helper)
+                    throw (ProtocolException);
         };
-
-    } /* end namespace api */
+    } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */
 
-#endif /* SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H */
+#endif /* OBPGETCONSECUTIVESAMPLECOUNTEXCHANGE_H */
 

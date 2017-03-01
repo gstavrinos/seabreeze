@@ -225,6 +225,8 @@ public:
 	virtual int getFastBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
 	virtual unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode);
 	virtual void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled);
+	virtual unsigned int fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode);
+	virtual void fastBufferSetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount);
 
     /* Acquisition delay capabilities */
     virtual int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode);
