@@ -40,6 +40,7 @@ using namespace std;
 OBPGetConsecutiveSampleCountExchange::OBPGetConsecutiveSampleCountExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BACK_TO_BACK_SAMPLE_COUNT;
+	this->payload.resize(sizeof(unsigned int));  
 }
 
 OBPGetConsecutiveSampleCountExchange::~OBPGetConsecutiveSampleCountExchange() {
@@ -53,11 +54,12 @@ unsigned int OBPGetConsecutiveSampleCountExchange::queryConsecutiveSampleCount(
     vector<byte> *result;
 
     result = this->queryDevice(helper);
-    if(NULL == result || result->size() < 1) {
+    if(NULL == result || result->size() < sizeof(unsigned int)) {
         throw ProtocolException("Got a short read when querying consecutive sample count.");
     }
 
-	 consecutiveSampleCount = ((*result)[0] & 0x00FF);
+	// cast of a byte pointer(data) to an unsigned integer pointer which is dereferenced
+	consecutiveSampleCount = *(unsigned int *)((*result).data()); 
 
     delete result;
 

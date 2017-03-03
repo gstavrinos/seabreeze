@@ -71,10 +71,9 @@ FlameNIR::FlameNIR() {
 
     /* Set up the features that comprise this device */
     
-    ProgrammableSaturationFeature *saturation =
-            new SaturationEEPROMSlotFeature(0x0011);
-    
+    ProgrammableSaturationFeature *saturation =new SaturationEEPROMSlotFeature(0x0011);  
     this->features.push_back(new FlameNIRSpectrometerFeature(saturation));
+
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(30));
 

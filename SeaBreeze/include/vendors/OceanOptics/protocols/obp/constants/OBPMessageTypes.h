@@ -172,11 +172,15 @@ namespace seabreeze {
         static const unsigned int OBP_GET_CORRECTED_SPECTRUM_NOW		= 0x00101000;
 		static const unsigned int OBP_GET_MAXIMUM_ADC_COUNTS			= 0x00101010;
 
+
 // Saturation
         static const unsigned int OBP_GET_SATURATION_LEVEL				= 0x001010A0;
 		static const unsigned int OBP_GET_BASELINE_LEVEL				= 0x001010A1;	
 		static const unsigned int OBP_GET_MAXIMUM_SATURATION_LEVEL		= 0x001010A2;	
-		static const unsigned int OBP_GET_MAXIMUM_BASELINE_LEVEL		= 0x001010A3;	
+		static const unsigned int OBP_GET_MAXIMUM_BASELINE_LEVEL		= 0x001010A3;
+
+
+#ifdef false
 		static const unsigned int OBP_SET_SATURATION_LEVEL				= 0x001010B0;	
 		static const unsigned int OBP_SET_BASELINE_LEVEL				= 0x001010B1;	
 		static const unsigned int OBP_GET_DAC_OFFSET_VALUE				= 0x001010C0;	
@@ -185,7 +189,8 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_DAC_REFERENCE_CONSTRAINTS		= 0x001010C3;	
 		static const unsigned int OBP_SET_DAC_OFFSET_VALUE				= 0x001010D0;	
 		static const unsigned int OBP_SET_DAC_REFERENCE_VALUE			= 0x001010D1;	
-       
+#endif       
+
 // Partial and raw spectra
 		static const unsigned int OBP_GET_RAW_SPECTRUM_NOW				= 0x00101100;
         static const unsigned int OBP_GET_PARTIAL_SPECTRUM_MODE			= 0x00102000;

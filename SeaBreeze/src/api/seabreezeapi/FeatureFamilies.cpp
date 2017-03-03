@@ -57,6 +57,8 @@
 #define FEATURE_FAMILY_ID_PIXEL_BINNING         20 // was 18... that appears to have been a bug
 #define FEATURE_FAMILY_ID_INTROSPECTION			21
 #define FEATURE_FAMILY_ID_FAST_BUFFER			22
+#define FEATURE_FAMILY_ID_AUTO_NULLING_ANALOG	23
+#define	FEATURE_FAMILY_ID_AUTO_NULLING_DIGITAL	24
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -264,6 +266,7 @@ seabreeze::api::IntrospectionFeatureFamily::IntrospectionFeatureFamily()
 seabreeze::api::IntrospectionFeatureFamily::~IntrospectionFeatureFamily() {
 
 }
+
 
 seabreeze::api::FastBufferFeatureFamily::FastBufferFeatureFamily()
 	: FeatureFamily("FastBuffer", FEATURE_FAMILY_ID_FAST_BUFFER) {

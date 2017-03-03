@@ -1,6 +1,6 @@
 ;;
-;; OOI_FlameX.inf
-;; Copyright (C) 2015 Ocean Optics, Inc.  All rights reserved.
+;; OOI_FlameU.inf
+;; Copyright (C) 2017 Ocean Optics, Inc.  All rights reserved.
 
 ; Adapted from the example INF in the Microsoft document "How to Use WinUSB to Communicate with a USB Device"
 
@@ -10,7 +10,7 @@ Class = OceanOpticsUSBDevice
 ClassGUID={BAD36DAB-A3D2-4a0e-8B2E-DA36202187D4}
 Provider = %ProviderName%
 DriverVer=08/23/2012,1.2.1
-CatalogFile=ooi_FlameX.cat
+CatalogFile=ooi_FlameU.cat
 
 ; =================== Class section ==================
 
@@ -27,10 +27,10 @@ HKR,,Icon,,-1
 %ProviderName% = MyDevice_WinUSB,NTx86,NTamd64
 
 [MyDevice_WinUSB.NTx86]
-%USB\MyDevice.DeviceDesc% =OOIUSB_Install, USB\VID_2457&PID_104C
+%USB\MyDevice.DeviceDesc% =OOIUSB_Install, USB\VID_2457&PID_2001
 
 [MyDevice_WinUSB.NTamd64]
-%USB\MyDevice.DeviceDesc% =OOIUSB_Install, USB\VID_2457&PID_104C
+%USB\MyDevice.DeviceDesc% =OOIUSB_Install, USB\VID_2457&PID_2001
 
 ; =================== Installation ===================
 
@@ -95,8 +95,8 @@ WdfCoInstaller01007.dll=2
 
 [Strings]
 ProviderName="Ocean Optics, Inc."
-USB\MyDevice.DeviceDesc="Ocean Optics FlameU (WinUSB)"
-WinUSB_SvcDesc="Ocean Optics FlameU (WinUSB)"
+USB\MyDevice.DeviceDesc="Ocean Optics FlameX (WinUSB)"
+WinUSB_SvcDesc="Ocean Optics FlameX (WinUSB)"
 DISK_NAME="My Install Disk"
 DeviceClassString="Ocean Optics USB Devices"
 

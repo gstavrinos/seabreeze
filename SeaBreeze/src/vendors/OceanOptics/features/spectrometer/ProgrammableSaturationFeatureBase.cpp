@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    ProgrammableSaturationFeatureBase.h
+ * @file    ProgrammableSaturationFeatureBase.cpp
  * @date    March 2016
  * @author  Ocean Optics, Inc.
  *

@@ -38,13 +38,13 @@
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
-#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureImpl.h"
+//#include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeatureImpl.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
 #include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/data_buffer/FlameXDataBufferFeature.h"
 #include "vendors/OceanOptics/features/fast_buffer/FlameXFastBufferFeature.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPProgrammableSaturationProtocol.h"
+//#include "vendors/OceanOptics/protocols/obp/impls/OBPProgrammableSaturationProtocol.h""
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
@@ -77,13 +77,7 @@ FlameX::FlameX() {
     this->protocols.push_back(new OceanBinaryProtocol());
 
     /* Set up the features that comprise this device */
-  
-
-	/* Add programmable saturation protocol*/
-    vector<ProtocolHelper *> saturationHelpers;
-	ProgrammableSaturationFeature *saturation =
-		new ProgrammableSaturationFeatureImpl(saturationHelpers);
-    saturationHelpers.push_back(new OBPProgrammableSaturationProtocol()); 
+ 
 
 	/* Add introspection feature*/
 	vector<ProtocolHelper *> introspectionHelpers;
@@ -92,7 +86,7 @@ FlameX::FlameX() {
 	this->features.push_back(introspection);
 
 	/* spectrometer and databuffer features*/
-    this->features.push_back(new FlameXSpectrometerFeature(introspection, saturation));
+    this->features.push_back(new FlameXSpectrometerFeature(introspection));
 	this->features.push_back(new FlameXDataBufferFeature());
 	this->features.push_back(new FlameXFastBufferFeature());
 

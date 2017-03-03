@@ -39,7 +39,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPSetDefaultPixelBinningExchange::OBPSetDefaultPixelBinningExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_SET_DEFAULT_BINNING_FACTOR;
-    //this->payload.resize(sizeof(unsigned char));
+    this->payload.resize(sizeof(unsigned char));
 }
 
 OBPSetDefaultPixelBinningExchange::~OBPSetDefaultPixelBinningExchange() {
@@ -47,7 +47,7 @@ OBPSetDefaultPixelBinningExchange::~OBPSetDefaultPixelBinningExchange() {
 }
 
 void OBPSetDefaultPixelBinningExchange::setDefaultPixelBinningFactor(const unsigned char binning) {
-    this->payload.resize(sizeof(unsigned char));
+    //this->payload.resize(sizeof(unsigned char));
     memcpy(&(this->payload[0]), &binning, sizeof(unsigned char));
 }
 

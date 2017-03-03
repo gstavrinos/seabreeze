@@ -35,9 +35,9 @@
 
 namespace seabreeze {
 
-    class FlameXSpectrometerFeature : public GainAdjustedSpectrometerFeature {
+    class FlameXSpectrometerFeature : public OOISpectrometerFeature{
     public:
-        FlameXSpectrometerFeature(IntrospectionFeature *introspection, ProgrammableSaturationFeature *saturationFeature);
+        FlameXSpectrometerFeature(IntrospectionFeature *introspection);
         virtual ~FlameXSpectrometerFeature();
 
         /* Using OBP wavelength coefficient commands */

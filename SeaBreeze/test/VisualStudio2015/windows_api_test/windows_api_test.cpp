@@ -528,6 +528,8 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
 		printf("\t\t\tGetting wavelengths...\n");
 		length = sbapi_spectrometer_get_wavelengths(deviceID,
 			spectrometer_ids[i], &error, doubleBuffer, length);
+		if (length == 0)
+			printf("\t\t\t\tThere were no wavelength calibration coefficients returned by the spectrometer.\n");
 		printf("\t\t\t\tResult is %d [%s]\n", length,
 			sbapi_get_error_string(error));
 		printf("\t\t\t\tPixel indices 19 and 20 are: %1.2f, %1.2f\n",
@@ -1539,7 +1541,9 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 	int number_of_fast_buffer_features = 0;
 	int error = 0;
-	long *fast_buffer_ids = 0;
+	long fast_buffer_feature_ids = 0;
+	long data_buffer_feature_ids = 0;
+	long spectrometerID = 0;
 	unsigned char fastBufferEnableState = 0;
 
 	printf("\n\tTesting fast buffer features:\n");
@@ -1558,15 +1562,14 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 	printf("\t\t%d: Testing device 0x%02lX, fast buffer 0x%02lX\n", 0, deviceID, 0);
 
-	// this is just to test the command. There is only one fast buffer feature at this point. use id=0
+	// this is just to test the command. There is only one fast buffer feature at this point.
 
-	fast_buffer_ids = (long *)calloc(number_of_fast_buffer_features, sizeof(long));
 	printf("\t\tGetting fast buffer feature IDs...\n");
-	number_of_fast_buffer_features = sbapi_get_fast_buffer_features(deviceID, &error, fast_buffer_ids, number_of_fast_buffer_features);
-	printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features, sbapi_get_error_string(error));
+	number_of_fast_buffer_features = sbapi_get_fast_buffer_features(deviceID, &error, &fast_buffer_feature_ids, 1);
+	printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
-	long spectrometerID = 0;
+	// id's needed from other features
 	if (error == 0)
 	{
 		int number_of_spectrometers = sbapi_get_spectrometer_features(deviceID, &error, &spectrometerID, 1);
@@ -1574,18 +1577,26 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 	if (error == 0)
 	{
+		// there is only one databuffer feature
+		int number_of_data_buffers = sbapi_get_data_buffer_features(deviceID, &error, &data_buffer_feature_ids, 1);
+	}
+
+
+	// set up for taking a fast buffered spectrum
+	if (error == 0)
+	{
 		printf("\t\t\tDisable all triggers\n");
-		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
+		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); 
 	}
 	
 	if (error == 0)
 	{
 		printf("\t\t\tFast buffering, set buffer to maximum capacity ...\n");
 
-		int maxCapacity = sbapi_data_buffer_get_buffer_capacity_maximum(deviceID, 0, &error); // data buffer id = 0
+		int maxCapacity = sbapi_data_buffer_get_buffer_capacity_maximum(deviceID, data_buffer_feature_ids, &error);
 		if (0 == error)
 		{
-			sbapi_data_buffer_set_buffer_capacity(deviceID, 0, &error, maxCapacity);
+			sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_feature_ids, &error, maxCapacity);
 			if (0 == error)
 			{
 				printf("\t\t\t\tFast buffer capacity was set to: %d\n", maxCapacity);
@@ -1596,16 +1607,16 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	if (error == 0)
 	{
 		printf("\t\t\tSetting integration time to 1ms\n");
-		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000); // 1ms integration time, spectrometer ID = 0
+		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000); // 1ms integration time, 
 	}
 
 	if (error == 0)
 	{
 		printf("\t\t\tSetting consecutive sample count to 1000:\n");
-		sbapi_fast_buffer_set_consecutive_sample_count(deviceID, 0, &error, 1000);
+		sbapi_fast_buffer_set_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error, 1000);
 		if (error == 0)
 		{
-			unsigned int sampleCount = sbapi_fast_buffer_get_consecutive_sample_count(deviceID, 0, &error); // fast buffer id = 0
+			unsigned int sampleCount = sbapi_fast_buffer_get_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error);
 			if (error == 0)
 			{
 				if (sampleCount != 1000)
@@ -1617,10 +1628,10 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	if (0 == error)
 	{
 		printf("\t\t\t\tEnable fast buffer.\n");
-		sbapi_fast_buffer_set_buffering_enable(deviceID, 0, &error, 1);
+		sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_ids, &error, 1);
 		if (error == 0)
 		{
-			unsigned char bufferEnabled = sbapi_fast_buffer_get_buffering_enable(deviceID, 0, &error); // fast buffer id = 0
+			unsigned char bufferEnabled = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_feature_ids, &error);
 			if (error == 0)
 			{
 				if (bufferEnabled != 1)
@@ -1632,44 +1643,60 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	if (error == 0)
 	{
 		printf("\t\t\tClear the spectrum buffer\n");
-		sbapi_data_buffer_clear(deviceID, 0, &error);
+		sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
 	}
 
-	for (int i = 0; i < 3; i++)
+	if (error == 0)
 	{
+		int pixelCount = sbapi_spectrometer_get_formatted_spectrum_length(deviceID, spectrometerID, &error); // this is really just the pixel count
+		unsigned int metaData[32];
+		unsigned int checksum = 0;
+		unsigned short *aSpectrum = (unsigned short *)calloc(pixelCount, sizeof(unsigned short));
 		if (error == 0)
 		{
 			printf("\t\t\tTake three spectral consecutive sample scans \n");
-			printf("\t\t\Set trigger to free running\n");
-			sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+
+			for (int i = 0; i < 3; i++)
+			{
+				printf("\t\t\t\tScan %d\n", i);
+				if (error == 0)
+				{
+
+					printf("\t\t\Set trigger to free running\n");
+					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+				}
+
+				// send a get fast buffered spectrum request only for a trigger, buffer should be clear
+
+				//sbapi_fast_buffer_get_spectrum(0, )
+				// disable all triggers
+				if (error == 0)
+				{
+					printf("\t\t\Set trigger to disabled\n");
+					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
+				}
+
+				// call get fast buffered spectrum until the buffer is empty
+
+
+				if (error != 0)
+					break;
+			}
 		}
-
-		// send a get spectrum request only for a trigger
-
-		// disable all triggers
-		if (error == 0)
-		{
-			printf("\t\t\Set trigger to free running\n");
-			sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
-		}
-
-		// call get spectrum until the buffer is empty
-
-
-		if (error != 0)
-			break;
+		
+		free(aSpectrum);
 	}
 
 	if (0 == error)
 	{
 		printf("\t\t\t\tDisable fast buffer.\n");
-		sbapi_fast_buffer_set_buffering_enable(deviceID, 0, &error, 0);
+		sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_ids, &error, 0);
 	}
 
 	if(0==error)
 	{
 		printf("\t\t\tClear the spectrum buffer\n");
-		sbapi_data_buffer_clear(deviceID, 0, &error);
+		sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
 	}
 
 	if (error == 0)
@@ -1683,8 +1710,6 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 
 	printf("\t\t%d: Finished testing device 0x%02lX, fast buffer 0x%02lX\n", 0, deviceID, 0);
-
-	free(fast_buffer_ids);
 	printf("\tFinished testing fast buffer capabilities.\n");
 }
 
