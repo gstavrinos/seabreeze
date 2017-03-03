@@ -203,7 +203,6 @@ namespace seabreeze {
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
             const PixelBinningFeatureFamily PIXEL_BINNING;
 
-
             FeatureFamilies();
             ~FeatureFamilies();
             std::vector<FeatureFamily *> getAllFeatureFamilies();

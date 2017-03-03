@@ -195,9 +195,20 @@ int SpectrometerFeatureAdapter::getWavelengths(int *errorCode,
     return valuesCopied;
 }
 
-unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) {
+unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) 
+{
+// this, of course, is the same as getFormattedSpectrumLength(), but has a more descriptive name.
 
-	unsigned short numberOfPixels = this->feature->getNumberOfPixels();
+	unsigned short numberOfPixels = 0;
+
+	try {
+		numberOfPixels = this->feature->getNumberOfPixels();
+		SET_ERROR_CODE(ERROR_SUCCESS);
+	}
+	catch (FeatureException &fe) {
+		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		return 0;
+	}
 
 	SET_ERROR_CODE(ERROR_SUCCESS);
 	return numberOfPixels;
