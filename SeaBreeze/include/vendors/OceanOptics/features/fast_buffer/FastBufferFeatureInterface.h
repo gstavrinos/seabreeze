@@ -50,7 +50,7 @@ namespace seabreeze {
 			throw (FeatureException) = 0;
 		virtual void setBufferingEnable(const Protocol &protocol, const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
-			const FastBufferElementCount_t bufferSize)
+			const FastBufferIndex_t isEnabled)
 			throw (FeatureException) = 0;
 		virtual FastBufferSampleCount_t getConsecutiveSampleCount(const Protocol &protocol,
 			const Bus &bus, const FastBufferIndex_t bufferIndex)
