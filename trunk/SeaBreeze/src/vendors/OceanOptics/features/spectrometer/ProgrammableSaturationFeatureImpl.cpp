@@ -67,8 +67,7 @@ unsigned int ProgrammableSaturationFeatureImpl::getSaturation(const Protocol &pr
         proto = lookupProtocolImpl(protocol);
         saturation = static_cast<ProgrammableSaturationProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
-        string error(
-                "Could not find matching protocol implementation to get saturation.");
+        string error("Could not find matching protocol implementation to get saturation.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }

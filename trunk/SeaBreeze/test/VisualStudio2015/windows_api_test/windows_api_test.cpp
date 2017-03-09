@@ -1662,7 +1662,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 				if (error == 0)
 				{
 
-					printf("\t\t\Set trigger to free running\n");
+					printf("\t\t\tSet trigger to free running\n");
 					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
 				}
 
@@ -1672,7 +1672,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 				// disable all triggers
 				if (error == 0)
 				{
-					printf("\t\t\Set trigger to disabled\n");
+					printf("\t\t\tSet trigger to disabled\n");
 					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
 				}
 
@@ -1701,7 +1701,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 	if (error == 0)
 	{
-		printf("\t\t\Set trigger to free running\n");
+		printf("\t\t\tSet trigger to free running\n");
 		sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
 	}
 

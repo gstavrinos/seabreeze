@@ -112,7 +112,7 @@ vector<double> *STSSpectrometerFeature::getWavelengths(const Protocol &protocol,
     vector<double> &w = *wavelengths;
 
     if (binningFactor > 0) {
-        const size_t step = 1 << binningFactor;
+        const size_t step = (size_t)1 << binningFactor;
         for (size_t start = 0, destination = 0; start < unbinnedNumberOfPixels; start += step, ++destination) {
             double sum = 0.0;
             for (size_t i = start, count = 0; count < step; ++i, ++count) {
