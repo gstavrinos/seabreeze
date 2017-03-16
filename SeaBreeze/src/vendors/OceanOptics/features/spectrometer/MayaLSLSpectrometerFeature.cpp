@@ -51,6 +51,7 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature(
             : GainAdjustedSpectrometerFeature(saturationFeature) {
 
     this->numberOfPixels = 2068;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
     this->maxIntensity = 64000;   // MZ: resolves unit-to-unit issues with S10420 detector
     int readoutLength = 2304 * 2 + 1;
 
@@ -67,16 +68,17 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature(
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(MayaLSLSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new MayaProSpectrumExchange(readoutLength, this->numberOfPixels, this);
-
-    Transfer *requestSpectrum = new RequestSpectrumExchange();
+	Transfer *requestFormattedSpectrum = new RequestSpectrumExchange();
+    Transfer *readFormattedSpectrum = new MayaProSpectrumExchange(readoutLength, this->numberOfPixels, this);
+	Transfer *requestUnformattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readUnformattedSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new RequestSpectrumExchange();
+	Transfer *readFastBufferSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum, triggerMode);
-
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 
     this->triggerModes.push_back(new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));

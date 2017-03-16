@@ -58,8 +58,10 @@ namespace seabreeze {
             const Bus &bus) throw (FeatureException);       
 
     private:
-        oceanBinaryProtocol::OBPReadRawSpectrumExchange *unformattedSpectrum;
-        oceanBinaryProtocol::OBPReadSpectrumExchange *formattedSpectrum;
+        oceanBinaryProtocol::OBPReadRawSpectrumExchange *readUnformattedSpectrum;
+        oceanBinaryProtocol::OBPReadSpectrumExchange *readFormattedSpectrum;
+		oceanBinaryProtocol::OBPReadRawSpectrumExchange *readFastBufferSpectrum;
+
         unsigned char binningFactor;
 
         static const unsigned int unbinnedNumberOfPixels = 1024;

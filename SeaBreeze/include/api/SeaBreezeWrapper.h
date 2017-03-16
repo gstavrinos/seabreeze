@@ -84,9 +84,10 @@ public:
 
     // basic acquisitions
     void   setIntegrationTimeMicrosec(int index, int *errorCode, unsigned long integration_time_micros);
-    int    getWavelengths            (int index, int *errorCode, double *wavelengths, int length);
-    int    getFormattedSpectrum      (int index, int *errorCode, double* buffer, int buffer_length);
-    int    getUnformattedSpectrum    (int index, int *errorCode, unsigned char *buffer, int buffer_length);
+    int    getWavelengths(int index, int *errorCode, double *wavelengths, int length);
+    int    getFormattedSpectrum(int index, int *errorCode, double* buffer, int buffer_length);
+    int    getUnformattedSpectrum(int index, int *errorCode, unsigned char *buffer, int buffer_length);
+	int	   getFastBufferSpectrum(int index, int *errorCode, unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve);
     int    getFormattedSpectrumLength(int index, int *errorCode);
     int    getUnformattedSpectrumLength(int index, int *errorCode);
     long   getMinIntegrationTimeMicrosec(int index, int *errorCode);
@@ -526,6 +527,21 @@ extern "C" {
      * synchronization points or whatever, etc.  
      */
     DLL_DECL int seabreeze_get_unformatted_spectrum(int index, int *error_code, unsigned char *buffer, int buffer_length);
+
+	/**
+	* @brief This acquires the number of spectrum samples defined by seabreeze_set_consecutive_sample_count
+	*        and returns the number of samples defined by numberOfSamplesToRetrieve with meta data
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*        error codes.
+	* @param buffer (Output) A buffer (with memory already allocated) to hold the
+	*        spectral data
+	* @param buffer_length (Input) The length of the buffer in bytes (not pixels)
+	* @param numberOfSamplesToRetrieve, currently a maximum of 15 samples can be retrieve by any get fast buffer spectrum
+	* @return int: The number of bytes read into the buffer
+	*
+	*/
+	DLL_DECL int seabreeze_get_fast_buffer_spectrum(int index, int *error_code, unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve);
 
     /**
      * @brief This acquires a spectrum and returns the answer in formatted

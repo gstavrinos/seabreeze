@@ -36,6 +36,7 @@ NIRQuest512SpectrometerFeature::NIRQuest512SpectrometerFeature(
         ProgrammableSaturationFeature *saturationFeature)
             : NIRQuestSpectrometerFeature(saturationFeature) {
     this->numberOfPixels = 512;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
     int readoutLength = (512 * 2) + 1;
 
     /* Defer to the base class to finish setting everything up. */

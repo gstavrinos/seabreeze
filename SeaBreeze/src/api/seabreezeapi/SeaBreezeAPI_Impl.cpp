@@ -540,6 +540,18 @@ double SeaBreezeAPI_Impl::spectrometerGetMaximumIntensity(
     return adapter->spectrometerGetMaximumIntensity(featureID, errorCode);
 }
 
+int SeaBreezeAPI_Impl::spectrometerGetFastBufferSpectrum(long deviceID,
+	long featureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve) {
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->spectrometerGetFastBufferSpectrum(featureID, errorCode,
+		buffer, bufferLength, numberOfSamplesToRetrieve);
+}
+
 int SeaBreezeAPI_Impl::spectrometerGetUnformattedSpectrum(long deviceID,
         long featureID, int *errorCode, unsigned char *buffer, int bufferLength) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);

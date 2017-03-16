@@ -384,6 +384,16 @@ sbapi_spectrometer_get_maximum_intensity(long deviceID,
             error_code);
 }
 
+int sbapi_spectrometer_get_fast_buffer_spectrum(long deviceID,
+	long spectrometerFeatureID, int *error_code,
+	unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->spectrometerGetFastBufferSpectrum(deviceID,
+		spectrometerFeatureID, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
+}
+
 int
 sbapi_spectrometer_get_unformatted_spectrum(long deviceID,
         long spectrometerFeatureID, int *error_code,

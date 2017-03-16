@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    OBPRequestNumberOfBufferedSpectraWithMetadataExchange.h
- * @date    September 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
@@ -34,10 +34,13 @@
 
 namespace seabreeze {
     namespace oceanBinaryProtocol {
-        class OBPRequestNumberOfBufferedSpectraWithMetadataExchange : public Transfer {
+        class OBPRequestNumberOfBufferedSpectraWithMetadataExchange : public Transfer 
+		{
         public:
             OBPRequestNumberOfBufferedSpectraWithMetadataExchange();
             virtual ~OBPRequestNumberOfBufferedSpectraWithMetadataExchange();
+
+			static void setNumberOfSamplesToRequest(void *myExchange, unsigned int numberOfSamples);
         };
     }
 }

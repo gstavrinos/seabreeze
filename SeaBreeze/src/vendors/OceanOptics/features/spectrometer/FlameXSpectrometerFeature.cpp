@@ -32,12 +32,15 @@
 #include "vendors/OceanOptics/features/wavecal/WaveCalFeature.h"
 #include "vendors/OceanOptics/protocols/interfaces/WaveCalProtocolInterface.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPIntegrationTimeExchange.h"
-//#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumWithGainExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestNumberOfBufferedSpectraWithMetadataExchange.h"
+#include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
+#include "vendors/OceanOptics/features/fast_buffer/FlameXFastBufferFeature.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadNumberOfSpectraWithMetadataExchange.h"
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
@@ -52,12 +55,15 @@ const long FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
-FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *introspection) {
+FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *introspection, FlameXFastBufferFeature *fastBuffer ) {
     
 	myIntrospection = introspection;
-    this->numberOfPixels = 2136;
-    this->maxIntensity = 65535;
+	myFastBuffer = fastBuffer;
 
+    this->numberOfPixels = 2136;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
+    this->maxIntensity = 65535;
+	
     this->integrationTimeMinimum = FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
     this->integrationTimeMaximum = FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = FlameXSpectrometerFeature::INTEGRATION_TIME_BASE;
@@ -70,15 +76,17 @@ FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *intro
 
 	OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-	Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange((numberOfPixels * 2) + 64, this->numberOfPixels);
-
-	Transfer *formattedSpectrum = new OBPReadSpectrumExchange((numberOfPixels * 2) + 64, this->numberOfPixels); // new OBPReadSpectrumWithGainExchange((numberOfPixels * 2) + 64, this->numberOfPixels, this);
-
-	Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *requestFormattedSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *readFormattedSpectrum = new OBPReadSpectrumExchange((numberOfPixels * 2) + 64, this->numberOfPixels); // new OBPReadSpectrumWithGainExchange((numberOfPixels * 2) + 64, this->numberOfPixels, this);
+	Transfer *requestUnformattedSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *readUnformattedSpectrum = new OBPReadRawSpectrumExchange((numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new OBPRequestNumberOfBufferedSpectraWithMetadataExchange();
+	Transfer *readFastBufferSpectrum = new OBPReadNumberOfRawSpectraWithMetadataExchange(this->numberOfPixels, this->numberOfBytesPerPixel);
 
 	OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-	OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum, triggerMode);
+	OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
 	
 	this->protocols.push_back(obpProtocol);
     
@@ -133,20 +141,21 @@ bool FlameXSpectrometerFeature::initialize(const Protocol &protocol, const Bus &
 
 				OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(FlameXSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-				Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
-					(this->numberOfPixels * 2) + 64, this->numberOfPixels);
+				Transfer *requestFormattedSpectrum = new OBPRequestSpectrumExchange();
+				Transfer *readFormattedSpectrum = new OBPReadSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-				Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
-					(this->numberOfPixels * 2) + 64, this->numberOfPixels); 
-				// new OBPReadSpectrumWithGainExchange((numberOfPixels * 2) + 64, this->numberOfPixels, this);
+				Transfer *requestUnformattedSpectrum = new OBPRequestSpectrumExchange();
+				Transfer *readUnformattedSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-				Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+				Transfer *requestFastBufferSpectrum = new OBPRequestNumberOfBufferedSpectraWithMetadataExchange();
+				Transfer *readFastBufferSpectrum = new OBPReadNumberOfRawSpectraWithMetadataExchange(this->numberOfPixels, this->numberOfBytesPerPixel);
 
 				OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
 				OBPSpectrometerProtocol *anOBP = (OBPSpectrometerProtocol *)myProtocolHelper;
 				
-				anOBP->Initialize(intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum, triggerMode);
+				anOBP->Initialize(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+					requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
 
 			}
 		}

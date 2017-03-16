@@ -593,7 +593,6 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPMessage.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPQuery.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfRawSpectraWithMetadataExchange.h" />
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfSpectraWithMetadataExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrum32AndMetadataExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.h" />
@@ -981,7 +980,6 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPMessage.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPQuery.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfRawSpectraWithMetadataExchange.cpp" />
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfSpectraWithMetadataExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrum32AndMetadataExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadRawSpectrumExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadSpectrum32AndMetadataExchange.cpp" />

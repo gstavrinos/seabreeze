@@ -34,10 +34,12 @@
 #define FLAMEXFASTBUFFERFEATURE_H
 
 #include "vendors/OceanOptics/features/fast_buffer/FastBufferFeatureBase.h"
+#include "vendors/OceanOptics/features/data_buffer/DataBufferFeatureBase.h"
 
 namespace seabreeze {
 
-    class FlameXFastBufferFeature : public FastBufferFeatureBase {
+    class FlameXFastBufferFeature : public FastBufferFeatureBase
+	{
     public:
         FlameXFastBufferFeature();
         virtual ~FlameXFastBufferFeature();

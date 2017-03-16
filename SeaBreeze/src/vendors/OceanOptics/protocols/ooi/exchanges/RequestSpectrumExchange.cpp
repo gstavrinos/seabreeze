@@ -36,7 +36,8 @@ using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 
 RequestSpectrumExchange::RequestSpectrumExchange() {
-
+	// this uses the FX2 slot commands. OP code is really a slot address
+	// not valid for OBP spectrometers
     this->hints->push_back(new SpectrumHint());
 
     this->length = 1;

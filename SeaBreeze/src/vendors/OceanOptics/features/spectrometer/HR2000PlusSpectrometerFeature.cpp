@@ -47,6 +47,7 @@ const long HR2000PlusSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 HR2000PlusSpectrometerFeature::HR2000PlusSpectrometerFeature() {
 
     this->numberOfPixels = 2048;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
     this->maxIntensity = 16383;
 
     this->integrationTimeMinimum = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -61,20 +62,17 @@ HR2000PlusSpectrometerFeature::HR2000PlusSpectrometerFeature() {
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(
             HR2000PlusSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new ReadSpectrumExchange(
-            this->numberOfPixels * 2 + 1, this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new HRFPGASpectrumExchange(
-            this->numberOfPixels * 2 + 1, this->numberOfPixels);
-
-    Transfer *requestSpectrum = new RequestSpectrumExchange();
+	Transfer *requestFormattedSpectrum = new RequestSpectrumExchange();
+    Transfer *readFormattedSpectrum = new HRFPGASpectrumExchange(this->numberOfPixels * 2 + 1, this->numberOfPixels);
+	Transfer *requestUnformattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readUnformattedSpectrum = new ReadSpectrumExchange(this->numberOfPixels * 2 + 1, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new RequestSpectrumExchange();
+	Transfer *readFastBufferSpectrum = new ReadSpectrumExchange(this->numberOfPixels * 2 + 1, this->numberOfPixels);
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 
     this->triggerModes.push_back(

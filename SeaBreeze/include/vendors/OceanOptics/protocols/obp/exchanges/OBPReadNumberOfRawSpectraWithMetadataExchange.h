@@ -40,18 +40,25 @@ namespace seabreeze {
     namespace oceanBinaryProtocol {
         class OBPReadNumberOfRawSpectraWithMetadataExchange : public Transfer {
         public:
-            OBPReadNumberOfRawSpectraWithMetadataExchange(unsigned int numberOfPixels);
+            OBPReadNumberOfRawSpectraWithMetadataExchange(unsigned int numberOfPixels, unsigned int numberOfBytesPerPixel);
             virtual ~OBPReadNumberOfRawSpectraWithMetadataExchange();
 
             void setNumberOfPixels(int numberOfPixels);
+			void setNumberOfBytesPerPixel(int numberOfBytesPerPixel);
 
             /* Inherited */
             virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
 
+			static void setNumberOfSamplesToRequest(void *myExchange, unsigned int numberOfSamples);
+
         protected:
             unsigned int isLegalMessageType(unsigned int t);
             unsigned int numberOfPixels;
+			unsigned int numberOfBytesPerPixel;
             unsigned int metadataLength;
+			unsigned int checkSumLength;
+			unsigned int numberOfSamplesToRetrieve;
+
         };
     }
 }

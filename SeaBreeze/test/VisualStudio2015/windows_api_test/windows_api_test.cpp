@@ -43,6 +43,8 @@
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
+#include <vector>;
+
 /* Prototypes */
 void test_serial_number_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -1545,6 +1547,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	long data_buffer_feature_ids = 0;
 	long spectrometerID = 0;
 	unsigned char fastBufferEnableState = 0;
+	unsigned int numberOfSamplesToTake = 1000;
 
 	printf("\n\tTesting fast buffer features:\n");
 
@@ -1607,19 +1610,20 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	if (error == 0)
 	{
 		printf("\t\t\tSetting integration time to 1ms\n");
-		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000); // 1ms integration time, 
+		sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000000/numberOfSamplesToTake);
 	}
 
 	if (error == 0)
 	{
 		printf("\t\t\tSetting consecutive sample count to 1000:\n");
-		sbapi_fast_buffer_set_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error, 1000);
+		numberOfSamplesToTake = 1000;
+		sbapi_fast_buffer_set_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error, numberOfSamplesToTake);
 		if (error == 0)
 		{
 			unsigned int sampleCount = sbapi_fast_buffer_get_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error);
 			if (error == 0)
 			{
-				if (sampleCount != 1000)
+				if (sampleCount != numberOfSamplesToTake)
 					error = ERROR_VALUE_NOT_EXPECTED;
 			}
 		}
@@ -1648,43 +1652,82 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 	if (error == 0)
 	{
+		unsigned int numberOfSamplesToRetrieve = 15;
+
+		// Flame Fx is the only spectrometer using this right now, so the pixel size is a short. However, in the future 
+		// some way for the user to know what size integer is used for a pixel. That is probably another awkward length call for
+		//  a fast spectrum that returns the total number of bytes.
 		int pixelCount = sbapi_spectrometer_get_formatted_spectrum_length(deviceID, spectrometerID, &error); // this is really just the pixel count
-		unsigned int metaData[32];
+		int dataMaxLength = (((pixelCount*sizeof(unsigned short)) + 32 ) * numberOfSamplesToRetrieve); // 32 is the metadata.
+		std::vector<byte> *dataBuffer = new std::vector<byte>(dataMaxLength);
+
 		unsigned int checksum = 0;
-		unsigned short *aSpectrum = (unsigned short *)calloc(pixelCount, sizeof(unsigned short));
 		if (error == 0)
 		{
 			printf("\t\t\tTake three spectral consecutive sample scans \n");
 
+
 			for (int i = 0; i < 3; i++)
 			{
 				printf("\t\t\t\tScan %d\n", i);
+
+				if (0 == error)
+				{
+					printf("\t\t\tClear the spectrum buffer\n");
+					sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
+				}
+
 				if (error == 0)
 				{
 
-					printf("\t\t\tSet trigger to free running\n");
+					printf("\t\t\tSet trigger to free running to allow a trigger\n");
 					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
 				}
 
-				// send a get fast buffered spectrum request only for a trigger, buffer should be clear
-
-				//sbapi_fast_buffer_get_spectrum(0, )
-				// disable all triggers
 				if (error == 0)
 				{
-					printf("\t\t\tSet trigger to disabled\n");
+					printf("\t\t\Send get spectrum to start sampling\n");
+					// send a get fast buffered spectrum request only for a trigger, buffer should be clear
+					// when that is true, no spectra are returned, but a new sample is triggered
+					int bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometerID, &error, dataBuffer->data(), dataMaxLength, 0);
+				}
+
+				// disable all triggers  
+				if (error == 0)
+				{
+					printf("\t\t\tSet trigger to disabled to prevent triggering when fetching samples\n");
 					sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
 				}
 
-				// call get fast buffered spectrum until the buffer is empty
+				printf("\t\t\tWaiting to allow data to be buffered...\n");
+				/* This assumes that the spectrometer test occurred before this, so the
+				* integration time and trigger mode were set in a way that this will
+				* keep acquiring a few spectra.
+				*/
 
+				std::this_thread::sleep_for(std::chrono::seconds(2));
+
+				// call get fast buffered spectrum until the buffer is empty
+				while (error == 0)
+				{
+					unsigned int retrieveCount = numberOfSamplesToRetrieve;
+					unsigned int spectraInBuffer = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_feature_ids, &error);
+					if (spectraInBuffer < numberOfSamplesToRetrieve)
+						retrieveCount = spectraInBuffer;
+
+					int bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometerID, &error, dataBuffer->data(), dataMaxLength, retrieveCount);
+					printf("\t\t\tSpectra in Buffer: %d\tSpectrum Count: %d\tTimestamp: %d\n", spectraInBuffer, *reinterpret_cast<unsigned int*>(&(*dataBuffer)[24]), *reinterpret_cast<unsigned long*>(&(*dataBuffer)[8]));
+					if (spectraInBuffer == 0)
+						break;
+				}
 
 				if (error != 0)
+				{
 					break;
+				}
 			}
 		}
-		
-		free(aSpectrum);
+		delete dataBuffer;
 	}
 
 	if (0 == error)

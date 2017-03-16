@@ -30,14 +30,13 @@
 #ifndef FLAMEXSPECTROMETERFEATURE_H
 #define FLAMEXSPECTROMETERFEATURE_H
 
-#include "vendors/OceanOptics/features/spectrometer/GainAdjustedSpectrometerFeature.h"
-#include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/OOISpectrometerFeature.h"
 
 namespace seabreeze {
 
     class FlameXSpectrometerFeature : public OOISpectrometerFeature{
     public:
-        FlameXSpectrometerFeature(IntrospectionFeature *introspection);
+        FlameXSpectrometerFeature(IntrospectionFeature *introspection, FlameXFastBufferFeature *fastBuffer);
         virtual ~FlameXSpectrometerFeature();
 
         /* Using OBP wavelength coefficient commands */

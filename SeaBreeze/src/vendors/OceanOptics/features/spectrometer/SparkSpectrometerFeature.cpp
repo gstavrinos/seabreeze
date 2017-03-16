@@ -52,6 +52,7 @@ const long SparkSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 SparkSpectrometerFeature::SparkSpectrometerFeature() {
 
     this->numberOfPixels = 1024;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
     this->maxIntensity = 16383;
 
     this->integrationTimeMinimum = SparkSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -62,20 +63,17 @@ SparkSpectrometerFeature::SparkSpectrometerFeature() {
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             SparkSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new OBPReadRawSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new OBPReadSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
-
-    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *requestFormattedSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *readFormattedSpectrum = new OBPReadSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *requestUnformattedSpectrum = new OBPRequestSpectrumExchange();
+    Transfer *readUnformattedSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new OBPRequestSpectrumExchange();
+	Transfer *readFastBufferSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
     this->triggerModes.push_back(
