@@ -52,7 +52,8 @@ using namespace seabreeze;
 using namespace oceanBinaryProtocol;
 using namespace std;
 
-void OBPMessage::setupMessage() {
+void OBPMessage::setupMessage() 
+{
     this->header = new vector<byte>(2);
     this->footer = new vector<byte>(4);
 
@@ -78,7 +79,8 @@ void OBPMessage::setupMessage() {
 
     this->checksumType = 0;
     this->checksum = new vector<byte>(16);
-    for(unsigned int i = 0; i < checksum->size(); i++) {
+    for(unsigned int i = 0; i < checksum->size(); i++) 
+	{
         (*(this->checksum))[i] = 0;
     }
 
@@ -86,34 +88,43 @@ void OBPMessage::setupMessage() {
     setImmediateData(0);
 }
 
-OBPMessage::OBPMessage() {
+OBPMessage::OBPMessage() 
+{
     setupMessage();
 }
 
-OBPMessage::~OBPMessage() {
-    if(NULL != this->header) {
+OBPMessage::~OBPMessage() 
+{
+    if(NULL != this->header) 
+	{
         delete this->header;
     }
-    if(NULL != this->footer) {
+    if(NULL != this->footer) 
+	{
         delete this->footer;
     }
-    if(NULL != this->checksum) {
+    if(NULL != this->checksum) 
+	{
         delete this->checksum;
     }
-    if(NULL != this->payload) {
+    if(NULL != this->payload) 
+	{
         delete this->payload;
     }
-    if(NULL != this->immediateData) {
+    if(NULL != this->immediateData) 
+	{
         delete this->immediateData;
     }
 }
 
 OBPMessage *OBPMessage::parseHeaderFromByteStream(vector<byte> *message)
-        throw (IllegalArgumentException) {
+        throw (IllegalArgumentException) 
+{
     unsigned int i;
     OBPMessage *retval = new OBPMessage();
 
-    if((*retval->header)[0] != (*message)[0] || (*retval->header)[1] != (*message)[1]) {
+    if((*retval->header)[0] != (*message)[0] || (*retval->header)[1] != (*message)[1]) 
+	{
         string errorMessage("Could not find message header");
         throw IllegalArgumentException(errorMessage);
     }
@@ -134,9 +145,11 @@ OBPMessage *OBPMessage::parseHeaderFromByteStream(vector<byte> *message)
                      | (((*message)[15] & 0x00FF) << 24);
     retval->checksumType = (*message)[22];
     retval->immediateDataLength = (*message)[23];
-    if(retval->immediateDataLength > 0) {
+    if(retval->immediateDataLength > 0) 
+	{
         retval->immediateData = new vector<byte>(retval->immediateDataLength);
-        for(i = 0; i < retval->immediateDataLength; i++) {
+        for(i = 0; i < retval->immediateDataLength; i++) 
+		{
             (*(retval->immediateData))[i] = (*message)[i + 24];
         }
     }
@@ -145,7 +158,8 @@ OBPMessage *OBPMessage::parseHeaderFromByteStream(vector<byte> *message)
                           | (((*message)[42] & 0x00FF) << 16)
                           | (((*message)[43] & 0x00FF) << 24);
     if(retval->bytesRemaining <
-            retval->checksum->size() + retval->footer->size()) {
+            retval->checksum->size() + retval->footer->size()) 
+	{
         string errorMessage("Invalid bytes remaining field");
         throw IllegalArgumentException(errorMessage);
     }
@@ -154,7 +168,8 @@ OBPMessage *OBPMessage::parseHeaderFromByteStream(vector<byte> *message)
 }
 
 OBPMessage *OBPMessage::parseByteStream(vector<byte> *message)
-        throw (IllegalArgumentException) {
+        throw (IllegalArgumentException) 
+{
     int temp;
     int offset;
     unsigned int i;
@@ -162,21 +177,31 @@ OBPMessage *OBPMessage::parseByteStream(vector<byte> *message)
     OBPMessage *retval = parseHeaderFromByteStream(message);
 
     /* Compute the payload length.  This may be zero. */
-    temp = retval->bytesRemaining - (unsigned) retval->checksum->size()
-            - (unsigned) retval->footer->size();
+    temp = retval->bytesRemaining - (unsigned) retval->checksum->size() - (unsigned) retval->footer->size();
     offset = 44;
-    if(temp > 0) {
+    if(temp > 0) 
+	{
         retval->payload = new vector<byte>(temp);
-        for(i = 0; i < (unsigned)temp; i++) {
-            (*(retval->payload))[i] = (*message)[offset++];
+        for(i = 0; i < (unsigned)temp; i++) 
+		{
+			if((*message).size() >= i)
+				(*(retval->payload))[i] = (*message)[offset++];
+			else
+			{
+				string errorMessage("OBP Message Error: Could not parse message. Bytes remaining did not match message size.");
+				throw IllegalArgumentException(errorMessage);
+			}
         }
         /* FIXME: should this delete immediateData too? */
     }
-    for(i = 0; i < retval->checksum->size(); i++) {
+    for(i = 0; i < retval->checksum->size(); i++) 
+	{
         (*(retval->checksum))[i] = (*message)[offset++];
     }
-    for(i = 0; i < retval->footer->size(); i++) {
-        if((*(retval->footer))[i] != (*message)[offset++]) {
+    for(i = 0; i < retval->footer->size(); i++) 
+	{
+        if((*(retval->footer))[i] != (*message)[offset++]) 
+		{
             string errorMessage("Could not find message footer");
             throw IllegalArgumentException(errorMessage);
         }
@@ -184,19 +209,22 @@ OBPMessage *OBPMessage::parseByteStream(vector<byte> *message)
     return retval;
 }
 
-vector<byte> *OBPMessage::toByteStream() {
+vector<byte> *OBPMessage::toByteStream() 
+{
     vector<byte> *retval = new vector<byte>;
     int length = 64;
     unsigned int i;
     int offset = 0;
     int immediateCopied = 0;
 
-    if(0 != this->payload) {
+    if(0 != this->payload) 
+	{
         length += (unsigned) this->payload->size();
     }
 
     retval->resize(length);
-    for(i = 0; i < header->size(); i++) {
+    for(i = 0; i < header->size(); i++) 
+	{
         (*retval)[offset++] = (*this->header)[i];
     }
 
@@ -219,14 +247,17 @@ vector<byte> *OBPMessage::toByteStream() {
     (*retval)[offset++] = (this->regarding >> 16) & 0x00FF;
     (*retval)[offset++] = (this->regarding >> 24) & 0x00FF;
 
-    for(i = 0; i < 6; i++) {
+    for(i = 0; i < 6; i++) 
+	{
         (*retval)[offset++] = 0;  /* Reserved bytes */
     }
 
     (*retval)[offset++] = checksumType;
     (*retval)[offset++] = immediateDataLength;
-    if(NULL != this->immediateData) {
-        for(i = 0; i < 16 && i < this->immediateData->size(); i++) {
+    if(NULL != this->immediateData) 
+	{
+        for(i = 0; i < 16 && i < this->immediateData->size(); i++) 
+		{
             (*retval)[offset++] = (*(this->immediateData))[i];
             immediateCopied++;
         }
@@ -236,7 +267,8 @@ vector<byte> *OBPMessage::toByteStream() {
      * of the vector being copied there was less than the full field length
      * or immediateData was null.
      */
-    for(i = immediateCopied; i < 16; i++) {
+    for(i = immediateCopied; i < 16; i++) 
+	{
         (*retval)[offset++] = 0;
     }
 
@@ -245,175 +277,222 @@ vector<byte> *OBPMessage::toByteStream() {
     (*retval)[offset++] = (this->bytesRemaining >> 16) & 0x00FF;
     (*retval)[offset++] = (this->bytesRemaining >> 24) & 0x00FF;
 
-    if(NULL != this->payload) {
-        for(i = 0; i < this->payload->size(); i++) {
+    if(NULL != this->payload) 
+	{
+        for(i = 0; i < this->payload->size(); i++) 
+		{
             (*retval)[offset++] = (*this->payload)[i];
         }
     }
     for(i = 0; i < 16; i++) {
         (*retval)[offset++] = 0;   /* Checksum (zero for now) */
     }
-    for(i = 0; i < this->footer->size(); i++) {
+    for(i = 0; i < this->footer->size(); i++) 
+	{
         (*retval)[offset++] = (*this->footer)[i];
     }
     return retval;
 }
 
-vector<byte> *OBPMessage::getData() {
-    if(0 != this->immediateData && 0 != this->immediateDataLength) {
+vector<byte> *OBPMessage::getData() 
+{
+    if(0 != this->immediateData && 0 != this->immediateDataLength) 
+	{
         return this->immediateData;
     } else if(0 != this->payload && (checksum->size() + footer->size())
-            < bytesRemaining) {
+            < bytesRemaining) 
+	{
         return this->payload;
-    } else {
+    } 
+	else 
+	{
         return new vector<byte>();
     }
 }
 
 
-unsigned int OBPMessage::getBytesRemaining() {
+unsigned int OBPMessage::getBytesRemaining() 
+{
     return this->bytesRemaining;
 }
 
 
-byte OBPMessage::getChecksumType() {
+byte OBPMessage::getChecksumType() 
+{
     return this->checksumType;
 }
 
 
-unsigned short OBPMessage::getErrno() {
+unsigned short OBPMessage::getErrno() 
+{
     return this->errorNumber;
 }
 
 
-unsigned short OBPMessage::getFlags() {
+unsigned short OBPMessage::getFlags() 
+{
     return this->flags;
 }
 
 
-vector<byte> *OBPMessage::getImmediateData() {
+vector<byte> *OBPMessage::getImmediateData() 
+{
     return this->immediateData;
 }
 
 
-byte OBPMessage::getImmediateDataLength() {
+byte OBPMessage::getImmediateDataLength() 
+{
     return this->immediateDataLength;
 }
 
 
-unsigned int OBPMessage::getMessageType() {
+unsigned int OBPMessage::getMessageType() 
+{
     return this->messageType;
 }
 
 
-vector<byte> *OBPMessage::getPayload() {
+vector<byte> *OBPMessage::getPayload() 
+{
     return this->payload;
 }
 
 
-unsigned short OBPMessage::getProtocolVersion() {
+unsigned short OBPMessage::getProtocolVersion() 
+{
     return this->protocolVersion;
 }
 
 
-unsigned int OBPMessage::getRegarding() {
+unsigned int OBPMessage::getRegarding() 
+{
     return this->regarding;
 }
 
 
-bool OBPMessage::isAckFlagSet() {
+bool OBPMessage::isAckFlagSet() 
+{
     return (0 == (this->flags & OBP_MESSAGE_FLAGS_ACK)) ? false : true;
 }
 
-bool OBPMessage::isNackFlagSet() {
+bool OBPMessage::isNackFlagSet() 
+{
     return (0 == (this->flags & OBP_MESSAGE_FLAGS_NACK)) ? false : true;
 }
 
-void OBPMessage::setAckRequestedFlag() {
+void OBPMessage::setAckRequestedFlag() 
+{
     this->flags |= OBP_MESSAGE_FLAGS_ACK_REQUESTED;
 }
 
-void OBPMessage::setBytesRemaining(unsigned int remaining) {
+void OBPMessage::setBytesRemaining(unsigned int remaining) 
+{
     this->bytesRemaining = remaining;
 }
 
 
-void OBPMessage::setChecksumType(byte t) {
+void OBPMessage::setChecksumType(byte t) 
+{
     this->checksumType = t;
 }
 
 
-void OBPMessage::setData(vector<byte> *data) {
-    if(NULL == data || data->size() <= 16) {
+void OBPMessage::setData(vector<byte> *data) 
+{
+    if(NULL == data || data->size() <= 16) 
+	{
         setImmediateData(data);
         setPayload(NULL);  /* Just in case data == NULL */
-    } else {
+    } 
+	else 
+	{
         setPayload(data);
     }
 }
 
-void OBPMessage::setErrorNumber(unsigned short errNumber) {
+void OBPMessage::setErrorNumber(unsigned short errNumber) 
+{
     this->errorNumber = errNumber;
 }
 
 
-void OBPMessage::setFlags(unsigned short f) {
+void OBPMessage::setFlags(unsigned short f) 
+{
     this->flags = f;
 }
 
 
-void OBPMessage::setImmediateData(vector<byte> *data) {
-    if(0 != this->immediateData) {
+void OBPMessage::setImmediateData(vector<byte> *data) 
+{
+    if(0 != this->immediateData) 
+	{
         delete this->immediateData;
     }
     this->immediateData = data;
-    if(0 != this->immediateData) {
-        if(this->immediateData->size() <= 16) {
+    if(0 != this->immediateData) 
+	{
+        if(this->immediateData->size() <= 16)
+		{
             this->immediateDataLength = (byte)this->immediateData->size();
-        } else {
+        } 
+		else 
+		{
             this->immediateDataLength = 16;
         }
         /* Payload and immediate data are mutually exclusive */
         setPayload(NULL);
-    } else {
+    } 
+	else 
+	{
         this->immediateDataLength = 0;
     }
 }
 
 
-void OBPMessage::setImmediateDataLength(byte len) {
+void OBPMessage::setImmediateDataLength(byte len) 
+{
     this->immediateDataLength = len;
 }
 
 
-void OBPMessage::setMessageType(unsigned int t) {
+void OBPMessage::setMessageType(unsigned int t) 
+{
     this->messageType = t;
 }
 
 
-void OBPMessage::setPayload(vector<byte> *data) {
-    if(NULL != this->payload) {
+void OBPMessage::setPayload(vector<byte> *data) 
+{
+    if(NULL != this->payload) 
+	{
         delete this->payload;
     }
     this->payload = data;
-    if(NULL != this->payload) {
+    if(NULL != this->payload) 
+	{
         this->bytesRemaining = (unsigned) (this->payload->size() + this->checksum->size()
             + this->footer->size());
-        if(payload->size() > 0) {
+        if(payload->size() > 0) 
+		{
             /* Payload and immediate data are mutually exclusive */
             setImmediateData(NULL);
         }
-    } else {
+    } 
+	else 
+	{
         this->bytesRemaining = (unsigned) (this->checksum->size() + this->footer->size());
     }
 }
 
 
-void OBPMessage::setProtocolVersion(unsigned short version) {
+void OBPMessage::setProtocolVersion(unsigned short version) 
+{
     this->protocolVersion = version;
 }
 
 
-void OBPMessage::setRegarding(unsigned int r) {
+void OBPMessage::setRegarding(unsigned int r) 
+{
     this->regarding = r;
 }
