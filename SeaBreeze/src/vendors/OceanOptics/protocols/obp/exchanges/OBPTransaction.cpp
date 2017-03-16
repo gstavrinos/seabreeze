@@ -69,7 +69,8 @@ const vector<ProtocolHint *> &OBPTransaction::getHints() {
 
 vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
                     unsigned int messageType,
-                    vector<byte> &data) throw (ProtocolException) {
+                    vector<byte> &data) throw (ProtocolException) 
+{
     int flag = 0;
     vector<byte> *bytes = NULL;
     vector<byte> *fullVector = NULL;
@@ -82,14 +83,19 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
     /* Note: copy will be deleted by message when appropriate. */
     message->setData(new vector<byte>(data));
 
-    try {
+    try 
+	{
         bytes = message->toByteStream();
         flag = helper->send(*bytes, (unsigned) bytes->size());
-        if(((unsigned int)flag) != bytes->size()) {
+        if(((unsigned int)flag) != bytes->size()) 
+		{
             /* FIXME: retry, throw exception, something here */
         }
-    } catch (BusException &be) {
-        if(NULL != bytes) {
+    } 
+	catch (BusException &be) 
+	{
+        if(NULL != bytes) 
+		{
             delete bytes;
         }
         delete message;
@@ -109,26 +115,40 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
          */
         bytes = new vector<byte>(64);
         flag = helper->receive(*bytes, (unsigned) bytes->size());
-        if(((unsigned int)flag) != bytes->size()) {
+        if(((unsigned int)flag) != bytes->size()) 
+		{
             /* FIXME: retry, throw exception, something here */
         }
 
         /* Parse out the header and see if there is an extended payload. */
-        try {
+        try 
+		{
             response = OBPMessage::parseHeaderFromByteStream(bytes);
-        } catch (IllegalArgumentException &iae) {
+        } 
+		catch (IllegalArgumentException &iae) 
+		{
             response = NULL;
         }
         if(NULL == response || true == response->isNackFlagSet()
-                || response->getMessageType() != messageType) {
-            if(NULL != bytes) {
+                || response->getMessageType() != messageType) 
+		{
+            if(NULL != bytes) 
+			{
                 delete bytes;
             }
 
-            if(NULL != response) {
-				unsigned short flags = (*response).getFlags();
-				char message[32];
-				snprintf(message, sizeof(message), "OBP Flags indicated an error: %x", flags);
+            if(NULL != response) 
+			{
+				char message[64];
+				if (response->getMessageType() == messageType)
+				{
+					unsigned short flags = (*response).getFlags();
+					snprintf(message, sizeof(message), "OBP Flags indicated an error: %x", flags);
+				}
+				else
+				{
+					snprintf(message, sizeof(message), "Expected message type 0x%x, but got %x", messageType, response->getMessageType());
+				}
 				throw(ProtocolException(message));
                 delete response;
             }

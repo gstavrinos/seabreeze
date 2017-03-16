@@ -37,29 +37,42 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBufferedSpectraWithMetadataExchange() {
-    OBPMessage message;
-    vector<byte> *stream;
-    unsigned int i;
-
-    this->hints->push_back(new OBPSpectrumHint());
-
-    this->direction = Transfer::TO_DEVICE;
-
-    message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
-    stream = message.toByteStream();
-
-    this->length = (unsigned) stream->size();
-    this->buffer->resize(stream->size());
-
-    for(i = 0; i < stream->size(); i++) {
-        (*(this->buffer))[i] = (*stream)[i];
-    }
-    delete stream;
-
-    checkBufferSize();
+OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBufferedSpectraWithMetadataExchange() 
+{
+	this->hints->push_back(new OBPSpectrumHint());
+	this->direction = Transfer::TO_DEVICE;
+	derivedClassPointer = this;
+	setParametersFunction = &(this->setNumberOfSamplesToRequest);
+	this->setNumberOfSamplesToRequest(this, 1);
 }
 
 OBPRequestNumberOfBufferedSpectraWithMetadataExchange::~OBPRequestNumberOfBufferedSpectraWithMetadataExchange() {
 
+}
+
+
+void OBPRequestNumberOfBufferedSpectraWithMetadataExchange::setNumberOfSamplesToRequest(void *myClass, unsigned int numberOfSamples)
+{
+	OBPMessage message;
+	vector<byte> *stream;
+	unsigned int i;
+	
+	OBPRequestNumberOfBufferedSpectraWithMetadataExchange *parentClass = (OBPRequestNumberOfBufferedSpectraWithMetadataExchange *)myClass;
+
+	vector<byte> *numberOfSamplesToRetrieve = new vector<byte>(sizeof(unsigned int));
+	memcpy(numberOfSamplesToRetrieve->data(), &numberOfSamples, sizeof(unsigned int));
+
+	message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
+	message.setImmediateData(numberOfSamplesToRetrieve); // sets length automatically ~obpMessage destroys the vector
+	stream = message.toByteStream();
+
+	parentClass->length = (unsigned)stream->size();
+	parentClass->buffer->resize(stream->size());
+
+	for (i = 0; i < stream->size(); i++) {
+		(*(parentClass->buffer))[i] = (*stream)[i];
+	}
+	delete stream;
+
+	parentClass->checkBufferSize();
 }
