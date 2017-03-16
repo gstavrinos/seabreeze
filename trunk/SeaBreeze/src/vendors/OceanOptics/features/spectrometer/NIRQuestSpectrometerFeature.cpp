@@ -79,22 +79,18 @@ NIRQuestSpectrometerFeature::~NIRQuestSpectrometerFeature() {
  */
 void NIRQuestSpectrometerFeature::setupExchanges(int readoutLength) {
 
-    IntegrationTimeExchange *intTime = new IntegrationTimeExchange(
-            NIRQuestSpectrometerFeature::INTEGRATION_TIME_BASE);
-
-    Transfer *unformattedSpectrum = new ReadSpectrumExchange(
-            readoutLength, this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new NIRQuestSpectrumExchange(
-            readoutLength, this->numberOfPixels, this);
-
-    Transfer *requestSpectrum = new RequestSpectrumExchange();
+    IntegrationTimeExchange *intTime = new IntegrationTimeExchange(NIRQuestSpectrometerFeature::INTEGRATION_TIME_BASE);
+    Transfer *requestFormattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readFormattedSpectrum = new NIRQuestSpectrumExchange(readoutLength, this->numberOfPixels, this);
+	Transfer *requestUnformattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readUnformattedSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new RequestSpectrumExchange();
+	Transfer *readFastBufferSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
 
     this->protocols.push_back(ooiProtocol);
 }

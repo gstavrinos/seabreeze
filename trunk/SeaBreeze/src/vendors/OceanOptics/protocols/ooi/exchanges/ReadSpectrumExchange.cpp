@@ -34,6 +34,7 @@
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 
+
 ReadSpectrumExchange::ReadSpectrumExchange(
         unsigned int readoutLength, unsigned int numPixels) {
 

@@ -81,7 +81,8 @@ public:
     virtual double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode);
     virtual int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     virtual int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength);
-    virtual int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
+	virtual int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve);
+	virtual int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode);
     virtual int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength);
     virtual int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length);
     virtual int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode);

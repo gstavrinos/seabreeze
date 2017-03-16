@@ -1182,9 +1182,6 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNumberOfPixelsExchange.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetDataBufferingEnableExchange.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -1192,9 +1189,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfRawSpectraWithMetadataExchange.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfSpectraWithMetadataExchange.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestNumberOfBufferedSpectraWithMetadataExchange.h">
@@ -1264,6 +1258,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDigitalAutoNullingSaturationLevelExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <!-- INCLUDES END HERE -->
@@ -2338,16 +2335,10 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNumberOfPixelsExchange.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPDataBufferRemoveOldestExchange.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfRawSpectraWithMetadataExchange.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadNumberOfSpectraWithMetadataExchange.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPRequestNumberOfBufferedSpectraWithMetadata.cpp">
@@ -2378,6 +2369,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetConsecutiveSampleCountExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <!-- SOURCES END HERE -->

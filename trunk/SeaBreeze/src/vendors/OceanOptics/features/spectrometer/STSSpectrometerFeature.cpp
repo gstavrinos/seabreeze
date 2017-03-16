@@ -51,6 +51,7 @@ STSSpectrometerFeature::STSSpectrometerFeature()
     : binningFactor(0) {
 
     this->numberOfPixels = unbinnedNumberOfPixels;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
     this->maxIntensity = 16383;
 
     this->integrationTimeMinimum = STSSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -61,20 +62,18 @@ STSSpectrometerFeature::STSSpectrometerFeature()
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             STSSpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    unformattedSpectrum = new OBPReadRawSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    formattedSpectrum = new OBPReadSpectrumExchange(
-            (this->numberOfPixels * 2) + 64, this->numberOfPixels);
 
-    Transfer *requestSpectrum = new OBPRequestSpectrumExchange();
-
+	Transfer *requestFormattedSpectrum = new OBPRequestSpectrumExchange();
+    readFormattedSpectrum = new OBPReadSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *requestUnformattedSpectrum = new OBPRequestSpectrumExchange();
+	readUnformattedSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new OBPRequestSpectrumExchange();
+	readFastBufferSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
     this->triggerModes.push_back(
@@ -93,8 +92,9 @@ STSSpectrometerFeature::~STSSpectrometerFeature() {
 void STSSpectrometerFeature::setPixelBinningFactor(unsigned char factor) {
     binningFactor = factor;
     numberOfPixels = unbinnedNumberOfPixels >> binningFactor;
-    unformattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
-    formattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
+    readUnformattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
+	readFastBufferSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
+    readFormattedSpectrum->setNumberOfPixels(numberOfPixels * 2 + 64, numberOfPixels);
 }
 
 vector<double> *STSSpectrometerFeature::getWavelengths(const Protocol &protocol,

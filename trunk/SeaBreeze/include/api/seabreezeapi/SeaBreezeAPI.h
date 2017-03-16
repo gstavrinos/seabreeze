@@ -143,7 +143,8 @@ public:
     virtual double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
     virtual int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
     virtual int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength) = 0;
-    virtual int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
+	virtual int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve) = 0; // currently 15 max
+	virtual int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
     virtual int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength) = 0;
     virtual int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length) = 0;
     virtual int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
@@ -895,6 +896,29 @@ extern "C" {
     sbapi_spectrometer_get_unformatted_spectrum(long deviceID,
             long featureID, int *error_code,
             unsigned char *buffer, int buffer_length);
+
+	/**
+	* This acquires the number of fast buffer spectra, set by sbapi_fast_buffer_set_consecutive_sample_count()
+	* and returns the number of samples defined by numberOfSamplesToRetrieve with meta data
+	*
+	* @param deviceID (Input) The index of a device previously opened with
+	*      open_spectrometer().
+	* @param featureID (Input) The ID of a particular instance of a spectrometer
+	*      feature.  Valid IDs can be found with the sbapi_get_spectrometer_features()
+	*      function.
+	* @param error_code (Output) pointer to an integer that can be used for
+	*      storing error codes.
+	* @param buffer (Output) A buffer (with memory already allocated) to hold
+	*      the spectral data
+	* @param buffer_length (Input) The length of the buffer
+	* @param numberOfSamplesToRetrieve up to 15 samples can be retrieved by a single get fast buffer spectrum command
+	*
+	* @return the number of bytes read into the buffer
+	*/
+	DLL_DECL int
+		sbapi_spectrometer_get_fast_buffer_spectrum(long deviceID,
+			long spectrometerFeatureID, int *error_code,
+			unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve);
 
     /**
      * This computes the wavelengths for the spectrometer and fills in the

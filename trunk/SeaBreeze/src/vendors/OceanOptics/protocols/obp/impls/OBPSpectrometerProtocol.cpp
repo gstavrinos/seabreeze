@@ -43,56 +43,94 @@ using namespace std;
 
 OBPSpectrometerProtocol::OBPSpectrometerProtocol(
         OBPIntegrationTimeExchange *integrationTime,
-        Transfer *requestSpectrum,
-        Transfer *unformattedSpectrum,
-        Transfer *spectrumTransfer,
+        Transfer *requestFormattedSpectrum,
+		Transfer *readFormattedSpectrum,
+        Transfer *requestUnformattedSpectrum,
+        Transfer *readUnformattedSpectrum,
+		Transfer *requestFastBufferSpectrum,
+		Transfer *readFastBufferSpectrum,
         OBPTriggerModeExchange *triggerMode)
             : SpectrometerProtocolInterface(new OceanBinaryProtocol()) {
     this->integrationTimeExchange = integrationTime;
-    this->unformattedSpectrumExchange = unformattedSpectrum;
-    this->requestSpectrumExchange = requestSpectrum;
-    this->spectrumTransferExchange = spectrumTransfer;
+	this->requestFormattedSpectrumExchange = requestFormattedSpectrum;
+	this->readFormattedSpectrumExchange = readFormattedSpectrum;
+	this->requestUnformattedSpectrumExchange = requestUnformattedSpectrum;
+    this->readUnformattedSpectrumExchange = readUnformattedSpectrum;
+	this->requestFastBufferSpectrumExchange = requestFastBufferSpectrum;
+	this->readFastBufferSpectrumExchange = readFastBufferSpectrum;
     this->triggerModeExchange = triggerMode;
 }
 
 OBPSpectrometerProtocol::~OBPSpectrometerProtocol() {
     delete this->integrationTimeExchange;
-    delete this->unformattedSpectrumExchange;
-    delete this->requestSpectrumExchange;
-    delete this->spectrumTransferExchange;
+	delete this->requestFormattedSpectrumExchange;
+	delete this->readFormattedSpectrumExchange;
+	delete this->requestUnformattedSpectrumExchange;
+    delete this->readUnformattedSpectrumExchange;
+	delete this->requestFastBufferSpectrumExchange;
+	delete this->readFastBufferSpectrumExchange;
     delete this->triggerModeExchange;
 }
 
 void OBPSpectrometerProtocol::Initialize(
 	OBPIntegrationTimeExchange *integrationTime,
-	Transfer *requestSpectrum,
-	Transfer *unformattedSpectrum,
-	Transfer *spectrumTransfer,
+	Transfer *requestFormattedSpectrum,
+	Transfer *readFormattedSpectrum,
+	Transfer *requestUnformattedSpectrum,
+	Transfer *readUnformattedSpectrum,
+	Transfer *requestFastBufferSpectrum,
+	Transfer *readFastBufferSpectrum,
 	OBPTriggerModeExchange *triggerMode)
 {
+
 	if (this->integrationTimeExchange != NULL)
 	{
 		delete integrationTimeExchange;
 	}
 	this->integrationTimeExchange = integrationTime;
 
-	if (this->unformattedSpectrumExchange != NULL)
-	{
-		delete unformattedSpectrumExchange;
-	}
-	this->unformattedSpectrumExchange = unformattedSpectrum;
 
-	if (this->requestSpectrumExchange != NULL)
+	if (this->requestFormattedSpectrumExchange != NULL)
 	{
-		delete requestSpectrumExchange;
+		delete requestFormattedSpectrumExchange;
 	}
-	this->requestSpectrumExchange = requestSpectrum;
+	this->requestFormattedSpectrumExchange = requestFormattedSpectrum;
 
-	if (this->spectrumTransferExchange != NULL)
+
+	if (this->readFormattedSpectrumExchange != NULL)
 	{
-		delete spectrumTransferExchange;
+		delete readFormattedSpectrumExchange;
 	}
-	this->spectrumTransferExchange = spectrumTransfer;
+	this->readFormattedSpectrumExchange = readFormattedSpectrum;
+
+
+	if (this->requestUnformattedSpectrumExchange != NULL)
+	{
+		delete requestUnformattedSpectrumExchange;
+	}
+	this->requestUnformattedSpectrumExchange = requestUnformattedSpectrum;
+
+
+	if (this->readUnformattedSpectrumExchange != NULL)
+	{
+		delete readUnformattedSpectrumExchange;
+	}
+	this->readUnformattedSpectrumExchange = readUnformattedSpectrum;
+
+
+	if (this->requestFastBufferSpectrumExchange != NULL)
+	{
+		delete requestFastBufferSpectrumExchange;
+	}
+	this->requestFastBufferSpectrumExchange = requestFastBufferSpectrum;
+
+
+	if (this->readFastBufferSpectrumExchange != NULL)
+	{
+		delete readFastBufferSpectrumExchange;
+	}
+	this->readFastBufferSpectrumExchange = readFastBufferSpectrum;
+
 
 	if (this->triggerModeExchange != NULL)
 	{
@@ -101,21 +139,25 @@ void OBPSpectrometerProtocol::Initialize(
 	this->triggerModeExchange = triggerMode;
 
 }
+
 vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+        throw (ProtocolException) 
+{
     Data *result;
     TransferHelper *helper;
 
-    helper = bus.getHelper(this->unformattedSpectrumExchange->getHints());
-    if (NULL == helper) {
+    helper = bus.getHelper(this->readUnformattedSpectrumExchange->getHints());
+    if (NULL == helper) 
+	{
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    result = this->unformattedSpectrumExchange->transfer(helper);
+    result = this->readUnformattedSpectrumExchange->transfer(helper);
 
-    if (NULL == result) {
+    if (NULL == result) 
+	{
         string error("Got NULL when expecting spectral data which was unexpected.");
         throw ProtocolException(error);
     }
@@ -134,20 +176,59 @@ vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
     return retval;
 }
 
-vector<double> *OBPSpectrometerProtocol::readSpectrum(const Bus &bus)
+vector<byte> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
+throw (ProtocolException) 
+{
+	Data *result;
+	TransferHelper *helper;
+
+	helper = bus.getHelper(this->readFastBufferSpectrumExchange->getHints());
+	if (NULL == helper) 
+	{
+		string error("Failed to find a helper to bridge given protocol and bus.");
+		throw ProtocolBusMismatchException(error);
+	}
+
+	// workaround for setting the number of samples to be taken by the buffered get spectrum in the Flame X
+	// See transfer.h for more details
+	this->readFastBufferSpectrumExchange->setParametersFunction(this->readFastBufferSpectrumExchange, numberOfSamplesToRetrieve);
+
+	/* This transfer() may cause a ProtocolException to be thrown. */
+	result = this->readFastBufferSpectrumExchange->transfer(helper);
+
+	if (NULL == result) {
+		string error("Got NULL when expecting spectral data which was unexpected.");
+		throw ProtocolException(error);
+	}
+
+	ByteVector *bv = static_cast<ByteVector *>(result);
+
+	vector<byte> *retval = new vector<byte >(bv->getByteVector());
+
+	delete result;
+
+	/* FIXME: this method should probably return (Data *) so that
+	* metadata is preserved.  In that case, this should just return
+	* the above result without any additional work.  The current
+	* implementation has an extra allocate/copy/destroy overhead.
+	*/
+	return retval;
+}
+
+vector<double> *OBPSpectrometerProtocol::readFormattedSpectrum(const Bus &bus)
         throw (ProtocolException) {
     TransferHelper *helper;
     Data *result;
     unsigned int i;
 
-    helper = bus.getHelper(this->spectrumTransferExchange->getHints());
+    helper = bus.getHelper(this->readFormattedSpectrumExchange->getHints());
     if (NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    result = this->spectrumTransferExchange->transfer(helper);
+    result = this->readFormattedSpectrumExchange->transfer(helper);
 
     if (NULL == result) {
         string error("Got NULL when expecting spectral data which was unexpected.");
@@ -193,11 +274,11 @@ vector<double> *OBPSpectrometerProtocol::readSpectrum(const Bus &bus)
     return retval;
 }
 
-void OBPSpectrometerProtocol::requestSpectrum(const Bus &bus)
+void OBPSpectrometerProtocol::requestFormattedSpectrum(const Bus &bus)
         throw (ProtocolException) {
     TransferHelper *helper;
 
-    helper = bus.getHelper(this->requestSpectrumExchange->getHints());
+    helper = bus.getHelper(this->requestFormattedSpectrumExchange->getHints());
 
     if (NULL == helper) {
         string error("Failed to find a helper to bridge given protocol and bus.");
@@ -205,8 +286,42 @@ void OBPSpectrometerProtocol::requestSpectrum(const Bus &bus)
     }
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    this->requestSpectrumExchange->transfer(helper);
+    this->requestFormattedSpectrumExchange->transfer(helper);
 }
+
+void OBPSpectrometerProtocol::requestUnformattedSpectrum(const Bus &bus)
+throw (ProtocolException) {
+	TransferHelper *helper;
+
+	helper = bus.getHelper(this->requestUnformattedSpectrumExchange->getHints());
+
+	if (NULL == helper) {
+		string error("Failed to find a helper to bridge given protocol and bus.");
+		throw ProtocolBusMismatchException(error);
+	}
+
+	/* This transfer() may cause a ProtocolException to be thrown. */
+	this->requestUnformattedSpectrumExchange->transfer(helper);
+}
+
+void OBPSpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
+throw (ProtocolException) {
+	TransferHelper *helper;
+
+	helper = bus.getHelper(this->requestFastBufferSpectrumExchange->getHints());
+
+	if (NULL == helper) {
+		string error("Failed to find a helper to bridge given protocol and bus.");
+		throw ProtocolBusMismatchException(error);
+	}
+	
+	// workaround for setting the number of samples to be taken by the buffered get spectrum in the Flame X
+	// See transfer.h for more details
+	this->requestFastBufferSpectrumExchange->setParametersFunction(this->requestFastBufferSpectrumExchange, numberOfSamplesToRetrieve);
+	/* This transfer() may cause a ProtocolException to be thrown. */
+	this->requestFastBufferSpectrumExchange->transfer(helper);
+}
+
 
 void OBPSpectrometerProtocol::setIntegrationTimeMicros(const Bus &bus,
         unsigned long integrationTime_usec) throw (ProtocolException) {

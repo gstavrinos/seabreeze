@@ -50,6 +50,7 @@ const long QEProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 QEProSpectrometerFeature::QEProSpectrometerFeature() {
 
     this->numberOfPixels = 1044;
+	this->numberOfBytesPerPixel = sizeof(unsigned int);
     this->maxIntensity = 200000; // technically 18-bit, but internally limited
 
     this->integrationTimeMinimum = QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -67,23 +68,18 @@ QEProSpectrometerFeature::QEProSpectrometerFeature() {
         this->electricDarkPixelIndices.push_back(i);
     }
 
-    OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
-            QEProSpectrometerFeature::INTEGRATION_TIME_BASE);
-
-    Transfer *unformattedSpectrum = new OBPReadRawSpectrum32AndMetadataExchange(
-            this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new OBPReadSpectrum32AndMetadataExchange(
-            this->numberOfPixels);
-
-    Transfer *requestSpectrum = new OBPRequestBufferedSpectrum32AndMetadataExchange();
+    OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(QEProSpectrometerFeature::INTEGRATION_TIME_BASE);
+	Transfer *requestFormattedSpectrum = new OBPRequestBufferedSpectrum32AndMetadataExchange();
+    Transfer *readFormattedSpectrum = new OBPReadSpectrum32AndMetadataExchange(this->numberOfPixels);
+	Transfer *requestUnformattedSpectrum = new OBPRequestBufferedSpectrum32AndMetadataExchange();
+	Transfer *readUnformattedSpectrum = new OBPReadRawSpectrum32AndMetadataExchange(this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new OBPRequestBufferedSpectrum32AndMetadataExchange();
+	Transfer *readFastBufferSpectrum = new OBPReadRawSpectrum32AndMetadataExchange(this->numberOfPixels);
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum,readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
     this->triggerModes.push_back(

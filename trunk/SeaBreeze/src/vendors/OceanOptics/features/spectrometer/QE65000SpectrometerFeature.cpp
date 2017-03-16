@@ -50,6 +50,8 @@ QE65000SpectrometerFeature::QE65000SpectrometerFeature() {
 
     this->numberOfPixels = 1044;
     this->maxIntensity = 65535;
+	this->numberOfBytesPerPixel = sizeof(unsigned short);
+
     int readoutLength = (1024 + 256)*2 + 1;
 
     this->integrationTimeMinimum = QE65000SpectrometerFeature::INTEGRATION_TIME_MINIMUM;
@@ -64,23 +66,19 @@ QE65000SpectrometerFeature::QE65000SpectrometerFeature() {
         this->electricDarkPixelIndices.push_back(i);
     }
 
-    IntegrationTimeExchange *intTime = new IntegrationTimeExchange(
-            QE65000SpectrometerFeature::INTEGRATION_TIME_BASE);
+    IntegrationTimeExchange *intTime = new IntegrationTimeExchange(QE65000SpectrometerFeature::INTEGRATION_TIME_BASE);
 
-    Transfer *unformattedSpectrum = new ReadSpectrumExchange(
-            readoutLength, this->numberOfPixels);
-
-    Transfer *formattedSpectrum = new QESpectrumExchange(
-            readoutLength, this->numberOfPixels);
-
-    Transfer *requestSpectrum = new RequestSpectrumExchange();
+    Transfer *requestFormattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readFormattedSpectrum = new QESpectrumExchange(readoutLength, this->numberOfPixels);
+	Transfer *requestUnformattedSpectrum = new RequestSpectrumExchange();
+	Transfer *readUnformattedSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
+	Transfer *requestFastBufferSpectrum = new RequestSpectrumExchange();
+	Transfer *readFastBufferSpectrum = new ReadSpectrumExchange(readoutLength, this->numberOfPixels);
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(
-            intTime, requestSpectrum, unformattedSpectrum, formattedSpectrum,
-            triggerMode);
-
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 
     this->triggerModes.push_back(

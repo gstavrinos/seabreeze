@@ -1,10 +1,10 @@
 /***************************************************//**
  * @file    FlameXDataBufferFeature.cpp
- * @date    January 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This feature provides an interface to the data buffer
- * for the FlameX.
+ * for the Flame X.
  *
  * LICENSE:
  *

@@ -100,28 +100,18 @@ namespace seabreeze {
             int getNumberOfSpectrometerFeatures();
             int getSpectrometerFeatures(long *buffer, int maxFeatures);
             void spectrometerSetTriggerMode(long spectrometerFeatureID, int *errorCode, int mode);
-            void spectrometerSetIntegrationTimeMicros(long spectrometerFeatureID, int *errorCode,
-                    unsigned long integrationTimeMicros);
-            unsigned long spectrometerGetMinimumIntegrationTimeMicros(
-                    long spectrometerFeatureID, int *errorCode);
-            unsigned long spectrometerGetMaximumIntegrationTimeMicros(
-                    long spectrometerFeatureID, int *errorCode);
-            double spectrometerGetMaximumIntensity(
-                    long spectrometerFeatureID, int *errorCode);
-            int spectrometerGetUnformattedSpectrumLength(
-                    long spectrometerFeatureID, int *errorCode);
-            int spectrometerGetUnformattedSpectrum(long spectrometerFeatureID,
-                    int *errorCode, unsigned char *buffer, int bufferLength);
-            int spectrometerGetFormattedSpectrumLength(
-                    long spectrometerFeatureID, int *errorCode);
-            int spectrometerGetFormattedSpectrum(long spectrometerFeatureID, int *errorCode,
-                    double *buffer, int bufferLength);
-            int spectrometerGetWavelengths(long spectrometerFeatureID, int *errorCode,
-                    double *wavelengths, int length);
-            int spectrometerGetElectricDarkPixelCount(
-                    long spectrometerFeatureID, int *errorCode);
-            int spectrometerGetElectricDarkPixelIndices(
-                    long spectrometerFeatureID, int *errorCode, int *indices, int length);
+            void spectrometerSetIntegrationTimeMicros(long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros);
+            unsigned long spectrometerGetMinimumIntegrationTimeMicros(long spectrometerFeatureID, int *errorCode);
+            unsigned long spectrometerGetMaximumIntegrationTimeMicros(long spectrometerFeatureID, int *errorCode);
+            double spectrometerGetMaximumIntensity(long spectrometerFeatureID, int *errorCode);
+            int spectrometerGetUnformattedSpectrumLength(long spectrometerFeatureID, int *errorCode);
+            int spectrometerGetUnformattedSpectrum(long spectrometerFeatureID,int *errorCode, unsigned char *buffer, int bufferLength);
+			int spectrometerGetFastBufferSpectrum(long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve);
+			int spectrometerGetFormattedSpectrumLength(long spectrometerFeatureID, int *errorCode);
+            int spectrometerGetFormattedSpectrum(long spectrometerFeatureID, int *errorCode,double *buffer, int bufferLength);
+            int spectrometerGetWavelengths(long spectrometerFeatureID, int *errorCode,double *wavelengths, int length);
+            int spectrometerGetElectricDarkPixelCount(long spectrometerFeatureID, int *errorCode);
+            int spectrometerGetElectricDarkPixelIndices(long spectrometerFeatureID, int *errorCode, int *indices, int length);
 
 
             /* Get one or more pixel binning features */

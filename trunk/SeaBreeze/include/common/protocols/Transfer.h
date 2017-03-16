@@ -78,6 +78,15 @@ namespace seabreeze {
         static const direction_t TO_DEVICE;
         static const direction_t FROM_DEVICE;
 
+		// workaround for the FlameX get buffered spectrum call, which unlike all of the rest of the get spectrum calls
+		//  for all of the other spectrometers, has an argument. Since the request spectrum exchanges are stored as Transfer objects
+		//  in the spectrometer protocol when it is first created, and the message content is already defined, then later, when the transfer method is
+		//  called, there is no way to change the immediate data in the predefined message. This gives a pointer to the derived class and
+		//  provides an interface to a static function, within the derived class, set the immediate data of the message.
+
+		void * derivedClassPointer;
+		void (*setParametersFunction)(void *, unsigned int);
+
     protected:
         Transfer();
         void checkBufferSize();
@@ -85,6 +94,7 @@ namespace seabreeze {
         unsigned int length;
         std::vector<byte> *buffer;
         direction_t direction;
+
     };
 
 }

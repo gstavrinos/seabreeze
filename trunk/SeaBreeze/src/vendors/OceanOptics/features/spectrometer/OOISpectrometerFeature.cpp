@@ -42,6 +42,7 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestSpectrumExchange.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPTriggerModeExchange.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPRequestNumberOfBufferedSpectraWithMetadataExchange.h"
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -64,10 +65,10 @@ OOISpectrometerFeature::~OOISpectrometerFeature() {
     }
 }
 
-vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+vector<double> *OOISpectrometerFeature::getFormattedSpectrum(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
 
     LOG(__FUNCTION__);
-    // logger.debug("starting OOISpectrometerFeature::getSpectrum");
+    // logger.debug("starting OOISpectrometerFeature::getFormattedSpectrum");
 
     ProtocolHelper *proto;
     SpectrometerProtocolInterface *spec;
@@ -76,19 +77,19 @@ vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, co
         proto = lookupProtocolImpl(protocol);
         spec = static_cast<SpectrometerProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
-        string error("Could not find matching protocol implementation to get raw spectrum.");
+        string error("Could not find matching protocol implementation to get a formatted spectrum.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }
 
     logger.debug("writing requestSpectrum");
-    writeRequestSpectrum(protocol, bus);
+    writeRequestFormattedSpectrum(protocol, bus);
 
     vector<double> *retval = NULL;
 
     try {
         logger.debug("reading spectrum");
-        retval = spec->readSpectrum(bus);
+        retval = spec->readFormattedSpectrum(bus);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -102,15 +103,22 @@ vector<double> *OOISpectrometerFeature::getSpectrum(const Protocol &protocol, co
 vector<byte> *OOISpectrometerFeature::getUnformattedSpectrum(
         const Protocol &protocol, const Bus &bus) throw (FeatureException) {
     LOG(__FUNCTION__);
-    writeRequestSpectrum(protocol, bus);
+    writeRequestUnformattedSpectrum(protocol, bus);
     return readUnformattedSpectrum(protocol, bus);
 }
 
-void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
+vector<byte> *OOISpectrometerFeature::getFastBufferSpectrum(
+	const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) {
+	LOG(__FUNCTION__);
+	writeRequestFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
+	return readFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
+}
+
+void OOISpectrometerFeature::writeRequestFormattedSpectrum(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
 
     LOG(__FUNCTION__);
-    // logger.debug("starting OOISpectrometerFeature::writeRequestSpectrum");
+    // logger.debug("starting OOISpectrometerFeature::writeRequestFormattedSpectrum");
 
     ProtocolHelper *proto;
     SpectrometerProtocolInterface *spec;
@@ -126,7 +134,7 @@ void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
     }
 
     try {
-        spec->requestSpectrum(bus);
+        spec->requestFormattedSpectrum(bus);
     } catch (ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -134,6 +142,70 @@ void OOISpectrometerFeature::writeRequestSpectrum(const Protocol &protocol,
         logger.error(error.c_str());
         throw FeatureControlException(error);
     }
+}
+
+void OOISpectrometerFeature::writeRequestUnformattedSpectrum(const Protocol &protocol,
+	const Bus &bus) throw (FeatureException) {
+
+	LOG(__FUNCTION__);
+	// logger.debug("starting OOISpectrometerFeature::writeRequestFormattedSpectrum");
+
+	ProtocolHelper *proto;
+	SpectrometerProtocolInterface *spec;
+
+	try {
+		proto = lookupProtocolImpl(protocol);
+		spec = static_cast<SpectrometerProtocolInterface *>(proto);
+	}
+	catch (FeatureProtocolNotFoundException &e) {
+		string error("Could not find matching protocol implementation to get an unformatted spectrum.");
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		logger.error(error.c_str());
+		throw FeatureProtocolNotFoundException(error);
+	}
+
+	try {
+		spec->requestUnformattedSpectrum(bus);
+	}
+	catch (ProtocolException &pe) {
+		string error("Caught protocol exception: ");
+		error += pe.what();
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		logger.error(error.c_str());
+		throw FeatureControlException(error);
+	}
+}
+
+void OOISpectrometerFeature::writeRequestFastBufferSpectrum(const Protocol &protocol,
+	const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) {
+
+	LOG(__FUNCTION__);
+	// logger.debug("starting OOISpectrometerFeature::writeRequestFormattedSpectrum");
+
+	ProtocolHelper *proto;
+	SpectrometerProtocolInterface *spec;
+
+	try {
+		proto = lookupProtocolImpl(protocol);
+		spec = static_cast<SpectrometerProtocolInterface *>(proto);
+	}
+	catch (FeatureProtocolNotFoundException &e) {
+		string error("Could not find matching protocol implementation to get an unformatted spectrum.");
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		logger.error(error.c_str());
+		throw FeatureProtocolNotFoundException(error);
+	}
+	
+	try {
+		spec->requestFastBufferSpectrum(bus, numberOfSamplesToRetrieve);
+	}
+	catch (ProtocolException &pe) {
+		string error("Caught protocol exception: ");
+		error += pe.what();
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		logger.error(error.c_str());
+		throw FeatureControlException(error);
+	}
 }
 
 vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &protocol,
@@ -148,7 +220,7 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
         proto = lookupProtocolImpl(protocol);
         spec = static_cast<SpectrometerProtocolInterface *>(proto);
     } catch (FeatureProtocolNotFoundException &e) {
-        string error("Could not find matching protocol implementation to get raw spectrum.");
+        string error("Could not find matching protocol implementation to get an unformatted spectrum.");
         logger.error(error.c_str());
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
@@ -167,6 +239,41 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
     }
 
     return retval;
+}
+
+vector<byte> *OOISpectrometerFeature::readFastBufferSpectrum(const Protocol &protocol,
+	const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) {
+	LOG(__FUNCTION__);
+	// logger.debug("starting OOISpectrometerFeature::readUnformattedSpectrum");
+
+	ProtocolHelper *proto;
+	SpectrometerProtocolInterface *spec;
+
+	try {
+		proto = lookupProtocolImpl(protocol);
+		spec = static_cast<SpectrometerProtocolInterface *>(proto);
+	}
+	catch (FeatureProtocolNotFoundException &e) {
+		string error("Could not find matching protocol implementation to get fast buffered spectra.");
+		logger.error(error.c_str());
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureProtocolNotFoundException(error);
+	}
+
+	vector<byte> *retval;
+
+	try {
+		retval = spec->readFastBufferSpectrum(bus, numberOfSamplesToRetrieve);
+	}
+	catch (ProtocolException &pe) {
+		string error("Caught protocol exception: ");
+		error += pe.what();
+		logger.error(error.c_str());
+		/* FIXME: previous exception should probably be bundled up into the new exception */
+		throw FeatureControlException(error);
+	}
+
+	return retval;
 }
 
 vector<double> *OOISpectrometerFeature::getWavelengths(const Protocol &protocol,
