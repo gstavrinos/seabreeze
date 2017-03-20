@@ -84,6 +84,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<SpectrometerFeatureAdapter>(spectrometerFeatures);
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
     __delete_feature_adapters<IrradCalFeatureAdapter>(irradCalFeatures);
+	__delete_feature_adapters<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures);
     __delete_feature_adapters<EEPROMFeatureAdapter>(eepromFeatures);
     __delete_feature_adapters<StrobeLampFeatureAdapter>(strobeLampFeatures);
     __delete_feature_adapters<ContinuousStrobeFeatureAdapter>(continuousStrobeFeatures);
@@ -182,6 +183,11 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<IrradCalFeatureInterface,
                     IrradCalFeatureAdapter>(this->device,
             irradCalFeatures, bus, featureFamilies.IRRAD_CAL);
+
+	/* Create ethernet configuration feature list */
+	__create_feature_adapters<EthernetConfigurationFeatureInterface,
+		EthernetConfigurationFeatureAdapter>(this->device,
+			ethernetConfigurationFeatures, bus, featureFamilies.IRRAD_CAL);
 
     /* Create EEPROM feature list */
     __create_feature_adapters<EEPROMSlotFeatureInterface,
@@ -751,6 +757,67 @@ void DeviceAdapter::irradCalibrationWriteCollectionArea(long featureID,
     }
 
     return feature->writeIrradCollectionArea(errorCode, area);
+}
+
+/* Ethernet Configuration feature wrappers */
+int DeviceAdapter::getNumberOfEthernetConfigurationFeatures() 
+{
+	return (int) this->ethernetConfigurationFeatures.size();
+}
+
+int DeviceAdapter::getEthernetConfigurationFeatures(long *buffer, int maxFeatures) 
+{
+	return __getFeatureIDs<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures, buffer, maxFeatures);
+}
+
+EthernetConfigurationFeatureAdapter *DeviceAdapter::getEthernetConfigurationFeatureByID(long featureID) 
+{
+	return __getFeatureByID<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures, featureID);
+}
+
+
+void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
+{
+	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
+	if (NULL == feature) 
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	}
+
+	feature->get_MAC_Address(errorCode, interfaceIndex, macAddress);
+}
+
+void DeviceAdapter::ethernetConfiguration_Set_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+{
+	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->set_MAC_Address(errorCode, interfaceIndex, macAddress);
+}
+
+unsigned char DeviceAdapter::ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex) 
+{
+	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->get_GbE_Enable_Status(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+{
+	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->set_GbE_Enable_Status(errorCode, interfaceIndex, enableState);
 }
 
 /* EEPROM feature wrappers */

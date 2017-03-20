@@ -40,7 +40,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSpectrometerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWaveCalProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadSpectrumExchange.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadNumberOfSpectraWithMetadataExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadNumberOfRawSpectraWithMetadataExchange.h"
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;

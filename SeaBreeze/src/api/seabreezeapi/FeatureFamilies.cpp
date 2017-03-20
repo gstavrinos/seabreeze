@@ -34,31 +34,45 @@
 #include "api/seabreezeapi/FeatureFamilies.h"
 
 /* Constants */
-#define FEATURE_FAMILY_ID_UNDEFINED             0
-#define FEATURE_FAMILY_ID_SERIAL_NUMBER         1
-#define FEATURE_FAMILY_ID_SPECTROMETER          2
-#define FEATURE_FAMILY_ID_THERMOELECTRIC        3
-#define FEATURE_FAMILY_ID_IRRADCAL              4
-#define FEATURE_FAMILY_ID_EEPROM                5
-#define FEATURE_FAMILY_ID_STROBE_LAMP           6
-#define FEATURE_FAMILY_ID_SHUTTER               7
-#define FEATURE_FAMILY_ID_WAVECAL               8
-#define FEATURE_FAMILY_ID_NONLINEARITYCAL       9
-#define FEATURE_FAMILY_ID_STRAYLIGHTCAL         10
-#define FEATURE_FAMILY_ID_RAW_USB_BUS_ACCESS    11
-#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE     12
-#define FEATURE_FAMILY_ID_LIGHT_SOURCE          13
-#define FEATURE_FAMILY_ID_TEMPERATURE           14
-#define FEATURE_FAMILY_ID_OPTICAL_BENCH         15
-#define FEATURE_FAMILY_ID_REVISION              16
-#define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING   17
-#define FEATURE_FAMILY_ID_DATA_BUFFER           18
-#define FEATURE_FAMILY_ID_ACQUISITION_DELAY     19
-#define FEATURE_FAMILY_ID_PIXEL_BINNING         20 // was 18... that appears to have been a bug
-#define FEATURE_FAMILY_ID_INTROSPECTION			21
-#define FEATURE_FAMILY_ID_FAST_BUFFER			22
-#define FEATURE_FAMILY_ID_AUTO_NULLING_ANALOG	23
-#define	FEATURE_FAMILY_ID_AUTO_NULLING_DIGITAL	24
+#define FEATURE_FAMILY_ID_UNDEFINED             	0
+#define FEATURE_FAMILY_ID_SERIAL_NUMBER         	1
+#define FEATURE_FAMILY_ID_SPECTROMETER          	2
+#define FEATURE_FAMILY_ID_THERMOELECTRIC        	3
+#define FEATURE_FAMILY_ID_IRRADCAL              	4
+#define FEATURE_FAMILY_ID_EEPROM                	5
+#define FEATURE_FAMILY_ID_STROBE_LAMP           	6
+#define FEATURE_FAMILY_ID_SHUTTER               	7
+#define FEATURE_FAMILY_ID_WAVECAL               	8
+#define FEATURE_FAMILY_ID_NONLINEARITYCAL       	9
+#define FEATURE_FAMILY_ID_STRAYLIGHTCAL         	10
+#define FEATURE_FAMILY_ID_RAW_USB_BUS_ACCESS    	11
+#define FEATURE_FAMILY_ID_CONTINUOUS_STROBE     	12
+#define FEATURE_FAMILY_ID_LIGHT_SOURCE          	13
+#define FEATURE_FAMILY_ID_TEMPERATURE           	14
+#define FEATURE_FAMILY_ID_OPTICAL_BENCH         	15
+#define FEATURE_FAMILY_ID_REVISION              	16
+#define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING   	17
+#define FEATURE_FAMILY_ID_DATA_BUFFER           	18
+#define FEATURE_FAMILY_ID_ACQUISITION_DELAY     	19 
+#define FEATURE_FAMILY_ID_PIXEL_BINNING         	20 // was 18... that appears to have been a bug
+#define FEATURE_FAMILY_ID_INTROSPECTION				21
+#define FEATURE_FAMILY_ID_FAST_BUFFER				22
+#define FEATURE_FAMILY_ID_AUTO_NULLING_ANALOG		23
+#define	FEATURE_FAMILY_ID_AUTO_NULLING_DIGITAL		24
+#define	FEATURE_FAMILY_ID_ETHERNET_CONFIGURATION	25
+#define	FEATURE_FAMILY_ID_WIFI_CONFIGURATION		26
+#define	FEATURE_FAMILY_ID_NETWORK_CONFIGURATION		27
+#define	FEATURE_FAMILY_ID_DHCP_CONFIGURATION		28
+#define	FEATURE_FAMILY_ID_BLUETOOTH_CONFIGURATION	29
+#define FEATURE_FAMILY_ID_TIME_COMMANDS				30
+#define FEATURE_FAMILY_ID_RS232_BUS_COMMANDS		31
+#define FEATURE_FAMILY_ID_IPV4_ADDRESSING_COMMANDS	32
+#define FEATURE_FAMILY_ID_IPV4_MULTICAST_COMMANDS	33
+#define FEATURE_FAMILY_ID_NETWORK_SERIVICES			34
+#define FEATURE_FAMILY_ID_DEVICE_IDENTIFICATION		35
+#define FEATURE_FAMILY_ID_TEST_COMMANDS				36
+
+
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -114,6 +128,15 @@ seabreeze::api::IrradCalFeatureFamily::IrradCalFeatureFamily()
 }
 
 seabreeze::api::IrradCalFeatureFamily::~IrradCalFeatureFamily() {
+
+}
+
+seabreeze::api::EthernetConfigurationFeatureFamily::EthernetConfigurationFeatureFamily()
+        : FeatureFamily("EthernetConfiguration", FEATURE_FAMILY_ID_ETHERNET_CONFIGURATION) {
+
+}
+
+seabreeze::api::EthernetConfigurationFeatureFamily::~EthernetConfigurationFeatureFamily() {
 
 }
 
@@ -286,6 +309,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new SpectrometerFeatureFamily());
     retval.push_back(new ThermoElectricFeatureFamily());
     retval.push_back(new IrradCalFeatureFamily());
+    retval.push_back(new EthernetConfigurationFeatureFamily());
     retval.push_back(new EEPROMFeatureFamily());
     retval.push_back(new StrobeLampFeatureFamily());
     retval.push_back(new ContinuousStrobeFeatureFamily());
