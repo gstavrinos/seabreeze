@@ -800,6 +800,54 @@ sbapi_irrad_calibration_write_collection_area(long deviceID, long featureID,
     return wrapper->irradCalibrationWriteCollectionArea(deviceID, featureID, error_code, area);
 }
 
+
+/**************************************************************************************/
+//  C language wrapper for Ethernet configuration features
+/**************************************************************************************/
+
+int sbapi_get_number_of_ethernet_configuration_features(long deviceID, int *error_code) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfEthernetConfigurationFeatures(deviceID, error_code);
+}
+
+int sbapi_get_ethernet_configuration_features(long deviceID, int *error_code, long *features, int max_features) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEthernetConfigurationFeatures(deviceID, error_code, features, max_features);
+}
+
+void sbapi_ethernet_configuration_get_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->ethernetConfiguration_Get_MAC_Address(deviceID, featureID, error_code, interfaceIndex, macAddress);
+}
+
+void sbapi_ethernet_configuration_set_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->ethernetConfiguration_Set_MAC_Address(deviceID, featureID, error_code, interfaceIndex, macAddress);
+}
+
+unsigned char sbapi_ethernet_configuration_get_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->ethernetConfiguration_Get_GbE_Enable_Status(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableStatus)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->ethernetConfiguration_Set_GbE_Enable_Status(deviceID, featureID, error_code, interfaceIndex, enableStatus);
+}
+
+
 /**************************************************************************************/
 //  C language wrapper for thermo-electric features
 /**************************************************************************************/

@@ -81,7 +81,6 @@ public:
 	unsigned char   getSerialNumberMaximumLength(int index, int *errorCode);
 
 		
-
     // basic acquisitions
     void   setIntegrationTimeMicrosec(int index, int *errorCode, unsigned long integration_time_micros);
     int    getWavelengths(int index, int *errorCode, double *wavelengths, int length);
@@ -119,7 +118,7 @@ public:
     void   setBufferingEnable         (int index, int *errorCode, unsigned char isEnabled);
 	unsigned int getConsecutiveSampleCount(int index, int *errorCode);
 	void   setConsecutiveSampleCount(int index, int *errorCode, unsigned int consecutiveSampleCount);
-
+	
     // EEPROM access
     int    readEEPROMSlot            (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);
     int    writeEEPROMSlot           (int index, int *errorCode, int slot_number, unsigned char *buffer, int buffer_length);
@@ -130,6 +129,12 @@ public:
     int    hasIrradCollectionArea    (int index, int *errorCode);
     float  readIrradCollectionArea   (int index, int *errorCode);
     void   writeIrradCollectionArea  (int index, int *errorCode, float area);
+    
+    	// ethernet configuration features
+	unsigned char get_GbE_Enable_Status	(int index, int *errorCode, unsigned char interfaceIndex);
+    void   set_GbE_Enable_Status      	(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
+	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+	void   set_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
 
     // thermal-electric cooler
     double readTECTemperature        (int index, int *errorCode);
@@ -915,6 +920,38 @@ extern "C" {
     DLL_DECL void seabreeze_set_buffering_enable(int index, int *error_code, unsigned char isEnabled);
 
 
+    /**
+    * @brief Get GbE enable state (if equipped)
+    * @param index (Input) Ethernet interface to query
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @return The GbE enable state
+    */
+    DLL_DECL unsigned char seabreeze_get_gbe_enable(int index, int *error_code, unsigned char interfaceIndex);
+    
+        /**
+    * @brief Set GbE enable state (if equipped)
+    * @param index (Input) Ethernet interface to set
+    * @param GbE_Enable (Input) The GbE enable state from the indicated interface
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    */
+    DLL_DECL void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char GbE_Enable);
+    
+        /**
+    * @brief Get the MAC address (if equipped)
+    * @param index (Input) Ethernet interface to query
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    * @param error_code (Output) Pointer to allocated six byte unsigned char array to receive the MAC Address
+    */
+    DLL_DECL void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+    
+        /**
+    * @brief Set the MAC address (if equipped)
+    * @param index (Input) Ethernet interface to set
+    * @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+    * @param error_code (Output) Pointer to allocated integer to receive error code
+    */
+    DLL_DECL void seabreeze_set_mac_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+    
     /**
     * @brief Programmatically enable debug outputs to stderr
     * @param flag (Input) zero to disable (default), non-zero to enable

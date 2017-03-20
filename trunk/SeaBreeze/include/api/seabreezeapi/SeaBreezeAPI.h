@@ -176,6 +176,14 @@ public:
     virtual float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode) = 0;
     virtual void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area) = 0;
 
+    /* Ethernet Configuration features */
+    virtual int getNumberOfEthernetConfigurationFeatures(long deviceID, int *errorCode) = 0;
+    virtual int getEthernetConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+    virtual void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) = 0;
+    virtual void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]) = 0;
+    virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+    virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
+    
     /* EEPROM capabilities */
     virtual int getNumberOfEEPROMFeatures(long deviceID, int *errorCode) = 0;
     virtual int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -795,8 +803,7 @@ extern "C" {
      *      On error, returns -1 and error_code will be set accordingly.
      */
     DLL_DECL long
-    sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID,
-            long featureID, int *error_code);
+    sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID, long featureID, int *error_code);
 
     /**
      * This function returns the maximum pixel intensity for the
@@ -813,8 +820,7 @@ extern "C" {
      *      On error, returns -1 and error_code will be set accordingly.
      */
     DLL_DECL double
-    sbapi_spectrometer_get_maximum_intensity(long deviceID,
-            long featureID, int *error_code);
+    sbapi_spectrometer_get_maximum_intensity(long deviceID, long featureID, int *error_code);
 
     /**
      * This returns an integer denoting the number of pixels in a
@@ -1699,6 +1705,94 @@ extern "C" {
     sbapi_irrad_calibration_write_collection_area(long deviceID, long featureID,
             int *error_code, float area);
 
+	/**
+	* This function returns the total number of ethernet configuration
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of ethernet configuration features that will be
+	*      returned by a call to sbapi_get_ethernet_configuration_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_ethernet_configuration_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each ethernet configuration
+	* instance for this device.  The IDs are only valid when used with the
+	* deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param features (Output) a preallocated array to hold returned feature handles
+	* @param max_features (Input) length of the preallocated buffer
+	*
+	* @return the number of ethernet configuration feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_ethernet_configuration_features(long deviceID, int *error_code, long *features, int max_features);
+
+	/**
+	* This function reads out a MAC address from the spectrometer's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an irradiance calibration
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_irrad_cal_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param buffer (Output) six byte array into which the MAC address numbers should be put
+	*
+	*/
+	DLL_DECL void sbapi_ethernet_configuration_get_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+
+	/**
+	* This function writes a MAC address to the device's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param buffer (Output) a six byte array of the mac address components
+	*
+	*/
+	DLL_DECL void sbapi_ethernet_configuration_set_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+
+	/**
+	* This function reads a GbE enable status from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an irradiance calibration
+	*        feature.  Valid IDs can be found with the
+	*        sbapi_get_irrad_cal_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	*
+	* @return unsigned char: the enable status for GbE, 0 for disabled, 1 for enabled
+	*/
+	DLL_DECL unsigned char sbapi_ethernet_configuration_get_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function writes a GbE enable status to the spectrometer's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param GbE enable status (Input) the enable state for GbE
+	*/
+	DLL_DECL void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
+
+
     /**
      * This function returns the total number of thermoelectric cooler (TEC)
      * instances available in the indicated device.
@@ -2437,7 +2531,7 @@ extern "C" {
      *        error codes.
      * @param numberOfSpectraToRemove (Input) Number of spectra from oldest to newest to remove.
      */
-    DLL_DECL void sbapi_data_buffer_remove_oldest_spectra(long deviceID, long featureID, int *error_code, int numberOfSpectraToRemove);
+    DLL_DECL void sbapi_data_buffer_remove_oldest_spectra(long deviceID, long featureID, int *error_code, unsigned int numberOfSpectraToRemove);
 
     /**
      * @brief Get the number of data elements currently in the buffer

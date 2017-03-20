@@ -34,6 +34,7 @@
 #include "vendors/OceanOptics/buses/rs232/OOIRS232Interface.h"
 #include "vendors/OceanOptics/buses/usb/FlameXUSB.h"
 #include "vendors/OceanOptics/devices/FlameX.h"
+
 #include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
@@ -43,12 +44,15 @@
 #include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/fast_buffer/FlameXFastBufferFeature.h"
 #include "vendors/OceanOptics/features/data_buffer/FlameXDataBufferFeature.h"
+#include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeature.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPFastBufferProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPEthernetConfigurationProtocol.h"
+
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
 using namespace seabreeze;
@@ -110,6 +114,11 @@ FlameX::FlameX() {
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());
     this->features.push_back(new StrobeLampFeature(lampHelpers));
+
+	/* Add ethernet configuration feature */
+	vector<ProtocolHelper *> ethernetConfigurationHelpers;
+	ethernetConfigurationHelpers.push_back(new OBPEthernetConfigurationProtocol());
+	this->features.push_back(new EthernetConfigurationFeature(ethernetConfigurationHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }

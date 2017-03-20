@@ -148,7 +148,7 @@ int main() {
     
     /* This shows how to add network devices (note that most use TCP/IP) */
     //sbapi_add_TCPIPv4_device_location("Jaz", "192.168.1.150", 7654);
-    //sbapi_add_TCPIPv4_device_location("FlameX", "192.168.1.151", 57357);
+    //sbapi_add_TCPIPv4_device_location("FlameX", "192.168.254.254", 57357);
 
 #define USE_TCP
 #ifdef USE_TCP

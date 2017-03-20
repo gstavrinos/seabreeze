@@ -114,6 +114,15 @@ public:
     virtual float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode);
     virtual void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area);
 
+	/* Ethernet Configuration features */
+	virtual int getNumberOfEthernetConfigurationFeatures(long deviceID, int *errorCode);
+	virtual int getEthernetConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+	virtual void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+	virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+	virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+
+
     /* EEPROM capabilities */
     virtual int getNumberOfEEPROMFeatures(long deviceID, int *errorCode);
     virtual int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);

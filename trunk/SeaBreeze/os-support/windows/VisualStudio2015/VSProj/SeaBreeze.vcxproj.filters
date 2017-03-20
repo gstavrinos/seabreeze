@@ -1263,6 +1263,33 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\ethernet_configuration\EthernetConfigurationFeature.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\ethernet_configuration\EthernetConfigurationFeatureInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\EthernetConfigurationProtocolInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetEthernetConfigurationGbEEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetEthernetConfigurationMACAddressExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationGbEEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationMacAddressExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPEthernetConfigurationProtocol.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\EthernetConfigurationFeatureAdapter.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <!-- INCLUDES END HERE -->
   </ItemGroup>
   <ItemGroup>
@@ -2372,6 +2399,30 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\ethernet_configuration\EthernetConfigurationFeature.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EthernetConfigurationProtocolInterface.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPEthernetConfigurationProtocol.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetEthernetConfigurationGbEEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetEthernetConfigurationMACAddressExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationGbEEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationMacAddressExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\EthernetConfigurationFeatureAdapter.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <!-- SOURCES END HERE -->

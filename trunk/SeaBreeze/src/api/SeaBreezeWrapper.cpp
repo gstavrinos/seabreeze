@@ -56,6 +56,7 @@
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeatureInterface.h"
 #include "vendors/OceanOptics/features/thermoelectric/ThermoElectricFeatureInterface.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeatureInterface.h"
+#include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 
@@ -1225,6 +1226,142 @@ void SeaBreezeWrapper::writeIrradCollectionArea(int index, int *errorCode,
     }
 }
 
+void SeaBreezeWrapper::get_MAC_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
+{
+
+    if(NULL == this->devices[index]) 
+    {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    EthernetConfigurationFeatureInterface *ethernetConfigurationFI =
+        __seabreeze_getFeature<EthernetConfigurationFeatureInterface>(this->devices[index]);
+
+    if(NULL != ethernetConfigurationFI) 
+    {
+        vector<byte> macAddressBytes;
+
+        try 
+        {
+            macAddressBytes = ethernetConfigurationFI->get_MAC_Address(
+                *__seabreeze_getProtocol(this->devices[index]),
+                *__seabreeze_getBus(this->devices[index]),
+                interfaceIndex);
+
+			if (macAddressBytes.size() == 6)
+			{
+				memcpy(macAddress, &(macAddressBytes[0]), 6);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+	
+        } 
+        catch (FeatureException &fe) 
+        {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+}
+
+void SeaBreezeWrapper::set_MAC_Address(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]) 
+{
+    if(NULL == this->devices[index]) 
+    {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    EthernetConfigurationFeatureInterface *ethernetConfigurationFI =
+        __seabreeze_getFeature<EthernetConfigurationFeatureInterface>(this->devices[index]);
+    if(NULL != ethernetConfigurationFI) 
+	{
+        vector<byte> *byteVector = new vector<byte>(6);
+        memcpy(&((*byteVector)[0]), macAddress, 6 * sizeof(unsigned char));
+
+        try 
+        {
+            ethernetConfigurationFI->set_MAC_Address(
+                *__seabreeze_getProtocol(this->devices[index]),
+                *__seabreeze_getBus(this->devices[index]),
+                interfaceIndex,
+                *byteVector);
+            delete byteVector;
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } 
+        catch (FeatureException &fe) 
+        {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            delete byteVector;
+        }
+    }
+}
+
+
+unsigned char SeaBreezeWrapper::get_GbE_Enable_Status(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char enableState = 0;
+	
+    if(NULL == this->devices[index]) 
+    {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    EthernetConfigurationFeatureInterface *ethernetConfigurationIF =
+        __seabreeze_getFeature<EthernetConfigurationFeatureInterface>(this->devices[index]);
+    if(NULL != ethernetConfigurationIF)
+    {
+        try 
+        {
+            enableState = ethernetConfigurationIF->get_GbE_Enable_Status(
+                *__seabreeze_getProtocol(this->devices[index]),
+                *__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } 
+        catch (FeatureException &fe) 
+        {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+    return enableState;
+}
+
+void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+{
+    if(NULL == this->devices[index]) 
+	{
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+    EthernetConfigurationFeatureInterface *ethernetConfigurationIF =
+        __seabreeze_getFeature<EthernetConfigurationFeatureInterface>(this->devices[index]);
+    if(NULL != ethernetConfigurationIF) 
+	{
+        try 
+		{
+			ethernetConfigurationIF->set_GbE_Enable_Status(
+                *__seabreeze_getProtocol(this->devices[index]),
+                *__seabreeze_getBus(this->devices[index]),
+                interfaceIndex,
+                enableState);
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        } 
+		catch (FeatureException &fe) 
+		{
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+        }
+    }
+}
+
 double SeaBreezeWrapper::readTECTemperature(int index, int *errorCode) {
 
     if(NULL == this->devices[index]) {
@@ -2111,6 +2248,30 @@ void seabreeze_write_irrad_collection_area(int index, int *error_code, float are
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->writeIrradCollectionArea(index, error_code, area);
+}
+
+void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6])
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_MAC_Address(index, error_code, interfaceIndex, macAddress);
+}
+
+void seabreeze_set_mac_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6])
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_MAC_Address(index, error_code, interfaceIndex, macAddress);
+}
+
+unsigned char seabreeze_get_gbe_enable(int index, int *error_code, unsigned char interfaceIndex)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_GbE_Enable_Status(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char GbE_Enable) 
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_GbE_Enable_Status(index, error_code, interfaceIndex, GbE_Enable);
 }
 
 double seabreeze_read_tec_temperature(int index, int *error_code) {

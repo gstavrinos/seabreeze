@@ -863,6 +863,87 @@ void SeaBreezeAPI_Impl::irradCalibrationWriteCollectionArea(long deviceID, long 
 
 
 /**************************************************************************************/
+//  Ethernet Configuration Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfEthernetConfigurationFeatures(long deviceID, int *errorCode) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) 
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfEthernetConfigurationFeatures();
+}
+
+int SeaBreezeAPI_Impl::getEthernetConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) 
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getEthernetConfigurationFeatures(buffer, maxLength);
+}
+
+void SeaBreezeAPI_Impl::ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->ethernetConfiguration_Get_MAC_Address(featureID, errorCode, interfaceIndex, macAddress);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+}
+
+void SeaBreezeAPI_Impl::ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->ethernetConfiguration_Set_MAC_Address(featureID, errorCode, interfaceIndex, macAddress);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+}
+
+unsigned char SeaBreezeAPI_Impl::ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->ethernetConfiguration_Get_GbE_Enable_Status(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) 
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->ethernetConfiguration_Set_GbE_Enable_Status(featureID, errorCode, interfaceIndex, enableState);
+}
+
+
+/**************************************************************************************/
 //  EEProm Features for the SeaBreeze API class
 /**************************************************************************************/
 

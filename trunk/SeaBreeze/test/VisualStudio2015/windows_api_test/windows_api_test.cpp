@@ -1756,6 +1756,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 	printf("\tFinished testing fast buffer capabilities.\n");
 }
 
+
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {
 	int error = 0;
 	int number_of_acq_delays = 0;
