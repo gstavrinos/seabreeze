@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPThernetConfigurationProtocol.cpp
+ * @file    OBPEthernetConfigurationProtocol.cpp
  * @date    February 2017
  * @author  Ocean Optics, Inc.
  *

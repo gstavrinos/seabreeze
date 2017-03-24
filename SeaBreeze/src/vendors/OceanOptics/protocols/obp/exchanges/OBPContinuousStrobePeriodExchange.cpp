@@ -43,7 +43,7 @@ OBPContinuousStrobePeriodExchange::OBPContinuousStrobePeriodExchange() {
 
     this->messageType = OBPMessageTypes::OBP_SET_CONT_STROBE_PERIOD;
 
-    this->payload.resize(4);
+    this->payload.resize(sizeof(unsigned int));
 
     /* Set a reasonable default */
     unsigned long period = DEFAULT_PERIOD_USEC;

@@ -39,6 +39,7 @@ OBPGetOpticalBenchIDExchange::OBPGetOpticalBenchIDExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_BENCH_ID;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
 }
 
 OBPGetOpticalBenchIDExchange::~OBPGetOpticalBenchIDExchange() {

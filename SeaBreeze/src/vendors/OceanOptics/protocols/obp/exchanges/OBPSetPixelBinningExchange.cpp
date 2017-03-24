@@ -47,5 +47,5 @@ OBPSetPixelBinningExchange::~OBPSetPixelBinningExchange() {
 }
 
 void OBPSetPixelBinningExchange::setPixelBinningFactor(const unsigned char binning) {
-    memcpy(&(this->payload[0]), &binning, sizeof(unsigned char));
+	this->payload[0] = binning;
 }

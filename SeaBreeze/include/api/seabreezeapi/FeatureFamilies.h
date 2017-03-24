@@ -183,6 +183,13 @@ namespace seabreeze {
 			EthernetConfigurationFeatureFamily();
 			virtual ~EthernetConfigurationFeatureFamily();
 		};
+		
+		
+		class NetworkConfigurationFeatureFamily : public FeatureFamily {
+		public:
+			NetworkConfigurationFeatureFamily();
+			virtual ~NetworkConfigurationFeatureFamily();
+		};
 
         class FeatureFamilies {
         public:
@@ -210,8 +217,8 @@ namespace seabreeze {
             const AcquisitionDelayFeatureFamily ACQUISITION_DELAY;
             const PixelBinningFeatureFamily PIXEL_BINNING;
 			const EthernetConfigurationFeatureFamily ETHERNET_CONFIGURATION;
+			const NetworkConfigurationFeatureFamily NETWORK_CONFIGURATION;
 			//const WifiConfigurationFeatureFamily WIFI_CONFIGURATION;
-			//const NetworkConfigurationFeatureFamily NETWORK_CONFIGURATION;
 			//const DHCPConfigurationFeatureFamily DHCP_CONFIGURATION;
 			//const BluetoothConfigurationFeatureFamily BLUETOOTH_CONFIGURATION;
 			//const TimeFeatureFamily	TIME_COMMANDS;

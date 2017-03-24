@@ -39,6 +39,8 @@ OBPGetStrayLightCoeffsCountExchange::OBPGetStrayLightCoeffsCountExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_STRAY_COEFF_COUNT;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
+
 }
 
 OBPGetStrayLightCoeffsCountExchange::~OBPGetStrayLightCoeffsCountExchange() {

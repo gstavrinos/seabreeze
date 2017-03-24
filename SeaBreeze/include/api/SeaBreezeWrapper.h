@@ -130,11 +130,20 @@ public:
     float  readIrradCollectionArea   (int index, int *errorCode);
     void   writeIrradCollectionArea  (int index, int *errorCode, float area);
     
-    	// ethernet configuration features
+    // ethernet configuration features
 	unsigned char get_GbE_Enable_Status	(int index, int *errorCode, unsigned char interfaceIndex);
     void   set_GbE_Enable_Status      	(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
 	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
 	void   set_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+
+	// network configuration features
+	unsigned char getNumberOfNetworkInterfaces(int index, int *errorCode);
+	unsigned char getNetworkInterfaceConnectionType(int index, int *errorCode, unsigned char interfaceIndex);
+	unsigned char getNetworkInterfaceEnableState(int index, int *errorCode, unsigned char interfaceIndex);
+	void		  setNetworkInterfaceEnableState(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+	unsigned char runNetworkInterfaceSelfTest(int index, int *errorCode, unsigned char interfaceIndex);
+	void		  saveNetworkInterfaceConnectionSettings(int index, int *errorCode, unsigned char interfaceIndex);
+
 
     // thermal-electric cooler
     double readTECTemperature        (int index, int *errorCode);
@@ -815,8 +824,8 @@ extern "C" {
 
     /**
     * @brief Get a USB descriptor string by number
-    * @param index     (Input)  Which spectrometer to set
-    * @param errorCode (Output) pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param errorCode (Output) pointer to allocated integer to receive error code
     * @param id        (Input)  numeric ID of the desired USB descriptor string
     * @param buffer    (Output) pointer to an allocated character array to hold
     *                           the returned descriptor string
@@ -827,8 +836,8 @@ extern "C" {
 
     /**
     * @brief Set the continuous strobe period in microseconds
-    * @param index (Input) Which spectrometer to set
-    * @param errorCode (Output) pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param errorCode (Output) pointer to allocated integer to receive error code
     * @param strobe_id (Input) index of the strobe generator (currently always zero)
     * @param period_usec (Input) total period of the strobe, in microseconds
     * @return no return
@@ -842,6 +851,11 @@ extern "C" {
     *        controls the amount of time between a particular event
     *        (usually a request for spectrum or an external trigger pulse)
     *        and the start of acquisition.
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param errorCode (Output) pointer to allocated integer to receive error code
+	* @param delay_usec (Input) total delay before acquisition, in microseconds
+	* @return no return
+	*
     */
     DLL_DECL void seabreeze_set_acquisition_delay_microsec(int index, int *errorCode, unsigned long delay_usec);
 
@@ -849,62 +863,62 @@ extern "C" {
     * @brief Clear the spectrum buffer (if equipped)
     * @param index (Input) Which spectrometer should have its buffer cleared
     * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return no return
     */
     DLL_DECL void seabreeze_clear_buffer(int index, int *error_code);
 
     /**
     * @brief remove the oldest spectrum from the buffer (if equipped)
-    * @param index (Input) Which spectrometer should have its buffer cleared
-    + @param numberOfSpectra (Input) how many of the oldest spectra to be removed
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	+ @param numberOfSpectra (Input) how many of the oldest spectra to be removed
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
-    DLL_DECL void seabreeze_remove_oldest_spectra_from_buffer(int index, int *error_code, int numberOfSpectra);
-
+    DLL_DECL void seabreeze_remove_oldest_spectra_from_buffer(int index, int *error_code, unsigned int numberOfSpectra);
 
     /**
     * @brief Get the number of spectra presently in the buffer (if equipped)
-    * @param index (Input) Which spectrometer should have its buffer queried
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Number of spectra in the buffer
     */
     DLL_DECL unsigned long seabreeze_get_buffer_element_count(int index, int *error_code);
 
     /**
     * @brief Get the currently configured size of the data buffer (if equipped)
-    * @param index (Input) Which spectrometer should have its buffer queried
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return The present limit on the number of spectra that will be retained.
     */
     DLL_DECL unsigned long seabreeze_get_buffer_capacity(int index, int *error_code);
 
     /**
     * @brief Get buffer enable value (if equipped)
-    * @param index (Input) Which spectrometer should have its buffering enable bit read
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return The value of the buffering enable bit
     */
     DLL_DECL unsigned char seabreeze_get_buffering_enable(int index, int *error_code);
     
     /**
     * @brief Get the maximum possible configurable size for the data buffer (if equipped)
-    * @param index (Input) Which spectrometer should have its buffer queried
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Maximum allowed value for the buffer size
     */
     DLL_DECL unsigned long seabreeze_get_buffer_capacity_maximum(int index, int *error_code);
 
     /**
     * @brief Get the minimum possible configurable size for the data buffer (if equipped)
-    * @param index (Input) Which spectrometer should have its buffer queried
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return Minimum allowed value for the buffer size
     */
     DLL_DECL unsigned long seabreeze_get_buffer_capacity_minimum(int index, int *error_code);
 
     /**
     * @brief Set the number of spectra that the buffer should keep
-    * @param index (Input) Which spectrometer should have its buffer modified
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @param capacity (Input) Limit on number of spectra to store.
     *        Note that this must be within the range defined by the capacity minimum
     *        and maximum values.
@@ -913,8 +927,8 @@ extern "C" {
 
     /**
     * @brief Set the buffering enable bit
-    * @param index (Input) Which spectrometer should have its buffering enable bit set
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @param isEnabled (Input) The state of the buffering enable bit
     */
     DLL_DECL void seabreeze_set_buffering_enable(int index, int *error_code, unsigned char isEnabled);
@@ -922,36 +936,89 @@ extern "C" {
 
     /**
     * @brief Get GbE enable state (if equipped)
-    * @param index (Input) Ethernet interface to query
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @return The GbE enable state
     */
     DLL_DECL unsigned char seabreeze_get_gbe_enable(int index, int *error_code, unsigned char interfaceIndex);
     
         /**
     * @brief Set GbE enable state (if equipped)
-    * @param index (Input) Ethernet interface to set
-    * @param GbE_Enable (Input) The GbE enable state from the indicated interface
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param GbE_Enable (Input) The GbE enable state from the indicated interface
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
     DLL_DECL void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char GbE_Enable);
     
         /**
     * @brief Get the MAC address (if equipped)
-    * @param index (Input) Ethernet interface to query
-    * @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @param error_code (Output) Pointer to allocated six byte unsigned char array to receive the MAC Address
     */
     DLL_DECL void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
     
         /**
     * @brief Set the MAC address (if equipped)
-    * @param index (Input) Ethernet interface to set
-    * @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
     DLL_DECL void seabreeze_set_mac_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6]);
-    
+
+	/**
+	* @brief Get the number of network interfaces (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return The number of network interfaces available
+	*/
+	DLL_DECL unsigned char seabreeze_get_number_of_network_interfaces(int index, int *error_code);
+
+	/**
+	* @brief Get the network interface type, 0: loopback, 1: wired ethernet, 2: wifi, 3: cdc ethernet (usb) 
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param interfaceIndex (Input) The index number for the network interface of interest
+	* @return The network interface type
+	*/
+	DLL_DECL unsigned char seabreeze_get_network_interface_connection_type(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Get the network interface type (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param interfaceIndex (Input) The index number for the network interface of interest
+	* @return Network interface type, 0: loopback, 1: wired ethernet, 2: wifi, 3: cdc ethernet (usb) 
+	*/
+	DLL_DECL unsigned char seabreeze_get_netwwork_interface_enable_state(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Set the network interface enable state (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param interfaceIndex (Input) The index number for the network interface of interest
+	* @return no return
+	*/
+	DLL_DECL void seabreeze_set_network_interface_enable_state(int index, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
+
+	/**
+	* @brief Run a self test on the indicated network interface (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param interfaceIndex (Input) The index number for the network interface of interest
+	* @return SElf test result, pass = 1, fail = 0
+	*/
+	DLL_DECL unsigned char seabreeze_run_network_interface_self_test(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Save all of the network interface settings
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param interfaceIndex (Input) The index number for the network interface of interest
+	* @return no return
+	*/
+	DLL_DECL void seabreeze_save_network_interface_settings(int index, int *error_code, unsigned char interfaceIndex);
+
     /**
     * @brief Programmatically enable debug outputs to stderr
     * @param flag (Input) zero to disable (default), non-zero to enable

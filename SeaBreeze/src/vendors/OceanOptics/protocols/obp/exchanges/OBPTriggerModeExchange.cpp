@@ -39,7 +39,7 @@ OBPTriggerModeExchange::OBPTriggerModeExchange() {
 
     this->hints->push_back(new OBPControlHint());
 
-    this->payload.resize(1);
+    this->payload.resize(sizeof(unsigned char));
 
     /* In case the caller does not specify a trigger mode, pick something
      * relatively innocuous.  The normal mode is what the spectrometer

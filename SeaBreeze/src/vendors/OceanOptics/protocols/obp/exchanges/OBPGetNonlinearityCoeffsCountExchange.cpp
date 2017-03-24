@@ -39,6 +39,7 @@ OBPGetNonlinearityCoeffsCountExchange::OBPGetNonlinearityCoeffsCountExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_NL_COEFF_COUNT;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
 }
 
 OBPGetNonlinearityCoeffsCountExchange::~OBPGetNonlinearityCoeffsCountExchange() {

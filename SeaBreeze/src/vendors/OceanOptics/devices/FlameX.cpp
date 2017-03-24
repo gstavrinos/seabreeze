@@ -35,23 +35,28 @@
 #include "vendors/OceanOptics/buses/usb/FlameXUSB.h"
 #include "vendors/OceanOptics/devices/FlameX.h"
 
-#include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
+#include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
+#include "vendors/OceanOptics/features/data_buffer/FlameXDataBufferFeature.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeature.h"
+
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeature.h"
 #include "vendors/OceanOptics/features/introspection/IntrospectionFeature.h"
+#include "vendors/OceanOptics/features/light_source/StrobeLampFeature.h"
 #include "vendors/OceanOptics/features/nonlinearity/NonlinearityCoeffsFeature.h"
 #include "vendors/OceanOptics/features/stray_light/StrayLightCoeffsFeature.h"
-#include "vendors/OceanOptics/features/spectrometer/FlameXSpectrometerFeature.h"
 #include "vendors/OceanOptics/features/fast_buffer/FlameXFastBufferFeature.h"
-#include "vendors/OceanOptics/features/data_buffer/FlameXDataBufferFeature.h"
 #include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeature.h"
+#include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeature.h"
+
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNonlinearityCoeffsProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPStrayLightCoeffsProtocol.h"
-#include "vendors/OceanOptics/protocols/obp/impls/OBPStrobeLampProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPFastBufferProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPEthernetConfigurationProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPNetworkConfigurationProtocol.h"
+
 
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
@@ -114,6 +119,11 @@ FlameX::FlameX() {
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());
     this->features.push_back(new StrobeLampFeature(lampHelpers));
+
+	/* Add network configuration feature */
+	vector<ProtocolHelper *> networkConfigurationHelpers;
+	networkConfigurationHelpers.push_back(new OBPNetworkConfigurationProtocol());
+	this->features.push_back(new NetworkConfigurationFeature(networkConfigurationHelpers));
 
 	/* Add ethernet configuration feature */
 	vector<ProtocolHelper *> ethernetConfigurationHelpers;

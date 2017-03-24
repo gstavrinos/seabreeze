@@ -38,7 +38,8 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetNonlinearityCoeffExchange::OBPGetNonlinearityCoeffExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_NL_COEFF;
-    this->payload.resize(1);
+	this->payload.resize(sizeof(unsigned char));
+	this->payload[0] = 0;  /* default state of device on startup */
 }
 
 OBPGetNonlinearityCoeffExchange::~OBPGetNonlinearityCoeffExchange() {

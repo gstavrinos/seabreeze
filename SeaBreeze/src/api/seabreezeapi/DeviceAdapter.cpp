@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    DeviceAdapter.cpp
  * @date    January 2017
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
  * access to SeaBreeze DeviceInterface instances.
@@ -85,6 +85,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
     __delete_feature_adapters<IrradCalFeatureAdapter>(irradCalFeatures);
 	__delete_feature_adapters<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures);
+	__delete_feature_adapters<NetworkConfigurationFeatureAdapter>(networkConfigurationFeatures);
     __delete_feature_adapters<EEPROMFeatureAdapter>(eepromFeatures);
     __delete_feature_adapters<StrobeLampFeatureAdapter>(strobeLampFeatures);
     __delete_feature_adapters<ContinuousStrobeFeatureAdapter>(continuousStrobeFeatures);
@@ -105,8 +106,8 @@ DeviceAdapter::~DeviceAdapter() {
     delete this->device;
 }
 
-template <class T, class U> void __create_feature_adapters(Device *device,
-        vector<U *> &adapters, Bus *bus, const FeatureFamily &family) {
+template <class T, class U> void __create_feature_adapters(Device *device, vector<U *> &adapters, Bus *bus, const FeatureFamily &family) 
+{
 
     unsigned short i;
     vector<Protocol *> protocols;
@@ -132,8 +133,7 @@ template <class T, class U> void __create_feature_adapters(Device *device,
             /* No supported protocol for this feature on the opened bus. */
             continue;
         }
-        adapters.push_back(
-            new U(((*features)[i]), family, (protocols[0]), bus, i));
+        adapters.push_back(new U(((*features)[i]), family, (protocols[0]), bus, i));
     }
     delete features;
 }
@@ -187,7 +187,13 @@ int DeviceAdapter::open(int *errorCode) {
 	/* Create ethernet configuration feature list */
 	__create_feature_adapters<EthernetConfigurationFeatureInterface,
 		EthernetConfigurationFeatureAdapter>(this->device,
-			ethernetConfigurationFeatures, bus, featureFamilies.IRRAD_CAL);
+			ethernetConfigurationFeatures, bus, featureFamilies.ETHERNET_CONFIGURATION);
+
+
+	/* Create network configuration feature list */
+	__create_feature_adapters<NetworkConfigurationFeatureInterface,
+		NetworkConfigurationFeatureAdapter>(this->device,
+			networkConfigurationFeatures, bus, featureFamilies.NETWORK_CONFIGURATION);
 
     /* Create EEPROM feature list */
     __create_feature_adapters<EEPROMSlotFeatureInterface,
@@ -819,6 +825,108 @@ void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, 
 
 	feature->set_GbE_Enable_Status(errorCode, interfaceIndex, enableState);
 }
+
+
+
+
+
+
+
+/* Network Configuration feature wrappers */
+int DeviceAdapter::getNumberOfNetworkConfigurationFeatures()
+{
+	return (int) this->networkConfigurationFeatures.size();
+}
+
+int DeviceAdapter::getNetworkConfigurationFeatures(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<NetworkConfigurationFeatureAdapter>(networkConfigurationFeatures, buffer, maxFeatures);
+}
+
+NetworkConfigurationFeatureAdapter *DeviceAdapter::getNetworkConfigurationFeatureByID(long featureID)
+{
+	return __getFeatureByID<NetworkConfigurationFeatureAdapter>(networkConfigurationFeatures, featureID);
+}
+
+unsigned char DeviceAdapter::getNumberOfNetworkInterfaces(long featureID, int *errorCode)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getNumberOfNetworkInterfaces(errorCode);
+}
+
+unsigned char DeviceAdapter::getNetworkInterfaceConnectionType(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getNetworkInterfaceConnectionType(errorCode, interfaceIndex);
+}
+
+unsigned char DeviceAdapter::getNetworkInterfaceEnableState(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getNetworkInterfaceEnableState(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::setNetworkInterfaceEnableState(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setNetworkInterfaceEnableState(errorCode, interfaceIndex, enableState);
+}
+
+unsigned char DeviceAdapter::runNetworkInterfaceSelfTest(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->runNetworkInterfaceSelfTest(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::saveNetworkInterfaceConnectionSettings(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	NetworkConfigurationFeatureAdapter *feature = getNetworkConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->saveNetworkInterfaceConnectionSettings(errorCode, interfaceIndex);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* EEPROM feature wrappers */
 int DeviceAdapter::getNumberOfEEPROMFeatures() {

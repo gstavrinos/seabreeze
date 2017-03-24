@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetOpticalBenchSlitWidthMicronsExchange::OBPGetOpticalBenchSlitWidthMicronsExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BENCH_SLIT_WIDTH_MICRONS;
-    this->payload.resize(1);
+    this->payload.resize(0);
 }
 
 OBPGetOpticalBenchSlitWidthMicronsExchange::~OBPGetOpticalBenchSlitWidthMicronsExchange() {

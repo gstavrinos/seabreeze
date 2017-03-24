@@ -140,6 +140,15 @@ seabreeze::api::EthernetConfigurationFeatureFamily::~EthernetConfigurationFeatur
 
 }
 
+seabreeze::api::NetworkConfigurationFeatureFamily::NetworkConfigurationFeatureFamily()
+        : FeatureFamily("NetworkConfiguration", FEATURE_FAMILY_ID_NETWORK_CONFIGURATION) {
+
+}
+
+seabreeze::api::NetworkConfigurationFeatureFamily::~NetworkConfigurationFeatureFamily() {
+
+}
+
 seabreeze::api::EEPROMFeatureFamily::EEPROMFeatureFamily()
         : FeatureFamily("EEPROM", FEATURE_FAMILY_ID_EEPROM) {
 
@@ -302,6 +311,7 @@ seabreeze::api::FastBufferFeatureFamily::~FastBufferFeatureFamily() {
 
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
+    
     /* This creates new instances of these so the class-wide fields do not risk
      * having their const flags ignored.
      */
@@ -310,6 +320,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new ThermoElectricFeatureFamily());
     retval.push_back(new IrradCalFeatureFamily());
     retval.push_back(new EthernetConfigurationFeatureFamily());
+	retval.push_back(new NetworkConfigurationFeatureFamily());
     retval.push_back(new EEPROMFeatureFamily());
     retval.push_back(new StrobeLampFeatureFamily());
     retval.push_back(new ContinuousStrobeFeatureFamily());

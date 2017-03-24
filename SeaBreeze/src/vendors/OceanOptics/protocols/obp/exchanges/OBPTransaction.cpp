@@ -129,8 +129,7 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
 		{
             response = NULL;
         }
-        if(NULL == response || true == response->isNackFlagSet()
-                || response->getMessageType() != messageType) 
+        if(NULL == response || true == response->isNackFlagSet() || response->getMessageType() != messageType) 
 		{
             if(NULL != bytes) 
 			{

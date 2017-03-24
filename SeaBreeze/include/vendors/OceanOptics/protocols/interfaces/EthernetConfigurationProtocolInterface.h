@@ -3,7 +3,7 @@
  * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
- * This is a generic interface into ethernet calibration
+ * This is a generic interface into ethernet configuration
  * functionality at the protocol level, agnostic to
  * any particular protocol.  Each Protocol offering this
  * functionality should implement this interface.
@@ -73,4 +73,4 @@ namespace seabreeze {
 
 }
 
-#endif /* IRRADCALPROTOCOLINTERFACE_H */
+#endif /* ETHERNETCONFIGURATIONPROTOCOLINTERFACE_H */

@@ -40,6 +40,7 @@ using namespace std;
 OBPGetDataBufferMaximumCapacityExchange::OBPGetDataBufferMaximumCapacityExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BUFFER_SIZE_MAX;
+	this->payload.resize(0);
 }
 
 OBPGetDataBufferMaximumCapacityExchange::~OBPGetDataBufferMaximumCapacityExchange() {

@@ -184,6 +184,17 @@ public:
     virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
     virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
     
+	/* Network Configuration features */
+	virtual int getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getNetworkConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	virtual unsigned char getNumberOfNetworkInterfaces(long deviceID, long featureID, int *errorCode) = 0;
+	virtual unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+	virtual unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+	virtual unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+	virtual void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
+	virtual void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+
+
     /* EEPROM capabilities */
     virtual int getNumberOfEEPROMFeatures(long deviceID, int *errorCode) = 0;
     virtual int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -677,8 +688,7 @@ extern "C" {
      * @return the number of serial number feature IDs that were copied.
      */
     DLL_DECL int
-    sbapi_get_serial_number_features(long deviceID, int *error_code, long *features,
-            int max_features);
+    sbapi_get_serial_number_features(long deviceID, int *error_code, long *features, int max_features);
 
     /**
      * This reads the device's serial number and fills the
@@ -1738,9 +1748,8 @@ extern "C" {
 	* internal memory if that feature is supported.
 	*
 	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
-	* @param featureID (Input) The ID of a particular instance of an irradiance calibration
-	*        feature.  Valid IDs can be found with the
-	*        sbapi_get_irrad_cal_features() function.
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
 	* @param error_code (Output) A pointer to an integer that can be used for storing
 	*      error codes.
 	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
@@ -1768,9 +1777,8 @@ extern "C" {
 	* This function reads a GbE enable status from the device's internal memory if that feature is supported.
 	*
 	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
-	* @param featureID (Input) The ID of a particular instance of an irradiance calibration
-	*        feature.  Valid IDs can be found with the
-	*        sbapi_get_irrad_cal_features() function.
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
 	* @param error_code (Output) A pointer to an integer that can be used for storing
 	*      error codes.
 	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
@@ -1791,6 +1799,116 @@ extern "C" {
 	* @param GbE enable status (Input) the enable state for GbE
 	*/
 	DLL_DECL void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
+
+
+	/**
+	* This function returns the total number of network configuration
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of ethernet configuration features that will be
+	*      returned by a call to sbapi_get_network_configuration_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_network_configuration_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each network configuration
+	* instance for this device.  The IDs are only valid when used with the
+	* deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param features (Output) a preallocated array to hold returned feature handles
+	* @param max_features (Input) length of the preallocated buffer
+	*
+	* @return the number of network configuration feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_network_configuration_features(long deviceID, int *error_code, long *features, int max_features);
+
+	/**
+	* This function reads a network interface enable status from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration 
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*
+	* @return unsigned char: the enable status for indexed network interface, 0 for disabled, 1 for enabled
+	*/
+	DLL_DECL unsigned char sbapi_network_configuration_get_interface_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function writes a network interface enable status to the spectrometer's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	* @param Enable status (Input) the enable state for indexed interface
+	*/
+	DLL_DECL void sbapi_network_configuration_set_interface_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
+
+	/**
+	* This function retrieves the number of network interfaces from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*
+	* @return unsigned char: the enable status for indexed network interface, 0 for disabled, 1 for enabled
+	*/
+	DLL_DECL unsigned char sbapi_network_configuration_get_interface_count(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function retrieves the type of network interface from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*
+	* @return unsigned char: the network type. 0: loopback, 1: wired ethernet, 2: wifi, 3:cdc ethernet (usb)
+	*/
+	DLL_DECL unsigned char sbapi_network_configuration_get_interface_connection_type(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function initiates a network interface self test for the interface of interest.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*
+	* @return unsigned char: the self test result for indexed network interface, 0:fail, 1:pass
+	*/
+	DLL_DECL unsigned char sbapi_network_configuration_run_interface_self_test(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function saves the network interface configuration to the spectrometer's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an network configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_network_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*/
+	DLL_DECL void sbapi_network_configuration_save_interface_settings(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
 
 
     /**

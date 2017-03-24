@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetBoxcarWidthExchange::OBPGetBoxcarWidthExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BOXCAR_WIDTH;
-    this->payload.resize(sizeof(unsigned char));
+	this->payload.resize(0); // no data sent
 }
 
 OBPGetBoxcarWidthExchange::~OBPGetBoxcarWidthExchange() {

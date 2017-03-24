@@ -41,6 +41,8 @@ OBPGetSaturationExchange::OBPGetSaturationExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_SATURATION_LEVEL;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
+
 }
 
 OBPGetSaturationExchange::~OBPGetSaturationExchange() {

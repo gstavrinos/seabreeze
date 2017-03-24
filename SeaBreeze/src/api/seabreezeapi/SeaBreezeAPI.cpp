@@ -849,6 +849,66 @@ void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long feat
 
 
 /**************************************************************************************/
+//  C language wrapper for Network configuration features
+/**************************************************************************************/
+
+int sbapi_get_number_of_network_configuration_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfNetworkConfigurationFeatures(deviceID, error_code);
+}
+
+int sbapi_get_network_configuration_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNetworkConfigurationFeatures(deviceID, error_code, features, max_features);
+}
+
+unsigned char sbapi_network_configuration_get_interface_count(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfNetworkInterfaces(deviceID, featureID, error_code);
+}
+
+unsigned char sbapi_network_configuration_get_interface_connection_type(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNetworkInterfaceConnectionType(deviceID, featureID, error_code, interfaceIndex);
+}
+
+unsigned char sbapi_network_configuration_run_interface_self_test(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->runNetworkInterfaceSelfTest(deviceID, featureID, error_code, interfaceIndex);
+}
+
+unsigned char sbapi_network_configuration_get_interface_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNetworkInterfaceEnableState(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_network_configuration_set_interface_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableStatus)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setNetworkInterfaceEnableState(deviceID, featureID, error_code, interfaceIndex, enableStatus);
+}
+
+void sbapi_network_configuration_save_interface_settings(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->saveNetworkInterfaceConnectionSettings(deviceID, featureID, error_code, interfaceIndex);
+}
+
+/**************************************************************************************/
 //  C language wrapper for thermo-electric features
 /**************************************************************************************/
 

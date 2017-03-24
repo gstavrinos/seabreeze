@@ -39,6 +39,8 @@ OBPGetOpticalBenchGratingExchange::OBPGetOpticalBenchGratingExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_BENCH_GRATING;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
+
 }
 
 OBPGetOpticalBenchGratingExchange::~OBPGetOpticalBenchGratingExchange() {
