@@ -43,7 +43,7 @@
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
-#include <vector>;
+#include <vector>
 
 /* Prototypes */
 void test_serial_number_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -62,7 +62,8 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
-void test_fast_buffer_feature(long devideID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
@@ -94,6 +95,7 @@ static testfunc_t __test_functions[] = {
 	test_fast_buffer_feature,
 	test_acquisition_delay_feature,
 	test_pixel_binning_feature,
+	test_networking_features,
 	test_miscellaneous_commands
 };
 
@@ -1686,7 +1688,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 
 				if (error == 0)
 				{
-					printf("\t\t\Send get spectrum to start sampling\n");
+					printf("\t\t\tSend get spectrum to start sampling\n");
 					// send a get fast buffered spectrum request only for a trigger, buffer should be clear
 					// when that is true, no spectra are returned, but a new sample is triggered
 					int bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometerID, &error, dataBuffer->data(), dataMaxLength, 0);
@@ -1999,6 +2001,136 @@ void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int
 	printf("\tFinished testing pixel binning capabilities\n");
 }
 
+void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+	int error = 0;
+	int number_of_network_configurations;
+	long *network_configuration_ids = 0;
+	int i;
+	unsigned char numberOfNetworkInterfaces;
+
+	printf("\n\tTesting networking features:\n");
+
+	printf("\t\tExercising network configuration commands:\n");
+	number_of_network_configurations = sbapi_get_number_of_network_configuration_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_network_configurations, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_network_configurations) {
+		printf("\tNo network capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	network_configuration_ids = (long *)calloc(number_of_network_configurations, sizeof(long));
+	printf("\t\tGetting network configuration feature IDs...\n");
+	number_of_network_configurations = sbapi_get_network_configuration_features(deviceID, &error, network_configuration_ids, number_of_network_configurations);
+	printf("\t\t\tResult is %d [%s]\n", number_of_network_configurations,
+		sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_network_configurations; i++) {
+		printf("\t\t%d: Testing device 0x%02lX, network feature id 0x%02lX\n", i, deviceID, network_configuration_ids[i]);
+
+		printf("\t\t\tAttempting to get the number of network interfaces...\n");
+		numberOfNetworkInterfaces = sbapi_network_configuration_get_interface_count(deviceID, network_configuration_ids[i], &error);
+		printf("\t\t\tResult is %d [%s]\n", numberOfNetworkInterfaces, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		for (unsigned char networkInterfaceIndex = 0; networkInterfaceIndex < numberOfNetworkInterfaces; networkInterfaceIndex++)
+		{
+			printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+			// get interface type
+			printf("\t\t\tAttempting to retrieve the interface type...\n");
+			unsigned char interfaceType = sbapi_network_configuration_get_interface_connection_type(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+			std::string typeName = "";
+			
+			switch (interfaceType)
+			{
+			case 0:
+				typeName = "Loopback";
+				break;
+			case 1:
+				typeName = "Wired Ethernet";
+				break;
+			case 2:
+				typeName = "WiFi\n";
+				break;
+			case 3:
+				typeName = "CDC Ethernet (USB)";
+				break;
+			default:
+				typeName = "Undefined";
+				break;
+			}			
+			printf("\t\t\tResult is %d [%s]: %s\n", interfaceType, sbapi_get_error_string(error), typeName.data());
+			tallyErrors(error, testFailureCount);
+			
+			// switch interface enable state
+			printf("\t\t\tAttempting to retrieve the interface enable state...\n");
+			unsigned char interfaceEnableState1 = sbapi_network_configuration_get_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+			printf("\t\t\tResult is %d [%s]\n", interfaceEnableState1, sbapi_get_error_string(error));
+			tallyErrors(error, testFailureCount);
+
+			unsigned char interfaceEnableState2 =  interfaceEnableState1;
+			printf("\t\t\tAttempting to switch the interface enable state...\n");
+			if (interfaceEnableState2 == 0)
+			{
+				interfaceEnableState2 = 1;
+				printf("\t\t\t\tInterface was disabled.\n");
+			}
+			else
+			{
+				interfaceEnableState2 = 0;
+				printf("\t\t\t\tInterface was enabled.\n");
+			}
+
+			sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, interfaceEnableState2);
+			tallyErrors(error, testFailureCount);
+			if (error == 0)
+			{
+				printf("\t\t\tThe interface enable state was successfully modified.\n");
+
+			}
+			else
+			{
+				printf("\t\t\tThe interface enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+			}
+			
+
+			// set interface enable state to true
+			printf("\t\t\tAttempting to set the interface enable state to true\n");
+			sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, 1);
+			printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+			tallyErrors(error, testFailureCount);
+
+			// run self test
+			printf("\t\t\tAttempting to run a network interface selftest.\n");
+			unsigned char myResult = sbapi_network_configuration_run_interface_self_test(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+			std::string selftestResult = "Failed";
+			if (myResult == 1)
+				selftestResult = "Passed";
+			printf("\t\t\tSelf test result: %s [%s]\n", selftestResult.data(), sbapi_get_error_string(error));
+			tallyErrors(error, testFailureCount);
+
+			// save interface settings
+			printf("\t\t\tAttempting to save the interface settings\n");
+			sbapi_network_configuration_save_interface_settings(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+			printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+			tallyErrors(error, testFailureCount);
+
+
+			// test ethernet
+
+
+		}
+		printf("\t\t%d: Finished testing device 0x%02lX, network configuration feature 0x%02lX\n", i, deviceID, network_configuration_ids[i]);
+	}
+
+	free(network_configuration_ids);
+
+	printf("\tFinished testing network feature capabilities.\n");
+}
 
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
 {

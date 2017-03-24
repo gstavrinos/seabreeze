@@ -39,6 +39,7 @@ OBPGetIrradCollectionAreaExchange::OBPGetIrradCollectionAreaExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_IRRAD_CAL_COLL_AREA;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
 }
 
 OBPGetIrradCollectionAreaExchange::~OBPGetIrradCollectionAreaExchange() {

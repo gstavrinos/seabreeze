@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetHardwareRevisionExchange::OBPGetHardwareRevisionExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_HARDWARE_REVISION;
-    this->payload.resize(1);  // specification says it returns 1 byte 
+    this->payload.resize(0); 
 }
 
 OBPGetHardwareRevisionExchange::~OBPGetHardwareRevisionExchange() {

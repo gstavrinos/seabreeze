@@ -41,7 +41,7 @@ OBPContinuousStrobeEnableExchange::OBPContinuousStrobeEnableExchange() {
 
     this->messageType = OBPMessageTypes::OBP_SET_CONT_STROBE_ENABLE;
 
-    this->payload.resize(1);
+    this->payload.resize(sizeof(unsigned char));
     this->payload[0] = 0;  /* default state of device on startup */
 }
 

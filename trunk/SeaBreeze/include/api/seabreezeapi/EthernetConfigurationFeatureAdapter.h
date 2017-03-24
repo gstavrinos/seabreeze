@@ -4,7 +4,7 @@
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
- * access to SeaBreeze IrradCalFeatureInterface instances.
+ * access to SeaBreeze EthernetConfigurationFeatureInterface instances.
  *
  * LICENSE:
  *
@@ -45,9 +45,7 @@ namespace seabreeze
                 : public FeatureAdapterTemplate<EthernetConfigurationFeatureInterface> 
 		{
         	public:
-            	EthernetConfigurationFeatureAdapter(
-            		EthernetConfigurationFeatureInterface *intf, const FeatureFamily &f,
-                    Protocol *p, Bus *b, unsigned short instanceIndex);
+            	EthernetConfigurationFeatureAdapter( EthernetConfigurationFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);
             	virtual ~EthernetConfigurationFeatureAdapter();
 
             	void get_MAC_Address(int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);

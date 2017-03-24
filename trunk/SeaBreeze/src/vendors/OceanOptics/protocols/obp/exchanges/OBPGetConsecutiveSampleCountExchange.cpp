@@ -40,7 +40,7 @@ using namespace std;
 OBPGetConsecutiveSampleCountExchange::OBPGetConsecutiveSampleCountExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BACK_TO_BACK_SAMPLE_COUNT;
-	this->payload.resize(sizeof(unsigned int));  
+	this->payload.resize(0);  
 }
 
 OBPGetConsecutiveSampleCountExchange::~OBPGetConsecutiveSampleCountExchange() {

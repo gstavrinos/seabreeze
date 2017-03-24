@@ -43,7 +43,8 @@ OBPIntegrationTimeExchange::OBPIntegrationTimeExchange(
     this->messageType = OBPMessageTypes::OBP_SET_ITIME_USEC;
 
     this->hints->push_back(new OBPControlHint());
-    this->payload.resize(4);
+	this->payload.resize(sizeof(unsigned int));
+
 
     /* In case the caller does not specify an integration time, pick something
      * relatively innocuous.  100ms is fast enough that the overhead to change

@@ -40,6 +40,7 @@ using namespace std;
 OBPGetDataBufferElementCountExchange::OBPGetDataBufferElementCountExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BUFFERED_SPEC_COUNT;
+	this->payload.resize(0);
 }
 
 OBPGetDataBufferElementCountExchange::~OBPGetDataBufferElementCountExchange() {

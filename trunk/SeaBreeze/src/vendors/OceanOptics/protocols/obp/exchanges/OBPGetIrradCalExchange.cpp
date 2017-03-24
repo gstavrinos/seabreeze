@@ -39,6 +39,7 @@ OBPGetIrradCalExchange::OBPGetIrradCalExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_IRRAD_CAL_ALL;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
 }
 
 OBPGetIrradCalExchange::~OBPGetIrradCalExchange() {

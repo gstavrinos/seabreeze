@@ -41,6 +41,9 @@ OBPDataBufferClearExchange::OBPDataBufferClearExchange() {
     this->hints->push_back(new OBPControlHint());
 
     this->messageType = OBPMessageTypes::OBP_CLEAR_BUFFER_ALL;
+
+	// no data sent
+	this->payload.resize(0);
 }
 
 OBPDataBufferClearExchange::~OBPDataBufferClearExchange() {

@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetOpticalBenchFiberDiameterMicronsExchange::OBPGetOpticalBenchFiberDiameterMicronsExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BENCH_FIBER_DIAM_MICRONS;
-    this->payload.resize(1);
+    this->payload.resize(0);
 }
 
 OBPGetOpticalBenchFiberDiameterMicronsExchange::~OBPGetOpticalBenchFiberDiameterMicronsExchange() {

@@ -42,7 +42,7 @@ OBPSetDataBufferCapacityExchange::OBPSetDataBufferCapacityExchange() {
 
     this->messageType = OBPMessageTypes::OBP_SET_BUFFER_SIZE_ACTIVE;
 
-    this->payload.resize(4);
+	this->payload.resize(sizeof(unsigned int));
 }
 
 OBPSetDataBufferCapacityExchange::~OBPSetDataBufferCapacityExchange() {

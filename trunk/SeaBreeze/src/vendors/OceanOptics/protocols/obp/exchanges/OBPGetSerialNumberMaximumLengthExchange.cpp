@@ -39,6 +39,8 @@ OBPGetSerialNumberMaximumLengthExchange::OBPGetSerialNumberMaximumLengthExchange
     this->messageType = OBPMessageTypes::OBP_GET_SERIAL_NUMBER_LENGTH;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
+
 }
 
 OBPGetSerialNumberMaximumLengthExchange::~OBPGetSerialNumberMaximumLengthExchange() {

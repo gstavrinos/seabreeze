@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetMaxPixelBinningExchange::OBPGetMaxPixelBinningExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_MAX_BINNING_FACTOR;
-    this->payload.resize(sizeof(unsigned char));
+    this->payload.resize(0);
 }
 
 OBPGetMaxPixelBinningExchange::~OBPGetMaxPixelBinningExchange() {

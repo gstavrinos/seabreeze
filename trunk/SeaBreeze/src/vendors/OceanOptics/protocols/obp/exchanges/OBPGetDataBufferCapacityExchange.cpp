@@ -40,6 +40,7 @@ using namespace std;
 OBPGetDataBufferCapacityExchange::OBPGetDataBufferCapacityExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BUFFER_SIZE_ACTIVE;
+	this->payload.resize(0);
 }
 
 OBPGetDataBufferCapacityExchange::~OBPGetDataBufferCapacityExchange() {

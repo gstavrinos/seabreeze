@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    OBPGetEthernetConfigurationMACAddressExchange.cpp
+ * @file    OBPGetEthernetConfigurationGbEEnableExchange.cpp
  * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
@@ -39,6 +39,8 @@ OBPGetEthernetConfigurationGbEEnableExchange::OBPGetEthernetConfigurationGbEEnab
     this->messageType = OBPMessageTypes::OBP_GET_MAC_ADDRESS;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(sizeof(unsigned char));
+	this->payload[0] = 0;  /* default state of device on startup */
 }
 
 void OBPGetEthernetConfigurationGbEEnableExchange::setInterfaceIndex(unsigned char interfaceIndex)

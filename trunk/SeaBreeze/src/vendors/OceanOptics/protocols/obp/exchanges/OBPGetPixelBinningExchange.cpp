@@ -38,7 +38,8 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetPixelBinningExchange::OBPGetPixelBinningExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_PIXEL_BINNING_FACTOR;
-    this->payload.resize(sizeof(unsigned char));
+	this->payload.resize(0);
+
 }
 
 OBPGetPixelBinningExchange::~OBPGetPixelBinningExchange() {

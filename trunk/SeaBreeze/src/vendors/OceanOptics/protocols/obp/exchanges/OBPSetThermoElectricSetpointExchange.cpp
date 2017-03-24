@@ -51,12 +51,6 @@ OBPSetThermoElectricSetpointExchange::~OBPSetThermoElectricSetpointExchange() {
 }
 
 void OBPSetThermoElectricSetpointExchange::setThermoElectricSetpointCelsius(float setpoint) {
-    unsigned int i;
-    unsigned char *cptr;
-
-    cptr = (unsigned char *)&setpoint;
-
-    for(i = 0; i < sizeof(float); i++) {
-        this->payload[i] = cptr[i];
-    }
+    
+	memcpy(&(this->payload[0]), &setpoint, sizeof(float));
 }

@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetScansToAverageExchange::OBPGetScansToAverageExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_SCANS_TO_AVERAGE;
-    this->payload.resize(sizeof(unsigned short int));
+	this->payload.resize(0);
 }
 
 OBPGetScansToAverageExchange::~OBPGetScansToAverageExchange() {

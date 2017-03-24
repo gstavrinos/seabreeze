@@ -38,7 +38,8 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetTemperatureExchange::OBPGetTemperatureExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_TEMPERATURE;
-    this->payload.resize(1); // the index for the temperature to be returned is sent
+	this->payload.resize(sizeof(unsigned char));
+	this->payload[0] = 0;  /* default state of device on startup */
 }
 
 OBPGetTemperatureExchange::~OBPGetTemperatureExchange() {

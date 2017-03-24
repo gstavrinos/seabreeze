@@ -944,6 +944,105 @@ void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceI
 
 
 /**************************************************************************************/
+//  Network Configuration Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfNetworkConfigurationFeatures();
+}
+
+int SeaBreezeAPI_Impl::getNetworkConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNetworkConfigurationFeatures(buffer, maxLength);
+}
+
+unsigned char SeaBreezeAPI_Impl::getNumberOfNetworkInterfaces(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->getNumberOfNetworkInterfaces(featureID, errorCode);
+}
+
+unsigned char SeaBreezeAPI_Impl::getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->getNetworkInterfaceConnectionType(featureID, errorCode, interfaceIndex);
+}
+
+unsigned char SeaBreezeAPI_Impl::runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->runNetworkInterfaceSelfTest(featureID, errorCode, interfaceIndex);
+}
+
+unsigned char SeaBreezeAPI_Impl::getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->getNetworkInterfaceEnableState(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->setNetworkInterfaceEnableState(featureID, errorCode, interfaceIndex, enableState);
+}
+
+void SeaBreezeAPI_Impl::saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->saveNetworkInterfaceConnectionSettings(featureID, errorCode, interfaceIndex);
+}
+
+
+/**************************************************************************************/
 //  EEProm Features for the SeaBreeze API class
 /**************************************************************************************/
 

@@ -56,8 +56,9 @@
 #include "vendors/OceanOptics/features/serial_number/SerialNumberFeatureInterface.h"
 #include "vendors/OceanOptics/features/thermoelectric/ThermoElectricFeatureInterface.h"
 #include "vendors/OceanOptics/features/irradcal/IrradCalFeatureInterface.h"
-#include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
+#include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
+#include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 
 using namespace seabreeze;
@@ -1302,7 +1303,6 @@ void SeaBreezeWrapper::set_MAC_Address(int index, int *errorCode, unsigned char 
     }
 }
 
-
 unsigned char SeaBreezeWrapper::get_GbE_Enable_Status(int index, int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char enableState = 0;
@@ -1361,6 +1361,187 @@ void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned
         }
     }
 }
+
+
+unsigned char SeaBreezeWrapper::getNumberOfNetworkInterfaces(int index, int *errorCode)
+{
+	unsigned char numberOfInterfaces = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			numberOfInterfaces = networkConfigurationIF->getNumberOfNetworkInterfaces(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return numberOfInterfaces;
+}
+
+
+unsigned char SeaBreezeWrapper::getNetworkInterfaceConnectionType(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char connectionType = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			connectionType = networkConfigurationIF->getNetworkInterfaceConnectionType(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return connectionType;
+}
+
+unsigned char SeaBreezeWrapper::getNetworkInterfaceEnableState(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char enableState = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			enableState = networkConfigurationIF->getNetworkInterfaceEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return enableState;
+}
+
+unsigned char SeaBreezeWrapper::runNetworkInterfaceSelfTest(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char result = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			result = networkConfigurationIF->runNetworkInterfaceSelfTest(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return result;
+}
+
+void SeaBreezeWrapper::setNetworkInterfaceEnableState(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			networkConfigurationIF->setNetworkInterfaceEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				enableState);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::saveNetworkInterfaceConnectionSettings(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	NetworkConfigurationFeatureInterface *networkConfigurationIF =
+		__seabreeze_getFeature<NetworkConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != networkConfigurationIF)
+	{
+		try
+		{
+			networkConfigurationIF->saveNetworkInterfaceConnectionSettings(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
 
 double SeaBreezeWrapper::readTECTemperature(int index, int *errorCode) {
 
@@ -2274,6 +2455,42 @@ void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfac
 	return wrapper->set_GbE_Enable_Status(index, error_code, interfaceIndex, GbE_Enable);
 }
 
+unsigned char seabreeze_get_number_of_network_interfaces(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getNumberOfNetworkInterfaces(index, error_code);
+}
+
+unsigned char seabreeze_get_network_interface_connection_type(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getNetworkInterfaceConnectionType(index, error_code, interfaceIndex);
+}
+
+unsigned char seabreeze_get_network_interface_enable_state(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getNetworkInterfaceEnableState(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_network_interface_enable_state(int index, int *error_code, unsigned char interfaceIndex, unsigned char enableState)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setNetworkInterfaceEnableState(index, error_code, interfaceIndex, enableState);
+}
+
+unsigned char seabreeze_run_network_interface_self_test(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->runNetworkInterfaceSelfTest(index, error_code, interfaceIndex);
+}
+
+void seabreeze_save_network_interface_connection_settings(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->saveNetworkInterfaceConnectionSettings(index, error_code, interfaceIndex);
+}
+
 double seabreeze_read_tec_temperature(int index, int *error_code) {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->readTECTemperature(index, error_code);
@@ -2321,6 +2538,12 @@ int seabreeze_get_formatted_spectrum_length(int index, int *error_code)
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->getFormattedSpectrumLength(index, error_code);
+}
+
+int seabreeze_get_fast_buffer_spectrum(int index, int *error_code, unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getFastBufferSpectrum(index, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
 }
 
 int seabreeze_get_wavelengths(int index, int *error_code, double *wavelengths, int length) 
@@ -2445,11 +2668,12 @@ void seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode, 
     return wrapper->setContinuousStrobePeriodMicrosec(index, errorCode, strobe_id, period_usec);
 }
 
-void seabreeze_set_acquisition_delay_microseconds(int index, int *errorCode, unsigned long delay_usec) 
+void seabreeze_set_acquisition_delay_microsec(int index, int *errorCode, unsigned long delay_usec) 
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->setAcquisitionDelayMicrosec(index, errorCode, delay_usec);
 }
+
 
 int seabreeze_read_usb(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) 
 {

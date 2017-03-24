@@ -39,6 +39,7 @@ OBPGetOpticalBenchCoatingExchange::OBPGetOpticalBenchCoatingExchange() {
     this->messageType = OBPMessageTypes::OBP_GET_BENCH_COATING;
 
     this->hints->push_back(new OBPControlHint());
+	this->payload.resize(0);
 }
 
 OBPGetOpticalBenchCoatingExchange::~OBPGetOpticalBenchCoatingExchange() {

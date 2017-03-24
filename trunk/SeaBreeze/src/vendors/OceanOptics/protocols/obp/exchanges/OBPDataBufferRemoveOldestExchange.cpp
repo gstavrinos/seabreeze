@@ -42,6 +42,7 @@ OBPDataBufferRemoveOldestExchange::OBPDataBufferRemoveOldestExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_REMOVE_OLDEST_SPECTRA;
 	this->payload.resize(sizeof(unsigned int));
+	this->payload[0] = 0;  /* default state of device on startup */
 }
 
 OBPDataBufferRemoveOldestExchange::~OBPDataBufferRemoveOldestExchange() {

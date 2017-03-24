@@ -40,7 +40,8 @@ OBPGetTemperatureCountExchange::OBPGetTemperatureCountExchange() {
 
     this->hints->push_back(new OBPControlHint());
 
-	// no data sent
+	this->payload.resize(0);
+
 }
 
 OBPGetTemperatureCountExchange::~OBPGetTemperatureCountExchange() {
