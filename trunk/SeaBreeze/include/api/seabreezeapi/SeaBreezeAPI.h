@@ -184,6 +184,17 @@ public:
     virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
     virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
     
+
+	/* DHCP server features */
+	virtual int getNumberOfDHCPServerFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	virtual void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask) = 0;
+	virtual void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask) = 0;
+	virtual unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+	virtual void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
+
+
+
 	/* Network Configuration features */
 	virtual int getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode) = 0;
 	virtual int getNetworkConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -1800,6 +1811,88 @@ extern "C" {
 	*/
 	DLL_DECL void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
 
+	/**
+	* This function returns the total number of dhcp server 
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of dhcp server features that will be
+	*      returned by a call to sbapi_get_dhcp_server_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_dhcp_server_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each dhcp server
+	* instance for this device.  The IDs are only valid when used with the
+	* deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param features (Output) a preallocated array to hold returned feature handles
+	* @param max_features (Input) length of the preallocated buffer
+	*
+	* @return the number of dhcp server feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_dhcp_server_features(long deviceID, int *error_code, long *features, int max_features);
+
+	/**
+	* This function reads out a dhcp server address from the spectrometer's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an dhcp server feature
+	*        feature.  Valid IDs can be found with the sbapi_get_dhcp_server_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	* @param serverAddress (Output) four byte array into which the server address numbers should be put
+	* @param netMask (Output) single byte into which the network mask should be put
+	*
+	*/
+	DLL_DECL void sbapi_dhcp_server_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&serverAdderss)[4], unsigned char &netMask);
+
+	/**
+	* This function writes a dhcp server address to the device's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an dhcp server 
+	*        feature.  Valid IDs can be found with the sbapi_get_dhcp_server_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	* @param serverAddress (Output) a four byte array for the dhcp server address
+	* @param netMask (Output) a single byte for the netwrok mask
+	*
+	*/
+	DLL_DECL void sbapi_dhcp_server_set_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask);
+
+	/**
+	* This function reads a dhcp server enable state from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an dhcp server
+	*        feature.  Valid IDs can be found with the sbapi_get_dhcp_server_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	*
+	* @return unsigned char: the enable status dhcp server, 0 for disabled, 1 for enabled
+	*/
+	DLL_DECL unsigned char sbapi_dhcp_server_get_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function writes a dhcp server enable state to the spectrometer's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an dhcp server
+	*        feature.  Valid IDs can be found with the sbapi_get_dhcp_server_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param interfaceIndex (Input) identifier for the network interface of interest
+	* @param enableState (Input) the enable state for dhcp server
+	*/
+	DLL_DECL void sbapi_dhcp_server_set_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
 
 	/**
 	* This function returns the total number of network configuration

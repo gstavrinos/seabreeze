@@ -62,7 +62,7 @@
 #define	FEATURE_FAMILY_ID_ETHERNET_CONFIGURATION	25
 #define	FEATURE_FAMILY_ID_WIFI_CONFIGURATION		26
 #define	FEATURE_FAMILY_ID_NETWORK_CONFIGURATION		27
-#define	FEATURE_FAMILY_ID_DHCP_CONFIGURATION		28
+#define	FEATURE_FAMILY_ID_DHCP_SERVER				28
 #define	FEATURE_FAMILY_ID_BLUETOOTH_CONFIGURATION	29
 #define FEATURE_FAMILY_ID_TIME_COMMANDS				30
 #define FEATURE_FAMILY_ID_RS232_BUS_COMMANDS		31
@@ -146,6 +146,15 @@ seabreeze::api::NetworkConfigurationFeatureFamily::NetworkConfigurationFeatureFa
 }
 
 seabreeze::api::NetworkConfigurationFeatureFamily::~NetworkConfigurationFeatureFamily() {
+
+}
+
+seabreeze::api::DHCPServerFeatureFamily::DHCPServerFeatureFamily()
+        : FeatureFamily("DHCP_Server", FEATURE_FAMILY_ID_DHCP_SERVER) {
+
+}
+
+seabreeze::api::DHCPServerFeatureFamily::~DHCPServerFeatureFamily() {
 
 }
 
@@ -321,6 +330,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new IrradCalFeatureFamily());
     retval.push_back(new EthernetConfigurationFeatureFamily());
 	retval.push_back(new NetworkConfigurationFeatureFamily());
+	retval.push_back(new DHCPServerFeatureFamily());
     retval.push_back(new EEPROMFeatureFamily());
     retval.push_back(new StrobeLampFeatureFamily());
     retval.push_back(new ContinuousStrobeFeatureFamily());
