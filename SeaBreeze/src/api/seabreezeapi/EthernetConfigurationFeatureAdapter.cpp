@@ -1,5 +1,5 @@
 /***************************************************//**
- * @file    EthernetConfigurationFeatureAdapter.h
+ * @file    EthernetConfigurationFeatureAdapter.cpp
  * @date    March 2017
  * @author  Ocean Optics, Inc.
  *

@@ -849,6 +849,53 @@ void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long feat
 
 
 /**************************************************************************************/
+//  C language wrapper for dhcp server features
+/**************************************************************************************/
+
+int sbapi_get_number_of_dhcp_server_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfDHCPServerFeatures(deviceID, error_code);
+}
+
+int sbapi_get_dhcp_server_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getDHCPServerFeatures(deviceID, error_code, features, max_features);
+}
+
+void sbapi_dhcp_server_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->dhcpServerGetAddress(deviceID, featureID, error_code, interfaceIndex, serverAddress, netMask);
+}
+
+void sbapi_dhcp_server_set_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->dhcpServerSetAddress(deviceID, featureID, error_code, interfaceIndex, serverAddress, netMask);
+}
+
+unsigned char sbapi_dhcp_server_get_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->dhcpServerGetEnableState(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_dhcp_server_set_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableStatus)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->dhcpServerSetEnableState(deviceID, featureID, error_code, interfaceIndex, enableStatus);
+}
+
+
+/**************************************************************************************/
 //  C language wrapper for Network configuration features
 /**************************************************************************************/
 

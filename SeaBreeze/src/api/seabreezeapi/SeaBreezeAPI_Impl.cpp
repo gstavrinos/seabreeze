@@ -943,6 +943,115 @@ void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceI
 }
 
 
+
+
+
+
+
+
+
+
+/**************************************************************************************/
+//  DHCP Server Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfDHCPServerFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfDHCPServerFeatures();
+}
+
+int SeaBreezeAPI_Impl::getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getDHCPServerFeatures(buffer, maxLength);
+}
+
+void SeaBreezeAPI_Impl::dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->dhcpServerGetAddress(featureID, errorCode, interfaceIndex, serverAddress, netMask);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+}
+
+void SeaBreezeAPI_Impl::dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->dhcpServerSetAddress(featureID, errorCode, interfaceIndex, serverAddress, netMask);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+}
+
+unsigned char SeaBreezeAPI_Impl::dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->dhcpServerGetEnableState(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->dhcpServerSetEnableState(featureID, errorCode, interfaceIndex, enableState);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**************************************************************************************/
 //  Network Configuration Features for the SeaBreeze API class
 /**************************************************************************************/

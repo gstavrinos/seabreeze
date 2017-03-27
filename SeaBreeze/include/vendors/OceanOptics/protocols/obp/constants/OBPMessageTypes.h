@@ -74,17 +74,21 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_RS232_BUS_MODE				= 0x000008D0;
         static const unsigned int OBP_GET_RS232_SAVE_SETTINGS			= 0x000008F0;
 
-
+// network configuration 
 		static const unsigned int OBP_GET_NETWORK_INTERFACE_COUNT		= 0x00000900;
 		static const unsigned int OBP_GET_INTERFACE_CONNECTION_INFO		= 0x00000901;
 		static const unsigned int OBP_GET_INTERFACE_ENABLE_STATE		= 0x00000902; 
 		static const unsigned int OBP_RUN_INTERFACE_SELFTEST			= 0x00000903; 
 		static const unsigned int OBP_SAVE_INTERFACE_CONNECTION_INFO	= 0x00000911; 
 		static const unsigned int OBP_SET_INTERFACE_ENABLE_STATE		= 0x00000912; 
+		
+// ethernet 		
 		static const unsigned int OBP_GET_GBE_ENABLE_STATE				= 0x00000920; 
 		static const unsigned int OBP_SET_GBE_ENABLE_STATE				= 0x00000930; 
 		static const unsigned int OBP_GET_MAC_ADDRESS					= 0x00000940; 
 		static const unsigned int OBP_SET_MAC_ADDRESS					= 0x00000950; 
+		
+// wifi 
 		static const unsigned int OBP_GET_WIFI_SSID						= 0x00000960; 
 		static const unsigned int OBP_GET_WIFI_MODE						= 0x00000961; 
 		static const unsigned int OBP_GET_WIFI_SECURITY					= 0x00000962; 
@@ -92,11 +96,15 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_WIFI_MODE						= 0x00000971; 
 		static const unsigned int OBP_SET_WIFI_SECURITY					= 0x00000972; 
 		static const unsigned int OBP_SET_WIFI_PASSPHRASE				= 0x00000973; 
+
+// DHCP Server
 		static const unsigned int OBP_GET_DHCP_SERVER_ENABLE_STATE		= 0x00000980; 
-		static const unsigned int OBP_GET_DHCP_SERVER_ADDRESS_RANGE		= 0x00000981; 
+		static const unsigned int OBP_GET_DHCP_SERVER_ADDRESS			= 0x00000981; 
 		static const unsigned int OBP_SET_DHCP_SERVER_ENABLE_STATE		= 0x00000990; 
-		static const unsigned int OBP_SET_DHCP_SERVER_ADDRESS_RANGE		= 0x00000991; 
-		static const unsigned int OBP_DHCP_CLIENT_ENABLE_STATE			= 0x00000A00; 
+		static const unsigned int OBP_SET_DHCP_SERVER_ADDRESS			= 0x00000991; 
+		
+// IPv4 Addressing 
+		static const unsigned int OBP_DHCP_CLIENT_ENABLE_STATE			= 0x00000A00;
 		static const unsigned int OBP_GET_IPV4_ADDRESS_COUNT			= 0x00000A01; 
 		static const unsigned int OBP_GET_IPV4_ADDRESS_CIDR				= 0x00000A02; 
 		static const unsigned int OBP_GET_IPV4_DEFAULT_GATEWAY			= 0x00000A08; 
@@ -104,6 +112,8 @@ namespace seabreeze {
 		static const unsigned int OBP_DELETE_IPV4_ADDRESS				= 0x00000A11; 
 		static const unsigned int OBP_ADD_IPV4_ADDRESS_CIDR				= 0x00000A12; 
 		static const unsigned int OBP_SET_IPV4_DEFAULT_GATEWAY			= 0x00000A18; 
+		
+// IPv4 Multicast
 		static const unsigned int OBP_GET_IPV4_MULTICAST_ENABLE_STATE	= 0x00000A80; 
 		static const unsigned int OBP_GET_IPV4_MULTICAST_GRP_ADDRESS	= 0x00000A81;
 		static const unsigned int OBP_GET_IPV4_MULTICAST_GRP_PORT		= 0x00000A82; 
@@ -112,6 +122,8 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_IPV4_MULTICAST_GRP_ADDRESS	= 0x00000A91; 
 		static const unsigned int OBP_SET_IPV4_MULTICAST_GRP_PORT		= 0x00000A92; 
 		static const unsigned int OBP_SET_IPV4_MULTICAST_TTL			= 0x00000A93; 
+		
+// Device Identification
 		static const unsigned int OBP_GET_ORIGINAL_VID					= 0x00000E00; 
 		static const unsigned int OBP_GET_ORIGINAL_PID					= 0x00000E01; 
 		static const unsigned int OBP_GET_ORIGINAL_MFR_STRING			= 0x00000E10; 
@@ -124,6 +136,8 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_DEVICE_STRING					= 0x00000E41; 
 		static const unsigned int OBP_SET_MANUFACTURER_STRING			= 0x00000E50; 
 		static const unsigned int OBP_SET_DEVICE_STRING					= 0x00000E51; 
+		
+// bluetooth
 		static const unsigned int OBP_GET_BLUETOOTH_ENABLE_STATE		= 0x00000F00; 
 		static const unsigned int OBP_GET_INQUIRY_ACCESS_CODE			= 0x00000F02; 
 		static const unsigned int OBP_SET_BLUET00TH_ENABLE_STATE		= 0x00000F10; 

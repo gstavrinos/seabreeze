@@ -122,6 +122,15 @@ public:
 	virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
 	virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
 
+	/* DHCP Server features */
+	virtual int getNumberOfDHCPServerFeatures(long deviceID, int *errorCode);
+	virtual int getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+	virtual void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask);
+	virtual unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+	virtual void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+
+
 	/* Network Configuration features */
 	virtual int getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode);
 	virtual int getNetworkConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);

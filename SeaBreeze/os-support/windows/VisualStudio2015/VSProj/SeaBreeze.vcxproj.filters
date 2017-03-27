@@ -1323,6 +1323,33 @@
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\NetworkConfigurationFeatureAdapter.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetDHCPServerAddressExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDHCPServerAddressExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\DHCPServerProtocolInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPDHCPServerProtocol.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDHCPServerEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetDHCPServerEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\dhcp_server\DHCPServerFeature.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\dhcp_server\DHCPServerFeatureInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\DHCPServerFeatureAdapter.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <!-- INCLUDES END HERE -->
   </ItemGroup>
   <ItemGroup>
@@ -2434,9 +2461,6 @@
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\data_buffer\FlameXDataBufferFeature.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\ethernet_configuration\EthernetConfigurationFeature.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\EthernetConfigurationProtocolInterface.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -2486,6 +2510,33 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\NetworkConfigurationFeatureAdapter.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetDHCPServerAddressExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDHCPServerAddressExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\DHCPServerProtocolInterface.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPDHCPServerProtocol.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetDHCPServerEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetDHCPServerEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\DHCPServerFeatureAdapter.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\dhcp_server\DHCPServerFeature.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\ethernet_configuration\EthernetConfigurationFeature.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <!-- SOURCES END HERE -->

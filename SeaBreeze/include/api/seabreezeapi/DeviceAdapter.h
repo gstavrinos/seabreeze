@@ -38,6 +38,7 @@
 #include "api/seabreezeapi/EEPROMFeatureAdapter.h"
 #include "api/seabreezeapi/IrradCalFeatureAdapter.h"
 #include "api/seabreezeapi/EthernetConfigurationFeatureAdapter.h"
+#include "api/seabreezeapi/DHCPServerFeatureAdapter.h"
 #include "api/seabreezeapi/NetworkConfigurationFeatureAdapter.h"
 #include "api/seabreezeapi/RawUSBBusAccessFeatureAdapter.h"
 #include "api/seabreezeapi/NonlinearityCoeffsFeatureAdapter.h"
@@ -154,6 +155,15 @@ namespace seabreeze {
             unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex);
             void ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus);
              
+			/* Get one or more dhcp server features */
+			int getNumberOfDHCPServerFeatures();
+			int getDHCPServerFeatures(long *buffer, int maxFeatures);
+			void dhcpServerGetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+			void dhcpServerSetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask);
+			unsigned char dhcpServerGetEnableState(long featureID, int *errorCode, unsigned char interfaceIndex);
+			void dhcpServerSetEnableState(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+
+
 			/* Get one or more network configuration features */
 			int getNumberOfNetworkConfigurationFeatures();
 			int getNetworkConfigurationFeatures(long *buffer, int maxFeatures);
@@ -297,6 +307,7 @@ namespace seabreeze {
             std::vector<ThermoElectricCoolerFeatureAdapter *> tecFeatures;
             std::vector<IrradCalFeatureAdapter *> irradCalFeatures;
             std::vector<EthernetConfigurationFeatureAdapter *> ethernetConfigurationFeatures;
+			std::vector<DHCPServerFeatureAdapter *> dhcpServerFeatures;
 			std::vector<NetworkConfigurationFeatureAdapter *> networkConfigurationFeatures;
             std::vector<EEPROMFeatureAdapter *> eepromFeatures;
             std::vector<LightSourceFeatureAdapter *> lightSourceFeatures;
@@ -322,6 +333,7 @@ namespace seabreeze {
             ThermoElectricCoolerFeatureAdapter *getTECFeatureByID(long featureID);
             IrradCalFeatureAdapter *getIrradCalFeatureByID(long featureID);
             EthernetConfigurationFeatureAdapter *getEthernetConfigurationFeatureByID(long featureID);
+			DHCPServerFeatureAdapter *getDHCPServerFeatureByID(long featureID);
 			NetworkConfigurationFeatureAdapter *getNetworkConfigurationFeatureByID(long featureID);
             EEPROMFeatureAdapter *getEEPROMFeatureByID(long featureID);
             LightSourceFeatureAdapter *getLightSourceFeatureByID(long featureID);

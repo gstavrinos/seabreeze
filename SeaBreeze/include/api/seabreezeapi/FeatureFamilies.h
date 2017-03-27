@@ -190,6 +190,12 @@ namespace seabreeze {
 			NetworkConfigurationFeatureFamily();
 			virtual ~NetworkConfigurationFeatureFamily();
 		};
+		
+		class DHCPServerFeatureFamily : public FeatureFamily {
+		public:
+			DHCPServerFeatureFamily();
+			virtual ~DHCPServerFeatureFamily();
+		};
 
         class FeatureFamilies {
         public:
@@ -219,7 +225,7 @@ namespace seabreeze {
 			const EthernetConfigurationFeatureFamily ETHERNET_CONFIGURATION;
 			const NetworkConfigurationFeatureFamily NETWORK_CONFIGURATION;
 			//const WifiConfigurationFeatureFamily WIFI_CONFIGURATION;
-			//const DHCPConfigurationFeatureFamily DHCP_CONFIGURATION;
+			const DHCPServerFeatureFamily DHCP_SERVER;
 			//const BluetoothConfigurationFeatureFamily BLUETOOTH_CONFIGURATION;
 			//const TimeFeatureFamily	TIME_COMMANDS;
 			//const RS232BusFeatureFamily RS232_BUS_COMMANDS;

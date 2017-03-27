@@ -59,6 +59,7 @@
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
+#include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 
 using namespace seabreeze;

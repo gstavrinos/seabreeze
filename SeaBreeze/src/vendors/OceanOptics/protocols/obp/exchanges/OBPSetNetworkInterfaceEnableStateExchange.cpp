@@ -41,7 +41,7 @@ OBPSetNetworkInterfaceEnableStateExchange::OBPSetNetworkInterfaceEnableStateExch
 
     this->hints->push_back(new OBPControlHint());
 
-    this->messageType = OBPMessageTypes::OBP_SET_GBE_ENABLE_STATE;
+    this->messageType = OBPMessageTypes::OBP_SET_INTERFACE_ENABLE_STATE;
 
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char)); // two bytes in immediate data
 }
