@@ -36,7 +36,7 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
 OBPGetEthernetConfigurationGbEEnableExchange::OBPGetEthernetConfigurationGbEEnableExchange() {
-    this->messageType = OBPMessageTypes::OBP_GET_MAC_ADDRESS;
+    this->messageType = OBPMessageTypes::OBP_GET_GBE_ENABLE_STATE;
 
     this->hints->push_back(new OBPControlHint());
 	this->payload.resize(sizeof(unsigned char));

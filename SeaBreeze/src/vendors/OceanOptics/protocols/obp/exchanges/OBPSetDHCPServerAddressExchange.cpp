@@ -40,7 +40,7 @@ OBPSetDHCPServerAddressExchange::OBPSetDHCPServerAddressExchange() {
 
     this->hints->push_back(new OBPControlHint());
 
-    this->messageType = OBPMessageTypes::OBP_GET_DHCP_SERVER_ADDRESS;
+    this->messageType = OBPMessageTypes::OBP_SET_DHCP_SERVER_ADDRESS;
 
     this->payload.resize(1 + 4 + 1); // interface Index and 4 bytes for the IPv4 server address and 1 byte for the net mask
 }
@@ -59,7 +59,6 @@ void OBPSetDHCPServerAddressExchange::setInterfaceIndex(unsigned char interfaceI
 void OBPSetDHCPServerAddressExchange::setServerAddress(vector<unsigned char> serverAddress) 
 {
 // IPv4 address...
-    unsigned int i;
 
 	for (int i = 0; i < 4; i++)
 	{

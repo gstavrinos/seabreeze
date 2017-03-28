@@ -1,14 +1,14 @@
 /***************************************************//**
  * @file    FeatureFamilies.h
- * @date    February 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
+ * @date    March 2017
+ * @author  Ocean Optics, Inc.
  *
  * This provides a way to get references to different kinds
  * of features (e.g. spectrometer, TEC) generically.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -184,19 +184,24 @@ namespace seabreeze {
 			virtual ~EthernetConfigurationFeatureFamily();
 		};
 		
-		
-		class NetworkConfigurationFeatureFamily : public FeatureFamily {
+		class WifiConfigurationFeatureFamily : public FeatureFamily {
 		public:
-			NetworkConfigurationFeatureFamily();
-			virtual ~NetworkConfigurationFeatureFamily();
+			WifiConfigurationFeatureFamily();
+			virtual ~WifiConfigurationFeatureFamily();
 		};
-		
+
 		class DHCPServerFeatureFamily : public FeatureFamily {
 		public:
 			DHCPServerFeatureFamily();
 			virtual ~DHCPServerFeatureFamily();
 		};
 
+		class NetworkConfigurationFeatureFamily : public FeatureFamily {
+		public:
+			NetworkConfigurationFeatureFamily();
+			virtual ~NetworkConfigurationFeatureFamily();
+		};
+		
         class FeatureFamilies {
         public:
             const UndefinedFeatureFamily UNDEFINED;
@@ -224,7 +229,7 @@ namespace seabreeze {
             const PixelBinningFeatureFamily PIXEL_BINNING;
 			const EthernetConfigurationFeatureFamily ETHERNET_CONFIGURATION;
 			const NetworkConfigurationFeatureFamily NETWORK_CONFIGURATION;
-			//const WifiConfigurationFeatureFamily WIFI_CONFIGURATION;
+			const WifiConfigurationFeatureFamily WIFI_CONFIGURATION;
 			const DHCPServerFeatureFamily DHCP_SERVER;
 			//const BluetoothConfigurationFeatureFamily BLUETOOTH_CONFIGURATION;
 			//const TimeFeatureFamily	TIME_COMMANDS;

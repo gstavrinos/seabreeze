@@ -122,6 +122,17 @@ public:
 	virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
 	virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
 
+	/* Wifi Configuration features */
+	virtual int getNumberOfWifiConfigurationFeatures(long deviceID, int *errorCode);
+	virtual int getWifiConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual unsigned char wifiConfigurationGetMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+	virtual void wifiConfigurationSetMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
+	virtual unsigned char wifiConfigurationGetSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+	virtual void wifiConfigurationSetSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
+	virtual void wifiConfigurationGetSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+	virtual void wifiConfigurationSetSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
+	virtual void wifiConfigurationSetPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
+
 	/* DHCP Server features */
 	virtual int getNumberOfDHCPServerFeatures(long deviceID, int *errorCode);
 	virtual int getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);

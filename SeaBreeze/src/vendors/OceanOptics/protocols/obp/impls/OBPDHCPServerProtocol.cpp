@@ -66,6 +66,8 @@ void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char inter
         throw ProtocolBusMismatchException(error);
     }
 
+	request.setInterfaceIndex(interfaceIndex);
+
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<byte> *raw = request.queryDevice(helper);
     if (NULL == raw) {
@@ -121,6 +123,8 @@ unsigned char OBPDHCPServerProtocol::getServerEnableStatus(const Bus &bus, unsig
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
+
+	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<byte> *raw = request.queryDevice(helper);
