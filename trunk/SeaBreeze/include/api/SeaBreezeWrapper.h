@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeWrapper.h
- * @date    February 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a trivial interface to SeaBreeze that allows
@@ -135,6 +135,16 @@ public:
     void   set_GbE_Enable_Status      	(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
 	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
 	void   set_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+
+	// wifi configuration features
+	unsigned char getMode(int index, int *errorCode, unsigned char interfaceIndex);
+	void   setMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
+	unsigned char getSecurityType(int index, int *errorCode, unsigned char interfaceIndex);
+	void   setSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
+	void   getSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+	void   setSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
+	void   setPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, const unsigned char passPhraseLength);
+
 
 	// network configuration features
 	unsigned char getNumberOfNetworkInterfaces(int index, int *errorCode);

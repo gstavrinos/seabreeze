@@ -58,6 +58,11 @@ OBPNetworkConfigurationProtocol::~OBPNetworkConfigurationProtocol()
 
 }
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
+
 unsigned char OBPNetworkConfigurationProtocol::getNumberOfNetworkInterfaces(const Bus &bus) throw (ProtocolException)
 {
     TransferHelper *helper;
@@ -95,6 +100,8 @@ unsigned char OBPNetworkConfigurationProtocol::runNetworkInterfaceSelfTest(const
 		throw ProtocolBusMismatchException(error);
 	}
 
+	request.setInterfaceIndex(interfaceIndex);
+
 	/* This transfer() may cause a ProtocolException to be thrown. */
 	vector<byte> *raw = request.queryDevice(helper);
 	if (NULL == raw) {
@@ -120,6 +127,8 @@ unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceConnectionType
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
 	}
+
+	request.setInterfaceIndex(interfaceIndex);
 
 	/* This transfer() may cause a ProtocolException to be thrown. */
 	vector<byte> *raw = request.queryDevice(helper);
@@ -159,11 +168,6 @@ void OBPNetworkConfigurationProtocol::setNetworkInterfaceEnableState(const Bus &
 
 }
 
-#ifdef _WINDOWS
-#pragma warning (disable: 4101) // unreferenced local variable
-#endif
-
-
 unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
 {
     TransferHelper *helper;
@@ -174,6 +178,8 @@ unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceEnableState(co
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
+
+	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<byte> *raw = request.queryDevice(helper);

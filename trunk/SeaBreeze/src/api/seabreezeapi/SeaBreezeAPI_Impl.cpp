@@ -945,10 +945,122 @@ void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceI
 
 
 
+/**************************************************************************************/
+//  Wifi Configuration Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfWifiConfigurationFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfWifiConfigurationFeatures();
+}
+
+int SeaBreezeAPI_Impl::getWifiConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getWifiConfigurationFeatures(buffer, maxLength);
+}
+
+unsigned char SeaBreezeAPI_Impl::wifiConfigurationGetMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->wifiConfigurationGetMode(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::wifiConfigurationSetMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->wifiConfigurationSetMode(featureID, errorCode, interfaceIndex, mode);
+}
+
+unsigned char SeaBreezeAPI_Impl::wifiConfigurationGetSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->wifiConfigurationGetSecurityType(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::wifiConfigurationSetSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->wifiConfigurationSetSecurityType(featureID, errorCode, interfaceIndex, securityType);
+}
 
 
+void SeaBreezeAPI_Impl::wifiConfigurationGetSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->wifiConfigurationGetSSID(featureID, errorCode, interfaceIndex, ssid);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
 
+}
 
+void SeaBreezeAPI_Impl::wifiConfigurationSetSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->wifiConfigurationSetSSID(featureID, errorCode, interfaceIndex, ssid);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+}
+
+void SeaBreezeAPI_Impl::wifiConfigurationSetPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->wifiConfigurationSetPassPhrase(featureID, errorCode, interfaceIndex, passPhrase, passPhraseLength);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+}
 
 
 /**************************************************************************************/

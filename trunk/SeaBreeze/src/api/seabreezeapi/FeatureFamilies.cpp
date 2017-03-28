@@ -140,21 +140,30 @@ seabreeze::api::EthernetConfigurationFeatureFamily::~EthernetConfigurationFeatur
 
 }
 
+seabreeze::api::WifiConfigurationFeatureFamily::WifiConfigurationFeatureFamily()
+	: FeatureFamily("WifiConfiguration", FEATURE_FAMILY_ID_WIFI_CONFIGURATION) {
+
+}
+
+seabreeze::api::WifiConfigurationFeatureFamily::~WifiConfigurationFeatureFamily() {
+
+}
+
+seabreeze::api::DHCPServerFeatureFamily::DHCPServerFeatureFamily()
+	: FeatureFamily("DHCP_Server", FEATURE_FAMILY_ID_DHCP_SERVER) {
+
+}
+
+seabreeze::api::DHCPServerFeatureFamily::~DHCPServerFeatureFamily() {
+
+}
+
 seabreeze::api::NetworkConfigurationFeatureFamily::NetworkConfigurationFeatureFamily()
         : FeatureFamily("NetworkConfiguration", FEATURE_FAMILY_ID_NETWORK_CONFIGURATION) {
 
 }
 
 seabreeze::api::NetworkConfigurationFeatureFamily::~NetworkConfigurationFeatureFamily() {
-
-}
-
-seabreeze::api::DHCPServerFeatureFamily::DHCPServerFeatureFamily()
-        : FeatureFamily("DHCP_Server", FEATURE_FAMILY_ID_DHCP_SERVER) {
-
-}
-
-seabreeze::api::DHCPServerFeatureFamily::~DHCPServerFeatureFamily() {
 
 }
 
@@ -329,8 +338,9 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new ThermoElectricFeatureFamily());
     retval.push_back(new IrradCalFeatureFamily());
     retval.push_back(new EthernetConfigurationFeatureFamily());
-	retval.push_back(new NetworkConfigurationFeatureFamily());
+	retval.push_back(new WifiConfigurationFeatureFamily());
 	retval.push_back(new DHCPServerFeatureFamily());
+	retval.push_back(new NetworkConfigurationFeatureFamily());
     retval.push_back(new EEPROMFeatureFamily());
     retval.push_back(new StrobeLampFeatureFamily());
     retval.push_back(new ContinuousStrobeFeatureFamily());

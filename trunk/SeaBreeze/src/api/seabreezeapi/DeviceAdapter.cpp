@@ -832,6 +832,97 @@ void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, 
 }
 
 
+/* Wifi Configuration feature wrappers */
+int DeviceAdapter::getNumberOfWifiConfigurationFeatures()
+{
+	return (int) this->wifiConfigurationFeatures.size();
+}
+
+int DeviceAdapter::getWifiConfigurationFeatures(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<WifiConfigurationFeatureAdapter>(wifiConfigurationFeatures, buffer, maxFeatures);
+}
+
+WifiConfigurationFeatureAdapter *DeviceAdapter::getWifiConfigurationFeatureByID(long featureID)
+{
+	return __getFeatureByID<WifiConfigurationFeatureAdapter>(wifiConfigurationFeatures, featureID);
+}
+
+unsigned char DeviceAdapter::wifiConfigurationGetMode(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getMode(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::wifiConfigurationSetMode(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setMode(errorCode, interfaceIndex, mode);
+}
+
+unsigned char DeviceAdapter::wifiConfigurationGetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getSecurityType(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::wifiConfigurationSetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setMode(errorCode, interfaceIndex, securityType);
+}
+void DeviceAdapter::wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	}
+
+	feature->getSSID(errorCode, interfaceIndex, ssid);
+}
+
+void DeviceAdapter::wifiConfigurationSetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setSSID(errorCode, interfaceIndex, ssid);
+}
+
+void DeviceAdapter::wifiConfigurationSetPassPhrase(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
+{
+	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setPassPhrase(errorCode, interfaceIndex, passPhrase, passPhraseLength);
+}
 
 /* DHCP Server feature wrappers */
 int DeviceAdapter::getNumberOfDHCPServerFeatures()

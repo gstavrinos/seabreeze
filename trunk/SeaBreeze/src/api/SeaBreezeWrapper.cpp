@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeWrapper.cpp
- * @date    July 2009
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a simple wrapper around the SeaBreeze driver.
@@ -16,7 +16,7 @@
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2014, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -59,6 +59,7 @@
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
+#include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 
@@ -1361,6 +1362,235 @@ void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned
             SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         }
     }
+}
+
+unsigned char SeaBreezeWrapper::getMode(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char mode = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationIF =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationIF)
+	{
+		try
+		{
+			mode = wifiConfigurationIF->getMode(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return mode;
+}
+
+void SeaBreezeWrapper::setMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationIF =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationIF)
+	{
+		try
+		{
+			wifiConfigurationIF->setMode(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				mode);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+unsigned char SeaBreezeWrapper::getSecurityType(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char securityType = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationIF =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationIF)
+	{
+		try
+		{
+			securityType = wifiConfigurationIF->getSecurityType(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return securityType;
+}
+
+void SeaBreezeWrapper::setSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationIF =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationIF)
+	{
+		try
+		{
+			wifiConfigurationIF->setMode(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				securityType);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::getSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationFI =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+
+	if (NULL != wifiConfigurationFI)
+	{
+		vector<byte> ssidBytes;
+
+		try
+		{
+			ssidBytes = wifiConfigurationFI->getSSID(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+
+			if (ssidBytes.size() == 6)
+			{
+				memcpy(ssid, &(ssidBytes[0]), 32);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::setSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationFI =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationFI)
+	{
+		vector<byte> *byteVector = new vector<byte>(32);
+		memcpy(&((*byteVector)[0]), ssid, 32 * sizeof(unsigned char));
+
+		try
+		{
+			wifiConfigurationFI->setSSID(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+}
+
+
+void SeaBreezeWrapper::setPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, const unsigned char passPhraseLength )
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	WifiConfigurationFeatureInterface *wifiConfigurationFI =
+		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
+	if (NULL != wifiConfigurationFI)
+	{
+		vector<byte> *byteVector = new vector<byte>(passPhraseLength);
+		memcpy(&((*byteVector)[0]), passPhrase, passPhraseLength * sizeof(unsigned char));
+
+		try
+		{
+			wifiConfigurationFI->setSSID(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
 }
 
 
