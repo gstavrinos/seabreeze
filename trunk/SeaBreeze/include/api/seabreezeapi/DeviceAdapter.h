@@ -38,6 +38,7 @@
 #include "api/seabreezeapi/EEPROMFeatureAdapter.h"
 #include "api/seabreezeapi/IrradCalFeatureAdapter.h"
 #include "api/seabreezeapi/EthernetConfigurationFeatureAdapter.h"
+#include "api/seabreezeapi/IPv4FeatureAdapter.h"
 #include "api/seabreezeapi/WifiConfigurationFeatureAdapter.h"
 #include "api/seabreezeapi/DHCPServerFeatureAdapter.h"
 #include "api/seabreezeapi/NetworkConfigurationFeatureAdapter.h"
@@ -156,6 +157,17 @@ namespace seabreeze {
             unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex);
             void ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus);
              
+			// IPv4 features
+			virtual int getNumberOfIPv4Features();
+			virtual int getIPv4Features(long *buffer, int maxLength);
+			virtual unsigned char get_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex);
+			virtual void   set_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
+			virtual unsigned char get_Number_Of_IPv4_Addresses(long featureID, int *errorCode, unsigned char interfaceIndex);
+			virtual void   get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask);
+			virtual void   get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4]);
+			virtual void   set_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4]);
+			virtual void   add_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask);
+			virtual void   delete_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex);
 
 			/* Get one or more wifi configuration features */
 			int getNumberOfWifiConfigurationFeatures();
@@ -321,6 +333,7 @@ namespace seabreeze {
             std::vector<ThermoElectricCoolerFeatureAdapter *> tecFeatures;
             std::vector<IrradCalFeatureAdapter *> irradCalFeatures;
             std::vector<EthernetConfigurationFeatureAdapter *> ethernetConfigurationFeatures;
+			std::vector<IPv4FeatureAdapter *> IPv4Features;
 			std::vector<WifiConfigurationFeatureAdapter *> wifiConfigurationFeatures;
 			std::vector<DHCPServerFeatureAdapter *> dhcpServerFeatures;
 			std::vector<NetworkConfigurationFeatureAdapter *> networkConfigurationFeatures;
@@ -348,6 +361,7 @@ namespace seabreeze {
             ThermoElectricCoolerFeatureAdapter *getTECFeatureByID(long featureID);
             IrradCalFeatureAdapter *getIrradCalFeatureByID(long featureID);
             EthernetConfigurationFeatureAdapter *getEthernetConfigurationFeatureByID(long featureID);
+			IPv4FeatureAdapter *getIPv4FeatureByID(long featureID);
 			WifiConfigurationFeatureAdapter *getWifiConfigurationFeatureByID(long featureID);
 			DHCPServerFeatureAdapter *getDHCPServerFeatureByID(long featureID);
 			NetworkConfigurationFeatureAdapter *getNetworkConfigurationFeatureByID(long featureID);

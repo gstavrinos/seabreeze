@@ -33,6 +33,10 @@
 using namespace seabreeze;
 using namespace api;
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
 ProgrammableSaturationFeatureBase::ProgrammableSaturationFeatureBase() {
     this->saturation = 0;
     this->valid = false;

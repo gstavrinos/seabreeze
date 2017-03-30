@@ -31,6 +31,10 @@
 
 using namespace seabreeze;
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
 SaturationEEPROMSlotFeatureBase::SaturationEEPROMSlotFeatureBase() {
     this->saturation = 0;
     this->valid = false;

@@ -32,6 +32,10 @@
 
 #include "common/exceptions/FeatureException.h"
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
 namespace seabreeze {
     
     class ProgrammableSaturationFeatureInterface {

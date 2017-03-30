@@ -59,6 +59,7 @@
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
+#include "vendors/OceanOptics/features/ipv4/IPv4FeatureInterface.h"
 #include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
@@ -302,6 +303,133 @@ void __seabreeze_initDevice(Device *dev) {
     }
 }
 
+int SeaBreezeWrapper::readUSB(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) {
+	int bytesCopied = 0;
+	Device * dev = this->devices[index];
+
+	if (NULL == dev) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return bytesCopied;
+	}
+
+	if (NULL == buffer && length > 0) {
+		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+		return bytesCopied;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	RawUSBBusAccessFeatureInterface *feature =
+		__seabreeze_getFeature<RawUSBBusAccessFeatureInterface>(this->devices[index]);
+
+	USBInterface *usb = __seabreeze_getUSB(dev, errorCode);
+
+	vector<byte> data;
+
+	if (NULL != feature && NULL != usb) {
+		try {
+			data = feature->readUSB(usb, endpoint, length);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return bytesCopied;
+		}
+	}
+
+	bytesCopied = length > data.size() ? (int)data.size() : length;
+	for (int i = 0; i < bytesCopied; i++)
+	{
+		buffer[i] = data[i];
+	}
+
+	return bytesCopied;
+}
+
+int SeaBreezeWrapper::writeUSB(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) {
+
+	int bytesWritten = 0;
+
+	Device * dev = this->devices[index];
+
+	if (NULL == dev) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return bytesWritten;
+	}
+
+	if (NULL == buffer && length > 0) {
+		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+		return bytesWritten;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	RawUSBBusAccessFeatureInterface *feature =
+		__seabreeze_getFeature<RawUSBBusAccessFeatureInterface>(this->devices[index]);
+
+	USBInterface *usb = __seabreeze_getUSB(dev, errorCode);
+
+	if (NULL != feature && NULL != usb) {
+		try {
+			vector<byte> data(length);
+			for (unsigned i = 0; i < length; i++)
+			{
+				data[i] = buffer[i];
+			}
+
+			bytesWritten = feature->writeUSB(usb, endpoint, data);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return bytesWritten;
+		}
+	}
+
+	return bytesWritten;
+}
+
+void SeaBreezeWrapper::setVerbose(bool flag) {
+	LOG(__FUNCTION__);
+
+	if (flag)
+		logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
+	else
+		logger.setLogLevel(OOI_LOG_LEVEL_ERROR);
+
+	seabreeze::USB::setVerbose(flag);
+}
+
+void SeaBreezeWrapper::setLogfile(char *pathname, int len) {
+	LOG(__FUNCTION__);
+
+	if (len <= 0 || pathname[0] == 0)
+	{
+		logger.setLogFile(stderr);
+		return;
+	}
+
+	// extract pathname
+	char path[256];
+	memset(path, 0, sizeof(path));
+	strncpy(path, pathname, len);
+	logger.debug("setting logfile to %s", path);
+
+	// open output file
+	FILE *f = fopen(path, "a");
+
+	// configure logging
+	if (f != NULL)
+	{
+		logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
+		logger.setLogFile(f);
+		logger.debug("logfile set to %s", path);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Spectrometer feature
+//////////////////////////////////////////////////////////////////////////////
 int SeaBreezeWrapper::openSpectrometer(int index, int *errorCode) {
     LOG(__FUNCTION__);
 
@@ -508,6 +636,241 @@ int SeaBreezeWrapper::getMaximumIntensity(int index,
     return retval;
 }
 
+
+int SeaBreezeWrapper::getFastBufferSpectrum(int index, int *errorCode,
+	unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve) {
+	vector<unsigned char> *spectrum;
+	int bytesCopied = 0;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	if (NULL == buffer) {
+		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			spectrum = spec->getFastBufferSpectrum(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				numberOfSamplesToRetrieve);
+			int bytes = (int)spectrum->size();
+			bytesCopied = (bytes < buffer_length) ? bytes : buffer_length;
+			memcpy(buffer, &((*spectrum)[0]),
+				bytesCopied * sizeof(unsigned char));
+			delete spectrum;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+	return bytesCopied;
+}
+
+int SeaBreezeWrapper::getUnformattedSpectrum(int index, int *errorCode,
+	unsigned char *buffer, int buffer_length) {
+	vector<unsigned char> *spectrum;
+	int bytesCopied = 0;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	if (NULL == buffer) {
+		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			spectrum = spec->getUnformattedSpectrum(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			int bytes = (int)spectrum->size();
+			bytesCopied = (bytes < buffer_length) ? bytes : buffer_length;
+			memcpy(buffer, &((*spectrum)[0]),
+				bytesCopied * sizeof(unsigned char));
+			delete spectrum;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+	return bytesCopied;
+}
+
+int SeaBreezeWrapper::getFormattedSpectrum(int index, int *errorCode,
+	double* buffer, int buffer_length) {
+
+	LOG(__FUNCTION__);
+
+	vector<double> *spectrum;
+	int doublesCopied = 0;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	if (NULL == buffer) {
+		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			spectrum = spec->getFormattedSpectrum(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			int pixels = (int)spectrum->size();
+			doublesCopied = (pixels < buffer_length) ? pixels : buffer_length;
+			memcpy(buffer, &((*spectrum)[0]), doublesCopied * sizeof(double));
+			delete spectrum;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+
+	return doublesCopied;
+}
+
+int SeaBreezeWrapper::getUnformattedSpectrumLength(int index, int *errorCode) {
+	/* This is, unfortunately, very hard to implement directly.
+	* The readout length from the device is buried inside a particular
+	* protocol message that would require a lot of digging to reach.
+	* Since every protocol could have a different readout length,
+	* this value cannot simply be stored in the spectrometer feature
+	* like the number of pixels.
+	*
+	* This leaves two (not particularly nice) options.  The first is
+	* to simply get an unformatted spectrum, check the length, and
+	* throw it away.  The other is to create a lookup table of all
+	* possible lengths based on the device type.  I am opting for
+	* the former, even though it could have unpleasant side-effects.
+	*/
+
+	LOG(__FUNCTION__);
+
+	vector<byte> *spectrum;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			spectrum = spec->getUnformattedSpectrum(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			int length = (int)spectrum->size();
+			delete spectrum;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+			return length;
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+	return 0;
+}
+
+int SeaBreezeWrapper::getFormattedSpectrumLength(int index, int *errorCode) {
+
+	int numberOfPixels = 0;
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			numberOfPixels = spec->getNumberOfPixels();
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+	return numberOfPixels;
+}
+
+int SeaBreezeWrapper::getWavelengths(int index, int *errorCode,
+	double *wavelengths, int length) {
+	int valuesCopied = 0;
+	int i;
+	vector<double> *wlVector;
+	vector<double>::iterator iter;
+
+	if (NULL == this->devices[index]) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+	OOISpectrometerFeatureInterface *spec =
+		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+	if (NULL != spec) {
+		try {
+			wlVector = spec->getWavelengths(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+
+			/* It might be possible to do a memcpy() of the underlying vector into
+			* the array, but that isn't the safest thing to do.  As long as this is
+			* called once and the result cached, the inefficiency won't hurt.
+			*/
+			for (iter = wlVector->begin(), i = 0;
+				iter != wlVector->end() && i < length; iter++, i++) {
+				wavelengths[i] = *iter;
+				valuesCopied++;
+			}
+
+			delete wlVector;
+
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe) {
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			return 0;
+		}
+	}
+	return valuesCopied;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// shutter feature
+//////////////////////////////////////////////////////////////////////////////
 void SeaBreezeWrapper::setShutterOpen(int index, int *errorCode,
         unsigned char opened) {
 
@@ -536,6 +899,9 @@ void SeaBreezeWrapper::setShutterOpen(int index, int *errorCode,
     return;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// strobe feature
+//////////////////////////////////////////////////////////////////////////////
 void SeaBreezeWrapper::setStrobeEnable(int index, int *errorCode,
         unsigned char strobe_enable) {
 
@@ -562,6 +928,11 @@ void SeaBreezeWrapper::setStrobeEnable(int index, int *errorCode,
 
     return;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Light Source feature
+//////////////////////////////////////////////////////////////////////////////
 
 int SeaBreezeWrapper::getLightSourceCount(int index, int *errorCode) {
     if(NULL == this->devices[index]) {
@@ -692,6 +1063,11 @@ void SeaBreezeWrapper::setLightSourceIntensity(int index, int *errorCode,
     SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
 }
 
+
+//////////////////////////////////////////////////////////////////////////////
+// serial number feature
+//////////////////////////////////////////////////////////////////////////////
+
 unsigned char SeaBreezeWrapper::getSerialNumberMaximumLength(int index, int *errorCode)
 {
 	unsigned char serialNumberLength = 0;
@@ -767,6 +1143,11 @@ int SeaBreezeWrapper::getSerialNumber(int index, int *errorCode, char *buffer, i
     SET_ERROR_CODE(ERROR_SUCCESS);
     return i;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// data buffer feature
+//////////////////////////////////////////////////////////////////////////////
+
 
 void SeaBreezeWrapper::clearBuffer(int index, int *errorCode) {
     if(NULL == this->devices[index]) {
@@ -887,6 +1268,10 @@ unsigned char SeaBreezeWrapper::getBufferingEnable(int index, int *errorCode) {
     }
     return retval;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// fast buffer feature
+//////////////////////////////////////////////////////////////////////////////
 
 unsigned int SeaBreezeWrapper::getConsecutiveSampleCount(int index, int *errorCode) {
 	unsigned int retval = 0;
@@ -1028,6 +1413,10 @@ void SeaBreezeWrapper::setConsecutiveSampleCount(int index, int *errorCode, unsi
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// eeprom feature
+//////////////////////////////////////////////////////////////////////////////
+
 int SeaBreezeWrapper::readEEPROMSlot(int index, int *errorCode,
         int slot_number, unsigned char *buffer, int buffer_length) {
 
@@ -1092,6 +1481,10 @@ int SeaBreezeWrapper::writeEEPROMSlot(int index, int *errorCode,
 
     return bytesWritten;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// irradiance calibration feature
+//////////////////////////////////////////////////////////////////////////////
 
 int SeaBreezeWrapper::readIrradCalibration(int index, int *errorCode,
         float *buffer, int buffer_length) {
@@ -1229,6 +1622,10 @@ void SeaBreezeWrapper::writeIrradCollectionArea(int index, int *errorCode,
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// ethernet feature
+//////////////////////////////////////////////////////////////////////////////
+
 void SeaBreezeWrapper::get_MAC_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
 {
 
@@ -1364,7 +1761,153 @@ void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned
     }
 }
 
-unsigned char SeaBreezeWrapper::getMode(int index, int *errorCode, unsigned char interfaceIndex)
+
+//////////////////////////////////////////////////////////////////////////////
+// dhcp server feature
+//////////////////////////////////////////////////////////////////////////////
+
+void SeaBreezeWrapper::get_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&dhcpServerAddress)[4], unsigned char &netMask)
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	DHCPServerFeatureInterface *DHCPServerFI =
+		__seabreeze_getFeature<DHCPServerFeatureInterface>(this->devices[index]);
+
+	if (NULL != DHCPServerFI)
+	{
+		vector<byte> dhcpServerAddressBytes;
+		
+		try
+		{
+			DHCPServerFI->getServerAddress(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex, dhcpServerAddressBytes, netMask);
+
+			if (dhcpServerAddressBytes.size() == 4)
+			{
+				memcpy(dhcpServerAddress, &(dhcpServerAddressBytes[0]), 4);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::set_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char dhcpServerAddress[4],  unsigned char netMask)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	DHCPServerFeatureInterface *dhcpServerFI =
+		__seabreeze_getFeature<DHCPServerFeatureInterface>(this->devices[index]);
+	if (NULL != dhcpServerFI)
+	{
+		vector<byte> *byteVector = new vector<byte>(4);
+		memcpy(&((*byteVector)[0]), dhcpServerAddress, 4 * sizeof(unsigned char));
+
+		try
+		{
+			dhcpServerFI->setServerAddress(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector, netMask);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+}
+
+unsigned char SeaBreezeWrapper::get_DHCP_Server_Enable_State(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char enableState = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	DHCPServerFeatureInterface *dhcpServerIF =
+		__seabreeze_getFeature<DHCPServerFeatureInterface>(this->devices[index]);
+	if (NULL != dhcpServerIF)
+	{
+		try
+		{
+			enableState = dhcpServerIF->getServerEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return enableState;
+}
+
+void SeaBreezeWrapper::set_DHCP_Server_Enable_State(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	DHCPServerFeatureInterface *dhcpServerIF =
+		__seabreeze_getFeature<DHCPServerFeatureInterface>(this->devices[index]);
+	if (NULL != dhcpServerIF)
+	{
+		try
+		{
+			dhcpServerIF->setServerEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				enableState);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// wifi feature
+//////////////////////////////////////////////////////////////////////////////
+
+
+unsigned char SeaBreezeWrapper::getWifiConfigurationMode(int index, int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char mode = 0;
 
@@ -1395,7 +1938,7 @@ unsigned char SeaBreezeWrapper::getMode(int index, int *errorCode, unsigned char
 	return mode;
 }
 
-void SeaBreezeWrapper::setMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+void SeaBreezeWrapper::setWifiConfigurationMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
 {
 	if (NULL == this->devices[index])
 	{
@@ -1423,7 +1966,7 @@ void SeaBreezeWrapper::setMode(int index, int *errorCode, unsigned char interfac
 	}
 }
 
-unsigned char SeaBreezeWrapper::getSecurityType(int index, int *errorCode, unsigned char interfaceIndex)
+unsigned char SeaBreezeWrapper::getWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char securityType = 0;
 
@@ -1454,7 +1997,7 @@ unsigned char SeaBreezeWrapper::getSecurityType(int index, int *errorCode, unsig
 	return securityType;
 }
 
-void SeaBreezeWrapper::setSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+void SeaBreezeWrapper::setWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
 {
 	if (NULL == this->devices[index])
 	{
@@ -1482,7 +2025,7 @@ void SeaBreezeWrapper::setSecurityType(int index, int *errorCode, unsigned char 
 	}
 }
 
-void SeaBreezeWrapper::getSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+void SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
 {
 
 	if (NULL == this->devices[index])
@@ -1524,7 +2067,7 @@ void SeaBreezeWrapper::getSSID(int index, int *errorCode, unsigned char interfac
 	}
 }
 
-void SeaBreezeWrapper::setSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
 {
 	if (NULL == this->devices[index])
 	{
@@ -1559,7 +2102,7 @@ void SeaBreezeWrapper::setSSID(int index, int *errorCode, unsigned char interfac
 }
 
 
-void SeaBreezeWrapper::setPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, const unsigned char passPhraseLength )
+void SeaBreezeWrapper::setWifiConfigurationPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength )
 {
 	if (NULL == this->devices[index])
 	{
@@ -1593,6 +2136,287 @@ void SeaBreezeWrapper::setPassPhrase(int index, int *errorCode, unsigned char in
 	}
 }
 
+
+//////////////////////////////////////////////////////////////////////////////
+// ipv4 addressing feature
+//////////////////////////////////////////////////////////////////////////////
+
+unsigned char SeaBreezeWrapper::get_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char enableState = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4FI)
+	{
+		try
+		{
+			enableState = IPv4FI->get_IPv4_DHCP_Enable_State(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return enableState;
+}
+
+void SeaBreezeWrapper::set_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4IF =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4IF)
+	{
+		try
+		{
+			IPv4IF->set_IPv4_DHCP_Enable_State(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				enableState);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+
+unsigned char SeaBreezeWrapper::get_Number_Of_IPv4_Addresses(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char numberOfAddresses = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4FI)
+	{
+		try
+		{
+			numberOfAddresses = IPv4FI->get_Number_Of_IPv4_Addresses(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return numberOfAddresses;
+}
+
+
+void SeaBreezeWrapper::get_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+
+	if (NULL != IPv4FI)
+	{
+		vector<byte> IPv4_Address_bytes;
+
+		try
+		{
+			IPv4FI->get_IPv4_Address(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex, addressIndex, IPv4_Address_bytes, netMask);
+
+			if (IPv4_Address_bytes.size() == 4)
+			{
+				memcpy(IPv4_Address, &(IPv4_Address_bytes[0]), 4);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::get_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+
+	if (NULL != IPv4FI)
+	{
+		vector<byte> defaultGatewayAddressBytes;
+
+		try
+		{
+			defaultGatewayAddressBytes = IPv4FI->get_IPv4_Default_Gateway(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+
+			if (defaultGatewayAddressBytes.size() == 4)
+			{
+				memcpy(defaultGatewayAddress, &(defaultGatewayAddressBytes[0]), 4);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::set_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4])
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4FI)
+	{
+		vector<byte> *byteVector = new vector<byte>(4);
+		memcpy(&((*byteVector)[0]), defaultGatewayAddress, 4 * sizeof(unsigned char));
+
+		try
+		{
+			IPv4FI->set_IPv4_Default_Gateway(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+}
+
+void SeaBreezeWrapper::add_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4FI =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4FI)
+	{
+		vector<byte> *byteVector = new vector<byte>(4);
+		memcpy(&((*byteVector)[0]), IPv4_Address, 4 * sizeof(unsigned char));
+
+		try
+		{
+			IPv4FI->add_IPv4_Address(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector,
+				netMask);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+}
+
+void SeaBreezeWrapper::delete_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	IPv4FeatureInterface *IPv4IF =
+		__seabreeze_getFeature<IPv4FeatureInterface>(this->devices[index]);
+	if (NULL != IPv4IF)
+	{
+		try
+		{
+			IPv4IF->delete_IPv4_Address(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				addressIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// network configuration feature
+//////////////////////////////////////////////////////////////////////////////
 
 unsigned char SeaBreezeWrapper::getNumberOfNetworkInterfaces(int index, int *errorCode)
 {
@@ -1773,6 +2597,10 @@ void SeaBreezeWrapper::saveNetworkInterfaceConnectionSettings(int index, int *er
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// thermo electric control feature
+//////////////////////////////////////////////////////////////////////////////
+
 
 double SeaBreezeWrapper::readTECTemperature(int index, int *errorCode) {
 
@@ -1861,231 +2689,12 @@ void SeaBreezeWrapper::setTECFanEnable(int index, int *errorCode,
     return;
 }
 
-int SeaBreezeWrapper::getFastBufferSpectrum(int index, int *errorCode,
-	unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve) {
-	vector<unsigned char> *spectrum;
-	int bytesCopied = 0;
 
-	if (NULL == this->devices[index]) {
-		SET_ERROR_CODE(ERROR_NO_DEVICE);
-		return 0;
-	}
 
-	if (NULL == buffer) {
-		SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
-		return 0;
-	}
+//////////////////////////////////////////////////////////////////////////////
+// Introspection feature
+//////////////////////////////////////////////////////////////////////////////
 
-	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-	OOISpectrometerFeatureInterface *spec =
-		__seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-	if (NULL != spec) {
-		try {
-			spectrum = spec->getFastBufferSpectrum(
-				*__seabreeze_getProtocol(this->devices[index]),
-				*__seabreeze_getBus(this->devices[index]),
-				numberOfSamplesToRetrieve);
-			int bytes = (int)spectrum->size();
-			bytesCopied = (bytes < buffer_length) ? bytes : buffer_length;
-			memcpy(buffer, &((*spectrum)[0]),
-				bytesCopied * sizeof(unsigned char));
-			delete spectrum;
-			SET_ERROR_CODE(ERROR_SUCCESS);
-		}
-		catch (FeatureException &fe) {
-			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-			return 0;
-		}
-	}
-	return bytesCopied;
-}
-
-int SeaBreezeWrapper::getUnformattedSpectrum(int index, int *errorCode,
-        unsigned char *buffer, int buffer_length) {
-    vector<unsigned char> *spectrum;
-    int bytesCopied = 0;
-
-    if(NULL == this->devices[index]) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return 0;
-    }
-
-    if(NULL == buffer) {
-        SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
-        return 0;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    OOISpectrometerFeatureInterface *spec =
-            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-    if(NULL != spec) {
-        try {
-            spectrum = spec->getUnformattedSpectrum(
-                    *__seabreeze_getProtocol(this->devices[index]),
-                    *__seabreeze_getBus(this->devices[index]));
-            int bytes = (int) spectrum->size();
-            bytesCopied = (bytes < buffer_length) ? bytes : buffer_length;
-            memcpy(buffer, &((*spectrum)[0]),
-                    bytesCopied * sizeof (unsigned char));
-            delete spectrum;
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return 0;
-        }
-    }
-    return bytesCopied;
-}
-
-int SeaBreezeWrapper::getFormattedSpectrum(int index, int *errorCode,
-        double* buffer, int buffer_length) {
-
-    LOG(__FUNCTION__);
-
-    vector<double> *spectrum;
-    int doublesCopied = 0;
-
-    if(NULL == this->devices[index]) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return 0;
-    }
-
-    if(NULL == buffer) {
-        SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
-        return 0;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    OOISpectrometerFeatureInterface *spec =
-            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-    if(NULL != spec) {
-        try {
-            spectrum = spec->getFormattedSpectrum(
-                    *__seabreeze_getProtocol(this->devices[index]),
-                    *__seabreeze_getBus(this->devices[index]));
-            int pixels = (int) spectrum->size();
-            doublesCopied = (pixels < buffer_length) ? pixels : buffer_length;
-            memcpy(buffer, &((*spectrum)[0]), doublesCopied * sizeof (double));
-            delete spectrum;
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return 0;
-        }
-    }
-
-    return doublesCopied;
-}
-
-int SeaBreezeWrapper::getUnformattedSpectrumLength(int index, int *errorCode) {
-    /* This is, unfortunately, very hard to implement directly.
-     * The readout length from the device is buried inside a particular
-     * protocol message that would require a lot of digging to reach.
-     * Since every protocol could have a different readout length,
-     * this value cannot simply be stored in the spectrometer feature
-     * like the number of pixels.
-     *
-     * This leaves two (not particularly nice) options.  The first is
-     * to simply get an unformatted spectrum, check the length, and
-     * throw it away.  The other is to create a lookup table of all
-     * possible lengths based on the device type.  I am opting for
-     * the former, even though it could have unpleasant side-effects.
-     */
-
-    LOG(__FUNCTION__);
-
-    vector<byte> *spectrum;
-
-    if(NULL == this->devices[index]) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return 0;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    OOISpectrometerFeatureInterface *spec =
-        __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-    if (NULL != spec) {
-        try {
-            spectrum = spec->getUnformattedSpectrum(
-                    *__seabreeze_getProtocol(this->devices[index]),
-                    *__seabreeze_getBus(this->devices[index]));
-            int length = (int) spectrum->size();
-            delete spectrum;
-            SET_ERROR_CODE(ERROR_SUCCESS);
-            return length;
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return 0;
-        }
-    }
-    return 0;
-}
-
-int SeaBreezeWrapper::getFormattedSpectrumLength(int index, int *errorCode) {
-
-    int numberOfPixels = 0;
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    OOISpectrometerFeatureInterface *spec =
-        __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-    if(NULL != spec) {
-        try {
-            numberOfPixels = spec->getNumberOfPixels();
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return 0;
-        }
-    }
-    return numberOfPixels;
-}
-
-int SeaBreezeWrapper::getWavelengths(int index, int *errorCode,
-        double *wavelengths, int length) {
-    int valuesCopied = 0;
-    int i;
-    vector<double> *wlVector;
-    vector<double>::iterator iter;
-
-    if(NULL == this->devices[index]) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return 0;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    OOISpectrometerFeatureInterface *spec =
-        __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
-    if(NULL != spec) {
-        try {
-            wlVector = spec->getWavelengths(
-                    *__seabreeze_getProtocol(this->devices[index]),
-                    *__seabreeze_getBus(this->devices[index]));
-
-            /* It might be possible to do a memcpy() of the underlying vector into
-             * the array, but that isn't the safest thing to do.  As long as this is
-             * called once and the result cached, the inefficiency won't hurt.
-             */
-            for(iter = wlVector->begin(), i = 0;
-                    iter != wlVector->end() && i < length; iter++, i++) {
-                wavelengths[i] = *iter;
-                valuesCopied++;
-            }
-
-            delete wlVector;
-
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return 0;
-        }
-    }
-    return valuesCopied;
-}
 
 unsigned short SeaBreezeWrapper::getNumberOfPixels(int index, int *errorCode) {
 	unsigned int numberOfPixels = 0;
@@ -2350,6 +2959,9 @@ int SeaBreezeWrapper::getUSBDescriptorString(int index, int *errorCode, int id, 
     return bytesCopied;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// continuous strobe feature
+//////////////////////////////////////////////////////////////////////////////
 void SeaBreezeWrapper::setContinuousStrobePeriodMicrosec(int index, int *errorCode,
         unsigned short strobe_id, unsigned long period_usec) {
     if(NULL == this->devices[index]) {
@@ -2375,6 +2987,9 @@ void SeaBreezeWrapper::setContinuousStrobePeriodMicrosec(int index, int *errorCo
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// acquisition delay feature
+//////////////////////////////////////////////////////////////////////////////
 void SeaBreezeWrapper::setAcquisitionDelayMicrosec(int index, int *errorCode,
         unsigned long delay_usec) {
 
@@ -2401,127 +3016,7 @@ void SeaBreezeWrapper::setAcquisitionDelayMicrosec(int index, int *errorCode,
     }
 }
 
-int SeaBreezeWrapper::readUSB(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) {
-    int bytesCopied = 0;
-    Device * dev = this->devices[index];
 
-    if(NULL == dev) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return bytesCopied;
-    }
-
-    if (NULL == buffer && length > 0) {
-        SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
-        return bytesCopied;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    RawUSBBusAccessFeatureInterface *feature =
-        __seabreeze_getFeature<RawUSBBusAccessFeatureInterface>(this->devices[index]);
-
-    USBInterface *usb = __seabreeze_getUSB(dev, errorCode);
-
-    vector<byte> data;
-
-    if(NULL != feature && NULL != usb) {
-        try {
-            data = feature->readUSB(usb, endpoint, length);
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return bytesCopied;
-        }
-    }
-
-    bytesCopied = length > data.size() ? (int) data.size() : length;
-    for (int i = 0; i < bytesCopied; i++)
-    {
-        buffer[i] = data[i];
-    }
-
-    return bytesCopied;
-}
-
-int SeaBreezeWrapper::writeUSB(int index, int *errorCode, unsigned char endpoint, unsigned char *buffer, unsigned int length) {
-
-    int bytesWritten = 0;
-
-    Device * dev = this->devices[index];
-
-    if (NULL == dev) {
-        SET_ERROR_CODE(ERROR_NO_DEVICE);
-        return bytesWritten;
-    }
-
-    if (NULL == buffer && length > 0) {
-        SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
-        return bytesWritten;
-    }
-
-    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-
-    RawUSBBusAccessFeatureInterface *feature =
-        __seabreeze_getFeature<RawUSBBusAccessFeatureInterface>(this->devices[index]);
-
-    USBInterface *usb = __seabreeze_getUSB(dev, errorCode);
-
-    if(NULL != feature && NULL != usb) {
-        try {
-            vector<byte> data(length);
-            for (unsigned i = 0; i < length; i++)
-            {
-                data[i] = buffer[i];
-            }
-
-            bytesWritten = feature->writeUSB(usb, endpoint, data);
-            SET_ERROR_CODE(ERROR_SUCCESS);
-        } catch (FeatureException &fe) {
-            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-            return bytesWritten;
-        }
-    }
-
-    return bytesWritten;
-}
-
-void SeaBreezeWrapper::setVerbose(bool flag) {
-    LOG(__FUNCTION__);
-
-    if (flag)
-        logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
-    else
-        logger.setLogLevel(OOI_LOG_LEVEL_ERROR);
-
-    seabreeze::USB::setVerbose(flag);
-}
-
-void SeaBreezeWrapper::setLogfile(char *pathname, int len) {
-    LOG(__FUNCTION__);
-
-    if (len <= 0 || pathname[0] == 0)
-    {
-        logger.setLogFile(stderr);
-        return;
-    }
-
-    // extract pathname
-    char path[256];
-    memset(path, 0, sizeof(path));
-    strncpy(path, pathname, len);
-    logger.debug("setting logfile to %s", path);
-
-    // open output file
-    FILE *f = fopen(path, "a");
-
-    // configure logging
-    if (f != NULL)
-    {
-        logger.setLogLevel(OOI_LOG_LEVEL_DEBUG);
-        logger.setLogFile(f);
-        logger.debug("logfile set to %s", path);
-    }
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -2543,12 +3038,13 @@ int seabreeze_close_spectrometer(int index, int *error_code)
     return wrapper->closeSpectrometer(index, error_code);
 }
 
+
+
 int seabreeze_get_error_string_maximum_length(void)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getErrorStringMaximumLength();
 }
-
 
 int seabreeze_get_error_string(int error_code, char *buffer, int buffer_length) 
 {
@@ -2568,6 +3064,8 @@ int seabreeze_get_model(int index, int *error_code, char *buffer, int buffer_len
     return wrapper->getModel(index, error_code, buffer, buffer_length);
 }
 
+
+
 void seabreeze_set_trigger_mode(int index, int *error_code, int mode) 
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
@@ -2586,17 +3084,23 @@ long seabreeze_get_min_integration_time_microsec(int index, int *error_code)
     return wrapper->getMinIntegrationTimeMicrosec(index, error_code);
 }
 
+
+
 void seabreeze_set_shutter_open(int index, int *error_code, unsigned char opened) 
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     wrapper->setShutterOpen(index, error_code, opened);
 }
 
+
+
 void seabreeze_set_strobe_enable(int index, int *error_code, unsigned char strobe_enable)
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     wrapper->setStrobeEnable(index, error_code, strobe_enable);
 }
+
+
 
 int seabreeze_get_light_source_count(int index, int *error_code) 
 {
@@ -2616,6 +3120,8 @@ void seabreeze_set_light_source_intensity(int index, int *error_code, int light_
     wrapper->setLightSourceIntensity(index, error_code, light_index, intensity);
 }
 
+
+
 int seabreeze_read_eeprom_slot(int index, int *error_code, int slot_number, unsigned char *buffer, int buffer_length) 
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
@@ -2629,6 +3135,8 @@ int seabreeze_write_eeprom_slot(int index, int *error_code, int slot_number, uns
     return wrapper->writeEEPROMSlot(index, error_code, slot_number, buffer,
             buffer_length);
 }
+
+
 
 int seabreeze_read_irrad_calibration(int index, int *error_code, float *buffer, int buffer_length) 
 {
@@ -2662,6 +3170,7 @@ void seabreeze_write_irrad_collection_area(int index, int *error_code, float are
     return wrapper->writeIrradCollectionArea(index, error_code, area);
 }
 
+
 void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6])
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
@@ -2685,6 +3194,76 @@ void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfac
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->set_GbE_Enable_Status(index, error_code, interfaceIndex, GbE_Enable);
 }
+
+
+unsigned char seabreeze_get_wifi_mode(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getWifiConfigurationMode(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_wifi_mode(int index, int *error_code, unsigned char interfaceIndex, unsigned char wifiMode)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setWifiConfigurationMode(index, error_code, interfaceIndex, wifiMode);
+}
+
+unsigned char seabreeze_get_wifi_security_type(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getWifiConfigurationSecurityType(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_wifi_security_type(int index, int *error_code, unsigned char interfaceIndex, unsigned char wifiMode)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setWifiConfigurationSecurityType(index, error_code, interfaceIndex, wifiMode);
+}
+
+void seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);
+}
+
+void seabreeze_set_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32])
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);
+}
+
+void seabreeze_set_wifi_pass_phrse(int index, int *error_code, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setWifiConfigurationPassPhrase(index, error_code, interfaceIndex, passPhrase, passPhraseLength);
+}
+
+
+void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&serverAddress)[4], unsigned char &netMask)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_DHCP_Server_Address(index, error_code, interfaceIndex, serverAddress, netMask);
+}
+
+void seabreeze_set_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char serverAddress[4], const unsigned char netMask)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_DHCP_Server_Address(index, error_code, interfaceIndex, serverAddress, netMask);
+}
+
+unsigned char seabreeze_get_dhcp_server_enable_state(int index, int *error_code, unsigned char interfaceIndex)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_DHCP_Server_Enable_State(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_dhcp_server_enable_state(int index, int *error_code, unsigned char interfaceIndex, unsigned char serverEnable)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_DHCP_Server_Enable_State(index, error_code, interfaceIndex, serverEnable);
+}
+
+
 
 unsigned char seabreeze_get_number_of_network_interfaces(int index, int *error_code)
 {
@@ -2722,6 +3301,58 @@ void seabreeze_save_network_interface_connection_settings(int index, int *error_
 	return wrapper->saveNetworkInterfaceConnectionSettings(index, error_code, interfaceIndex);
 }
 
+
+
+unsigned char seabreeze_get_ipv4_dhcp_enable_state(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_IPv4_DHCP_Enable_State(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_ipv4_dhcp_enable_state(int index, int *error_code, unsigned char interfaceIndex, unsigned char enableState)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_DHCP_Server_Enable_State(index, error_code, interfaceIndex, enableState);
+}
+
+unsigned char seabreeze_get_Number_Of_IPv4_Addresses(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_Number_Of_IPv4_Addresses(index, error_code, interfaceIndex);
+}
+
+void seabreeze_get_ipv4_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_IPv4_Address(index, error_code, interfaceIndex, addressIndex, IPv4_Address, netMask);
+}
+
+void seabreeze_get_ipv4_default_gateway(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&IPv4_Address)[4])
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->get_IPv4_Default_Gateway(index, error_code, interfaceIndex, IPv4_Address);
+}
+
+void seabreeze_set_ipv4_default_gateway(int index, int *error_code, unsigned char interfaceIndex, const unsigned char IPv4_Address[4])
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->set_IPv4_Default_Gateway(index, error_code, interfaceIndex, IPv4_Address);
+}
+
+void seabreeze_add_ipv4_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->add_IPv4_Address(index, error_code, interfaceIndex, IPv4_Address, netMask);
+}
+
+void seabreeze_delete_ipv4_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->delete_IPv4_Address(index, error_code, interfaceIndex, addressIndex);
+}
+
+
+
 double seabreeze_read_tec_temperature(int index, int *error_code) {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->readTECTemperature(index, error_code);
@@ -2744,6 +3375,8 @@ void seabreeze_set_tec_fan_enable(int index, int *error_code, unsigned char tec_
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     wrapper->setTECFanEnable(index, error_code, tec_fan_enable);
 }
+
+
 
 int seabreeze_get_unformatted_spectrum(int index, int *error_code, unsigned char *buffer, int buffer_length) 
 {
@@ -2783,6 +3416,8 @@ int seabreeze_get_wavelengths(int index, int *error_code, double *wavelengths, i
     return wrapper->getWavelengths(index, error_code, wavelengths, length);
 }
 
+
+
 unsigned char seabreeze_get_serial_number_max_length(int index, int *error_code)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
@@ -2794,6 +3429,8 @@ int seabreeze_get_serial_number(int index, int *error_code, char *buffer, int bu
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->getSerialNumber(index, error_code, buffer, buffer_length);
 }
+
+
 
 unsigned short seabreeze_get_number_of_pixels(int index, int *error_code) 
 {
@@ -2821,6 +3458,8 @@ int seabreeze_get_active_pixel_indices(int index, int *error_code, int *indices,
 	return wrapper->getActivePixelIndices(index, error_code,
 		indices, length);
 }
+
+
 
 void seabreeze_clear_buffer(int index, int *error_code) 
 {
@@ -2876,6 +3515,8 @@ void seabreeze_set_buffering_enable(int index, int *error_code, unsigned char is
     wrapper->setBufferingEnable(index, error_code, isEnabled);
 }
 
+
+
 void seabreeze_shutdown() 
 {
     SeaBreezeWrapper::shutdown();
@@ -2887,11 +3528,15 @@ int seabreeze_get_api_version_string(char *buffer, int len)
     return wrapper->getAPIVersionString(buffer, len);
 }
 
+
+
 int seabreeze_get_usb_descriptor_string(int index, int *errorCode, int id, unsigned char *buffer, int len) 
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->getUSBDescriptorString(index, errorCode, id, buffer, len);
 }
+
+
 
 void seabreeze_set_continuous_strobe_period_microsec(int index, int *errorCode, unsigned short strobe_id, unsigned long period_usec) 
 {
@@ -2917,6 +3562,8 @@ int seabreeze_write_usb(int index, int *errorCode, unsigned char endpoint, unsig
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->writeUSB(index, errorCode, endpoint, buffer, length);
 }
+
+
 
 void seabreeze_set_verbose(int flag) 
 {

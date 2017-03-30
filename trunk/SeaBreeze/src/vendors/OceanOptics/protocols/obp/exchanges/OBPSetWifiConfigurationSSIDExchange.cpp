@@ -58,7 +58,6 @@ void OBPSetWifiConfigurationSSIDExchange::setInterfaceIndex(unsigned char interf
 
 void OBPSetWifiConfigurationSSIDExchange::setSSID(vector<unsigned char> ssid) 
 {
-    unsigned int i;
 
 	for (int i = 0; i < 32; i++)
 	{

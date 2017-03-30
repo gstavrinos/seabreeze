@@ -33,6 +33,10 @@
 using namespace seabreeze;
 using namespace std;
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
 GainAdjustedSpectrometerFeature::GainAdjustedSpectrometerFeature(
                 ProgrammableSaturationFeature *saturationFeature) {
     this->saturation = saturationFeature;

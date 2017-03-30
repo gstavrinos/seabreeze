@@ -42,7 +42,7 @@ OBPSetWifiConfigurationPassPhraseExchange::OBPSetWifiConfigurationPassPhraseExch
 
     this->messageType = OBPMessageTypes::OBP_SET_WIFI_PASSPHRASE;
 
-    this->payload.resize(1 + 6); // interface Index and 6 bytes for the Mac Address
+    this->payload.resize(sizeof(unsigned char) + 0); // initialize to interface Index and 0 bytes for data
 }
 
 OBPSetWifiConfigurationPassPhraseExchange::~OBPSetWifiConfigurationPassPhraseExchange()
@@ -58,8 +58,9 @@ void OBPSetWifiConfigurationPassPhraseExchange::setInterfaceIndex(unsigned char 
 
 void OBPSetWifiConfigurationPassPhraseExchange::setPassPhrase(vector<unsigned char> passPhrase)
 {
-    unsigned int i;
-
+	
+    this->payload.resize(sizeof(unsigned char) + passPhrase.size()); // initialize to interface Index and 0 bytes for data
+	
 	for (int i = 0; i < passPhrase.size(); i++)
 	{
 		this->payload[1 + i] = passPhrase[i];

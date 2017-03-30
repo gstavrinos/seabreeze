@@ -35,6 +35,10 @@
 using namespace seabreeze;
 using namespace std;
 
+#ifdef _WINDOWS
+#pragma warning (disable: 4101) // unreferenced local variable
+#endif
+
 ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl(
         vector<ProtocolHelper *> helpers) {
     
