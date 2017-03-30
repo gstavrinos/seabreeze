@@ -104,7 +104,7 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_DHCP_SERVER_ADDRESS			= 0x00000991; 
 		
 // IPv4 Addressing 
-		static const unsigned int OBP_DHCP_CLIENT_ENABLE_STATE			= 0x00000A00;
+		static const unsigned int OBP_GET_DHCP_CLIENT_ENABLE_STATE		= 0x00000A00;
 		static const unsigned int OBP_GET_IPV4_ADDRESS_COUNT			= 0x00000A01; 
 		static const unsigned int OBP_GET_IPV4_ADDRESS_CIDR				= 0x00000A02; 
 		static const unsigned int OBP_GET_IPV4_DEFAULT_GATEWAY			= 0x00000A08; 

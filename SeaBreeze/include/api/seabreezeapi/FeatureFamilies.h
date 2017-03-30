@@ -183,6 +183,12 @@ namespace seabreeze {
 			EthernetConfigurationFeatureFamily();
 			virtual ~EthernetConfigurationFeatureFamily();
 		};
+
+		class IPv4FeatureFamily : public FeatureFamily {
+		public:
+			IPv4FeatureFamily();
+			virtual ~IPv4FeatureFamily();
+		};
 		
 		class WifiConfigurationFeatureFamily : public FeatureFamily {
 		public:
@@ -234,7 +240,7 @@ namespace seabreeze {
 			//const BluetoothConfigurationFeatureFamily BLUETOOTH_CONFIGURATION;
 			//const TimeFeatureFamily	TIME_COMMANDS;
 			//const RS232BusFeatureFamily RS232_BUS_COMMANDS;
-			//const IPv4AddressingFeatureFamily IPV4_ADDRESSING_COMMANDS;
+			const IPv4FeatureFamily IPV4_ADDRESS;
 			//const	IPv4MulsticastFeatureFamily IPV4_MULTICAST_COMMANDS;
 			//const NetworkServicesFeatureFamily NETWORK_SERVICES;
 			//const	DeviceIdentificationFeatureFamily DEVICE_IDENTIFICATION;

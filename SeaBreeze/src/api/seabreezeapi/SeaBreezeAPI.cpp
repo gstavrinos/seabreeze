@@ -849,6 +849,80 @@ void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long feat
 
 
 /**************************************************************************************/
+//  C language wrapper for IPv4 features
+/**************************************************************************************/
+
+int sbapi_get_number_of_ipv4_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfIPv4Features(deviceID, error_code);
+}
+
+int sbapi_get_ipv4_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getIPv4Features(deviceID, error_code, features, max_features);
+}
+
+unsigned char sbapi_ipv4_get_dhcp_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->get_IPv4_DHCP_Enable_State(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_ipv4_set_dhcp_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableStatus)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->set_IPv4_DHCP_Enable_State(deviceID, featureID, error_code, interfaceIndex, enableStatus);
+}
+
+unsigned char sbapi_ipv4_get_number_of_addresses(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->get_Number_Of_IPv4_Addresses(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_ipv4_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->get_IPv4_Address(deviceID, featureID, error_code, interfaceIndex, addressIndex, IPv4_Address, netMask);
+}
+
+void sbapi_ipv4_get_default_gateway_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->get_IPv4_Default_Gateway(deviceID, featureID, error_code, interfaceIndex, defaultGatewayAddress);
+}
+void sbapi_ipv4_set_default_gateway_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->set_IPv4_Default_Gateway(deviceID, featureID, error_code, interfaceIndex, defaultGatewayAddress);
+}
+
+void sbapi_ipv4_add_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->add_IPv4_Address(deviceID, featureID, error_code, interfaceIndex, IPv4_Address, netMask);
+}
+
+void sbapi_ipv4_delete_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->delete_IPv4_Address(deviceID, featureID, error_code, interfaceIndex, addressIndex);
+}
+
+
+/**************************************************************************************/
 //  C language wrapper for dhcp server features
 /**************************************************************************************/
 
@@ -953,6 +1027,73 @@ void sbapi_network_configuration_save_interface_settings(long deviceID, long fea
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
 	return wrapper->saveNetworkInterfaceConnectionSettings(deviceID, featureID, error_code, interfaceIndex);
+}
+
+
+/**************************************************************************************/
+//  C language wrapper for Wifi configuration features
+/**************************************************************************************/
+int sbapi_get_number_of_wifi_configuration_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfWifiConfigurationFeatures(deviceID, error_code);
+}
+
+int sbapi_get_wifi_configuration_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNetworkConfigurationFeatures(deviceID, error_code, features, max_features);
+}
+
+unsigned char sbapi_wifi_configuration_get_mode(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getWifiConfigurationMode(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_wifi_configuration_set_mode(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char wifiMode)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setWifiConfigurationMode(deviceID, featureID, error_code, interfaceIndex, wifiMode);
+}
+
+unsigned char sbapi_wifi_configuration_get_security_type(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getWifiConfigurationSecurityType(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_wifi_configuration_set_security_type(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char securityType)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setWifiConfigurationSecurityType(deviceID, featureID, error_code, interfaceIndex, securityType);
+}
+
+void sbapi_wifi_configuration_get_ssid(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getWifiConfigurationSSID(deviceID, featureID, error_code, interfaceIndex, ssid);
+}
+
+void sbapi_wifi_configuration_set_ssid(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setWifiConfigurationSSID(deviceID, featureID, error_code, interfaceIndex, ssid);
+}
+
+void sbapi_wifi_configuration_set_pass_phrase(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setWifiConfigurationPassPhrase(deviceID, featureID, error_code, interfaceIndex, passPhrase, passPhraseLength);
 }
 
 /**************************************************************************************/

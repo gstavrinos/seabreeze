@@ -85,6 +85,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
     __delete_feature_adapters<IrradCalFeatureAdapter>(irradCalFeatures);
 	__delete_feature_adapters<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures);
+	__delete_feature_adapters<IPv4FeatureAdapter>(IPv4Features);
 	__delete_feature_adapters<DHCPServerFeatureAdapter>(dhcpServerFeatures);
 	__delete_feature_adapters<NetworkConfigurationFeatureAdapter>(networkConfigurationFeatures);
     __delete_feature_adapters<EEPROMFeatureAdapter>(eepromFeatures);
@@ -830,6 +831,135 @@ void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, 
 
 	feature->set_GbE_Enable_Status(errorCode, interfaceIndex, enableState);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* IPv4 feature wrappers */
+int DeviceAdapter::getNumberOfIPv4Features()
+{
+	return (int) this->IPv4Features.size();
+}
+
+int DeviceAdapter::getIPv4Features(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<IPv4FeatureAdapter>(IPv4Features, buffer, maxFeatures);
+}
+
+IPv4FeatureAdapter *DeviceAdapter::getIPv4FeatureByID(long featureID)
+{
+	return __getFeatureByID<IPv4FeatureAdapter>(IPv4Features, featureID);
+}
+
+unsigned char DeviceAdapter::get_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->get_IPv4_DHCP_Enable_State(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::set_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->set_IPv4_DHCP_Enable_State(errorCode, interfaceIndex, enableState);
+}
+
+unsigned char DeviceAdapter::get_Number_Of_IPv4_Addresses(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->get_Number_Of_IPv4_Addresses(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	}
+
+	feature->get_IPv4_Default_Gateway(errorCode, interfaceIndex, defaultGatewayAddress);
+}
+
+void DeviceAdapter::set_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4])
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->set_IPv4_Default_Gateway(errorCode, interfaceIndex, defaultGatewayAddress);
+}
+
+void DeviceAdapter::get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex,  unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	}
+
+	feature->get_IPv4_Address(errorCode, interfaceIndex, addressIndex, IPv4_Address, netMask);
+}
+
+void DeviceAdapter::add_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->add_IPv4_Address(errorCode, interfaceIndex, IPv4_Address, netMask);
+}
+
+void DeviceAdapter::delete_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex)
+{
+	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->delete_IPv4_Address(errorCode, interfaceIndex, addressIndex);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Wifi Configuration feature wrappers */
