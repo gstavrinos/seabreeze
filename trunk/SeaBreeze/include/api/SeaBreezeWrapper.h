@@ -1016,6 +1016,22 @@ extern "C" {
 	*/
 	DLL_DECL void seabreeze_set_multicast_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char multicastEnable);
 
+	/**
+	* @brief Get the hard coded multicast group address (239.239.239.239). In the future this can be modified
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param macAddress (Output) Pointer to allocated six byte unsigned char array to receive the multicast group Address
+	*/
+	DLL_DECL void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4]);
+
+
+	/**
+	* @brief Get the hard coded multicast group port (57357) In the future this will can be modified
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return The multicast enable state
+	*/
+	DLL_DECL unsigned short seabreeze_get_multicast_group_port(int index, int *error_code, unsigned char interfaceIndex);
 
 
 

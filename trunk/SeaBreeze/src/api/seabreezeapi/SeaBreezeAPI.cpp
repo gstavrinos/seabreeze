@@ -848,6 +848,74 @@ void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long feat
 }
 
 
+
+/**************************************************************************************/
+//  C language wrapper for multicast features
+/**************************************************************************************/
+
+int sbapi_get_number_of_multicast_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfMulticastFeatures(deviceID, error_code);
+}
+
+int sbapi_get_multicast_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getMulticastFeatures(deviceID, error_code, features, max_features);
+}
+
+#if(false)  // not yet implemented
+void sbapi_multicast_get_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getMulticastGroupAddress(deviceID, featureID, error_code, interfaceIndex, groupAddress);
+}
+
+void sbapi_multicast_set_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char groupAddress[4])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	wrapper->setMulticastGroupAddress(deviceID, featureID, error_code, interfaceIndex, groupAddress);
+}
+#endif
+unsigned char sbapi_multicast_get_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getMulticastEnableState(deviceID, featureID, error_code, interfaceIndex);
+}
+
+void sbapi_multicast_set_enable_state(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	wrapper->setMulticastEnableState(deviceID, featureID, error_code, interfaceIndex, enableState);
+}
+
+
+// currently the multicast group address and port are not accessible. However, these functions return a hard coded value for convenience
+unsigned short sbapi_multicast_get_group_port(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	//return wrapper->getMulticastGroupPort(deviceID, featureID, error_code, interfaceIndex);
+	return 57357;
+}
+
+void sbapi_multicast_get_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	//wrapper->getMulticastGroupAddress(deviceID, featureID, error_code, interfaceIndex, groupAddress);
+	for (int i = 0; i < 4; i++)
+		groupAddress[i] = 239;
+}
+
+
 /**************************************************************************************/
 //  C language wrapper for IPv4 features
 /**************************************************************************************/

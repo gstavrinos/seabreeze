@@ -3353,6 +3353,23 @@ void seabreeze_set_multicast_enable(int index, int *error_code, unsigned char in
 	return wrapper->setMulticastEnableState(index, error_code, interfaceIndex, multicastEnable);
 }
 
+// this is a convenience function. in the future the port will be settable
+unsigned short seabreeze_get_multicast_group_port(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	//return wrapper->getMutlicastGroupPort(index, error_code, interfaceIndex);
+	return 57357;
+}
+
+// this is a convenience function. in the future the group address will be settable
+void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	// wrapper->getMulticastGroupAddress(index, error_code, interfaceIndex, groupAddress);
+	for (int i = 0; i < 4; i++)
+		groupAddress[i] = 239;
+}
+
 unsigned char seabreeze_get_wifi_mode(int index, int *error_code, unsigned char interfaceIndex)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
