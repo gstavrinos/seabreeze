@@ -59,6 +59,7 @@
 #include "vendors/OceanOptics/features/acquisition_delay/AcquisitionDelayFeatureInterface.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/ethernet_configuration/EthernetConfigurationFeatureInterface.h"
+#include "vendors/OceanOptics/features/multicast/MulticastFeatureInterface.h"
 #include "vendors/OceanOptics/features/ipv4/IPv4FeatureInterface.h"
 #include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
@@ -1762,6 +1763,151 @@ void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned
 }
 
 
+
+
+//////////////////////////////////////////////////////////////////////////////
+// multicast feature
+//////////////////////////////////////////////////////////////////////////////
+
+#if(false) // not yet implemented
+void SeaBreezeWrapper::getMulticastGroupAddress(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	MulticastFeatureInterface *multicastFI =
+		__seabreeze_getFeature<MulticastFeatureInterface>(this->devices[index]);
+
+	if (NULL != multicastFI)
+	{
+		vector<byte> groupAddressBytes;
+
+		try
+		{
+			groupAddressBytes = multicastFI->getGroupAddress(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+
+			if (groupAddressBytes.size() == 6)
+			{
+				memcpy(groupAddress, &(groupAddressBytes[0]), 6);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+void SeaBreezeWrapper::setMulticastGroupAddress(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char groupAddress[4])
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	MulticastInterface *multicastFI =
+		__seabreeze_getFeature<MulticastFeatureInterface>(this->devices[index]);
+	if (NULL != MmlticastFI)
+	{
+		vector<byte> *byteVector = new vector<byte>(4);
+		memcpy(&((*byteVector)[0]), groupAddress, 4 * sizeof(unsigned char));
+
+		try
+		{
+			multicastFI->getGroupAddress(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				*byteVector);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+}
+
+#endif
+
+unsigned char SeaBreezeWrapper::getMutlicastEnableState(int index, int *errorCode, unsigned char interfaceIndex)
+{
+	unsigned char enableState = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	MulticastFeatureInterface *multicastIF =
+		__seabreeze_getFeature<MulticastFeatureInterface>(this->devices[index]);
+	if (NULL != multicastIF)
+	{
+		try
+		{
+			enableState = multicastIF->getEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return enableState;
+}
+
+void SeaBreezeWrapper::setMulticastEnableState(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	MulticastFeatureInterface *multicastIF =
+		__seabreeze_getFeature<MulticastFeatureInterface>(this->devices[index]);
+	if (NULL != multicastIF)
+	{
+		try
+		{
+			multicastIF->setEnableState(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				interfaceIndex,
+				enableState);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+
 //////////////////////////////////////////////////////////////////////////////
 // dhcp server feature
 //////////////////////////////////////////////////////////////////////////////
@@ -3195,6 +3341,17 @@ void seabreeze_set_gbe_enable(int index, int *error_code, unsigned char interfac
 	return wrapper->set_GbE_Enable_Status(index, error_code, interfaceIndex, GbE_Enable);
 }
 
+unsigned char seabreeze_get_multicast_enable(int index, int *error_code, unsigned char interfaceIndex)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getMutlicastEnableState(index, error_code, interfaceIndex);
+}
+
+void seabreeze_set_multicast_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char multicastEnable)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setMulticastEnableState(index, error_code, interfaceIndex, multicastEnable);
+}
 
 unsigned char seabreeze_get_wifi_mode(int index, int *error_code, unsigned char interfaceIndex)
 {

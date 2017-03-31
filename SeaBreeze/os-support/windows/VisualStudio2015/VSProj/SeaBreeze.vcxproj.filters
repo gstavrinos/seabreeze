@@ -1422,6 +1422,33 @@
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\IPv4FeatureAdapter.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMulticastEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetMulticastEnableExchange.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPMulticastProtocol.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\MulticastProtocolInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\EthernetConfigurationFeature.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\EthernetConfigurationFeatureInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\MulticastFeatureInterface.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\MulticastFeature.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\MulticastFeatureAdapter.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <!-- INCLUDES END HERE -->
   </ItemGroup>
   <ItemGroup>
@@ -2678,6 +2705,24 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\IPv4FeatureAdapter.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMulticastEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetMulticastEnableExchange.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\MulticastProtocolInterface.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPMulticastProtocol.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\multicast\MulticastFeature.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\MulticastFeatureAdapter.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <!-- SOURCES END HERE -->

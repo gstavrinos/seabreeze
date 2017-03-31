@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.h
- * @date    February 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This is an implementation of the SeaBreezeAPI interface.
@@ -121,6 +121,15 @@ public:
 	virtual void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
 	virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
 	virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+
+	/* Multicast features */
+	virtual int getNumberOfMulticastFeatures(long deviceID, int *errorCode);
+	virtual int getMulticastFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	//virtual void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&groupAddress)[4]);
+	//virtual void setMulitcastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char groupAddress[4]);
+	virtual unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+	virtual void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
+
 
 	// IPv4 features
 	virtual int getNumberOfIPv4Features(long deviceID, int *errorCode);

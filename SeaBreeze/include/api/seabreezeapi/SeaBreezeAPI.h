@@ -184,6 +184,14 @@ public:
     virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
     virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
     
+	/* Multicast features */
+	virtual int getNumberOfMulticastFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getMulticastFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	//virtual void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[6]) = 0;
+	//virtual void setMulticstGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]) = 0;
+	virtual unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
+	virtual void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
+
 	// IPv4 features
 	virtual int getNumberOfIPv4Features(long deviceID, int *errorCode) = 0;
     virtual int getIPv4Features(long deviceID, int *errorCode, long *buffer, int maxLength) = 0;
@@ -1829,6 +1837,95 @@ extern "C" {
 	* @param GbE enable status (Input) the enable state for GbE
 	*/
 	DLL_DECL void sbapi_ethernet_configuration_set_gbe_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
+
+
+
+	/**
+	* This function returns the total number of multicast
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	*
+	* @return the number of multicast features that will be
+	*      returned by a call to sbapi_get_multicast_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_multicast_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each mutlicast
+	* instance for this device.  The IDs are only valid when used with the
+	* deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param features (Output) a preallocated array to hold returned feature handles
+	* @param max_features (Input) length of the preallocated buffer
+	*
+	* @return the number of multicast feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_multicast_features(long deviceID, int *error_code, long *features, int max_features);
+
+#if(false) // not implemented yet
+	/**
+	* This function reads out a group address from the spectrometer's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param buffer (Output) four byte array into which the group address numbers should be put
+	*
+	*/
+	DLL_DECL void sbapi_multicast_get_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&macAddress)[6]);
+
+	/**
+	* This function writes a group address to the device's
+	* internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param buffer (Output) a four byte array of the group address components
+	*
+	*/
+	DLL_DECL void sbapi_multicast_set_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, const unsigned char groupAddress[4]);
+#endif
+
+	/**
+	* This function reads the multicast enable status from the device's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	*
+	* @return unsigned char: the enable status for the multicast group, 0 for disabled, 1 for enabled
+	*/
+	DLL_DECL unsigned char sbapi_multicast_get_group_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* This function sets the multicast group enable status to the spectrometer's internal memory if that feature is supported.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of an ethernet configuration
+	*        feature.  Valid IDs can be found with the sbapi_get_ethernet_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing
+	*      error codes.
+	* @param interfaceIndex (Input) identifier for the ethernet interface of interest
+	* @param multicst group enable status (Input)0 for disabled, 1 for enabled
+	*/
+	DLL_DECL void sbapi_multicast_set_group_enable_status(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char enableState);
 
 
 
