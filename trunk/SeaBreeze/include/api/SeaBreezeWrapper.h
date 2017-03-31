@@ -136,6 +136,10 @@ public:
 	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
 	void   set_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
 
+	// multicast features
+	unsigned char getMutlicastEnableState(int index, int *errorCode, unsigned char interfaceIndex);
+	void   setMulticastEnableState(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
+
 	// IPv4 features
 	unsigned char get_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex);
 	void   set_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
@@ -993,6 +997,27 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
     DLL_DECL void seabreeze_set_mac_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+
+
+
+	/**
+	* @brief Get multicast enable state (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return The multicast enable state
+	*/
+	DLL_DECL unsigned char seabreeze_get_multicast_enable(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Set multicat enable state (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param GbE_Enable (Input) The GbE enable state from the indicated interface
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_multicast_enable(int index, int *error_code, unsigned char interfaceIndex, unsigned char multicastEnable);
+
+
+
 
 	/**
 	* @brief Get the number of network interfaces (if equipped)

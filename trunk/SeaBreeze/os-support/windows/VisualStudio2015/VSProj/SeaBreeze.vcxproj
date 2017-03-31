@@ -273,6 +273,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\FastBufferFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\IntrospectionFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\IPv4FeatureAdapter.h" />
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\MulticastFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\NetworkConfigurationFeatureAdapter.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\SeaBreezeAPI_Impl.h" />
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\WifiConfigurationFeatureAdapter.h" />
@@ -464,6 +465,10 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\light_source\StrobeLampFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\light_source\StrobeLampFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\light_source\VentanaLightSourceFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\EthernetConfigurationFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\EthernetConfigurationFeatureInterface.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\MulticastFeature.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\multicast\MulticastFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\network_configuration\NetworkConfigurationFeature.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\network_configuration\NetworkConfigurationFeatureInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\nonlinearity\NonlinearityCoeffsFeature.h" />
@@ -536,6 +541,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\IPv4ProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\IrradCalProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\LightSourceProtocolInterface.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\MulticastProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\NetworkConfigurationProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInterface.h" />
@@ -591,6 +597,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetIrradCalExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetIrradCollectionAreaExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMaxPixelBinningExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMulticastEnableExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNetworkInterfaceConnectionTypeExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNetworkInterfaceEnableStateExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNonlinearityCoeffExchange.h" />
@@ -657,6 +664,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIPv4DHCPEnableStateExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCollectionAreaExchange.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetMulticastEnableExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetNetworkInterfaceEnableStateExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetPixelBinningExchange.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetScansToAverageExchange.h" />
@@ -682,6 +690,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPLightSourceProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPLightSourceProtocol_Ventana.h" />
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPMulticastProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPNetworkConfigurationProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.h" />
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.h" />
@@ -757,6 +766,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\FastBufferFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\IntrospectionFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\IPv4FeatureAdapter.cpp" />
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\MulticastFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\NetworkConfigurationFeatureAdapter.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\SeaBreezeAPI_Impl.cpp" />
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\WifiConfigurationFeatureAdapter.cpp" />
@@ -924,6 +934,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\light_source\LightSourceFeatureImpl.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\light_source\StrobeLampFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\light_source\VentanaLightSourceFeature.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\multicast\MulticastFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\network_configuration\NetworkConfigurationFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\nonlinearity\NonlinearityCoeffsFeature.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\optical_bench\OpticalBenchFeature.cpp" />
@@ -981,6 +992,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\IPv4ProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\IrradCalProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\LightSourceProtocolInterface.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\MulticastProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\NetworkConfigurationProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\NonlinearityCoeffsProtocolInterface.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\OpticalBenchProtocolInteface.cpp" />
@@ -1027,6 +1039,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetIrradCalExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetIrradCollectionAreaExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMaxPixelBinningExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetMulticastEnableExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNetworkInterfaceConnectionTypeExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNetworkInterfaceEnableStateExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetNonlinearityCoeffExchange.cpp" />
@@ -1089,6 +1102,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIPv4DHCPEnableStateExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCalExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetIrradCollectionAreaExchange.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetMulticastEnableExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetNetworkInterfaceEnableStateExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetPixelBinningExchange.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPSetScansToAverageExchange.cpp" />
@@ -1114,6 +1128,7 @@ copy /b /v ..\x64\Release\SeaBreeze.* ..\..\..\..\lib</Command>
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPIrradCalProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPLightSourceProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPLightSourceProtocol_Ventana.cpp" />
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPMulticastProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPNetworkConfigurationProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPNonlinearityCoeffsProtocol.cpp" />
     <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPOpticalBenchProtocol.cpp" />

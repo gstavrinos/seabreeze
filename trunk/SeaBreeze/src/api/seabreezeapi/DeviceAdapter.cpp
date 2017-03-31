@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DeviceAdapter.cpp
- * @date    January 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
@@ -85,6 +85,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<ThermoElectricCoolerFeatureAdapter>(tecFeatures);
     __delete_feature_adapters<IrradCalFeatureAdapter>(irradCalFeatures);
 	__delete_feature_adapters<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures);
+	__delete_feature_adapters<MulticastFeatureAdapter>(multicastFeatures);
 	__delete_feature_adapters<IPv4FeatureAdapter>(IPv4Features);
 	__delete_feature_adapters<DHCPServerFeatureAdapter>(dhcpServerFeatures);
 	__delete_feature_adapters<NetworkConfigurationFeatureAdapter>(networkConfigurationFeatures);
@@ -190,6 +191,11 @@ int DeviceAdapter::open(int *errorCode) {
 	__create_feature_adapters<EthernetConfigurationFeatureInterface,
 		EthernetConfigurationFeatureAdapter>(this->device,
 			ethernetConfigurationFeatures, bus, featureFamilies.ETHERNET_CONFIGURATION);
+
+	/* Create multicast configuration feature list */
+	__create_feature_adapters<MulticastFeatureInterface,
+		MulticastFeatureAdapter>(this->device,
+			multicastFeatures, bus, featureFamilies.IPV4_MULTICAST);
 
 	/* Create dhcp server feature list */
 	__create_feature_adapters<DHCPServerFeatureInterface,
@@ -837,6 +843,67 @@ void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, 
 
 
 
+
+/* Multicast feature wrappers */
+int DeviceAdapter::getNumberOfMulticastFeatures()
+{
+	return (int) this->multicastFeatures.size();
+}
+
+int DeviceAdapter::getMulticastFeatures(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<MulticastFeatureAdapter>(multicastFeatures, buffer, maxFeatures);
+}
+
+MulticastFeatureAdapter *DeviceAdapter::getMulticastFeatureByID(long featureID)
+{
+	return __getFeatureByID<MulticastFeatureAdapter>(multicastFeatures, featureID);
+}
+
+#if(false)  // not implemented yet
+void DeviceAdapter::getMulticastGroupAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+	MulticastFeatureAdapter *feature = getMulticastFeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	}
+
+	feature->getGroupAddress(errorCode, interfaceIndex, groupAddress);
+}
+
+void DeviceAdapter::setMulticastGroupAddress(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char groupAddress[4])
+{
+	MulticastFeatureAdapter *feature = getMulticastFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setGroupAddress(errorCode, interfaceIndex, groupAddress);
+}
+#endif
+unsigned char DeviceAdapter::getMulticastEnableState(long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	MulticastFeatureAdapter *feature = getMulticastFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEnableState(errorCode, interfaceIndex);
+}
+
+void DeviceAdapter::setMulticastEnableState(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	MulticastFeatureAdapter *feature = getMulticastFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setEnableState(errorCode, interfaceIndex, enableState);
+}
 
 
 

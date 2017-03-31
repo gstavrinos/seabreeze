@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.cpp
- * @date    February 2017
+ * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver. Please
@@ -944,6 +944,89 @@ void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceI
 
 
 
+
+
+/**************************************************************************************/
+//  Multicast Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfMulticastFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfMulticastFeatures();
+}
+
+int SeaBreezeAPI_Impl::getMulticastFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getMulticastFeatures(buffer, maxLength);
+}
+
+#if(false) // not yet implemented
+void SeaBreezeAPI_Impl::getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->getMulticastGroupAddress(featureID, errorCode, interfaceIndex, groupAddress);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+}
+
+void SeaBreezeAPI_Impl::setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char groupAddress[4])
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->setMulticastGroupAddress(featureID, errorCode, interfaceIndex, groupAddress);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+}
+#endif
+
+unsigned char SeaBreezeAPI_Impl::getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->getMulticastEnableState(featureID, errorCode, interfaceIndex);
+}
+
+void SeaBreezeAPI_Impl::setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->setMulticastEnableState(featureID, errorCode, interfaceIndex, enableState);
+}
 
 
 
