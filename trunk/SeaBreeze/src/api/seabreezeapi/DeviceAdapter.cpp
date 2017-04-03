@@ -800,6 +800,7 @@ void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *e
 	if (NULL == feature) 
 	{
 		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
 	}
 
 	feature->get_MAC_Address(errorCode, interfaceIndex, macAddress);
@@ -821,7 +822,7 @@ unsigned char DeviceAdapter::ethernetConfiguration_Get_GbE_Enable_Status(long fe
 	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
 	if (NULL == feature) {
 		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-		return 0;
+		return -1;
 	}
 
 	return feature->get_GbE_Enable_Status(errorCode, interfaceIndex);
