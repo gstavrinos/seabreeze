@@ -43,6 +43,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
+#include <cstdio>
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable

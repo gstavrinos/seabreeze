@@ -59,7 +59,7 @@ void OBPSetWifiConfigurationSSIDExchange::setInterfaceIndex(unsigned char interf
 void OBPSetWifiConfigurationSSIDExchange::setSSID(vector<unsigned char> ssid) 
 {
 	this->payload.resize(ssid.size() + 1); // set the payload size according to the ssid length
-	for (int i = 0; i < ssid.size(); i++)
+	for (unsigned char i = 0; i < ssid.size(); i++)
 	{
 		this->payload[i + 1] = ssid[i];
 	}

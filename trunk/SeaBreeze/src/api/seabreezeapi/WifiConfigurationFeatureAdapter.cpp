@@ -33,7 +33,7 @@
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "api/seabreezeapi/WifiConfigurationFeatureAdapter.h"
-#include <string.h> /* for memcpy */
+#include <string.h> /* for memcpy pre c++11 */
 #include <vector>
 
 using namespace seabreeze;
@@ -108,7 +108,7 @@ void WifiConfigurationFeatureAdapter::setSecurityType(int *errorCode, unsigned c
     }
 }
 
-unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (&ssid)[32])
+unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (*ssid)[32])
 {
 
     vector<unsigned char> ssidVector;
@@ -118,7 +118,19 @@ unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned 
 
 		ssidVector = this->feature->getSSID(*this->protocol, *this->bus, interfaceIndex);
 		// remove the null termination
-		ssidVector.resize(std::find(ssidVector.begin(), ssidVector.end(), 0) - ssidVector.begin());
+		//ssidVector.resize(std::find(ssidVector.begin(), ssidVector.end(), 0) - ssidVector.begin());
+        
+        // can't use c++11 yet
+        unsigned char index;
+        for(index = 0; index<ssidVector.size(); index++)
+        {
+        	if(ssidVector[index] == 0)
+        	{
+        	    break;
+        	}
+        }
+        ssidVector.resize(index);
+        
         memcpy(ssid, ssidVector.data(), ssidVector.size());
 
         SET_ERROR_CODE(ERROR_SUCCESS);

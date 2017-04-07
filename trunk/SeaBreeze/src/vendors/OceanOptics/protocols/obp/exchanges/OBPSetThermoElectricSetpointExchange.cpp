@@ -31,6 +31,7 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetThermoElectricSetpointExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
+#include <cstring>  /* for memcpy pre c++11 */
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;

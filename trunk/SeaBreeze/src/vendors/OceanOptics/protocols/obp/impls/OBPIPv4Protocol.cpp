@@ -65,7 +65,7 @@ OBPIPv4Protocol::~OBPIPv4Protocol()
 #endif
 
 
-void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> &IPv4_Address,  unsigned char &netMask) throw (ProtocolException)
+void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask) throw (ProtocolException)
 {
     TransferHelper *helper;
     OBPGetIPv4AddressExchange request;
@@ -87,8 +87,10 @@ void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIn
     }
 
     vector<byte> result = *raw;
-	IPv4_Address.assign(raw->cbegin(), prev(raw->cend()));
-	netMask = IPv4_Address.back();
+    // c++11 not used yet
+	//IPv4_Address.assign(raw->cbegin(), prev(raw->cend()));
+	IPv4_Address->assign(raw->begin(), raw->end()-1);
+	*netMask = IPv4_Address->back();
 
     delete raw;
 }

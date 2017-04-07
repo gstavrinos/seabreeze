@@ -55,7 +55,7 @@ OBPDHCPServerProtocol::~OBPDHCPServerProtocol()
 
 }
 
-void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> &serverAddress, unsigned char &netMask) throw (ProtocolException) 
+void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask) throw (ProtocolException) 
 {
     TransferHelper *helper;
     OBPGetDHCPServerAddressExchange request;
@@ -75,9 +75,12 @@ void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char inter
             "containing a DHCP server address and netmask.  Without this data, it is not possible to continue.");
         throw ProtocolException(error);
     }
+	
+	// can't use c++11 yet
+	// serverAddress.assign(raw->cbegin(), prev(raw->cend()));
+	serverAddress->assign(raw->begin(), raw->end()-1);
 
-	serverAddress.assign(raw->cbegin(), prev(raw->cend()));
-	netMask = serverAddress.back();
+	(*netMask) = serverAddress->back();
 
     delete raw;
 }

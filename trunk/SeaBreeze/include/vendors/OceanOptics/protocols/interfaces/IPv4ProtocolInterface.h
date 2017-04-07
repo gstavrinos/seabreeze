@@ -68,7 +68,7 @@ namespace seabreeze {
         /**
          * Get an IPv4 address by its index
          */
-        virtual void get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex, std::vector<unsigned char> &IPv4_Address, unsigned char &netMask)
+        virtual void get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex, std::vector<unsigned char> *IPv4_Address, unsigned char *netMask)
             throw (ProtocolException) = 0;
 
         /**

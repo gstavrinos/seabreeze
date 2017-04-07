@@ -48,7 +48,7 @@ namespace seabreeze
             	EthernetConfigurationFeatureAdapter( EthernetConfigurationFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);
             	virtual ~EthernetConfigurationFeatureAdapter();
 
-            	void get_MAC_Address(int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+            	void get_MAC_Address(int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]);
 				void set_MAC_Address(int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
             	unsigned char get_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex);
             	void set_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex, unsigned char enableState);

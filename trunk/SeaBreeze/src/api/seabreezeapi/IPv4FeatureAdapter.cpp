@@ -33,7 +33,7 @@
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "api/seabreezeapi/IPv4FeatureAdapter.h"
-#include <string.h> /* for memcpy */
+#include <string.h> /* for memcpy pre c++11 */
 #include <vector>
 
 using namespace seabreeze;
@@ -96,16 +96,16 @@ unsigned char IPv4FeatureAdapter::get_Number_Of_IPv4_Addresses(int *errorCode, u
 	return numberOfAddresses;
 }
 
-void IPv4FeatureAdapter::get_IPv4_Address(int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char (&IPv4_Address)[4], unsigned char &netMask)
+void IPv4FeatureAdapter::get_IPv4_Address(int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char (*IPv4_Address)[4], unsigned char *netMask)
 {
 
     vector<byte> ipv4AddressVector;
 
     try 
 	{
-		this->feature->get_IPv4_Address(*this->protocol, *this->bus, interfaceIndex, addressIndex, ipv4AddressVector, netMask);
+		this->feature->get_IPv4_Address(*this->protocol, *this->bus, interfaceIndex, addressIndex, &ipv4AddressVector, netMask);
 
-        memcpy(IPv4_Address, &(ipv4AddressVector[0]), 4);
+        memcpy((*IPv4_Address), &(ipv4AddressVector[0]), 4);
 
         SET_ERROR_CODE(ERROR_SUCCESS);
     } 
@@ -115,7 +115,7 @@ void IPv4FeatureAdapter::get_IPv4_Address(int *errorCode, unsigned char interfac
     }
 }
 
-void IPv4FeatureAdapter::get_IPv4_Default_Gateway(int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+void IPv4FeatureAdapter::get_IPv4_Default_Gateway(int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
 {
 
 	vector<byte> defaultGatewayAddressVector;

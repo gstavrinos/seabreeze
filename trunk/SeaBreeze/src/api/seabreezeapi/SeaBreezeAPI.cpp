@@ -819,7 +819,7 @@ int sbapi_get_ethernet_configuration_features(long deviceID, int *error_code, lo
 	return wrapper->getEthernetConfigurationFeatures(deviceID, error_code, features, max_features);
 }
 
-void sbapi_ethernet_configuration_get_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6])
+void sbapi_ethernet_configuration_get_mac_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
@@ -900,19 +900,19 @@ void sbapi_multicast_set_enable_state(long deviceID, long featureID, int *error_
 // currently the multicast group address and port are not accessible. However, these functions return a hard coded value for convenience
 unsigned short sbapi_multicast_get_group_port(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex)
 {
-	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+	//SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
 	//return wrapper->getMulticastGroupPort(deviceID, featureID, error_code, interfaceIndex);
 	return 57357;
 }
 
-void sbapi_multicast_get_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+void sbapi_multicast_get_group_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(*groupAddress)[4])
 {
-	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+	//SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
 	//wrapper->getMulticastGroupAddress(deviceID, featureID, error_code, interfaceIndex, groupAddress);
 	for (int i = 0; i < 4; i++)
-		groupAddress[i] = 239;
+		(*groupAddress)[i] = 239;
 }
 
 
@@ -955,14 +955,14 @@ unsigned char sbapi_ipv4_get_number_of_addresses(long deviceID, long featureID, 
 	return wrapper->get_Number_Of_IPv4_Addresses(deviceID, featureID, error_code, interfaceIndex);
 }
 
-void sbapi_ipv4_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+void sbapi_ipv4_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask)
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
 	wrapper->get_IPv4_Address(deviceID, featureID, error_code, interfaceIndex, addressIndex, IPv4_Address, netMask);
 }
 
-void sbapi_ipv4_get_default_gateway_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+void sbapi_ipv4_get_default_gateway_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
@@ -1008,7 +1008,7 @@ int sbapi_get_dhcp_server_features(long deviceID, int *error_code, long *feature
 	return wrapper->getDHCPServerFeatures(deviceID, error_code, features, max_features);
 }
 
-void sbapi_dhcp_server_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask)
+void sbapi_dhcp_server_get_address(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask)
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
@@ -1143,7 +1143,7 @@ void sbapi_wifi_configuration_set_security_type(long deviceID, long featureID, i
 	return wrapper->setWifiConfigurationSecurityType(deviceID, featureID, error_code, interfaceIndex, securityType);
 }
 
-unsigned char sbapi_wifi_configuration_get_ssid(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char sbapi_wifi_configuration_get_ssid(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex, unsigned char(*ssid)[32])
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 

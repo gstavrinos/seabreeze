@@ -153,7 +153,7 @@ namespace seabreeze {
             /* Get one or more ethernet configuration features */
             int getNumberOfEthernetConfigurationFeatures();
             int getEthernetConfigurationFeatures(long *buffer, int maxFeatures);
-            void ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+            void ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]);
             void ethernetConfiguration_Set_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
             unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex);
             void ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus);
@@ -172,8 +172,8 @@ namespace seabreeze {
 			unsigned char get_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex);
 			void   set_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
 			unsigned char get_Number_Of_IPv4_Addresses(long featureID, int *errorCode, unsigned char interfaceIndex);
-			void   get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask);
-			void   get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4]);
+			void   get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask);
+			void   get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4]);
 			void   set_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4]);
 			void   add_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask);
 			void   delete_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex);
@@ -185,7 +185,7 @@ namespace seabreeze {
 			void wifiConfigurationSetMode(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
 			unsigned char wifiConfigurationGetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex);
 			void wifiConfigurationSetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
-			unsigned char wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+			unsigned char wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32]);
 			void wifiConfigurationSetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
 			void wifiConfigurationSetPassPhrase(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
@@ -193,7 +193,7 @@ namespace seabreeze {
 			/* Get one or more dhcp server features */
 			int getNumberOfDHCPServerFeatures();
 			int getDHCPServerFeatures(long *buffer, int maxFeatures);
-			void dhcpServerGetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+			void dhcpServerGetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask);
 			void dhcpServerSetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask);
 			unsigned char dhcpServerGetEnableState(long featureID, int *errorCode, unsigned char interfaceIndex);
 			void dhcpServerSetEnableState(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);

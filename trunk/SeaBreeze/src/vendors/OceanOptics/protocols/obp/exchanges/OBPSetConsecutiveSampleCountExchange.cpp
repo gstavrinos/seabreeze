@@ -32,6 +32,7 @@
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 #include <vector>
+#include <cstring>
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;

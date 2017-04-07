@@ -57,7 +57,7 @@ DHCPServerFeature::~DHCPServerFeature()
 
 }
 
-void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> &serverAddress, unsigned char &netMask) throw (FeatureException) 
+void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask) throw (FeatureException) 
 {
 
 	DHCPServerProtocolInterface *DHCPServerPI = NULL;

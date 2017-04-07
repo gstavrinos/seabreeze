@@ -2377,7 +2377,7 @@ void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *te
 
 		// get the mac address
 		printf("\t\t\tAttempting to retrieve the MAC address...\n");
-		sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, aMacAddress);
+		sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, &aMacAddress);
 			
 		printf("\t\t\tResult is %x:%x:%x:%x:%x:%x [%s]\n", aMacAddress[0], aMacAddress[1], aMacAddress[2], 
 			aMacAddress[3], aMacAddress[4], aMacAddress[5], sbapi_get_error_string(error));
@@ -2385,7 +2385,7 @@ void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *te
 
 		// set the same mac address and just check the error code
 		printf("\t\t\tAttempting to set the MAC address to the same value...\n");
-		sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, aMacAddress);
+		sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, &aMacAddress);
 
 		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
@@ -2473,7 +2473,7 @@ void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int 
 
 		// get the dhcp server address
 		printf("\t\t\tAttempting to retrieve the dhcp server address...\n");
-		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerAddress, netMask);
+		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, &dhcpServerAddress, &netMask);
 
 		printf("\t\t\tResult is %d.%d.%d.%d/%d [%s]\n", dhcpServerAddress[0], dhcpServerAddress[1], dhcpServerAddress[2],
 			dhcpServerAddress[3], netMask, sbapi_get_error_string(error));
@@ -2481,7 +2481,7 @@ void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int 
 
 		// set the same dhcp server address and just check the error code
 		printf("\t\t\tAttempting to set the dhcp server address to the same value...\n");
-		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerAddress, netMask);
+		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, &dhcpServerAddress, &netMask);
 
 		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
@@ -2567,7 +2567,7 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 
 		// get the dhcp gateway address
 		printf("\t\t\tAttempting to retrieve the default gateway address...\n");
-		sbapi_ipv4_get_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4GatewayAddress);
+		sbapi_ipv4_get_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, &ipv4GatewayAddress);
 
 		printf("\t\t\tResult is %d.%d.%d.%d[%s]\n", ipv4GatewayAddress[0], ipv4GatewayAddress[1], ipv4GatewayAddress[2],
 			ipv4GatewayAddress[3], sbapi_get_error_string(error));
@@ -2600,7 +2600,7 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 
 				// get the dhcp server address
 				printf("\t\t\t\tAttempting to retrieve the dhcp server address...\n");
-				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, addressIndex, ipv4Address, netMask);
+				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, addressIndex, (&ipv4Address), &netMask);
 
 				printf("\t\t\t\tResult is addressIndex = %d, ipv4 address =  %d.%d.%d.%d/%d [%s]\n", addressIndex, ipv4Address[0], ipv4Address[1], 
 					ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
@@ -2625,7 +2625,7 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 			ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
 			printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
 
-			sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1, ipv4Address, netMask);
+			sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1, &ipv4Address, &netMask);
 			printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
 
 			printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
@@ -2680,7 +2680,7 @@ void test_multicast_features(long deviceID, int *unsupportedFeatureCount, int *t
 		unsigned short port;
 
 		// these functions are for convenience. They do not contact the spectrometer
-		sbapi_multicast_get_group_address(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, groupAddress);
+		sbapi_multicast_get_group_address(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, &groupAddress);
 		port = sbapi_multicast_get_group_port(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex);
 		printf("\t\t\tMulticast Address = %d.%d.%d.%d, Port = %d\n", groupAddress[0], groupAddress[1], groupAddress[2], groupAddress[3], port);
 
@@ -2804,7 +2804,7 @@ void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 		tallyErrors(error, testFailureCount);
 
 		printf("\t\t\tAttempting to retrieve the wifi ssid...\n");
-		characterCount = sbapi_wifi_configuration_get_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, ssid);
+		characterCount = sbapi_wifi_configuration_get_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, &ssid);
 		if (characterCount > 0)
 		{
 			myString.replace(myString.begin(), myString.end(), &(ssid[0]), &(ssid[characterCount]));

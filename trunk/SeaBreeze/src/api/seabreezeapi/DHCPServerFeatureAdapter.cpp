@@ -33,7 +33,7 @@
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "api/seabreezeapi/DHCPServerFeatureAdapter.h"
-#include <string.h> /* for memcpy */
+#include <string.h> /* for memcpy pre c++11 */
 #include <vector>
 
 using namespace seabreeze;
@@ -58,14 +58,14 @@ DHCPServerFeatureAdapter::~DHCPServerFeatureAdapter()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char interfaceIndex, unsigned char (&serverAddress)[4], unsigned char &netMask)
+void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char interfaceIndex, unsigned char (*serverAddress)[4], unsigned char *netMask)
 {
 
     vector<byte> serverAddressVector;
 
     try 
 	{
-		this->feature->getServerAddress(*this->protocol, *this->bus, interfaceIndex, serverAddressVector, netMask);
+		this->feature->getServerAddress(*this->protocol, *this->bus, interfaceIndex, &serverAddressVector, netMask);
 
         memcpy(serverAddress, &(serverAddressVector[0]), 4);
 
