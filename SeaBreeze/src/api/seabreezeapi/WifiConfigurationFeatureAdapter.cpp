@@ -107,30 +107,36 @@ void WifiConfigurationFeatureAdapter::setSecurityType(int *errorCode, unsigned c
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }
-void WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (&ssid)[32])
+
+unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (&ssid)[32])
 {
 
-    vector<byte> ssidVector;
+    vector<unsigned char> ssidVector;
 
     try 
 	{
-		ssidVector = this->feature->getSSID(*this->protocol, *this->bus, interfaceIndex);
 
-        memcpy(ssid, &(ssidVector[0]), 32);
+		ssidVector = this->feature->getSSID(*this->protocol, *this->bus, interfaceIndex);
+		// remove the null termination
+		ssidVector.resize(std::find(ssidVector.begin(), ssidVector.end(), 0) - ssidVector.begin());
+        memcpy(ssid, ssidVector.data(), ssidVector.size());
 
         SET_ERROR_CODE(ERROR_SUCCESS);
+		return ssidVector.size();
+
     } 
 	catch (FeatureException &fe) 
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		return 0;
     }
 }
 
-void WifiConfigurationFeatureAdapter::setSSID(int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+void WifiConfigurationFeatureAdapter::setSSID(int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length)
 {
 
-    vector<byte> *ssidVector = new vector<byte>(32);
-    memcpy(&((*ssidVector)[0]), ssid, 32);
+    vector<unsigned char> *ssidVector = new vector<unsigned char>(length);
+    memcpy(&((*ssidVector)[0]), ssid, length);
 
     try {
         this->feature->setSSID(*this->protocol, *this->bus, interfaceIndex, *ssidVector);

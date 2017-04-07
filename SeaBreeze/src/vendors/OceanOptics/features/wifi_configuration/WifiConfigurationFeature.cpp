@@ -182,7 +182,7 @@ vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol
 	catch (FeatureProtocolNotFoundException &e) 
 	{
         string error(
-        "Could not find matching protocol implementation to get calibration.");
+        "Could not find matching protocol implementation to get wifi configuration");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }

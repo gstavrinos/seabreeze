@@ -67,7 +67,7 @@ namespace seabreeze
 			unsigned char interfaceIndex,
 			unsigned char securityType)
 			throw (FeatureException);
-		virtual std::vector<byte> getSSID(
+		virtual std::vector<unsigned char> getSSID(
 			const Protocol &protocol,
 			const Bus &bus, 
 			unsigned char interfaceIndex)
@@ -76,13 +76,13 @@ namespace seabreeze
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> ssid)
+			const std::vector<unsigned char> ssid)
 			throw (FeatureException);
 		virtual void setPassPhrase(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> passPhrase)
+			const std::vector<unsigned char> passPhrase)
 			throw (FeatureException);
 
 

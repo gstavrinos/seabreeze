@@ -161,7 +161,7 @@ public:
 	void   setWifiConfigurationMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
 	unsigned char getWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex);
 	void   setWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
-	void   getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+	unsigned char   getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
 	void   setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
 	void   setWifiConfigurationPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
@@ -997,6 +997,69 @@ extern "C" {
     * @param error_code (Output) Pointer to allocated integer to receive error code
     */
     DLL_DECL void seabreeze_set_mac_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char macAddress[6]);
+
+
+
+
+	/**
+	* @brief Get the wifi access mode, 0: client, 1: access point
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return The wifi access mode
+	*/
+	DLL_DECL unsigned char seabreeze_get_wifi_mode(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Set the wifi access mode,  0: client, 1: access point
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param wifi Mode (Input) The wifi mode for the indicated interface
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_wifi_mode(int index, int *error_code, unsigned char interfaceIndex, unsigned char wifiMode);
+
+	/**
+	* @brief Get the wifi security type, 0: open, 1: WPA2
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return The wifi security type
+	*/
+	DLL_DECL unsigned char seabreeze_get_wifi_security_type(int index, int *error_code, unsigned char interfaceIndex);
+
+	/**
+	* @brief Set the wifi security type,  0: open, 1: WPA2
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param secuirty type  (Input) The wifi mode for the indicated interface
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_wifi_security_type(int index, int *error_code, unsigned char interfaceIndex, unsigned char securityType);
+
+	/**
+	* @brief Get the wifi ssid (up to 32 bytes)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param macAddress (Output) Pointer to allocated 32 byte unsigned char array to receive the ssid
+	*/
+	DLL_DECL unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+
+	/**
+	* @brief Set the wifi ssid 
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the number of bytes used in the 32 byte array
+	*/
+	DLL_DECL void seabreeze_set_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
+
+	/**
+	* @brief Set the wifi ssid
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_wifi_pass_phrase(int index, int *error_code, unsigned char interfaceIndex, const unsigned char *passphrase, unsigned char length);
+
+
+
 
 
 

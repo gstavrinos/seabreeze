@@ -42,7 +42,7 @@ OBPSetWifiConfigurationSSIDExchange::OBPSetWifiConfigurationSSIDExchange() {
 
     this->messageType = OBPMessageTypes::OBP_SET_WIFI_SSID;
 
-    this->payload.resize(1 + 32); // interface Index and 32 bytes for the SSID
+    this->payload.resize(1); // interface Index and n bytes for the SSID, which should be set later
 }
 
 OBPSetWifiConfigurationSSIDExchange::~OBPSetWifiConfigurationSSIDExchange() 
@@ -58,10 +58,10 @@ void OBPSetWifiConfigurationSSIDExchange::setInterfaceIndex(unsigned char interf
 
 void OBPSetWifiConfigurationSSIDExchange::setSSID(vector<unsigned char> ssid) 
 {
-
-	for (int i = 0; i < 32; i++)
+	this->payload.resize(ssid.size() + 1); // set the payload size according to the ssid length
+	for (int i = 0; i < ssid.size(); i++)
 	{
-		this->payload[1 + i] = ssid[i];
+		this->payload[i + 1] = ssid[i];
 	}
 }
 

@@ -167,16 +167,16 @@ namespace seabreeze {
 			void setMulticastEnableState(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
 
 			// IPv4 features
-			virtual int getNumberOfIPv4Features();
-			virtual int getIPv4Features(long *buffer, int maxLength);
-			virtual unsigned char get_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex);
-			virtual void   set_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
-			virtual unsigned char get_Number_Of_IPv4_Addresses(long featureID, int *errorCode, unsigned char interfaceIndex);
-			virtual void   get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask);
-			virtual void   get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4]);
-			virtual void   set_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4]);
-			virtual void   add_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask);
-			virtual void   delete_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex);
+			int getNumberOfIPv4Features();
+			int getIPv4Features(long *buffer, int maxLength);
+			unsigned char get_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex);
+			void   set_IPv4_DHCP_Enable_State(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
+			unsigned char get_Number_Of_IPv4_Addresses(long featureID, int *errorCode, unsigned char interfaceIndex);
+			void   get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask);
+			void   get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4]);
+			void   set_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4]);
+			void   add_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask);
+			void   delete_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex);
 
 			/* Get one or more wifi configuration features */
 			int getNumberOfWifiConfigurationFeatures();
@@ -185,8 +185,8 @@ namespace seabreeze {
 			void wifiConfigurationSetMode(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
 			unsigned char wifiConfigurationGetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex);
 			void wifiConfigurationSetSecurityType(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
-			void wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[32]);
-			void wifiConfigurationSetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[32]);
+			unsigned char wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+			void wifiConfigurationSetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
 			void wifiConfigurationSetPassPhrase(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
 

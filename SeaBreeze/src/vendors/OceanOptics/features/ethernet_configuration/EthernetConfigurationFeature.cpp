@@ -72,7 +72,7 @@ vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protoc
 	catch (FeatureProtocolNotFoundException &e) 
 	{
         string error(
-        "Could not find matching protocol implementation to get calibration.");
+        "Could not find matching protocol implementation to get ethernet configuration.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }

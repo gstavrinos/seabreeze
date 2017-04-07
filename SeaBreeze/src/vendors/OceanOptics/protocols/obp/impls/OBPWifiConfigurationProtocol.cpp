@@ -187,6 +187,7 @@ void OBPWifiConfigurationProtocol::setMode(const Bus &bus, unsigned char interfa
         throw ProtocolBusMismatchException(error);
     }
 
+	command.setInterfaceIndex(interfaceIndex);
 	command.setMode(mode);
 
     /* This may cause a ProtocolException to be thrown. */
@@ -242,7 +243,7 @@ void OBPWifiConfigurationProtocol::setSecurityType(const Bus &bus, unsigned char
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
 	}
-
+	command.setInterfaceIndex(interfaceIndex);
 	command.setSecurityType(securityType);
 
 	/* This may cause a ProtocolException to be thrown. */
