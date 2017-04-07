@@ -2171,13 +2171,13 @@ void SeaBreezeWrapper::setWifiConfigurationSecurityType(int index, int *errorCod
 	}
 }
 
-void SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
 {
-
+	unsigned char result = 0;
 	if (NULL == this->devices[index])
 	{
 		SET_ERROR_CODE(ERROR_NO_DEVICE);
-		return;
+		return 0;
 	}
 
 	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
@@ -2186,7 +2186,7 @@ void SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsig
 
 	if (NULL != wifiConfigurationFI)
 	{
-		vector<byte> ssidBytes;
+		vector<unsigned char> ssidBytes;
 
 		try
 		{
@@ -2195,15 +2195,10 @@ void SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsig
 				*__seabreeze_getBus(this->devices[index]),
 				interfaceIndex);
 
-			if (ssidBytes.size() == 6)
-			{
-				memcpy(ssid, &(ssidBytes[0]), 32);
-				SET_ERROR_CODE(ERROR_SUCCESS);
-			}
-			else
-			{
-				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
-			}
+
+			memcpy(ssid, &(ssidBytes[0]), ssidBytes.size());
+			SET_ERROR_CODE(ERROR_SUCCESS);
+			result = ssidBytes.size();
 
 		}
 		catch (FeatureException &fe)
@@ -2211,6 +2206,7 @@ void SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsig
 			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		}
 	}
+	return result;
 }
 
 void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
@@ -2226,7 +2222,7 @@ void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsig
 		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
 	if (NULL != wifiConfigurationFI)
 	{
-		vector<byte> *byteVector = new vector<byte>(32);
+		vector<unsigned char> *byteVector = new vector<unsigned char>(32);
 		memcpy(&((*byteVector)[0]), ssid, 32 * sizeof(unsigned char));
 
 		try
@@ -2261,7 +2257,7 @@ void SeaBreezeWrapper::setWifiConfigurationPassPhrase(int index, int *errorCode,
 		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
 	if (NULL != wifiConfigurationFI)
 	{
-		vector<byte> *byteVector = new vector<byte>(passPhraseLength);
+		vector<unsigned char> *byteVector = new vector<unsigned char>(passPhraseLength);
 		memcpy(&((*byteVector)[0]), passPhrase, passPhraseLength * sizeof(unsigned char));
 
 		try
@@ -3394,7 +3390,7 @@ void seabreeze_set_wifi_security_type(int index, int *error_code, unsigned char 
 	return wrapper->setWifiConfigurationSecurityType(index, error_code, interfaceIndex, wifiMode);
 }
 
-void seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);

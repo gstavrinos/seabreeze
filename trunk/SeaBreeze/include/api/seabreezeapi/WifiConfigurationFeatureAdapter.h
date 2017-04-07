@@ -53,8 +53,8 @@ namespace seabreeze
             	unsigned char getSecurityType(int *errorCode, unsigned char interfaceIndex);
             	void setSecurityType(int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
 
-            	void getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (&ssid)[32]);
-				void setSSID(int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
+            	unsigned char getSSID(int *errorCode, unsigned char interfaceIndex, unsigned char (&ssid)[32]);
+				void setSSID(int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
 				void setPassPhrase(int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
         };

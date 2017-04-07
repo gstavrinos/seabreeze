@@ -143,11 +143,6 @@ FlameX::FlameX() {
 	multicastHelpers.push_back(new OBPMulticastProtocol());
 	this->features.push_back(new MulticastFeature(multicastHelpers));
 
-	/* Add wifi configuration feature */
-	vector<ProtocolHelper *> wifiConfigurationHelpers;
-	wifiConfigurationHelpers.push_back(new OBPWifiConfigurationProtocol());
-	this->features.push_back(new WifiConfigurationFeature(wifiConfigurationHelpers));
-
 	/* Add DHCP Server  feature */
 	vector<ProtocolHelper *> dhcpServerHelpers;
 	dhcpServerHelpers.push_back(new OBPDHCPServerProtocol());
@@ -157,6 +152,11 @@ FlameX::FlameX() {
 	vector<ProtocolHelper *> ipv4Helpers;
 	ipv4Helpers.push_back(new OBPIPv4Protocol());
 	this->features.push_back(new IPv4Feature(ipv4Helpers));
+
+	/* Add wifi configuration feature */
+	vector<ProtocolHelper *> wifiConfigurationHelpers;
+	wifiConfigurationHelpers.push_back(new OBPWifiConfigurationProtocol());
+	this->features.push_back(new WifiConfigurationFeature(wifiConfigurationHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }

@@ -75,18 +75,18 @@ namespace seabreeze {
         /**
          * Get the 32 byte SSID  from the device.
          */
-        virtual std::vector<byte> getSSID(const Bus &bus, unsigned char interfaceIndex)
+        virtual std::vector<unsigned char> getSSID(const Bus &bus, unsigned char interfaceIndex)
             throw (ProtocolException) = 0;
         /**
          *  Set the SSID  .
          */
-        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> ssid_32_bytes)
+        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> ssid_32_bytes)
             throw (ProtocolException) = 0;
 
         /**
          *  Set the pass phrase
          */
-        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> passPhrase)
+        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> passPhrase)
             throw (ProtocolException) = 0;
 
 

@@ -66,10 +66,15 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
-void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+
+void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_multicast_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
 
 /* Create a type called "testfunc_t" that is just a pointer to any function that
 * has this signature:  void func(long)
@@ -99,7 +104,7 @@ static testfunc_t __test_functions[] =
 	test_fast_buffer_feature,
 	test_acquisition_delay_feature,
 	test_pixel_binning_feature,
-	test_networking_features, // also includes ethernet
+	test_networking_features, // also includes ethernet, multicast, ipv4, dhcp server and wifi
 	test_miscellaneous_commands
 };
 
@@ -2130,8 +2135,9 @@ void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *
 	printf("\n\tTesting networking features:\n");
 
 	printf("\t\tExercising network configuration commands:\n");
+	printf("\t\tRetrieve number of network configuration features:\n");
 	number_of_network_configurations = sbapi_get_number_of_network_configuration_features(deviceID, &error);
-	printf("\t\t\tResult is %d [%s]\n", number_of_network_configurations, sbapi_get_error_string(error));
+	printf("\t\tResult is %d  [%s]\n", number_of_network_configurations, sbapi_get_error_string(error));
 	tallyErrors(error, testFailureCount);
 
 	if (0 == number_of_network_configurations)
@@ -2182,7 +2188,7 @@ void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *
 					typeName = "Undefined";
 					break;
 			}			
-			printf("\t\t\tResult is %d [%s]: %s\n", interfaceType, sbapi_get_error_string(error), typeName.data());
+			printf("\n>>>\t\t\tResult is %d [%s]: %s\n\n", interfaceType, sbapi_get_error_string(error), typeName.data());
 			tallyErrors(error, testFailureCount);
 			
 			// switch interface enable state
@@ -2191,70 +2197,92 @@ void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *
 			printf("\t\t\tResult is %d [%s]\n", interfaceEnableState1, sbapi_get_error_string(error));
 			tallyErrors(error, testFailureCount);
 
-			unsigned char interfaceEnableState2 =  interfaceEnableState1;
-			printf("\t\t\tAttempting to switch the interface enable state...\n");
-			if (interfaceEnableState2 == 0)
-			{
-				interfaceEnableState2 = 1;
-				printf("\t\t\t\tInterface was disabled.\n");
-			}
-			else
-			{
-				interfaceEnableState2 = 0;
-				printf("\t\t\t\tInterface was enabled.\n");
-			}
-
-			sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, interfaceEnableState2);
-			tallyErrors(error, testFailureCount);
 			if (error == 0)
 			{
-				printf("\t\t\tThe interface enable state was successfully modified.\n");
-			}
-			else
-			{
-				printf("\t\t\tThe interface enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
-			}
-			
-
-			// set interface enable state to true
-			printf("\t\t\tAttempting to set the interface enable state to true\n");
-			sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, 1);
-			printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
-			tallyErrors(error, testFailureCount);
-
-			if (error == 0)
-			{
-				if (interfaceType == 1)
+				unsigned char interfaceEnableState2 = interfaceEnableState1;
+				printf("\t\t\tAttempting to switch the interface enable state...\n");
+				if (interfaceEnableState2 == 0)
 				{
-					// test gigabit ethernet configuration commands
-					test_ethernet_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+					interfaceEnableState2 = 1;
+					printf("\t\t\t\tInterface was disabled.\n");
+				}
+				else
+				{
+					interfaceEnableState2 = 0;
+					printf("\t\t\t\tInterface was enabled.\n");
+				}
+
+				sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, interfaceEnableState2);
+				tallyErrors(error, testFailureCount);
+				if (error == 0)
+				{
+					printf("\t\t\tThe interface enable state was successfully modified.\n");
+				}
+				else
+				{
+					printf("\t\t\tThe interface enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+				}
+
+#if(FX_HANGS)
+				// set interface enable state to true
+				printf("\t\t\tAttempting to set the interface enable state to true\n");
+				sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, 1);
+				printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+				tallyErrors(error, testFailureCount);
+#endif
+				if (error == 0)
+				{
+					switch(interfaceType)
+					{
+					case 0: // loopback
+						test_ethernet_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						break;
+					case 1: // wired ethernet
+						// test gigabit ethernet configuration commands
+						test_ethernet_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						break;
+					case 2: // wifi
+						test_wifi_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_dhcp_server_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						break;
+					case 3: // CDC ethernet (USB)
+
+						break;
+					default:
+
+						break;
+
+						test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+					}
+
+#ifdef RUN_SELF_TEST
+
+					// run self test
+					printf("\t\t\tAttempting to run a network interface selftest. This can take up to two minutes to execute. Be patient.\n");
+					unsigned char myResult = sbapi_network_configuration_run_interface_self_test(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+					std::string selftestResult = "Failed";
+					if (myResult == 1)
+						selftestResult = "Passed";
+					printf("\t\t\tSelf test result: %s [%s]\n", selftestResult.data(), sbapi_get_error_string(error));
+					tallyErrors(error, testFailureCount);
+#endif
 
 				}
 
-#ifdef RUN_SELF_TEST
-				
-				// run self test
-				printf("\t\t\tAttempting to run a network interface selftest. This can take up to two minutes to execute. Be patient.\n");
-				unsigned char myResult = sbapi_network_configuration_run_interface_self_test(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
-				std::string selftestResult = "Failed";
-				if (myResult == 1)
-					selftestResult = "Passed";
-				printf("\t\t\tSelf test result: %s [%s]\n", selftestResult.data(), sbapi_get_error_string(error));
+
+
+				// save interface settings
+				printf("\t\t\tAttempting to save the interface settings\n");
+				sbapi_network_configuration_save_interface_settings(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+				printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 				tallyErrors(error, testFailureCount);
-#endif
-
 			}
-
-
-
-			// save interface settings
-			printf("\t\t\tAttempting to save the interface settings\n");
-			sbapi_network_configuration_save_interface_settings(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
-			printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-			tallyErrors(error, testFailureCount);
-
-
-			// test ethernet
 
 
 		}
@@ -2355,13 +2383,451 @@ void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *te
 			aMacAddress[3], aMacAddress[4], aMacAddress[5], sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 
+		// set the same mac address and just check the error code
+		printf("\t\t\tAttempting to set the MAC address to the same value...\n");
+		sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, aMacAddress);
+
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
 
 		printf("\t\t%d: Finished testing device 0x%02lX, ethernet configuration feature 0x%02lX\n", i, deviceID, ethernet_configuration_ids[i]);
 	}
 
 	free(ethernet_configuration_ids);
 
-	printf("\tFinished testing network feature capabilities.\n");
+	printf("\tFinished testing ethernet feature capabilities.\n");
 }
 
+void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+	int error = 0;
+	int number_of_dhcp_server_features;
+	long *dhcp_server_ids = 0;
+	int i;
+
+	printf("\n\tTesting dhcp server configuration features for network interface index = %d\n", networkInterfaceIndex);
+
+	printf("\t\tExercising dhcp server commands:\n");
+	number_of_dhcp_server_features = sbapi_get_number_of_dhcp_server_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_dhcp_server_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_dhcp_server_features)
+	{
+		printf("\tNo dhcp server capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	dhcp_server_ids = (long *)calloc(number_of_dhcp_server_features, sizeof(long));
+	printf("\t\tGetting dhcp server feature IDs...\n");
+	number_of_dhcp_server_features = sbapi_get_dhcp_server_features(deviceID, &error, dhcp_server_ids, number_of_dhcp_server_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_dhcp_server_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_dhcp_server_features; i++)
+	{
+		printf("\t\t%d: Testing device 0x%02lX, dhcp server feature id 0x%02lX\n", i, deviceID, dhcp_server_ids[i]);
+		printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+		// switch dhcp server enable state
+		printf("\t\t\tAttempting to retrieve the dhcp server enable state...\n");
+		unsigned char dhcpServerEnableState1 = sbapi_dhcp_server_get_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex);
+		printf("\t\t\tResult is %d [%s]\n", dhcpServerEnableState1, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned char dhcpServerEnableState2 = dhcpServerEnableState1;
+		printf("\t\t\tAttempting to switch the dhcp server enable state...\n");
+		if (dhcpServerEnableState2 == 0)
+		{
+			dhcpServerEnableState2 = 1;
+			printf("\t\t\t\tThe DHCP server was disabled.\n");
+		}
+		else
+		{
+			dhcpServerEnableState2 = 0;
+			printf("\t\t\t\tThe DHCP server was enabled.\n");
+		}
+
+		sbapi_dhcp_server_set_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerEnableState2);
+		tallyErrors(error, testFailureCount);
+		if (error == 0)
+		{
+			printf("\t\t\tThe dhcp server enable state was successfully modified.\n");
+		}
+		else
+		{
+			printf("\t\t\tThe dhcp server enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+		}
+
+
+		// set dhcp server enable state to false
+		printf("\t\t\tAttempting to set the dhcp server enable state to false\n");
+		sbapi_dhcp_server_set_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, 0);
+		printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned char dhcpServerAddress[4];
+		unsigned char netMask = 0;
+
+		// get the dhcp server address
+		printf("\t\t\tAttempting to retrieve the dhcp server address...\n");
+		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerAddress, netMask);
+
+		printf("\t\t\tResult is %d.%d.%d.%d/%d [%s]\n", dhcpServerAddress[0], dhcpServerAddress[1], dhcpServerAddress[2],
+			dhcpServerAddress[3], netMask, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		// set the same dhcp server address and just check the error code
+		printf("\t\t\tAttempting to set the dhcp server address to the same value...\n");
+		sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerAddress, netMask);
+
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t%d: Finished testing device 0x%02lX, dhcp server feature 0x%02lX\n", i, deviceID, dhcp_server_ids[i]);
+	}
+
+	free(dhcp_server_ids);
+
+	printf("\tFinished testing dhcp server feature capabilities.\n");
+}
+
+void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+	int error = 0;
+	int number_of_ipv4_features;
+	long *ipv4_feature_ids = 0;
+	int i;
+
+	printf("\n\tTesting ipv4 features for network interface index = %d\n", networkInterfaceIndex);
+
+	printf("\t\tExercising ipv4 commands:\n");
+	number_of_ipv4_features = sbapi_get_number_of_ipv4_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_ipv4_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_ipv4_features)
+	{
+		printf("\tNo ipv4 capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	ipv4_feature_ids = (long *)calloc(number_of_ipv4_features, sizeof(long));
+	printf("\t\tGetting ipv4 server feature IDs...\n");
+	number_of_ipv4_features = sbapi_get_ipv4_features(deviceID, &error, ipv4_feature_ids, number_of_ipv4_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_ipv4_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_ipv4_features; i++)
+	{
+		printf("\t\t%d: Testing device 0x%02lX, ipv4 feature id 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
+		printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+		// switch dhcp client enable state
+		printf("\t\t\tAttempting to retrieve the dhcp client enable state...\n");
+		unsigned char dhcpEnableState1 = sbapi_ipv4_get_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+		printf("\t\t\tResult is %d [%s]\n", dhcpEnableState1, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned char dhcpEnableState2 = dhcpEnableState1;
+		printf("\t\t\tAttempting to switch the dhcp client enable state...\n");
+		if (dhcpEnableState2 == 0)
+		{
+			dhcpEnableState2 = 1;
+			printf("\t\t\t\tThe dhcp client was disabled.\n");
+		}
+		else
+		{
+			dhcpEnableState2 = 0;
+			printf("\t\t\t\tThe dhcp client was enabled.\n");
+		}
+
+		sbapi_ipv4_set_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, dhcpEnableState2);
+		tallyErrors(error, testFailureCount);
+		if (error == 0)
+		{
+			printf("\t\t\tThe dhcp client enable state was successfully modified.\n");
+		}
+		else
+		{
+			printf("\t\t\tThe dhcp client enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+		}
+
+
+		// set dhcp server enable state to false
+		printf("\t\t\tAttempting to set the dhcp client enable state to true\n");
+		sbapi_ipv4_set_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, 1);
+		printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned char ipv4GatewayAddress[4];
+
+		// get the dhcp gateway address
+		printf("\t\t\tAttempting to retrieve the default gateway address...\n");
+		sbapi_ipv4_get_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4GatewayAddress);
+
+		printf("\t\t\tResult is %d.%d.%d.%d[%s]\n", ipv4GatewayAddress[0], ipv4GatewayAddress[1], ipv4GatewayAddress[2],
+			ipv4GatewayAddress[3], sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		// set the same default gateway address and just check the error code
+		printf("\t\t\tAttempting to set the default gateway address to the same value...\n");
+		sbapi_ipv4_set_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4GatewayAddress);
+
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+
+		unsigned char ipv4NumberOfAddresses = 0;
+
+		// get the number of ipv4 addresses
+		printf("\t\t\tAttempting to retrieve the number of ipv4 addresses...\n");
+		ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+
+		printf("\t\t\tResult is %d [%s]\n", ipv4NumberOfAddresses, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to list the ipv4 addresses...\n");
+		if (error == 0)
+		{
+			for (unsigned char addressIndex = 0; addressIndex < ipv4NumberOfAddresses; addressIndex++)
+			{
+				unsigned char ipv4Address[4];
+				unsigned char netMask = 0;
+
+				// get the dhcp server address
+				printf("\t\t\t\tAttempting to retrieve the dhcp server address...\n");
+				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, addressIndex, ipv4Address, netMask);
+
+				printf("\t\t\t\tResult is addressIndex = %d, ipv4 address =  %d.%d.%d.%d/%d [%s]\n", addressIndex, ipv4Address[0], ipv4Address[1], 
+					ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+				tallyErrors(error, testFailureCount);
+
+				if (error != 0)
+					break;
+			}
+		}
+
+		unsigned char ipv4Address[4] = { 192, 168, 1, 69 };
+		unsigned char netMask = 24;
+
+		// add and delete an ipv4 address
+		printf("\t\t\tAttempting to add an ipv4 address...\n");
+		printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
+
+		sbapi_ipv4_add_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4Address, netMask);
+		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		if (error == 0)
+		{
+			ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+			printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
+
+			sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1, ipv4Address, netMask);
+			printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+
+			printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
+			sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1);
+			printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+			
+			ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+			printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
+		}
+
+		printf("\t\t%d: Finished testing device 0x%02lX, ipv4 feature 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
+	}
+
+	free(ipv4_feature_ids);
+
+	printf("\tFinished testing ipv4 feature capabilities.\n");
+}
+
+void test_multicast_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+	int error = 0;
+	int number_of_multicast_features;
+	long *multicast_feature_ids = 0;
+	int i;
+
+	printf("\n\tTesting multicast features for network interface index = %d\n", networkInterfaceIndex);
+
+	printf("\t\tExercising multicast commands:\n");
+	number_of_multicast_features = sbapi_get_number_of_multicast_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_multicast_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_multicast_features)
+	{
+		printf("\tNo multicast capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	multicast_feature_ids = (long *)calloc(number_of_multicast_features, sizeof(long));
+	printf("\t\tGetting multicast feature IDs...\n");
+	number_of_multicast_features = sbapi_get_multicast_features(deviceID, &error, multicast_feature_ids, number_of_multicast_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_multicast_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_multicast_features; i++)
+	{
+		printf("\t\t%d: Testing device 0x%02lX, multicast feature id 0x%02lX\n", i, deviceID, multicast_feature_ids[i]);
+		printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+		unsigned char groupAddress[4];
+		unsigned short port;
+
+		// these functions are for convenience. They do not contact the spectrometer
+		sbapi_multicast_get_group_address(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, groupAddress);
+		port = sbapi_multicast_get_group_port(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex);
+		printf("\t\t\tMulticast Address = %d.%d.%d.%d, Port = %d\n", groupAddress[0], groupAddress[1], groupAddress[2], groupAddress[3], port);
+
+		// switch multicast enable state
+		printf("\t\t\tAttempting to retrieve the multicast enable state...\n");
+		unsigned char multicastEnableState1 = sbapi_multicast_get_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex);
+		printf("\t\t\tResult is %d [%s]\n", multicastEnableState1, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned char multicastEnableState2= multicastEnableState1;
+		printf("\t\t\tAttempting to switch multicast enable state...\n");
+		if (multicastEnableState2 == 0)
+		{
+			multicastEnableState2 = 1;
+			printf("\t\t\t\tMulticast was disabled.\n");
+		}
+		else
+		{
+			multicastEnableState2 = 0;
+			printf("\t\t\t\tMulticast was enabled.\n");
+		}
+
+		sbapi_multicast_set_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, multicastEnableState2);
+		tallyErrors(error, testFailureCount);
+		if (error == 0)
+		{
+			printf("\t\t\tThe multicast enable state was successfully modified.\n");
+		}
+		else
+		{
+			printf("\t\t\tThe multicast enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+		}
+
+		// set dhcp server enable state to false
+		printf("\t\t\tAttempting to set the multicast enable state to false\n");
+		sbapi_multicast_set_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, 0);
+		printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t%d: Finished testing device 0x%02lX, dhcp server feature 0x%02lX\n", i, deviceID, multicast_feature_ids[i]);
+	}
+
+	free(multicast_feature_ids);
+
+	printf("\tFinished testing multicast feature capabilities.\n");
+}
+
+void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+	int error = 0;
+	int number_of_wifi_features;
+	long *wifi_feature_ids = 0;
+	int i;
+
+	printf("\n\tTesting wifi features for network interface index = %d\n", networkInterfaceIndex);
+
+	printf("\t\tExercising wifi commands:\n");
+	number_of_wifi_features = sbapi_get_number_of_wifi_configuration_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_wifi_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_wifi_features)
+	{
+		printf("\tNo wifi configuration capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	wifi_feature_ids = (long *)calloc(number_of_wifi_features, sizeof(long));
+	printf("\t\tGetting wifi configuration feature IDs...\n");
+	number_of_wifi_features = sbapi_get_wifi_configuration_features(deviceID, &error, wifi_feature_ids, number_of_wifi_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_wifi_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (i = 0; i < number_of_wifi_features; i++)
+	{
+		unsigned char ssid[32];
+		unsigned char characterCount = 0;
+		std::string myString;
+
+		printf("\t\t%d: Testing device 0x%02lX, wifi configuration feature id 0x%02lX\n", i, deviceID, wifi_feature_ids[i]);
+		printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+		// wifi commands are tested, but settings are not changed, with the exception of the pass phrase which is changed to PassPhras3!
+		
+		printf("\t\t\tAttempting to retrieve the wifi mode...\n");
+		unsigned char wifiMode = sbapi_wifi_configuration_get_mode(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex);
+		if (wifiMode == 0)
+		{
+			myString.replace(myString.begin(), myString.end(), "Client");
+		}
+		else
+		{
+			myString.replace(myString.begin(), myString.end(), "Access Point");
+		}		
+		printf("\t\t\tResult is %s [%s]\n", myString.c_str(), sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to set the wifi mode with the same value...\n");
+		sbapi_wifi_configuration_set_mode(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, wifiMode);
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+
+		printf("\t\t\tAttempting to retrieve the wifi security type...\n");
+		unsigned char securityType = sbapi_wifi_configuration_get_security_type(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex);
+		if (securityType == 0)
+		{
+			myString.replace(myString.begin(), myString.end(), "Open");
+		}
+		else
+		{
+			myString.replace(myString.begin(), myString.end(), "WPA2");
+		}
+		printf("\t\t\tResult is %s [%s]\n", myString.c_str(), sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to set the wifi security type with the same value...\n");
+		sbapi_wifi_configuration_set_security_type(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, securityType);
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to retrieve the wifi ssid...\n");
+		characterCount = sbapi_wifi_configuration_get_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, ssid);
+		if (characterCount > 0)
+		{
+			myString.replace(myString.begin(), myString.end(), &(ssid[0]), &(ssid[characterCount]));
+		}
+		printf("\t\t\tResult is %s [%s]\n", myString.c_str(), sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to set the wifi ssid with the same value...\n");
+		sbapi_wifi_configuration_set_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, ssid, characterCount);
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t\tAttempting to set the wifi pass phrase with: PassPhras3.\n");
+		myString.replace(myString.begin(), myString.end(), "PassPhras3");
+		sbapi_wifi_configuration_set_pass_phrase(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, (unsigned char *)(myString.c_str()), myString.size());
+		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		printf("\t\t%d: Finished testing device 0x%02lX, wifi configuration feature 0x%02lX\n", i, deviceID, wifi_feature_ids[i]);
+	}
+
+	free(wifi_feature_ids);
+
+	printf("\tFinished testing multicast feature capabilities.\n");
+}
 

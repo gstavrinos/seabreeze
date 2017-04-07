@@ -97,7 +97,7 @@ void DHCPServerFeatureAdapter::setServerAddress(int *errorCode, unsigned char in
 
 unsigned char DHCPServerFeatureAdapter::getServerEnableState(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char enableState;
+	unsigned char enableState = 0;
     try {
 		enableState = this->feature->getServerEnableState(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);
