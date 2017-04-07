@@ -811,7 +811,7 @@ EthernetConfigurationFeatureAdapter *DeviceAdapter::getEthernetConfigurationFeat
 }
 
 
-void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
+void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]) 
 {
 	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
 	if (NULL == feature) 
@@ -980,7 +980,7 @@ unsigned char DeviceAdapter::get_Number_Of_IPv4_Addresses(long featureID, int *e
 	return feature->get_Number_Of_IPv4_Addresses(errorCode, interfaceIndex);
 }
 
-void DeviceAdapter::get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+void DeviceAdapter::get_IPv4_Default_Gateway(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
 {
 	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
 	if (NULL == feature)
@@ -1002,7 +1002,7 @@ void DeviceAdapter::set_IPv4_Default_Gateway(long featureID, int *errorCode, uns
 	feature->set_IPv4_Default_Gateway(errorCode, interfaceIndex, defaultGatewayAddress);
 }
 
-void DeviceAdapter::get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex,  unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+void DeviceAdapter::get_IPv4_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex,  unsigned char(*IPv4_Address)[4], unsigned char *netMask)
 {
 	IPv4FeatureAdapter *feature = getIPv4FeatureByID(featureID);
 	if (NULL == feature)
@@ -1106,7 +1106,7 @@ void DeviceAdapter::wifiConfigurationSetSecurityType(long featureID, int *errorC
 
 	feature->setMode(errorCode, interfaceIndex, securityType);
 }
-unsigned char DeviceAdapter::wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char DeviceAdapter::wifiConfigurationGetSSID(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32])
 {
 	WifiConfigurationFeatureAdapter *feature = getWifiConfigurationFeatureByID(featureID);
 	if (NULL == feature)
@@ -1157,7 +1157,7 @@ DHCPServerFeatureAdapter *DeviceAdapter::getDHCPServerFeatureByID(long featureID
 }
 
 
-void DeviceAdapter::dhcpServerGetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask)
+void DeviceAdapter::dhcpServerGetAddress(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask)
 {
 	DHCPServerFeatureAdapter *feature = getDHCPServerFeatureByID(featureID);
 	if (NULL == feature)

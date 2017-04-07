@@ -36,6 +36,8 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
+#include <string.h> /* for memcpy pre c++11 */
+
 
 OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBufferedSpectraWithMetadataExchange() 
 {
@@ -59,8 +61,10 @@ void OBPRequestNumberOfBufferedSpectraWithMetadataExchange::setNumberOfSamplesTo
 	
 	OBPRequestNumberOfBufferedSpectraWithMetadataExchange *parentClass = (OBPRequestNumberOfBufferedSpectraWithMetadataExchange *)myClass;
 
-	vector<byte> *numberOfSamplesToRetrieve = new vector<byte>(sizeof(unsigned int));
-	memcpy(numberOfSamplesToRetrieve->data(), &numberOfSamples, sizeof(unsigned int));
+	std::vector<unsigned char> *numberOfSamplesToRetrieve = new vector<unsigned char>(sizeof(unsigned int));
+	// no c++11 yet
+	//memcpy(numberOfSamplesToRetrieve.data(), &numberOfSamples, sizeof(unsigned int)); 
+	memcpy(&((*numberOfSamplesToRetrieve)[0]), &numberOfSamples, sizeof(unsigned int)); 
 
 	message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
 	message.setImmediateData(numberOfSamplesToRetrieve); // sets length automatically ~obpMessage destroys the vector

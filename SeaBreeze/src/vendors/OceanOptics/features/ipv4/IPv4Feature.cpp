@@ -145,7 +145,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 	return enableStatus;
 }
 
-void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> &IPv4_Address,  unsigned char &netMask) throw (FeatureException)
+void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask) throw (FeatureException)
 {
 
     vector<unsigned char> data;

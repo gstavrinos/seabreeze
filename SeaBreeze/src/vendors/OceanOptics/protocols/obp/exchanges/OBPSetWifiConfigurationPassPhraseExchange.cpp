@@ -61,7 +61,7 @@ void OBPSetWifiConfigurationPassPhraseExchange::setPassPhrase(vector<unsigned ch
 	
     this->payload.resize(sizeof(unsigned char) + passPhrase.size()); // initialize to interface Index and 0 bytes for data
 	
-	for (int i = 0; i < passPhrase.size(); i++)
+	for (unsigned char i = 0; i < passPhrase.size(); i++)
 	{
 		this->payload[1 + i] = passPhrase[i];
 	}

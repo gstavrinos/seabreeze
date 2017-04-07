@@ -133,7 +133,7 @@ public:
     // ethernet configuration features
 	unsigned char get_GbE_Enable_Status	(int index, int *errorCode, unsigned char interfaceIndex);
     void   set_GbE_Enable_Status      	(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
-	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+	void   get_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]);
 	void   set_MAC_Address				(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
 
 	// multicast features
@@ -144,14 +144,14 @@ public:
 	unsigned char get_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex);
 	void   set_IPv4_DHCP_Enable_State(int index, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled);
 	unsigned char get_Number_Of_IPv4_Addresses(int index, int *errorCode, unsigned char interfaceIndex);
-	void   get_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask);
-	void   get_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4]);
+	void   get_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask);
+	void   get_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4]);
 	void   set_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4]);
 	void   add_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask);
 	void   delete_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex);
 
 	/* DHCP server features */
-	void get_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+	void get_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask);
 	void set_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask);
 	unsigned char get_DHCP_Server_Enable_State(int index, int *errorCode, unsigned char interfaceIndex);
 	void set_DHCP_Server_Enable_State(int index, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
@@ -161,7 +161,7 @@ public:
 	void   setWifiConfigurationMode(int index, int *errorCode, unsigned char interfaceIndex, unsigned char mode);
 	unsigned char getWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex);
 	void   setWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
-	unsigned char   getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+	unsigned char   getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32]);
 	void   setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
 	void   setWifiConfigurationPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
@@ -988,7 +988,10 @@ extern "C" {
 	* @param error_code (Output) Pointer to allocated integer to receive error code
     * @param macAddress (Output) Pointer to allocated six byte unsigned char array to receive the MAC Address
     */
-    DLL_DECL void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
+    	// no c++11 yet 
+    DLL_DECL void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (*macAddress)[6]);
+
+    //DLL_DECL void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6]);
     
         /**
     * @brief Set the MAC address (if equipped)
@@ -1039,7 +1042,10 @@ extern "C" {
 	* @param error_code (Output) Pointer to allocated integer to receive error code
 	* @param macAddress (Output) Pointer to allocated 32 byte unsigned char array to receive the ssid
 	*/
-	DLL_DECL unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
+	
+	// no c++11 yet 
+	DLL_DECL unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*ssid)[32]);
+	//DLL_DECL unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32]);
 
 	/**
 	* @brief Set the wifi ssid 
@@ -1085,7 +1091,9 @@ extern "C" {
 	* @param error_code (Output) Pointer to allocated integer to receive error code
 	* @param macAddress (Output) Pointer to allocated six byte unsigned char array to receive the multicast group Address
 	*/
-	DLL_DECL void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4]);
+	// no c++11 yet
+	//DLL_DECL void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4]);
+	DLL_DECL void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*groupAddress)[4]);
 
 
 	/**
@@ -1176,7 +1184,9 @@ extern "C" {
 	* @param serverAddress (Output) Pointer to allocated four byte unsigned char array to receive the server Address
 	* @param netMask (Output) Pointer to an unsigned char to receive the network mask
 	*/
-	DLL_DECL void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+	// no c++11 yet
+	//DLL_DECL void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&serverAddress)[4], unsigned char &netMask);
+	DLL_DECL void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask);
 
 	/**
 	* @brief Set the dhcp server address (if equipped)

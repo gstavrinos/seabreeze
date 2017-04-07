@@ -33,7 +33,7 @@
 #include "common/globals.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 #include "api/seabreezeapi/ShutterFeatureAdapter.h"
-#include <string.h> /* for memcpy */
+#include <string.h> /* for memcpy pre c++11 */
 #include <string>
 
 using namespace seabreeze;

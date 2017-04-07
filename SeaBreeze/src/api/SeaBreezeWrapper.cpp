@@ -1627,7 +1627,7 @@ void SeaBreezeWrapper::writeIrradCollectionArea(int index, int *errorCode,
 // ethernet feature
 //////////////////////////////////////////////////////////////////////////////
 
-void SeaBreezeWrapper::get_MAC_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (&macAddress)[6]) 
+void SeaBreezeWrapper::get_MAC_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]) 
 {
 
     if(NULL == this->devices[index]) 
@@ -1912,7 +1912,7 @@ void SeaBreezeWrapper::setMulticastEnableState(int index, int *errorCode, unsign
 // dhcp server feature
 //////////////////////////////////////////////////////////////////////////////
 
-void SeaBreezeWrapper::get_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&dhcpServerAddress)[4], unsigned char &netMask)
+void SeaBreezeWrapper::get_DHCP_Server_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*dhcpServerAddress)[4], unsigned char *netMask)
 {
 
 	if (NULL == this->devices[index])
@@ -1934,7 +1934,7 @@ void SeaBreezeWrapper::get_DHCP_Server_Address(int index, int *errorCode, unsign
 			DHCPServerFI->getServerAddress(
 				*__seabreeze_getProtocol(this->devices[index]),
 				*__seabreeze_getBus(this->devices[index]),
-				interfaceIndex, dhcpServerAddressBytes, netMask);
+				interfaceIndex, &dhcpServerAddressBytes, netMask);
 
 			if (dhcpServerAddressBytes.size() == 4)
 			{
@@ -2171,7 +2171,7 @@ void SeaBreezeWrapper::setWifiConfigurationSecurityType(int index, int *errorCod
 	}
 }
 
-unsigned char SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32])
 {
 	unsigned char result = 0;
 	if (NULL == this->devices[index])
@@ -2198,7 +2198,7 @@ unsigned char SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCo
 
 			memcpy(ssid, &(ssidBytes[0]), ssidBytes.size());
 			SET_ERROR_CODE(ERROR_SUCCESS);
-			result = ssidBytes.size();
+			result = ssidBytes.size() & 0xFF;
 
 		}
 		catch (FeatureException &fe)
@@ -2375,7 +2375,7 @@ unsigned char SeaBreezeWrapper::get_Number_Of_IPv4_Addresses(int index, int *err
 }
 
 
-void SeaBreezeWrapper::get_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+void SeaBreezeWrapper::get_IPv4_Address(int index, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask)
 {
 
 	if (NULL == this->devices[index])
@@ -2397,7 +2397,7 @@ void SeaBreezeWrapper::get_IPv4_Address(int index, int *errorCode, unsigned char
 			IPv4FI->get_IPv4_Address(
 				*__seabreeze_getProtocol(this->devices[index]),
 				*__seabreeze_getBus(this->devices[index]),
-				interfaceIndex, addressIndex, IPv4_Address_bytes, netMask);
+				interfaceIndex, addressIndex, &IPv4_Address_bytes, netMask);
 
 			if (IPv4_Address_bytes.size() == 4)
 			{
@@ -2417,7 +2417,7 @@ void SeaBreezeWrapper::get_IPv4_Address(int index, int *errorCode, unsigned char
 	}
 }
 
-void SeaBreezeWrapper::get_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(&defaultGatewayAddress)[4])
+void SeaBreezeWrapper::get_IPv4_Default_Gateway(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
 {
 
 	if (NULL == this->devices[index])
@@ -3313,7 +3313,7 @@ void seabreeze_write_irrad_collection_area(int index, int *error_code, float are
 }
 
 
-void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&macAddress)[6])
+void seabreeze_get_mac_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->get_MAC_Address(index, error_code, interfaceIndex, macAddress);
@@ -3352,18 +3352,18 @@ void seabreeze_set_multicast_enable(int index, int *error_code, unsigned char in
 // this is a convenience function. in the future the port will be settable
 unsigned short seabreeze_get_multicast_group_port(int index, int *error_code, unsigned char interfaceIndex)
 {
-	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	//SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	//return wrapper->getMutlicastGroupPort(index, error_code, interfaceIndex);
 	return 57357;
 }
 
 // this is a convenience function. in the future the group address will be settable
-void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&groupAddress)[4])
+void seabreeze_get_multicast_group_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*groupAddress)[4])
 {
-	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	//SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	// wrapper->getMulticastGroupAddress(index, error_code, interfaceIndex, groupAddress);
 	for (int i = 0; i < 4; i++)
-		groupAddress[i] = 239;
+		(*groupAddress[i]) = 239;
 }
 
 unsigned char seabreeze_get_wifi_mode(int index, int *error_code, unsigned char interfaceIndex)
@@ -3390,7 +3390,7 @@ void seabreeze_set_wifi_security_type(int index, int *error_code, unsigned char 
 	return wrapper->setWifiConfigurationSecurityType(index, error_code, interfaceIndex, wifiMode);
 }
 
-unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&ssid)[32])
+unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*ssid)[32])
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);
@@ -3409,7 +3409,7 @@ void seabreeze_set_wifi_pass_phrse(int index, int *error_code, unsigned char int
 }
 
 
-void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (&serverAddress)[4], unsigned char &netMask)
+void seabreeze_get_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char (*serverAddress)[4], unsigned char *netMask)
 {
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->get_DHCP_Server_Address(index, error_code, interfaceIndex, serverAddress, netMask);
@@ -3491,13 +3491,13 @@ unsigned char seabreeze_get_Number_Of_IPv4_Addresses(int index, int *error_code,
 	return wrapper->get_Number_Of_IPv4_Addresses(index, error_code, interfaceIndex);
 }
 
-void seabreeze_get_ipv4_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(&IPv4_Address)[4], unsigned char &netMask)
+void seabreeze_get_ipv4_address(int index, int *error_code, unsigned char interfaceIndex, unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->get_IPv4_Address(index, error_code, interfaceIndex, addressIndex, IPv4_Address, netMask);
 }
 
-void seabreeze_get_ipv4_default_gateway(int index, int *error_code, unsigned char interfaceIndex, unsigned char(&IPv4_Address)[4])
+void seabreeze_get_ipv4_default_gateway(int index, int *error_code, unsigned char interfaceIndex, unsigned char(*IPv4_Address)[4])
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->get_IPv4_Default_Gateway(index, error_code, interfaceIndex, IPv4_Address);

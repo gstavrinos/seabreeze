@@ -23,6 +23,13 @@ SUBDIRS = \
     stray_light         \
     thermoelectric      \
     wavecal             \
-    pixel_binning
+    pixel_binning		\
+    ethernet_configuration \
+    fast_buffer 		\
+    ipv4				\
+    multicast			\
+    network_configuration	\
+    wifi_configuration	\
+    dhcp_server
 
 include $(SEABREEZE)/common.mk
