@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetEthernetConfigurationGbeEnableExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPGetEthernetConfigurationGbEEnableExchange.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 
