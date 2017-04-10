@@ -159,7 +159,7 @@ void IPv4FeatureAdapter::add_IPv4_Address(int *errorCode, unsigned char interfac
 	memcpy(&((*ipv4AddressVector)[0]), IPv4_Address, 4);
 
 	try {
-		this->feature->set_IPv4_Default_Gateway(*this->protocol, *this->bus, interfaceIndex, *ipv4AddressVector);
+		this->feature->add_IPv4_Address(*this->protocol, *this->bus, interfaceIndex, *ipv4AddressVector, netMask);
 		delete ipv4AddressVector;
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}

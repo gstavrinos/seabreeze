@@ -51,6 +51,9 @@
 #include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeature.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeature.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeature.h"
+#include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
+#include "vendors/OceanOptics/features/revision/RevisionFeature.h"
+#include "vendors/OceanOptics/features/optical_bench/OpticalBenchFeature.h"
 
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
@@ -64,6 +67,11 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPWifiConfigurationProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPDHCPServerProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPNetworkConfigurationProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPRevisionProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPOpticalBenchProtocol.h"
+
+
 
 
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
@@ -101,6 +109,19 @@ FlameX::FlameX() {
 	IntrospectionFeature *introspection = new IntrospectionFeature(introspectionHelpers);
 	this->features.push_back(introspection);
 
+    /* Add Revision feature (not fully implemented by flame x*/
+    vector<ProtocolHelper *> revisionHelpers;
+    revisionHelpers.push_back(new OBPRevisionProtocol());
+    this->features.push_back(
+        new RevisionFeature(revisionHelpers));
+
+#if(false) // not yet implemented in the FlameX
+    /* Add optical bench feature */
+    vector<ProtocolHelper *> opticalBenchHelpers;
+    opticalBenchHelpers.push_back(new OBPOpticalBenchProtocol());
+    this->features.push_back(
+        new OpticalBenchFeature(opticalBenchHelpers));
+#endif
 
 	/* spectrometer and databuffer features*/
 	FlameXFastBufferFeature *flameXDataBuffer = new FlameXFastBufferFeature();
@@ -118,6 +139,12 @@ FlameX::FlameX() {
     nonlinearityHelpers.push_back(new OBPNonlinearityCoeffsProtocol());
     this->features.push_back(new NonlinearityCoeffsFeature(nonlinearityHelpers));
 
+    /* Add Temperature feature */
+    vector<ProtocolHelper *> temperatureHelpers;
+    temperatureHelpers.push_back(new OBPTemperatureProtocol());
+    this->features.push_back(
+        new TemperatureFeature(temperatureHelpers));
+        
     /* Add stray light coefficients feature */
     vector<ProtocolHelper *> strayHelpers;
     strayHelpers.push_back(new OBPStrayLightCoeffsProtocol());

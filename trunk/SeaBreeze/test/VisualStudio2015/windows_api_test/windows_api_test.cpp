@@ -127,6 +127,7 @@ void tallyUnsupportedFeatures(int *unsupportedFeatureCount)
 
 /* Get a variable that tracks how many test functions have been specified */
 static const int __test_function_count = sizeof(__test_functions) / sizeof(testfunc_t);
+char nameBuffer[80];
 
 int main(void)
 {
@@ -143,7 +144,7 @@ int main(void)
 	int unsupportedFeatureCount = 0;
 	int testFailureCount = 0;
 	int error = 0;
-	char nameBuffer[80];
+
 
 	printf("Ocean Optics API Test\n"); fflush(stdout);
 
@@ -334,9 +335,14 @@ void test_revision_feature(long deviceID, int *unsupportedFeatureCount, int *tes
 	{
 		printf("\t\t%d: Testing device 0x%02lX, revision 0x%02lX\n", i, deviceID, revision_feature_ids[i]);
 		printf("\t\t\tAttempting to get revisions...\n");
-		printf("\t\t\t\tHardware Revision: 0x%x\n", sbapi_revision_hardware_get(deviceID, revision_feature_ids[i], &error));
-		printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
+
+		if (strcmp(nameBuffer, "FLAMEX") != 0) // features are not always consistent. Flame x does not support hardware versions
+		{
+			printf("\t\t\t\tHardware Revision: 0x%x\n", sbapi_revision_hardware_get(deviceID, revision_feature_ids[i], &error));
+			printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+			tallyErrors(error, testFailureCount);
+		}
+
 		printf("\t\t\t\tFirmware Revision: 0x%x\n", sbapi_revision_firmware_get(deviceID, revision_feature_ids[i], &error));
 		printf("\t\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
@@ -2600,11 +2606,10 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 				unsigned char ipv4Address[4];
 				unsigned char netMask = 0;
 
-				// get the dhcp server address
-				printf("\t\t\t\tAttempting to retrieve the dhcp server address...\n");
+				// get the address
+				printf("\t\t\t\tAttempting to retrieve an address %d...\n", addressIndex);
 				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, addressIndex, (&ipv4Address), &netMask);
-
-				printf("\t\t\t\tResult is addressIndex = %d, ipv4 address =  %d.%d.%d.%d/%d [%s]\n", addressIndex, ipv4Address[0], ipv4Address[1], 
+				printf("\t\t\t\tResult, IPv4 address =  %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], 
 					ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
 				tallyErrors(error, testFailureCount);
 
@@ -2617,25 +2622,51 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 		unsigned char netMask = 24;
 
 		// add and delete an ipv4 address
-		printf("\t\t\tAttempting to add an ipv4 address...\n");
-		printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
 
+		printf("\t\t\tAttempting to add and delete a ipv4 address...\n");
+		printf("\t\t\t\tIPv4 address count = %d...\n", ipv4NumberOfAddresses);
+
+		printf("\t\t\t\tAdding an address...\n");
 		sbapi_ipv4_add_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4Address, netMask);
 		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
 		if (error == 0)
 		{
-			ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
-			printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
+			unsigned char newAddressCount = 0;
+			newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+			printf("\t\t\t\tNew number of addresses = %d...\n", newAddressCount);
+			tallyErrors(error, testFailureCount);
 
-			sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1, &ipv4Address, &netMask);
-			printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+			if (newAddressCount == ipv4NumberOfAddresses + 1)
+			{
+				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1, &ipv4Address, &netMask);
+				printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+				tallyErrors(error, testFailureCount);
 
-			printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
-			sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4NumberOfAddresses-1);
-			printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-			
-			ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
-			printf("\t\t\t\tNumber of addresses = %d...\n", ipv4NumberOfAddresses);
+				printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
+				sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1);
+				printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+				tallyErrors(error, testFailureCount);
+
+				unsigned char deletedAddressCount = 0;
+				newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+				printf("\t\t\t\tNumber of addresses = %d...\n", deletedAddressCount);
+				tallyErrors(error, testFailureCount);
+
+				if (newAddressCount != deletedAddressCount + 1)
+				{
+					printf("\t\t\t\tThe number of addresses did not decrement.\n");
+					tallyErrors(-1, testFailureCount);
+				}
+			}
+			else
+			{
+				printf("\t\t\t\tThe number of addresses did not increment.\n");
+				tallyErrors(-1, testFailureCount);
+			}
+
+
 		}
 
 		printf("\t\t%d: Finished testing device 0x%02lX, ipv4 feature 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
