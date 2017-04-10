@@ -134,7 +134,7 @@ unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned 
         memcpy(ssid, ssidVector.data(), ssidVector.size());
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-		return ssidVector.size();
+		return ssidVector.size() & 0xFF;
 
     } 
 	catch (FeatureException &fe) 
