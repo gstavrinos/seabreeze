@@ -28,7 +28,7 @@
  *******************************************************/
 
 #include "common/globals.h"
-#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetConsecutiveSamplecountExchange.h"
+#include "vendors/OceanOptics/protocols/obp/exchanges/OBPSetConsecutiveSampleCountExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 #include <vector>
