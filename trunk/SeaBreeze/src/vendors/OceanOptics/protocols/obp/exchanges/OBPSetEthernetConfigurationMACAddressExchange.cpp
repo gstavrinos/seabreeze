@@ -58,8 +58,6 @@ void OBPSetEthernetConfigurationMacAddressExchange::setInterfaceIndex(unsigned c
 
 void OBPSetEthernetConfigurationMacAddressExchange::set_MAC_Address(vector<unsigned char> macAddress) 
 {
-    unsigned int i;
-
 	for (int i = 0; i < 7; i++)
 	{
 		this->payload[1 + i] = macAddress[i];
