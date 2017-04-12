@@ -86,11 +86,11 @@ void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIn
         throw ProtocolException(error);
     }
 
-    vector<byte> result = *raw;
+    vector<unsigned char> result = *raw;
     // c++11 not used yet
 	//IPv4_Address.assign(raw->cbegin(), prev(raw->cend()));
 	IPv4_Address->assign(raw->begin(), raw->end()-1);
-	*netMask = IPv4_Address->back();
+	*netMask = raw->back();
 
     delete raw;
 }
@@ -204,7 +204,7 @@ void OBPIPv4Protocol::set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char i
 unsigned char OBPIPv4Protocol::get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
 {
 	TransferHelper *helper;
-	OBPGetIPv4DHCPEnableStateExchange request;
+	OBPGetIPv4NumberOfAddressesExchange request;
 
 	helper = bus.getHelper(request.getHints());
 	if (NULL == helper) {

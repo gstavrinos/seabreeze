@@ -2563,13 +2563,15 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 		{
 			printf("\t\t\tThe dhcp client enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
 		}
-
+		Sleep(4000);
 
 		// set dhcp server enable state to false
 		printf("\t\t\tAttempting to set the dhcp client enable state to true\n");
 		sbapi_ipv4_set_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, 1);
 		printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
+
+		Sleep(4000);
 
 		unsigned char ipv4GatewayAddress[4];
 
@@ -2623,7 +2625,7 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 
 		// add and delete an ipv4 address
 
-		printf("\t\t\tAttempting to add and delete a ipv4 address...\n");
+		printf("\t\t\tAttempting to change the number of ipv4 addresses...\n");
 		printf("\t\t\t\tIPv4 address count = %d...\n", ipv4NumberOfAddresses);
 
 		printf("\t\t\t\tAdding an address...\n");
@@ -2635,10 +2637,10 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 		{
 			unsigned char newAddressCount = 0;
 			newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
-			printf("\t\t\t\tNew number of addresses = %d...\n", newAddressCount);
+			printf("\t\t\t\tThe new number of addresses = %d...\n", newAddressCount);
 			tallyErrors(error, testFailureCount);
 
-			if (newAddressCount == ipv4NumberOfAddresses + 1)
+			if (error == 0)
 			{
 				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1, &ipv4Address, &netMask);
 				printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
@@ -2650,7 +2652,7 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 				tallyErrors(error, testFailureCount);
 
 				unsigned char deletedAddressCount = 0;
-				newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+				deletedAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
 				printf("\t\t\t\tNumber of addresses = %d...\n", deletedAddressCount);
 				tallyErrors(error, testFailureCount);
 

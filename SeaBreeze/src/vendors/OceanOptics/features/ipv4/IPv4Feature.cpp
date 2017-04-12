@@ -119,7 +119,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	byte numberOfAddresses;
 
 	try {
 		proto = lookupProtocolImpl(protocol);
@@ -133,7 +133,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 	}
 
 	try {
-		enableStatus = IPv4PI->get_Number_Of_IPv4_Addresses(bus, interfaceIndex);
+		numberOfAddresses = IPv4PI->get_Number_Of_IPv4_Addresses(bus, interfaceIndex);
 	}
 	catch (ProtocolException &pe) {
 		string error("Caught protocol exception: ");
@@ -142,7 +142,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 		throw FeatureControlException(error);
 	}
 
-	return enableStatus;
+	return numberOfAddresses;
 }
 
 void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask) throw (FeatureException)
