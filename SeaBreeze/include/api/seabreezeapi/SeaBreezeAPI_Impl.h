@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.h
- * @date    March 2017
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * This is an implementation of the SeaBreezeAPI interface.
@@ -172,6 +172,24 @@ public:
 	virtual unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
 	virtual void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState);
 	virtual void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex);
+
+
+	// gpio features
+	virtual int getNumberOfGPIOFeatures(long deviceID, int *errorCode);
+	virtual int getGPIOFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual unsigned char getGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode);
+	virtual unsigned int getGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode);
+	virtual void setGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask);
+	virtual unsigned int getGPIO_ValueVector(long deviceID, long featureID, int *errorCode);
+	virtual void setGPIO_ValueVector(long deviceID, long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask);
+	virtual unsigned char getEGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode);
+	virtual void getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+	virtual unsigned char getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber);
+	virtual void setEGPIO_Mode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
+	virtual unsigned int getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode);
+	virtual void setEGPIO_OutputVector(long deviceID, long featureID, int *errorCode, unsigned int outputVector, unsigned int bitMask);
+	virtual float getEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber);
+	virtual void setEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, float value);
 
 
     /* EEPROM capabilities */

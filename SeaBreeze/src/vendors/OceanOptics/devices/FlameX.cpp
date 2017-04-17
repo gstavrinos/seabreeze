@@ -1,11 +1,11 @@
 /***************************************************//**
  * @file    FlameX.cpp
- * @date    February 2016
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * LICENSE:
  *
- * SeaBreeze Copyright (C) 2016, Ocean Optics Inc
+ * SeaBreeze Copyright (C) 2017, Ocean Optics Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -54,6 +54,7 @@
 #include "vendors/OceanOptics/features/temperature/TemperatureFeature.h"
 #include "vendors/OceanOptics/features/revision/RevisionFeature.h"
 #include "vendors/OceanOptics/features/optical_bench/OpticalBenchFeature.h"
+#include "vendors/OceanOptics/features/gpio/gpioFeature.h"
 
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
@@ -70,9 +71,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPTemperatureProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPRevisionProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPOpticalBenchProtocol.h"
-
-
-
+#include "vendors/OceanOptics/protocols/obp/impls/OBPGPIOProtocol.h"
 
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
@@ -184,6 +183,11 @@ FlameX::FlameX() {
 	vector<ProtocolHelper *> wifiConfigurationHelpers;
 	wifiConfigurationHelpers.push_back(new OBPWifiConfigurationProtocol());
 	this->features.push_back(new WifiConfigurationFeature(wifiConfigurationHelpers));
+
+	/* Add gpio feature */
+	vector<ProtocolHelper *> gpioHelpers;
+	gpioHelpers.push_back(new OBPGPIOProtocol());
+	this->features.push_back(new GPIOFeature(gpioHelpers));
 
     this->features.push_back(new RawUSBBusAccessFeature());
 }

@@ -194,16 +194,6 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_MAXIMUM_BASELINE_LEVEL		= 0x001010A3;
 
 
-#ifdef false
-		static const unsigned int OBP_SET_SATURATION_LEVEL				= 0x001010B0;	
-		static const unsigned int OBP_SET_BASELINE_LEVEL				= 0x001010B1;	
-		static const unsigned int OBP_GET_DAC_OFFSET_VALUE				= 0x001010C0;	
-		static const unsigned int OBP_GET_DAC_REFERENCE_VALUE			= 0x001010C1;	
-		static const unsigned int OBP_GET_DAC_OFFSET_CONSTRAINTS		= 0x001010C2;	
-		static const unsigned int OBP_GET_DAC_REFERENCE_CONSTRAINTS		= 0x001010C3;	
-		static const unsigned int OBP_SET_DAC_OFFSET_VALUE				= 0x001010D0;	
-		static const unsigned int OBP_SET_DAC_REFERENCE_VALUE			= 0x001010D1;	
-#endif       
 
 // Partial and raw spectra
 		static const unsigned int OBP_GET_RAW_SPECTRUM_NOW				= 0x00101100;
@@ -300,16 +290,16 @@ namespace seabreeze {
         static const unsigned int OBP_SET_GPIO_OUTPUT_ENABLE_VECTOR = 0x00200110;
 		static const unsigned int OBP_GET_MULTIPLEXER_VALUE			= 0x00200200;	
 		static const unsigned int OBP_SET_MULTIPLEXER_VALUE			= 0x00200210;	
-        static const unsigned int OBP_GET_GPIO_VALUE                = 0x00200300;
-        static const unsigned int OBP_SET_GPIO_VALUE                = 0x00200310;
+        static const unsigned int OBP_GET_GPIO_VALUE_VECTOR         = 0x00200300;
+        static const unsigned int OBP_SET_GPIO_VALUE_VECTOR 	    = 0x00200310;
 
-		static const unsigned int OBP_GET_EGPIO_PIN_COUNT			= 0x00280000;
-		static const unsigned int OBP_GET_EGPIO_MODES				= 0x00280001;	
-		static const unsigned int OBP_GET_EGPIO_MODE				= 0x00280002;	
+		static const unsigned int OBP_GET_EGPIO_NUMBER_OF_PINS		= 0x00280000;
+		static const unsigned int OBP_GET_EGPIO_AVAILABLE_MODES		= 0x00280001;	
+		static const unsigned int OBP_GET_EGPIO_CURRENT_MODE		= 0x00280002;	
 		static const unsigned int OBP_SET_EGPIO_MODE				= 0x00280012;	
-		static const unsigned int OBP_GET_EGPIO_VECTOR				= 0x00284000;
+		static const unsigned int OBP_GET_EGPIO_OUTPUT_VECTOR		= 0x00284000;
 		static const unsigned int OBP_GET_EGPIO_VALUE				= 0x00284001;	
-		static const unsigned int OBP_SET_EGPIO_VECTOR				= 0x00284010;	
+		static const unsigned int OBP_SET_EGPIO_OUTPUT_VECTOR		= 0x00284010;	
 		static const unsigned int OBP_SET_EGPIO_VALUE				= 0x00284011;	
 
 // Single strobe

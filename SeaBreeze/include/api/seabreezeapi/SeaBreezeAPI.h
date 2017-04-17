@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.h
- * @date    February 2017
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * This is an interface to SeaBreeze that allows
@@ -204,17 +204,13 @@ public:
 	virtual void   add_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask) = 0;
 	virtual void   delete_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex) = 0;
 
-
-	/* DHCP server features */
-	
+	/* DHCP server features */	
 	virtual int getNumberOfDHCPServerFeatures(long deviceID, int *errorCode) = 0;
 	virtual int getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
 	virtual void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask) = 0;
 	virtual void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask) = 0;
 	virtual unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
 	virtual void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
-
-
 
 	/* Network Configuration features */
 	virtual int getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode) = 0;
@@ -237,6 +233,22 @@ public:
 	virtual void   setWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length) = 0;
 	virtual void   setWifiConfigurationPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength) = 0;
 
+	// gpio features
+	virtual int getNumberOfGPIOFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getGPIOFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	virtual unsigned char getGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode) = 0;
+	virtual unsigned int getGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode) = 0;
+	virtual void setGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask) = 0;
+	virtual unsigned int getGPIO_ValueVector(long deviceID, long featureID, int *errorCode) = 0;
+	virtual void setGPIO_ValueVector(long deviceID, long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask) = 0;
+	virtual unsigned char getEGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode) = 0;
+	virtual void getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount) = 0;
+	virtual unsigned char getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber) = 0;
+	virtual void setEGPIO_Mode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value) = 0;
+	virtual unsigned int getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode) = 0;
+	virtual void setEGPIO_OutputVector(long deviceID, long featureID, int *errorCode, unsigned int outputVector, unsigned int bitMask) = 0;
+	virtual float getEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber) = 0;
+	virtual void setEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, float value) = 0;
 
     /* EEPROM capabilities */
     virtual int getNumberOfEEPROMFeatures(long deviceID, int *errorCode) = 0;
@@ -2430,6 +2442,188 @@ extern "C" {
 	* @param interfaceIndex (Input) identifier for the network interface of interest
 	*/
 	DLL_DECL void sbapi_network_configuration_save_interface_settings(long deviceID, long featureID, int *error_code, unsigned char interfaceIndex);
+
+
+
+	/**
+	* This function returns the total number of gpio instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	*
+	* @return   the number of gpio features that will be returned by a call to sbapi_get_gpio_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_gpio_features(long deviceID, int *error_code);
+
+	/**
+	* This function returns IDs for accessing each gpio
+	* instance for this device.  The IDs are only valid when used with the
+	* deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param features (Output) a preallocated array to hold returned feature handles
+	* @param max_features (Input) length of the preallocated buffer
+	*
+	* @return the number of gpio feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_gpio_features(long deviceID, int *error_code, long *features, int max_features);
+
+
+	/**
+	* This function retrieves the number of GPIO pins.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @return unsigned char: the gpio pin count
+	*/
+	DLL_DECL unsigned char sbapi_gpio_get_number_of_pins(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function retrieves the gpio output enable vector
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_gpio_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @return unsigned int: the gpio output enable vector
+	*/
+	DLL_DECL unsigned int sbapi_gpio_get_output_enable_vector(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function sets the gpio output enable bits 
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_gpio_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param outputEnableVector (Input) the enable state for indexed interface
+	*/
+	DLL_DECL void sbapi_gpio_set_output_enable_vector(long deviceID, long featureID, int *error_code, unsigned int outputEnableVector);
+
+	/**
+	* This function retrieves the gpio value vector (gpio bit values)
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_gpio_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @return unsigned int: the gpio value vector
+	*/
+	DLL_DECL unsigned int sbapi_gpio_get_value_vector(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function sets the gpio output enable bits
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_gpio_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param valueVector (Input) the bit values for the gpio output
+	* @param bitMask (Input)  the bit mask
+	*/
+	DLL_DECL void sbapi_gpio_set_value_vector(long deviceID, long featureID, int *error_code, unsigned int valueVector, unsigned int bitMask);
+
+	/**
+	* This function retrieves the number of eGPIO pins.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @return unsigned char: the gpio pin count
+	*/
+	DLL_DECL unsigned char sbapi_gpio_extension_get_number_of_pins(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function retrieves the egpio modes available for a particular pin 
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_gpio_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pinNumber (Input) the number of the gpio pin of interest
+	* @param availableModes (Input) a pointer to an array of unsigned characters, each of which represent a gpio mode
+	*	0x00: GPIO Output (Push/Pull), 0x01: GPIO Open Drain Output, 0x02: DAC output,	0x80: GPIO Input (High Z)
+	*	0x81: GPIO Input w/Pull Down, 0x82: ADC Input
+	*/
+	DLL_DECL void sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount);
+
+
+	/**
+	* This function retrieves the mode in use by the egpio pin of interest
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pinNumber (Input) the pin of interest
+	* @return unsigned char: gpio mode
+	*/
+	DLL_DECL unsigned char sbapi_gpio_extension_get_current_mode(long deviceID, long featureID, int *error_code, unsigned char pinNumber);
+
+	/**
+	* This function sets the mode to be used by the egpio pin of interest
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pinNumber (Input) the pin of interest
+	* @param mode (Input) i/o mode
+	* @param value (Input) default value for the pin
+	*/
+	DLL_DECL void sbapi_gpio_extension_set_mode(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char mode, float value);
+
+	/**
+	* This function retrieves the output vector for the eGPIO pins
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pinNumber (Input) the pin of interest
+	* @return unsigned char: egpio output vector
+	*/
+	DLL_DECL unsigned int sbapi_gpio_extension_get_output_vector(long deviceID, long featureID, int *error_code);
+
+	/**
+	* This function sets the output vector for the gpio pins
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param ouputVector (Input) gpio bit values
+	* @param bitMask (Input) gpio bit mask
+	*/
+	DLL_DECL void sbapi_gpio_extension_set_output_vector(long deviceID, long featureID, int *error_code, unsigned int outputVector, unsigned int bitMask);
+
+	/**
+	* This function retrieves the value for an eGPIO pin
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pinNumber (Input) the pin of interest
+	* @return float: egpio pin value
+	*/
+	DLL_DECL float sbapi_gpio_extension_get_value(long deviceID, long featureID, int *error_code, unsigned char pinNumber);
+
+	/**
+	* This function sets the value of a specific egpio pin
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param featureID (Input) The ID of a particular instance of a gpio
+	*        feature.  Valid IDs can be found with the sbapi_get_GPIO_configuration_features() function.
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param pin number (Input) the number of the pin to be set
+	* @param value (Input) normalized value, 0.0 to 1.0
+	*/
+	DLL_DECL void sbapi_gpio_extension_set_value(long deviceID, long featureID, int *error_code, unsigned int outputVector, unsigned int bitMask);
 
 
     /**

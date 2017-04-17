@@ -213,6 +213,13 @@ namespace seabreeze {
 			NetworkConfigurationFeatureFamily();
 			virtual ~NetworkConfigurationFeatureFamily();
 		};
+
+		class GPIOFeatureFamily : public FeatureFamily {
+		public:
+			GPIOFeatureFamily();
+			virtual ~GPIOFeatureFamily();
+		};
+
 		
         class FeatureFamilies {
         public:
@@ -251,6 +258,8 @@ namespace seabreeze {
 			//const NetworkServicesFeatureFamily NETWORK_SERVICES;
 			//const	DeviceIdentificationFeatureFamily DEVICE_IDENTIFICATION;
 			//const DeviceTestFeatureFamily DEVICE_TEST;
+			const GPIOFeatureFamily GENERAL_PURPOSE_INPUT_OUTPUT;
+
 
             FeatureFamilies();
             ~FeatureFamilies();
