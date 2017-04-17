@@ -162,7 +162,7 @@ public:
 	unsigned char getWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex);
 	void   setWifiConfigurationSecurityType(int index, int *errorCode, unsigned char interfaceIndex, unsigned char securityType);
 	unsigned char   getWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32]);
-	void   setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32]);
+	void   setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
 	void   setWifiConfigurationPassPhrase(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength);
 
 
@@ -174,6 +174,20 @@ public:
 	unsigned char runNetworkInterfaceSelfTest(int index, int *errorCode, unsigned char interfaceIndex);
 	void		  saveNetworkInterfaceConnectionSettings(int index, int *errorCode, unsigned char interfaceIndex);
 
+	// gpio features
+	unsigned char getGPIO_NumberOfPins(int index, int *errorCode);
+	unsigned int getGPIO_OutputEnableVector(int index, int *errorCode);
+	void setGPIO_OutputEnableVector(int index, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask);
+	unsigned int getGPIO_ValueVector(int index, int *errorCode);
+	void setGPIO_ValueVector(int index, int *errorCode, unsigned int valueVector, unsigned int bitMask);
+	unsigned char getEGPIO_NumberOfPins(int index, int *errorCode);
+	void getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+	unsigned char getEGPIO_CurrentMode(int index, int *errorCode, unsigned char pinNumber);
+	void setEGPIO_Mode(int index, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
+	unsigned int getEGPIO_OutputVector(int index, int *errorCode);
+	void setEGPIO_OutputVector(int index, int *errorCode, unsigned int outputVector, unsigned int bitMask);
+	float getEGPIO_Value(int index, int *errorCode, unsigned char pinNumber);
+	void setEGPIO_Value(int index, int *errorCode, unsigned char pinNumber, float value);
 
     // thermal-electric cooler
     double readTECTemperature        (int index, int *errorCode);
@@ -963,9 +977,6 @@ extern "C" {
     */
     DLL_DECL void seabreeze_set_buffering_enable(int index, int *error_code, unsigned char isEnabled);
 
-
-
-
     /**
     * @brief Get GbE enable state (if equipped)
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
@@ -1040,7 +1051,8 @@ extern "C" {
 	* @brief Get the wifi ssid (up to 32 bytes)
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
 	* @param error_code (Output) Pointer to allocated integer to receive error code
-	* @param macAddress (Output) Pointer to allocated 32 byte unsigned char array to receive the ssid
+	* @param ssid (Output) Pointer to allocated 32 byte unsigned char array to receive the ssid
+	* @return the number of bytes used in the 32 byte array
 	*/
 	
 	// no c++11 yet 
@@ -1050,16 +1062,17 @@ extern "C" {
 	/**
 	* @brief Set the wifi ssid 
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
-	* @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+	* @param ssid (Input) A pointer to a 32 byte unsigned char array to set the ssid for the indicated interface
+	* @param length (Input) the actual size of the SSID
 	* @param error_code (Output) Pointer to allocated integer to receive error code
-	* @return the number of bytes used in the 32 byte array
 	*/
 	DLL_DECL void seabreeze_set_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length);
 
 	/**
-	* @brief Set the wifi ssid
+	* @brief Set the wifi passphrase
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
-	* @param macAddress (Input) A pointer to a six byte unsigned char array to set the MAC address for the indicated interface
+	* @param pass phrase (Input) A pointer to a char array to set the pass phrase for the indicated interface
+	* @param length (Input) length of the pass phrase
 	* @param error_code (Output) Pointer to allocated integer to receive error code
 	*/
 	DLL_DECL void seabreeze_set_wifi_pass_phrase(int index, int *error_code, unsigned char interfaceIndex, const unsigned char *passphrase, unsigned char length);
@@ -1196,6 +1209,133 @@ extern "C" {
 	* @param error_code (Output) Pointer to allocated integer to receive error code
 	*/
 	DLL_DECL void seabreeze_set_dhcp_server_address(int index, int *error_code, unsigned char interfaceIndex, const unsigned char serverAddress[4], const unsigned char netMask);
+
+
+
+
+
+
+	/**
+	* @brief get number of gpio pins (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the number of gpio pins
+	*/
+	DLL_DECL unsigned char seabreeze_get_gpio_number_of_pins(int index, int *error_code);
+
+
+	/**
+	* @brief get bits that represent gpio output enable (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the output enable vector
+	*/
+	DLL_DECL unsigned int seabreeze_get_gpio_output_enable_vector(int index, int *error_code);
+
+	/**
+	* @brief Set bits that control  gpio output enable (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param outputEnableVector (Input) The GbE enable state from the indicated interface
+	* @param bit Mask (input) for the output enable vector.
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_gpio_output_enable_vector(int index, int *error_code, unsigned int outputEnableVector, unsigned bitMask);
+
+
+	/**
+	* @brief get bits that represent the gpio bit values (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the output enable vector
+	*/
+	DLL_DECL unsigned int seabreeze_get_gpio_value_vector(int index, int *error_code);
+
+	/**
+	* @brief Set bits that control  the gpio bit values (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param value (Input) The GbE enable state from the indicated interface
+	* @param bit Mask (input) for the output enable vector.
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_gpio_value_vector(int index, int *error_code, unsigned int value, unsigned bitMask);
+
+	/**
+	* @brief get number of extended gpio pins (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the number of gpio pins
+	*/
+	DLL_DECL unsigned char seabreeze_get_egpio_number_of_pins(int index, int *error_code);
+
+	/**
+	* @brief Returns the available gpio modes for the pin of interest
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param buffer (Output) A character buffer allocated to contain at least
+	*        'maxModeCount' items, which will be populated with the mode list
+	* @param maxModeClunt (Input) number of Modes that can be stored
+	* @return int: Number of bytes written to buffer.
+	*/
+	DLL_DECL unsigned char seabreeze_get_egpio_available_modes(int error_code, unsigned char *modes, int maxModeCount);
+
+	/**
+	* @brief get a mode type for the pin of interest (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the mode identifier, 0x00: GPIO Output (Push/Pull), 0x01: GPIO Open Drain Output
+	*     0x02: DAC output, 0x80: GPIO Input (High Z), 0x81: GPIO Input w/Pull Down, 0x82: ADC Input
+	*/
+	DLL_DECL unsigned int seabreeze_get_egpio_current_mode(int index, int *error_code, unsigned char pinNumber);
+
+	/**
+	* @brief Set bits that control  the gpio bit values (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @param pinNumber (Input) the pin of interest
+	* @param value (Input) optional value from 0.0 to 1.0
+	* @param mode (Input)  the mode identifier, 0x00: GPIO Output (Push/Pull), 0x01: GPIO Open Drain Output
+	*     0x02: DAC output, 0x80: GPIO Input (High Z), 0x81: GPIO Input w/Pull Down, 0x82: ADC Input
+	*/
+	DLL_DECL void seabreeze_set_egpio_mode(int index, int *error_code, unsigned char pinNumber, unsigned char mode, float value);
+
+
+	/**
+	* @brief get bits that represent the egpio bit values (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the output  vector
+	*/
+	DLL_DECL unsigned int seabreeze_get_egpio_output_vector(int index, int *error_code);
+
+	/**
+	* @brief Set bits that control  the egpio bit values (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param value (Input) The GbE enable state from the indicated interface
+	* @param bit Mask (input) for the output enable vector.
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_egpio_output_vector(int index, int *error_code, unsigned int value, unsigned bitMask);
+
+
+
+	/**
+	* @brief gest te value for the given pin, 0.0 to 1.0 (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param pinNumber (Input) the pin of interest
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the output value
+	*/
+	DLL_DECL float seabreeze_get_egpio_value(int index, int *error_code, unsigned pinNumber);
+
+
+	/**
+	* @brief Set value for the bit of interest, 0.0 to 1.0 (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param value (Input) a normalized value
+	* @param pinNumber (input) the pin of interest
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL void seabreeze_set_egpio_value(int index, int *error_code, unsigned pinNumber, float value);
 
 
 

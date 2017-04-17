@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.cpp
- * @date    March 2017
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver. Please
@@ -941,6 +941,206 @@ void SeaBreezeAPI_Impl::ethernetConfiguration_Set_GbE_Enable_Status(long deviceI
 
 	adapter->ethernetConfiguration_Set_GbE_Enable_Status(featureID, errorCode, interfaceIndex, enableState);
 }
+
+
+
+
+
+
+
+/**************************************************************************************/
+//  GPIO Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfGPIOFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfGPIOFeatures();
+}
+
+int SeaBreezeAPI_Impl::getGPIOFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getGPIOFeatures(buffer, maxLength);
+}
+
+
+unsigned char SeaBreezeAPI_Impl::getGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioGetNumberOfPins(featureID, errorCode);
+}
+
+unsigned int SeaBreezeAPI_Impl::getGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioGetOutputEnableVector(featureID, errorCode);
+}
+
+
+void SeaBreezeAPI_Impl::setGPIO_OutputEnableVector(long deviceID, long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->gpioSetOutputEnableVector(featureID, errorCode, outputEnableVector, bitMask);
+}
+
+unsigned int SeaBreezeAPI_Impl::getGPIO_ValueVector(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioGetValueVector(featureID, errorCode);
+}
+
+
+void SeaBreezeAPI_Impl::setGPIO_ValueVector(long deviceID, long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->gpioSetValueVector(featureID, errorCode, valueVector, bitMask);
+}
+
+
+unsigned char SeaBreezeAPI_Impl::getEGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioExtensionGetNumberOfPins(featureID, errorCode);
+}
+
+
+void SeaBreezeAPI_Impl::getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		adapter->gpioExtensionGetAvailableModes(featureID, errorCode, pinNumber, availableModes, maximumModeCount);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+}
+
+
+unsigned char SeaBreezeAPI_Impl::getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioExtensionGetCurrentMode(featureID, errorCode, pinNumber);
+}
+
+void SeaBreezeAPI_Impl::setEGPIO_Mode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->gpioExtensionSetMode(featureID, errorCode, pinNumber, mode, value);
+}
+
+unsigned int SeaBreezeAPI_Impl::getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioExtensionGetOutputVector(featureID, errorCode);
+}
+
+void SeaBreezeAPI_Impl::setEGPIO_OutputVector(long deviceID, long featureID, int *errorCode, unsigned int outputVector, unsigned int bitMask)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->gpioExtensionSetOutputVector(featureID, errorCode, outputVector, bitMask);
+}
+
+float SeaBreezeAPI_Impl::getEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->gpioExtensionGetValue(featureID, errorCode, pinNumber);
+}
+
+void SeaBreezeAPI_Impl::setEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, float value)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	adapter->gpioExtensionSetValue(featureID, errorCode, pinNumber, value);
+}
+
+
+
+
+
+
+
 
 
 

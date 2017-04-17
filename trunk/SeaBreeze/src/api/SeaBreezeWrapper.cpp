@@ -64,6 +64,7 @@
 #include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeatureInterface.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
+#include "vendors/OceanOptics/features/gpio/gpioFeatureInterface.h"
 
 using namespace seabreeze;
 using namespace std;
@@ -1765,6 +1766,402 @@ void SeaBreezeWrapper::set_GbE_Enable_Status(int index, int *errorCode, unsigned
 
 
 
+
+
+//////////////////////////////////////////////////////////////////////////////
+// gpio feature
+//////////////////////////////////////////////////////////////////////////////
+
+
+
+unsigned char SeaBreezeWrapper::getGPIO_NumberOfPins(int index, int *errorCode)
+{
+	unsigned char numberOfPins = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			numberOfPins = GPIO_IF->getGPIO_NumberOfPins(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return numberOfPins;
+}
+
+unsigned int SeaBreezeWrapper::getGPIO_OutputEnableVector(int index, int *errorCode)
+{
+	unsigned int outputEnableVector = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			outputEnableVector = GPIO_IF->getGPIO_OutputEnableVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return outputEnableVector;
+}
+
+void SeaBreezeWrapper::setGPIO_OutputEnableVector(int index, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			GPIO_IF->setGPIO_OutputEnableVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				outputEnableVector,
+				bitMask);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+unsigned int SeaBreezeWrapper::getGPIO_ValueVector(int index, int *errorCode)
+{
+	unsigned int valueVector = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			valueVector = GPIO_IF->getGPIO_ValueVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return valueVector;
+}
+
+void SeaBreezeWrapper::setGPIO_ValueVector(int index, int *errorCode, unsigned int valueVector, unsigned int bitMask)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			GPIO_IF->setGPIO_ValueVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				valueVector,
+				bitMask);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+unsigned char SeaBreezeWrapper::getEGPIO_NumberOfPins(int index, int *errorCode)
+{
+	unsigned char numberOfPins = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			numberOfPins = GPIO_IF->getGPIO_NumberOfPins(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return numberOfPins;
+}
+
+void SeaBreezeWrapper::getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxLength)
+{
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+
+	if (NULL != GPIO_IF)
+	{
+		vector<byte> availableModesForEGPIO;
+
+		try
+		{
+			availableModesForEGPIO = GPIO_IF->getEGPIO_AvailableModes(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				pinNumber);
+
+			if (availableModesForEGPIO.size()<= maxLength)
+			{
+				memcpy(availableModes, &(availableModesForEGPIO[0]), availableModesForEGPIO.size());
+				SET_ERROR_CODE(ERROR_SUCCESS);
+			}
+			else
+			{
+				SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+			}
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+unsigned char SeaBreezeWrapper::getEGPIO_CurrentMode(int index, int *errorCode, unsigned char pinNumber)
+{
+	unsigned char aMode = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			aMode = GPIO_IF->getEGPIO_CurrentMode(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				pinNumber);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return aMode;
+}
+
+
+void SeaBreezeWrapper::setEGPIO_Mode(int index, int *errorCode, unsigned char pinNumber, unsigned char mode, float value)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			GPIO_IF->setEGPIO_Mode(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				pinNumber, mode, value);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+unsigned int SeaBreezeWrapper::getEGPIO_OutputVector(int index, int *errorCode)
+{
+	unsigned int outputVector = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			outputVector = GPIO_IF->getEGPIO_OutputVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return outputVector;
+}
+
+void SeaBreezeWrapper::setEGPIO_OutputVector(int index, int *errorCode, unsigned int outputVector, unsigned int bitMask)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			GPIO_IF->setEGPIO_OutputVector(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				outputVector,
+				bitMask);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+float SeaBreezeWrapper::getEGPIO_Value(int index, int *errorCode, unsigned char pinNumber)
+{
+	float aValue = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			aValue = GPIO_IF->getEGPIO_Value(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				pinNumber);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return aValue;
+}
+
+void SeaBreezeWrapper::setEGPIO_Value(int index, int *errorCode, unsigned char pinNumber, float value)
+{
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	gpioFeatureInterface *GPIO_IF = __seabreeze_getFeature<gpioFeatureInterface>(this->devices[index]);
+
+	if (NULL != GPIO_IF)
+	{
+		try
+		{
+			GPIO_IF->setEGPIO_Value(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				pinNumber,
+				value);
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+}
+
+
 //////////////////////////////////////////////////////////////////////////////
 // multicast feature
 //////////////////////////////////////////////////////////////////////////////
@@ -2209,7 +2606,7 @@ unsigned char SeaBreezeWrapper::getWifiConfigurationSSID(int index, int *errorCo
 	return result;
 }
 
-void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32])
+void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length)
 {
 	if (NULL == this->devices[index])
 	{
@@ -2222,8 +2619,8 @@ void SeaBreezeWrapper::setWifiConfigurationSSID(int index, int *errorCode, unsig
 		__seabreeze_getFeature<WifiConfigurationFeatureInterface>(this->devices[index]);
 	if (NULL != wifiConfigurationFI)
 	{
-		vector<unsigned char> *byteVector = new vector<unsigned char>(32);
-		memcpy(&((*byteVector)[0]), ssid, 32 * sizeof(unsigned char));
+		vector<unsigned char> *byteVector = new vector<unsigned char>(length);
+		memcpy(&((*byteVector)[0]), ssid, length * sizeof(unsigned char));
 
 		try
 		{
@@ -3390,13 +3787,13 @@ unsigned char seabreeze_get_wifi_ssid(int index, int *error_code, unsigned char 
 	return wrapper->getWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);
 }
 
-void seabreeze_set_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32])
+void seabreeze_set_wifi_ssid(int index, int *error_code, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
-	return wrapper->setWifiConfigurationSSID(index, error_code, interfaceIndex, ssid);
+	return wrapper->setWifiConfigurationSSID(index, error_code, interfaceIndex, ssid, length);
 }
 
-void seabreeze_set_wifi_pass_phrse(int index, int *error_code, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
+void seabreeze_set_wifi_pass_phrase(int index, int *error_code, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->setWifiConfigurationPassPhrase(index, error_code, interfaceIndex, passPhrase, passPhraseLength);

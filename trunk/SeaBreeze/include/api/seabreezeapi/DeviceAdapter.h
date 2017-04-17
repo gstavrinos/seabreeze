@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DeviceAdapter.h
- * @date    March 2017
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
@@ -62,6 +62,7 @@
 #include "api/seabreezeapi/DataBufferFeatureAdapter.h"
 #include "api/seabreezeapi/FastBufferFeatureAdapter.h"
 #include "api/seabreezeapi/AcquisitionDelayFeatureAdapter.h"
+#include "api/seabreezeapi/gpioFeatureAdapter.h"
 #include <vector>
 
 namespace seabreeze {
@@ -209,6 +210,26 @@ namespace seabreeze {
 			unsigned char runNetworkInterfaceSelfTest(long featureID, int *errorCode, unsigned char interfaceIndex);
 			void		  saveNetworkInterfaceConnectionSettings(long featureID, int *errorCode, unsigned char interfaceIndex);
 
+			/* get on or more gpio features*/
+			int getNumberOfGPIOFeatures();
+			int getGPIOFeatures(long *buffer, int maxFeatures);
+			unsigned char gpioGetNumberOfPins(long featureID, int *errorCode);
+			unsigned int gpioGetOutputEnableVector(long featureID, int *errorCode);
+			void gpioSetOutputEnableVector(long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask);
+			unsigned int gpioGetValueVector(long featureID, int *errorCode);
+			void gpioSetValueVector(long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask);
+			unsigned char gpioExtensionGetNumberOfPins(long featureID, int *errorCode);
+			void gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+			unsigned char gpioExtensionGetCurrentMode(long featureID, int *errorCode, unsigned char pinNumber);
+			void gpioExtensionSetMode(long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
+			unsigned int gpioExtensionGetOutputVector(long featureID, int *errorCode);
+			void gpioExtensionSetOutputVector(long featureID, int *errorCode, unsigned int outputVector, unsigned int bitMask);
+			float gpioExtensionGetValue(long featureID, int *errorCode, unsigned char pinNumber);
+			void gpioExtensionSetValue(long featureID, int *errorCode, unsigned char pinNumber, float value);
+
+
+
+
 
             /* Get one or more EEPROM features */
             int getNumberOfEEPROMFeatures();
@@ -220,18 +241,12 @@ namespace seabreeze {
             int getNumberOfLightSourceFeatures();
             int getLightSourceFeatures(long *buffer, int maxFeatures);
             int lightSourceGetCount(long featureID, int *errorCode);
-            bool lightSourceHasEnable(long featureID, int *errorCode,
-                int lightSourceIndex);
-            bool lightSourceIsEnabled(long featureID, int *errorCode,
-                int lightSourceIndex);
-            void lightSourceSetEnable(long featureID, int *errorCode,
-                int lightSourceIndex, bool enable);
-            bool lightSourceHasVariableIntensity(long featureID, int *errorCode,
-                int lightSourceIndex);
-            double lightSourceGetIntensity(long featureID, int *errorCode,
-                int lightSourceIndex);
-            void lightSourceSetIntensity(long featureID, int *errorCode,
-                int lightSourceIndex, double intensity);
+            bool lightSourceHasEnable(long featureID, int *errorCode, int lightSourceIndex);
+            bool lightSourceIsEnabled(long featureID, int *errorCode, int lightSourceIndex);
+            void lightSourceSetEnable(long featureID, int *errorCode, int lightSourceIndex, bool enable);
+            bool lightSourceHasVariableIntensity(long featureID, int *errorCode, int lightSourceIndex);
+            double lightSourceGetIntensity(long featureID, int *errorCode, int lightSourceIndex);
+            void lightSourceSetIntensity(long featureID, int *errorCode, int lightSourceIndex, double intensity);
 
             /* Get one or more strobe lamp enable features */
             int getNumberOfStrobeLampFeatures();
@@ -363,7 +378,7 @@ namespace seabreeze {
             std::vector<DataBufferFeatureAdapter *> dataBufferFeatures;
 			std::vector<FastBufferFeatureAdapter *> fastBufferFeatures;
             std::vector<AcquisitionDelayFeatureAdapter *> acquisitionDelayFeatures;
-
+			std::vector<gpioFeatureAdapter *> gpioFeatures;
             
             RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
@@ -392,6 +407,7 @@ namespace seabreeze {
             DataBufferFeatureAdapter *getDataBufferFeatureByID(long featureID);
 			FastBufferFeatureAdapter *getFastBufferFeatureByID(long featureID);
             AcquisitionDelayFeatureAdapter *getAcquisitionDelayFeatureByID(long featureID);
+			gpioFeatureAdapter *getGPIOFeatureByID(long featureID);
         };
     }
 }

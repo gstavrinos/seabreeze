@@ -1164,6 +1164,123 @@ void sbapi_wifi_configuration_set_pass_phrase(long deviceID, long featureID, int
 	return wrapper->setWifiConfigurationPassPhrase(deviceID, featureID, error_code, interfaceIndex, passPhrase, passPhraseLength);
 }
 
+
+
+
+/**************************************************************************************/
+//  C language wrapper for gpio features
+/**************************************************************************************/
+
+int sbapi_get_number_of_gpio_features(long deviceID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfGPIOFeatures(deviceID, error_code);
+}
+
+int sbapi_get_gpio_features(long deviceID, int *error_code, long *features, int max_features)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getGPIOFeatures(deviceID, error_code, features, max_features);
+}
+
+unsigned char sbapi_gpio_get_number_of_pins(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getGPIO_NumberOfPins(deviceID, featureID, error_code);
+}
+
+unsigned int sbapi_gpio_get_output_enable_vector(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getGPIO_OutputEnableVector(deviceID, featureID, error_code);
+}
+
+
+void sbapi_gpio_set_output_enable_vector(long deviceID, long featureID, int *error_code, unsigned int outputEnableVector, unsigned int bitMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setGPIO_OutputEnableVector(deviceID, featureID, error_code, outputEnableVector, bitMask);
+}
+
+unsigned int sbapi_gpio_get_value_vector(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getGPIO_ValueVector(deviceID, featureID, error_code);
+}
+
+
+void sbapi_gpio_set_value_vector(long deviceID, long featureID, int *error_code, unsigned int valueVector, unsigned int bitMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setGPIO_ValueVector(deviceID, featureID, error_code, valueVector, bitMask);
+}
+
+unsigned char sbapi_gpio_extension_get_number_of_pins(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEGPIO_NumberOfPins(deviceID, featureID, error_code);
+}
+
+void sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEGPIO_AvailableModes(deviceID, featureID, error_code, pinNumber, availableModes, maximumModeCount);
+}
+
+unsigned char sbapi_gpio_extension_get_current_mode(long deviceID, long featureID, int *error_code, unsigned char pinNumber)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEGPIO_CurrentMode(deviceID, featureID, error_code, pinNumber);
+}
+
+
+void sbapi_gpio_extension_set_mode(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char mode, float value)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setEGPIO_Mode(deviceID, featureID, error_code, pinNumber, mode, value);
+}
+
+unsigned int sbapi_gpio_extension_get_output_vector(long deviceID, long featureID, int *error_code)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEGPIO_OutputVector(deviceID, featureID, error_code);
+}
+
+
+void sbapi_gpio_extension_set_output_vector(long deviceID, long featureID, int *error_code, unsigned int outputVector, unsigned int bitMask)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setEGPIO_OutputVector(deviceID, featureID, error_code, outputVector, bitMask);
+}
+
+float sbapi_gpio_extension_get_value(long deviceID, long featureID, int *error_code, unsigned char pinNumber)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getEGPIO_Value(deviceID, featureID, error_code, pinNumber);
+}
+
+
+void sbapi_gpio_extension_set_value(long deviceID, long featureID, int *error_code, unsigned char pinNumber, float value)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->setEGPIO_Value(deviceID, featureID, error_code, pinNumber, value);
+}
+
 /**************************************************************************************/
 //  C language wrapper for thermo-electric features
 /**************************************************************************************/

@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DeviceAdapter.cpp
- * @date    March 2017
+ * @date    April 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
@@ -106,6 +106,7 @@ DeviceAdapter::~DeviceAdapter() {
     __delete_feature_adapters<DataBufferFeatureAdapter>(dataBufferFeatures);
 	__delete_feature_adapters<FastBufferFeatureAdapter>(fastBufferFeatures);
     __delete_feature_adapters<AcquisitionDelayFeatureAdapter>(acquisitionDelayFeatures);
+	__delete_feature_adapters<gpioFeatureAdapter>(gpioFeatures);
 
     delete this->device;
 }
@@ -298,6 +299,10 @@ int DeviceAdapter::open(int *errorCode) {
                     AcquisitionDelayFeatureAdapter>(this->device,
             acquisitionDelayFeatures, bus, featureFamilies.ACQUISITION_DELAY);
 
+	/* Create gpio feature list */
+	__create_feature_adapters<gpioFeatureInterface,
+		gpioFeatureAdapter>(this->device,
+			gpioFeatures, bus, featureFamilies.GENERAL_PURPOSE_INPUT_OUTPUT);
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return 0;
@@ -858,6 +863,167 @@ void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, 
 
 
 
+
+
+/* gpio feature wrappers */
+int DeviceAdapter::getNumberOfGPIOFeatures()
+{
+	return (int) this->gpioFeatures.size();
+}
+
+int DeviceAdapter::getGPIOFeatures(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<gpioFeatureAdapter>(gpioFeatures, buffer, maxFeatures);
+}
+
+gpioFeatureAdapter *DeviceAdapter::getGPIOFeatureByID(long featureID)
+{
+	return __getFeatureByID<gpioFeatureAdapter>(gpioFeatures, featureID);
+}
+
+unsigned char DeviceAdapter::gpioGetNumberOfPins(long featureID, int *errorCode)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getGPIO_NumberOfPins(errorCode);
+}
+
+unsigned int DeviceAdapter::gpioGetOutputEnableVector(long featureID, int *errorCode)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEGPIO_OutputVector(errorCode);
+}
+
+void DeviceAdapter::gpioSetOutputEnableVector(long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setGPIO_OutputEnableVector(errorCode, outputEnableVector, bitMask);
+}
+
+unsigned int DeviceAdapter::gpioGetValueVector(long featureID, int *errorCode)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getGPIO_ValueVector(errorCode);
+}
+
+void DeviceAdapter::gpioSetValueVector(long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setGPIO_OutputEnableVector(errorCode, valueVector, bitMask);
+}
+
+unsigned char DeviceAdapter::gpioExtensionGetNumberOfPins(long featureID, int *errorCode)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEGPIO_NumberOfPins(errorCode);
+}
+
+void DeviceAdapter::gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->getEGPIO_AvailableModes(errorCode, pinNumber, availableModes, maximumModeCount);
+}
+
+unsigned char DeviceAdapter::gpioExtensionGetCurrentMode(long featureID, int *errorCode, unsigned char pinNumber)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEGPIO_CurrentMode(errorCode, pinNumber);
+}
+
+void DeviceAdapter::gpioExtensionSetMode(long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float defaultValue)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setEGPIO_Mode(errorCode, pinNumber, mode, defaultValue);
+}
+
+unsigned int DeviceAdapter::gpioExtensionGetOutputVector(long featureID, int *errorCode)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEGPIO_OutputVector(errorCode);
+}
+
+void DeviceAdapter::gpioExtensionSetOutputVector(long featureID, int *errorCode, unsigned int outputVector, unsigned int bitMask)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setEGPIO_OutputVector(errorCode, outputVector, bitMask);
+}
+
+float DeviceAdapter::gpioExtensionGetValue(long featureID, int *errorCode, unsigned char pinNumber)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->getEGPIO_Value(errorCode, pinNumber);
+}
+
+void DeviceAdapter::gpioExtensionSetValue(long featureID, int *errorCode, unsigned char pinNumber, float value)
+{
+	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return;
+	}
+
+	feature->setEGPIO_Value(errorCode, pinNumber, value);
+}
 
 
 
