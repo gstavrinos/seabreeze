@@ -77,7 +77,7 @@ void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIn
     }
 
 	request.setInterfaceIndex(interfaceIndex);
-	request.setAddressIndex(interfaceIndex);
+	request.setAddressIndex(addressIndex);
 	
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<byte> *raw = request.queryDevice(helper);

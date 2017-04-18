@@ -900,7 +900,7 @@ unsigned int DeviceAdapter::gpioGetOutputEnableVector(long featureID, int *error
 		return 0;
 	}
 
-	return feature->getEGPIO_OutputVector(errorCode);
+	return feature->getGPIO_OutputEnableVector(errorCode);
 }
 
 void DeviceAdapter::gpioSetOutputEnableVector(long featureID, int *errorCode, unsigned int outputEnableVector, unsigned int bitMask)
@@ -933,7 +933,7 @@ void DeviceAdapter::gpioSetValueVector(long featureID, int *errorCode, unsigned 
 		return;
 	}
 
-	feature->setGPIO_OutputEnableVector(errorCode, valueVector, bitMask);
+	feature->setGPIO_ValueVector(errorCode, valueVector, bitMask);
 }
 
 unsigned char DeviceAdapter::gpioExtensionGetNumberOfPins(long featureID, int *errorCode)
@@ -947,16 +947,18 @@ unsigned char DeviceAdapter::gpioExtensionGetNumberOfPins(long featureID, int *e
 	return feature->getEGPIO_NumberOfPins(errorCode);
 }
 
-void DeviceAdapter::gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+unsigned char DeviceAdapter::gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
 {
+	unsigned char arraySize = 0;
+
 	gpioFeatureAdapter *feature = getGPIOFeatureByID(featureID);
 	if (NULL == feature)
 	{
 		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
-		return;
+		return arraySize;
 	}
 
-	feature->getEGPIO_AvailableModes(errorCode, pinNumber, availableModes, maximumModeCount);
+	return feature->getEGPIO_AvailableModes(errorCode, pinNumber, availableModes, maximumModeCount);
 }
 
 unsigned char DeviceAdapter::gpioExtensionGetCurrentMode(long featureID, int *errorCode, unsigned char pinNumber)

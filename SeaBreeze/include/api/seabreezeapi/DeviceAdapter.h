@@ -219,7 +219,7 @@ namespace seabreeze {
 			unsigned int gpioGetValueVector(long featureID, int *errorCode);
 			void gpioSetValueVector(long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask);
 			unsigned char gpioExtensionGetNumberOfPins(long featureID, int *errorCode);
-			void gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+			unsigned char gpioExtensionGetAvailableModes(long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
 			unsigned char gpioExtensionGetCurrentMode(long featureID, int *errorCode, unsigned char pinNumber);
 			void gpioExtensionSetMode(long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
 			unsigned int gpioExtensionGetOutputVector(long featureID, int *errorCode);

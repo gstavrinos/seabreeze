@@ -54,7 +54,7 @@ namespace seabreeze
 				unsigned int getGPIO_ValueVector(int *errorCode);
 				void setGPIO_ValueVector(int *errorCode, unsigned int valueVector, unsigned int bitMask);
 				unsigned char getEGPIO_NumberOfPins(int *errorCode);
-				void getEGPIO_AvailableModes(int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+				unsigned char getEGPIO_AvailableModes(int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
 				unsigned char getEGPIO_CurrentMode(int *errorCode, unsigned char pinNumber);
 				void setEGPIO_Mode(int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
 				unsigned int getEGPIO_OutputVector(int *errorCode);

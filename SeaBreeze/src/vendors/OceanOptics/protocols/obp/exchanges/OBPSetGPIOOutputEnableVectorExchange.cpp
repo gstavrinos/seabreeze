@@ -41,7 +41,7 @@ OBPSetGPIOOutputEnableVectorExchange::OBPSetGPIOOutputEnableVectorExchange()
 
     this->hints->push_back(new OBPControlHint());
 
-    this->messageType = OBPMessageTypes::OBP_SET_GPIO_VALUE_VECTOR;
+    this->messageType = OBPMessageTypes::OBP_SET_GPIO_OUTPUT_ENABLE_VECTOR;
 
     this->payload.resize(sizeof(unsigned int)+ sizeof(unsigned int)); // four bytes in immediate data
 }
