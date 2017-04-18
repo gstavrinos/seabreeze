@@ -1051,18 +1051,20 @@ unsigned char SeaBreezeAPI_Impl::getEGPIO_NumberOfPins(long deviceID, long featu
 }
 
 
-void SeaBreezeAPI_Impl::getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+unsigned char SeaBreezeAPI_Impl::getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
 {
+	unsigned char arraySize = 0;
+
 	DeviceAdapter *adapter = getDeviceByID(deviceID);
 	if (NULL != adapter)
 	{
-		adapter->gpioExtensionGetAvailableModes(featureID, errorCode, pinNumber, availableModes, maximumModeCount);
+		arraySize = adapter->gpioExtensionGetAvailableModes(featureID, errorCode, pinNumber, availableModes, maximumModeCount);
 	}
 	else
 	{
 		SET_ERROR_CODE(ERROR_NO_DEVICE);
 	}
-
+	return arraySize;
 }
 
 

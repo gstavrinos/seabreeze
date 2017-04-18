@@ -183,7 +183,7 @@ public:
 	virtual unsigned int getGPIO_ValueVector(long deviceID, long featureID, int *errorCode);
 	virtual void setGPIO_ValueVector(long deviceID, long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask);
 	virtual unsigned char getEGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode);
-	virtual void getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+	virtual unsigned char getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
 	virtual unsigned char getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber);
 	virtual void setEGPIO_Mode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
 	virtual unsigned int getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode);

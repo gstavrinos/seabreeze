@@ -1229,7 +1229,7 @@ unsigned char sbapi_gpio_extension_get_number_of_pins(long deviceID, long featur
 	return wrapper->getEGPIO_NumberOfPins(deviceID, featureID, error_code);
 }
 
-void sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+unsigned char sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
 {
 	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 

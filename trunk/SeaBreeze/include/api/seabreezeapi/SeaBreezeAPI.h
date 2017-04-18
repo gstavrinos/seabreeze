@@ -242,7 +242,7 @@ public:
 	virtual unsigned int getGPIO_ValueVector(long deviceID, long featureID, int *errorCode) = 0;
 	virtual void setGPIO_ValueVector(long deviceID, long featureID, int *errorCode, unsigned int valueVector, unsigned int bitMask) = 0;
 	virtual unsigned char getEGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode) = 0;
-	virtual void getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount) = 0;
+	virtual unsigned char getEGPIO_AvailableModes(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount) = 0;
 	virtual unsigned char getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber) = 0;
 	virtual void setEGPIO_Mode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber, unsigned char mode, float value) = 0;
 	virtual unsigned int getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode) = 0;
@@ -2501,7 +2501,7 @@ extern "C" {
 	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
 	* @param outputEnableVector (Input) the enable state for indexed interface
 	*/
-	DLL_DECL void sbapi_gpio_set_output_enable_vector(long deviceID, long featureID, int *error_code, unsigned int outputEnableVector);
+	DLL_DECL void sbapi_gpio_set_output_enable_vector(long deviceID, long featureID, int *error_code, unsigned int outputEnableVector, unsigned int bitMask);
 
 	/**
 	* This function retrieves the gpio value vector (gpio bit values)
@@ -2549,7 +2549,7 @@ extern "C" {
 	*	0x00: GPIO Output (Push/Pull), 0x01: GPIO Open Drain Output, 0x02: DAC output,	0x80: GPIO Input (High Z)
 	*	0x81: GPIO Input w/Pull Down, 0x82: ADC Input
 	*/
-	DLL_DECL void sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount);
+	DLL_DECL unsigned char sbapi_gpio_extension_get_available_modes(long deviceID, long featureID, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount);
 
 
 	/**
@@ -2623,7 +2623,7 @@ extern "C" {
 	* @param pin number (Input) the number of the pin to be set
 	* @param value (Input) normalized value, 0.0 to 1.0
 	*/
-	DLL_DECL void sbapi_gpio_extension_set_value(long deviceID, long featureID, int *error_code, unsigned int outputVector, unsigned int bitMask);
+	DLL_DECL void sbapi_gpio_extension_set_value(long deviceID, long featureID, int *error_code, unsigned char pinNumber, float value);
 
 
     /**

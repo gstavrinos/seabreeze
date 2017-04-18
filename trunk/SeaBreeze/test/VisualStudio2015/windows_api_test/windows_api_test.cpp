@@ -69,6 +69,7 @@ void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 
 void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
@@ -106,6 +107,7 @@ static testfunc_t __test_functions[] =
 	test_acquisition_delay_feature,
 	test_pixel_binning_feature,
 	test_networking_features, // also includes ethernet, multicast, ipv4, dhcp server and wifi
+	test_gpio_features,
 	test_miscellaneous_commands
 };
 
@@ -2257,8 +2259,8 @@ void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *
 						break;
 					case 2: // wifi
 						test_wifi_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
-						test_dhcp_server_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
 						test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+						test_dhcp_server_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
 						test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
 						break;
 					case 3: // CDC ethernet (USB)
@@ -2300,6 +2302,190 @@ void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *
 	free(network_configuration_ids);
 
 	printf("\tFinished testing network feature capabilities.\n");
+}
+
+void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+	int error = 0;
+	int number_of_gpio_features;
+	long *gpio_feature_ids = 0;
+	int featureIndex = 0;
+
+	printf("\n\tTesting gpio features:\n");
+
+	printf("\t\tGetting number of gpio features:\n");
+	number_of_gpio_features = sbapi_get_number_of_gpio_features(deviceID, &error);
+	printf("\t\t\tResult is %d [%s]\n", number_of_gpio_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	if (0 == number_of_gpio_features)
+	{
+		printf("\tNo gpio capabilities found.\n");
+		tallyUnsupportedFeatures(unsupportedFeatureCount);
+		return;
+	}
+
+	gpio_feature_ids = (long *)calloc(number_of_gpio_features, sizeof(long));
+	printf("\t\tGetting gpio feature IDs...\n");
+	number_of_gpio_features = sbapi_get_gpio_features(deviceID, &error, gpio_feature_ids, number_of_gpio_features);
+	printf("\t\t\tResult is %d [%s]\n", number_of_gpio_features, sbapi_get_error_string(error));
+	tallyErrors(error, testFailureCount);
+
+	for (featureIndex = 0; featureIndex < number_of_gpio_features; featureIndex++)
+	{
+		printf("\t\t%d: Testing device 0x%02lX, gpio feature 0x%02lX\n", featureIndex, deviceID, gpio_feature_ids[featureIndex]);
+
+		printf("\t\t\tAttempting to get the number of gpio pins...\n");
+		unsigned gpioPinCount = sbapi_gpio_get_number_of_pins(deviceID, gpio_feature_ids[featureIndex], &error);
+		unsigned int testMask = ((0x00000001 << gpioPinCount) - 1);
+		printf("\t\t\t\tResult is %d [%s]\n", gpioPinCount, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		unsigned int outputEnableStateTestValue = 0xFFFFFFFF;
+		unsigned int outputEnableStateBitMask = 0xFFFFFFFF;
+
+		printf("\t\t\tAttempting to set the output enable state of the gpio pins...\n");
+		sbapi_gpio_set_output_enable_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputEnableStateTestValue, outputEnableStateBitMask);
+		printf("\t\t\t\tSent: %x  [%s]\n", outputEnableStateTestValue & testMask, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		if (error == 0)
+		{
+			printf("\t\t\tAttempting to get the output enable state of the gpio pins...\n");
+			unsigned int outputEnableVector = sbapi_gpio_get_output_enable_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+			printf("\t\t\t\tReceived: %x [%s]\n", testMask  & outputEnableVector, sbapi_get_error_string(error));
+			if ((testMask & outputEnableStateTestValue) != (testMask & outputEnableVector))
+			{
+				error = -1;
+				printf("\t\t\t\tSet Value=%x, Get Value=%x\n", outputEnableStateTestValue, outputEnableVector);
+			}
+			tallyErrors(error, testFailureCount);
+		}
+
+		unsigned int valueVectorTest = 0xFFFFFFFF;
+		unsigned int valueVectorBitMask = 0xFFFFFFFF;
+
+		printf("\t\t\tAttempting to set the values of the gpio pins...\n");
+		sbapi_gpio_set_value_vector(deviceID, gpio_feature_ids[featureIndex], &error, valueVectorTest, valueVectorBitMask);
+		printf("\t\t\t\tSent: %x  [%s]\n", valueVectorTest & testMask, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		if (error == 0)
+		{
+			printf("\t\t\tAttempting to get the values of the gpio pins...\n");
+			unsigned int valueVector = sbapi_gpio_get_value_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+			printf("\t\t\t\tReceived: %x [%s]\n", valueVector, sbapi_get_error_string(error));
+			if (valueVectorTest != valueVectorTest)
+				error = -1;
+			tallyErrors(error, testFailureCount);
+		}
+
+
+		printf("\t\t\tAttempting to get the number of extended gpio pins...\n");
+		unsigned char egpioPinCount = sbapi_gpio_extension_get_number_of_pins(deviceID, gpio_feature_ids[featureIndex], &error);
+		printf("\t\t\t\tResult is %d [%s]\n", egpioPinCount, sbapi_get_error_string(error));
+		tallyErrors(error, testFailureCount);
+
+		if (error == 0)
+		{
+			for (int pinIndex = 0; pinIndex < egpioPinCount; pinIndex++)
+			{
+				unsigned char arraySize = 10;
+				unsigned char pinModes[10];
+
+				printf("\t\t\tAttempting to get the available io modes for pin %d\n", pinIndex);
+				arraySize = sbapi_gpio_extension_get_available_modes(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, pinModes, arraySize);
+				printf("\t\t\t\tModes found: %d [%s]\n", arraySize, sbapi_get_error_string(error));
+				tallyErrors(error, testFailureCount);
+
+				for (int modeIndex = 0; modeIndex < arraySize; modeIndex++)
+				{
+					float dacTestValue = .54321;
+
+					printf("\t\t\tAttempting to set the pin mode to %x\n", pinModes[modeIndex]);
+					sbapi_gpio_extension_set_mode(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, pinModes[modeIndex], dacTestValue);
+					printf("\t\t\t\tResult [%s]\n", sbapi_get_error_string(error));
+					tallyErrors(error, testFailureCount);
+
+					if (error == 0)
+					{
+						printf("\t\t\tAttempting to get the pin mode\n");
+						unsigned char pinMode = sbapi_gpio_extension_get_current_mode(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex);
+						printf("\t\t\t\tMode=%x [%s]\n", pinMode, sbapi_get_error_string(error));
+						tallyErrors(error, testFailureCount);
+
+						if (pinMode == pinModes[modeIndex])
+						{
+							unsigned int outputValue = 0xFFFFFFFF;
+							unsigned int outputBitMask = 0x00000001 << pinIndex;
+							unsigned int outputVector = 0;
+							float adcValue = 0;
+
+							if (error == 0)
+							{
+								switch (pinMode)
+								{
+								case 0x00:
+									printf("\t\t\tSet push pull output bit %d to %x\n", pinIndex, 0x00000001 & (outputValue >> pinIndex));
+									sbapi_gpio_extension_set_output_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputValue, outputBitMask);
+									printf("\t\t\t\tResult %d [%s]\n", error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								case 0x01:
+									printf("\t\t\tSet open drain output bit %d to %x\n", pinIndex, 0x00000001 & (outputValue >> pinIndex));
+									sbapi_gpio_extension_set_output_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputValue, outputBitMask);
+									printf("\t\t\t\tResult is %d [%s]\n", error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								case 0x02:
+									printf("\t\t\tSet dac output of bit %d to %f\n", pinIndex, dacTestValue);
+									sbapi_gpio_extension_set_value(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, dacTestValue);
+									printf("\t\t\t\tResult is %d [%s]\n", error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								case 0x80:
+									printf("\t\t\tGet high Z input for bit %d\n", pinIndex);
+									outputVector = sbapi_gpio_extension_get_output_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+									printf("\t\t\t\tPin %d=%d, Result %d [%s]\n", pinIndex, 0x00000001 & (outputVector >> pinIndex), error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								case 0x81:
+									printf("\t\t\tGet pull down inputfor  bit %d\n", pinIndex);
+									outputVector = sbapi_gpio_extension_get_output_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+									printf("\t\t\t\tPin %d=%d, Result %d [%s]\n", pinIndex, 0x00000001 & (outputVector >> pinIndex), error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								case 0x82:
+									printf("\t\t\tGet adc input for bit %d\n", pinIndex, dacTestValue);
+									adcValue = sbapi_gpio_extension_get_value(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex);
+									printf("\t\t\t\tPin %d=%f, Result is %d [%s]\n", pinIndex, adcValue, error, sbapi_get_error_string(error));
+									tallyErrors(error, testFailureCount);
+									break;
+								default:
+									printf("\t\t\t\tUndefined pin mode: %x\n", pinMode);
+									break;
+								}
+							}
+							else
+							{
+								printf("\t\t\t\tMode values didn't match.\n");
+								tallyErrors(-1, testFailureCount);
+							}
+						}
+						
+					}
+				}
+			}
+		}
+
+
+
+		printf("\t\t%d: Finished testing device 0x%02lX, gpio feature 0x%02lX\n", featureIndex, deviceID, gpio_feature_ids[featureIndex]);
+	}
+
+	free(gpio_feature_ids);
+
+	printf("\tFinished testing gpio capabilities.\n");
 }
 
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
@@ -2624,53 +2810,53 @@ void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 		unsigned char netMask = 24;
 
 		// add and delete an ipv4 address
-
-		printf("\t\t\tAttempting to change the number of ipv4 addresses...\n");
-		printf("\t\t\t\tIPv4 address count = %d...\n", ipv4NumberOfAddresses);
-
-		printf("\t\t\t\tAdding an address...\n");
-		sbapi_ipv4_add_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4Address, netMask);
-		printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-		tallyErrors(error, testFailureCount);
-
 		if (error == 0)
 		{
-			unsigned char newAddressCount = 0;
-			newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
-			printf("\t\t\t\tThe new number of addresses = %d...\n", newAddressCount);
+			printf("\t\t\tAttempting to change the number of ipv4 addresses...\n");
+			printf("\t\t\t\tIPv4 address count = %d...\n", ipv4NumberOfAddresses);
+
+			printf("\t\t\t\tAdding an address...\n");
+			sbapi_ipv4_add_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4Address, netMask);
+			printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 			tallyErrors(error, testFailureCount);
 
 			if (error == 0)
 			{
-				sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1, &ipv4Address, &netMask);
-				printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+				unsigned char newAddressCount = 0;
+				newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+				printf("\t\t\t\tThe new number of addresses = %d...\n", newAddressCount);
 				tallyErrors(error, testFailureCount);
 
-				printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
-				sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1);
-				printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
-				tallyErrors(error, testFailureCount);
-
-				unsigned char deletedAddressCount = 0;
-				deletedAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
-				printf("\t\t\t\tNumber of addresses = %d...\n", deletedAddressCount);
-				tallyErrors(error, testFailureCount);
-
-				if (newAddressCount != deletedAddressCount + 1)
+				if (error == 0)
 				{
-					printf("\t\t\t\tThe number of addresses did not decrement.\n");
+					sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1, &ipv4Address, &netMask);
+					printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+					tallyErrors(error, testFailureCount);
+
+					printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
+					sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1);
+					printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+					tallyErrors(error, testFailureCount);
+
+					unsigned char deletedAddressCount = 0;
+					deletedAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+					printf("\t\t\t\tNumber of addresses = %d...\n", deletedAddressCount);
+					tallyErrors(error, testFailureCount);
+
+					if (newAddressCount != deletedAddressCount + 1)
+					{
+						printf("\t\t\t\tThe number of addresses did not decrement.\n");
+						tallyErrors(-1, testFailureCount);
+					}
+				}
+				else
+				{
+					printf("\t\t\t\tThe number of addresses did not increment.\n");
 					tallyErrors(-1, testFailureCount);
 				}
 			}
-			else
-			{
-				printf("\t\t\t\tThe number of addresses did not increment.\n");
-				tallyErrors(-1, testFailureCount);
-			}
-
-
 		}
-
+	
 		printf("\t\t%d: Finished testing device 0x%02lX, ipv4 feature 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
 	}
 

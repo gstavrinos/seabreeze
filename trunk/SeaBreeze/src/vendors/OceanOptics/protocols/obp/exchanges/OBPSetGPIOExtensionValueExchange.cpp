@@ -41,7 +41,7 @@ OBPSetGPIOExtensionValueExchange::OBPSetGPIOExtensionValueExchange()
 
     this->hints->push_back(new OBPControlHint());
 
-    this->messageType = OBPMessageTypes::OBP_SET_EGPIO_OUTPUT_VECTOR;
+    this->messageType = OBPMessageTypes::OBP_SET_EGPIO_VALUE;
 
     this->payload.resize(sizeof(unsigned char)+ sizeof(float)); // four bytes in immediate data
 	this->payload[0] = 0;
