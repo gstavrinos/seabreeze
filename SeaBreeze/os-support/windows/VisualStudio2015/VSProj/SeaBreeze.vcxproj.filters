@@ -852,9 +852,6 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationGbEEnableExchange.h">
       <Filter>Headers\EthernetConfiguration</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationMacAddressExchange.h">
-      <Filter>Headers\EthernetConfiguration</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetGPIOOutputEnableVectorExchange.h">
       <Filter>Headers\GPIO</Filter>
     </ClInclude>
@@ -1460,6 +1457,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\api\seabreezeapi\gpioFeatureAdapter.h">
       <Filter>Headers\GPIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationMACAddressExchange.h">
+      <Filter>Headers\EthernetConfiguration</Filter>
     </ClInclude>
     <!-- INCLUDES END HERE -->
   </ItemGroup>
