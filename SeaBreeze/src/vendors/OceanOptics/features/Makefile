@@ -30,6 +30,7 @@ SUBDIRS = \
     multicast			\
     network_configuration	\
     wifi_configuration	\
-    dhcp_server
+    dhcp_server \
+    gpio
 
 include $(SEABREEZE)/common.mk
