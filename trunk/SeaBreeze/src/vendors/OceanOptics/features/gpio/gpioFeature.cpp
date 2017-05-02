@@ -29,7 +29,7 @@
 
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/gpio/gpioFeature.h"
-#include "vendors/OceanOptics/protocols/interfaces/gpioProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/interfaces/GPIOProtocolInterface.h"
 #include "common/exceptions/FeatureControlException.h"
 #include "common/FloatVector.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
