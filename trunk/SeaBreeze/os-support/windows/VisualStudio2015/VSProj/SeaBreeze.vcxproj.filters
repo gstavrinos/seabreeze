@@ -1461,6 +1461,30 @@
     <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPSetEthernetConfigurationMACAddressExchange.h">
       <Filter>Headers\EthernetConfiguration</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPGetI2CMasterNumberOfBusesExchange.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPReadI2CMasterBusExchange.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\exchanges\OBPWriteI2CMasterBusExchange.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\interfaces\I2CMasterProtocolInterface.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\protocols\obp\impls\OBPI2CMasterProtocol.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\i2c_master\i2cMasterFeature.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\vendors\OceanOptics\features\i2c_master\i2cMasterFeatureInterface.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\api\seabreezeapi\I2CMasterFeatureAdapter.h">
+      <Filter>Headers\I2CMaster</Filter>
+    </ClInclude>
     <!-- INCLUDES END HERE -->
   </ItemGroup>
   <ItemGroup>
@@ -2788,6 +2812,27 @@
     <ClCompile Include="..\..\..\..\src\api\seabreezeapi\gpioFeatureAdapter.cpp">
       <Filter>Sources\GPIO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPGetI2CMasterNumberOfBusesExchange.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPReadI2CMasterBusExchange.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\exchanges\OBPWriteI2CMasterBusExchange.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\interfaces\I2CMasterProtocolInterface.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\protocols\obp\impls\OBPI2CMasterProtocol.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\vendors\OceanOptics\features\i2c_master\i2cFeature.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\api\seabreezeapi\I2CMasterFeatureAdapter.cpp">
+      <Filter>Sources\I2CMaster</Filter>
+    </ClCompile>
     <!-- SOURCES END HERE -->
   </ItemGroup>
   <ItemGroup>
@@ -3022,6 +3067,12 @@
     </Filter>
     <Filter Include="Sources\GPIO">
       <UniqueIdentifier>{fd7e381a-5742-4e8f-8be9-4fa2b4f595c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\I2CMaster">
+      <UniqueIdentifier>{c1fdfd07-3cd6-4817-8e2b-955d82af8a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\I2CMaster">
+      <UniqueIdentifier>{94dc72bd-75bd-4e76-a591-cc349f7b35f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

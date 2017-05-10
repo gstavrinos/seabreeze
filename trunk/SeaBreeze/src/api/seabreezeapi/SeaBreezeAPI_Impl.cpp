@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI_Impl.cpp
- * @date    April 2017
+ * @date    May 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper around the SeaBreeze driver. Please
@@ -2660,3 +2660,82 @@ unsigned long SeaBreezeAPI_Impl::acquisitionDelayGetDelayMinimumMicroseconds(lon
 
     return adapter->acquisitionDelayGetDelayMinimumMicroseconds(featureID, errorCode);
 }
+
+
+/**************************************************************************************/
+//  I2C Master Features for the SeaBreeze API class
+/**************************************************************************************/
+
+int SeaBreezeAPI_Impl::getNumberOfI2CMasterFeatures(long deviceID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getNumberOfI2CMasterFeatures();
+}
+
+int SeaBreezeAPI_Impl::getI2CMasterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter)
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_SUCCESS);
+	return adapter->getI2CMasterFeatures(buffer, maxLength);
+}
+
+unsigned char SeaBreezeAPI_Impl::i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode)
+{
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL == adapter) {
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	return adapter->i2cMasterGetNumberOfBuses(featureID, errorCode);
+}
+
+unsigned short SeaBreezeAPI_Impl::i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+{
+	unsigned short dataLength = 0;
+
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		dataLength = adapter->i2cMasterReadBus(featureID, errorCode, busIndex, slaveAddress, readData, numberOfBytes);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+	return dataLength;
+}
+
+unsigned short SeaBreezeAPI_Impl::i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
+{
+	unsigned short dataLength = 0;
+
+	DeviceAdapter *adapter = getDeviceByID(deviceID);
+	if (NULL != adapter)
+	{
+		dataLength = adapter->i2cMasterWriteBus(featureID, errorCode, busIndex, slaveAddress, writeData, numberOfBytes);
+	}
+	else
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+	}
+	return dataLength;
+}
+
+
+
+
+

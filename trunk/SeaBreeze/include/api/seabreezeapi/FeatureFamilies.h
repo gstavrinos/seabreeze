@@ -220,6 +220,12 @@ namespace seabreeze {
 			virtual ~GPIOFeatureFamily();
 		};
 
+		class I2CMasterFeatureFamily : public FeatureFamily {
+		public:
+			I2CMasterFeatureFamily();
+			virtual ~I2CMasterFeatureFamily();
+		};
+
 		
         class FeatureFamilies {
         public:
@@ -259,6 +265,7 @@ namespace seabreeze {
 			//const	DeviceIdentificationFeatureFamily DEVICE_IDENTIFICATION;
 			//const DeviceTestFeatureFamily DEVICE_TEST;
 			const GPIOFeatureFamily GENERAL_PURPOSE_INPUT_OUTPUT;
+			const I2CMasterFeatureFamily I2C_MASTER;
 
 
             FeatureFamilies();

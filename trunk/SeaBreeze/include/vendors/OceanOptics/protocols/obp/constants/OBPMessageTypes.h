@@ -357,9 +357,9 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_SPI_CONTROLLER_MODE		= 0x00500100;	
 
 /// Intra Integrated Circuit bus			
-		static const unsigned int OBP_GET_I2C_BUS_COUNT				= 0x00600000;	
-		static const unsigned int OBP_READ_12C_BUS					= 0x00600010;	
-		static const unsigned int OBP_WRITE_I2C_BUS					= 0x00600020;	
+		static const unsigned int OBP_GET_I2C_MASTER_BUS_COUNT				= 0x00600000;	
+		static const unsigned int OBP_READ_12C_MASTER_BUS					= 0x00600010;	
+		static const unsigned int OBP_WRITE_I2C_MASTER_BUS					= 0x00600020;	
 		static const unsigned int OBP_SET_I2C_CLOCK_LIMIT_HZ		= 0x00600080;	
 
 

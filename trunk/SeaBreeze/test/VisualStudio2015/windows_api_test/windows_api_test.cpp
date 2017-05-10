@@ -2400,7 +2400,7 @@ void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 
 				for (int modeIndex = 0; modeIndex < arraySize; modeIndex++)
 				{
-					float dacTestValue = .54321;
+					float dacTestValue = (float)0.54321;
 
 					printf("\t\t\tAttempting to set the pin mode to %x\n", pinModes[modeIndex]);
 					sbapi_gpio_extension_set_mode(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, pinModes[modeIndex], dacTestValue);
@@ -2456,7 +2456,7 @@ void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 									tallyErrors(error, testFailureCount);
 									break;
 								case 0x82:
-									printf("\t\t\tGet adc input for bit %d\n", pinIndex, dacTestValue);
+									printf("\t\t\tGet adc input for bit %d\n", pinIndex);
 									adcValue = sbapi_gpio_extension_get_value(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex);
 									printf("\t\t\t\tPin %d=%f, Result is %d [%s]\n", pinIndex, adcValue, error, sbapi_get_error_string(error));
 									tallyErrors(error, testFailureCount);
@@ -3040,7 +3040,7 @@ void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFa
 
 		printf("\t\t\tAttempting to set the wifi pass phrase with: PassPhras3.\n");
 		myString.replace(myString.begin(), myString.end(), "PassPhras3");
-		sbapi_wifi_configuration_set_pass_phrase(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, (unsigned char *)(myString.c_str()), myString.size());
+		sbapi_wifi_configuration_set_pass_phrase(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, (unsigned char *)(myString.c_str()), myString.size() & 0xFF);
 		printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
 		tallyErrors(error, testFailureCount);
 

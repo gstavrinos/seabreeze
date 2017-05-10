@@ -37,4 +37,7 @@ Other notes:
 AppWizard uses "TODO:" comments to indicate parts of the source code you
 should add to or customize.
 
+gpio, i2c etc. need a loopback connector to be properly tested. That is not currently available, so 
+any test mearly exercises the command call. i2c is not tested for this reason.
+
 /////////////////////////////////////////////////////////////////////////////

@@ -34,7 +34,9 @@
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
+#pragma warning( disable : 4290 )  // C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
 #endif
+
 
 namespace seabreeze {
     

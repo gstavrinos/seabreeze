@@ -321,6 +321,13 @@ public:
     virtual unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID,
             long featureID, int *errorCode);
 
+	/* I2C Master features */
+	virtual int getNumberOfI2CMasterFeatures(long deviceID, int *errorCode);
+	virtual int getI2CMasterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+	virtual unsigned char i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode);
+	virtual unsigned short i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes);
+	virtual unsigned short i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes);
+
 private:
     SeaBreezeAPI_Impl();
 

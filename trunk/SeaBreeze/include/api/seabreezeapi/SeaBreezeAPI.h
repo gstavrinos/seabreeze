@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeAPI.h
- * @date    April 2017
+ * @date    May 2017
  * @author  Ocean Optics, Inc.
  *
  * This is an interface to SeaBreeze that allows
@@ -361,7 +361,12 @@ public:
     virtual unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID, long featureID, int *errorCode) = 0;
     virtual unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID, long featureID, int *errorCode) = 0;
 
-
+	// i2c master features
+	virtual int getNumberOfI2CMasterFeatures(long deviceID, int *errorCode) = 0;
+	virtual int getI2CMasterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
+	virtual unsigned char i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode) = 0;
+	virtual unsigned short i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes) = 0;
+	virtual unsigned short i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes) = 0;
 
 protected:
     SeaBreezeAPI();
@@ -3619,8 +3624,67 @@ extern "C" {
      *        error codes.
      * @return The minimum acquisition delay in microseconds
      */
-    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long deviceID,
-            long featureID, int *errorCode);
+    DLL_DECL unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long deviceID, long featureID, int *errorCode);
+
+
+
+
+	/**
+	* This function returns the total number of I2C Master feature
+	* instances available in the indicated device.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	*
+	* @return the number of features that will be returned by a call to sbapi_get_i2c_master_features().
+	*/
+	DLL_DECL int sbapi_get_number_of_i2c_master_features(long deviceID, int *errorCode);
+
+	/**
+	* This function returns IDs for accessing each i2c master
+	* feature instance for this device.  The IDs are only valid when used with
+	* the deviceID used to obtain them.
+	*
+	* @param deviceID (Input) The index of a device previously opened with sbapi_open_device().
+	* @param error_code (Output) A pointer to an integer that can be used for storing error codes.
+	* @param features (Output) preallocated buffer to hold returned feature handles
+	* @param max_features (Input) size of preallocated buffer
+	*
+	* @return the number of i2c master feature IDs that were copied.
+	*/
+	DLL_DECL int sbapi_get_i2c_master_features(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
+
+	/**
+	* @brief get the number of i2c buses (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the number of i2c buses
+	*/
+	DLL_DECL unsigned char sbapi_i2c_master_get_number_of_buses(long deviceID, long featureID, int *errorCode);
+
+
+	/**
+	* @brief receive  i2c data (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param busIndex (Input) the index for the i2c bus of interest
+	* @param slaveAddress (Input) the i2c address of the device to be queried
+	* @param readData (Input) pointer to the data that should be received
+	* @param numberOfBytes (Input) the number of bytes to retrieve
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL unsigned short sbapi_i2c_master_read_bus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes);
+
+	/**
+	* @brief send  i2c data (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param busIndex (Input) the index for the i2c bus of interest
+	* @param slaveAddress (Input) the i2c address of the device to be written to
+	* @param writeData (Input) pointer to the data that should be sent
+	* @param numberOfBytes (Input) the number of bytes to send
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL unsigned short sbapi_i2c_master_read_bus(long deviceID, long featureID, int *error_code, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes);
+
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    DeviceAdapter.cpp
- * @date    April 2017
+ * @date    May 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a wrapper that allows
@@ -107,6 +107,7 @@ DeviceAdapter::~DeviceAdapter() {
 	__delete_feature_adapters<FastBufferFeatureAdapter>(fastBufferFeatures);
     __delete_feature_adapters<AcquisitionDelayFeatureAdapter>(acquisitionDelayFeatures);
 	__delete_feature_adapters<gpioFeatureAdapter>(gpioFeatures);
+	__delete_feature_adapters<I2CMasterFeatureAdapter>(i2cMasterFeatures);
 
     delete this->device;
 }
@@ -303,6 +304,12 @@ int DeviceAdapter::open(int *errorCode) {
 	__create_feature_adapters<gpioFeatureInterface,
 		gpioFeatureAdapter>(this->device,
 			gpioFeatures, bus, featureFamilies.GENERAL_PURPOSE_INPUT_OUTPUT);
+
+	/* Create i2c master feature list */
+	__create_feature_adapters<i2cMasterFeatureInterface,
+		I2CMasterFeatureAdapter>(this->device,
+			i2cMasterFeatures, bus, featureFamilies.I2C_MASTER);
+
 
     SET_ERROR_CODE(ERROR_SUCCESS);
     return 0;
@@ -2228,5 +2235,58 @@ unsigned long DeviceAdapter::acquisitionDelayGetDelayMinimumMicroseconds(long fe
 
     return feature->getAcquisitionDelayMinimumMicroseconds(errorCode);
 }
+
+
+/* i2c master feature wrappers */
+int DeviceAdapter::getNumberOfI2CMasterFeatures()
+{
+	return (int) this->i2cMasterFeatures.size();
+}
+
+int DeviceAdapter::getI2CMasterFeatures(long *buffer, int maxFeatures)
+{
+	return __getFeatureIDs<I2CMasterFeatureAdapter>(i2cMasterFeatures, buffer, maxFeatures);
+}
+
+I2CMasterFeatureAdapter *DeviceAdapter::getI2CMasterFeatureByID(long featureID)
+{
+	return __getFeatureByID<I2CMasterFeatureAdapter>(i2cMasterFeatures, featureID);
+}
+
+unsigned char DeviceAdapter::i2cMasterGetNumberOfBuses(long featureID, int *errorCode)
+{
+	I2CMasterFeatureAdapter *feature = getI2CMasterFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->i2cMasterGetNumberOfBuses(errorCode);
+}
+
+unsigned short DeviceAdapter::i2cMasterReadBus(long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+{
+	I2CMasterFeatureAdapter *feature = getI2CMasterFeatureByID(featureID);
+	if (NULL == feature)
+	{
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->i2cMasterReadBus(errorCode, busIndex, slaveAddress, readData, numberOfBytes);
+}
+
+unsigned short DeviceAdapter::i2cMasterWriteBus(long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
+{
+	I2CMasterFeatureAdapter *feature = getI2CMasterFeatureByID(featureID);
+	if (NULL == feature) {
+		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+		return 0;
+	}
+
+	return feature->i2cMasterWriteBus(errorCode, busIndex, slaveAddress, writeData, numberOfBytes);
+}
+
+
 
 

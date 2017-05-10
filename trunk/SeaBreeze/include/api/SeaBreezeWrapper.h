@@ -1,6 +1,6 @@
 /***************************************************//**
  * @file    SeaBreezeWrapper.h
- * @date    March 2017
+ * @date    May 2017
  * @author  Ocean Optics, Inc.
  *
  * This is a trivial interface to SeaBreeze that allows
@@ -181,7 +181,7 @@ public:
 	unsigned int getGPIO_ValueVector(int index, int *errorCode);
 	void setGPIO_ValueVector(int index, int *errorCode, unsigned int valueVector, unsigned int bitMask);
 	unsigned char getEGPIO_NumberOfPins(int index, int *errorCode);
-	void getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
+	unsigned char getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
 	unsigned char getEGPIO_CurrentMode(int index, int *errorCode, unsigned char pinNumber);
 	void setEGPIO_Mode(int index, int *errorCode, unsigned char pinNumber, unsigned char mode, float value);
 	unsigned int getEGPIO_OutputVector(int index, int *errorCode);
@@ -204,6 +204,11 @@ public:
     int    getLightSourceCount       (int index, int *errorCode);
     void   setLightSourceEnable      (int index, int *errorCode, int lightIndex, unsigned char enable);
     void   setLightSourceIntensity   (int index, int *errorCode, int lightIndex, double intensity);
+
+	// i2c master features
+	unsigned char getI2CMasterNumberOfBuses(int index, int *errorCode);
+	unsigned short readI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes);
+	unsigned short writeI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short dataLength);
 
 private:
     SeaBreezeWrapper();
@@ -1271,12 +1276,11 @@ extern "C" {
 	* @brief Returns the available gpio modes for the pin of interest
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
 	* @param error_code (Output) Pointer to allocated integer to receive error code
-	* @param buffer (Output) A character buffer allocated to contain at least
-	*        'maxModeCount' items, which will be populated with the mode list
-	* @param maxModeClunt (Input) number of Modes that can be stored
-	* @return int: Number of bytes written to buffer.
+	* @param buffer (Output) A character buffer allocated to contain at least 'maxModeCount' items, which will be populated with the mode list
+	* @param maxModeCount (Input) number of Modes that can be stored
+	* @return int: Number of modes written to buffer.
 	*/
-	DLL_DECL unsigned char seabreeze_get_egpio_available_modes(int error_code, unsigned char *modes, int maxModeCount);
+	DLL_DECL unsigned char seabreeze_get_egpio_available_modes(int index, int error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxModeCount);
 
 	/**
 	* @brief get a mode type for the pin of interest (if equipped)
@@ -1319,7 +1323,7 @@ extern "C" {
 
 
 	/**
-	* @brief gest te value for the given pin, 0.0 to 1.0 (if equipped)
+	* @brief get value for the given pin, 0.0 to 1.0 (if equipped)
 	* @param index (Input) The index of a device previously opened with open_spectrometer().
 	* @param pinNumber (Input) the pin of interest
 	* @param error_code (Output) Pointer to allocated integer to receive error code
@@ -1336,6 +1340,39 @@ extern "C" {
 	* @param error_code (Output) Pointer to allocated integer to receive error code
 	*/
 	DLL_DECL void seabreeze_set_egpio_value(int index, int *error_code, unsigned pinNumber, float value);
+
+
+	/**
+	* @brief get the number of i2c buses (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	* @return the number of i2c buses
+	*/
+	DLL_DECL unsigned char getI2CMasterNumberOfBuses(int index, int *errorCode);
+
+
+	/**
+	* @brief receive  i2c data (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param busIndex (Input) the index for the i2c bus of interest
+	* @param slaveAddress (Input) the i2c address of the device to be queried
+	* @param readData (Input) pointer to the data that should be received
+	* @param numberOfBytes (Input) the number of bytes to retrieve
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL unsigned short readI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes);
+	
+	/**
+	* @brief send  i2c data (if equipped)
+	* @param index (Input) The index of a device previously opened with open_spectrometer().
+	* @param busIndex (Input) the index for the i2c bus of interest
+	* @param slaveAddress (Input) the i2c address of the device to be written to
+	* @param writeData (Input) pointer to the data that should be sent
+	* @param numberOfBytes (Input) the number of bytes to send
+	* @param error_code (Output) Pointer to allocated integer to receive error code
+	*/
+	DLL_DECL unsigned short writeI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes);
+
 
 
 
