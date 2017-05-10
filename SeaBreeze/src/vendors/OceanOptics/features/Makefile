@@ -31,6 +31,7 @@ SUBDIRS = \
     network_configuration	\
     wifi_configuration	\
     dhcp_server \
-    gpio
+    gpio \
+    i2c_master
 
 include $(SEABREEZE)/common.mk

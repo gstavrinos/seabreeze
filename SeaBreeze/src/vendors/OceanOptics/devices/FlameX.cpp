@@ -55,6 +55,7 @@
 #include "vendors/OceanOptics/features/revision/RevisionFeature.h"
 #include "vendors/OceanOptics/features/optical_bench/OpticalBenchFeature.h"
 #include "vendors/OceanOptics/features/gpio/gpioFeature.h"
+#include "vendors/OceanOptics/features/i2c_master/i2cMasterFeature.h"
 
 #include "vendors/OceanOptics/protocols/obp/impls/OBPSerialNumberProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPIntrospectionProtocol.h"
@@ -72,6 +73,7 @@
 #include "vendors/OceanOptics/protocols/obp/impls/OBPRevisionProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPOpticalBenchProtocol.h"
 #include "vendors/OceanOptics/protocols/obp/impls/OBPGPIOProtocol.h"
+#include "vendors/OceanOptics/protocols/obp/impls/OBPI2CMasterProtocol.h"
 
 #include "vendors/OceanOptics/protocols/obp/impls/OceanBinaryProtocol.h"
 
@@ -189,6 +191,10 @@ FlameX::FlameX() {
 	gpioHelpers.push_back(new OBPGPIOProtocol());
 	this->features.push_back(new GPIOFeature(gpioHelpers));
 
+	/* Add i2c master feature */
+	vector<ProtocolHelper *> i2cMasterHelpers;
+	i2cMasterHelpers.push_back(new OBPI2CMasterProtocol());
+	this->features.push_back(new i2cMasterFeature(i2cMasterHelpers));
     this->features.push_back(new RawUSBBusAccessFeature());
 }
 

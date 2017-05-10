@@ -92,7 +92,7 @@ unsigned char OBPGPIOProtocol::getGPIO_NumberOfPins(const Bus &bus) throw (Proto
         throw ProtocolException(error);
     }
 
-	int retval = (*raw)[0];
+	unsigned char retval = (*raw)[0];
 
     delete raw;
 
@@ -124,7 +124,7 @@ unsigned int OBPGPIOProtocol::getGPIO_OutputEnableVector(const Bus &bus) throw (
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	unsigned int retval = (*raw)[0];
 
 	delete raw;
 
@@ -176,7 +176,7 @@ unsigned int OBPGPIOProtocol::getGPIO_ValueVector(const Bus &bus) throw (Protoco
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	unsigned int retval = (*raw)[0];
 
 	delete raw;
 
@@ -228,7 +228,7 @@ unsigned char OBPGPIOProtocol::getEGPIO_NumberOfPins(const Bus &bus) throw (Prot
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	unsigned char retval = (*raw)[0];
 
 	delete raw;
 
@@ -257,7 +257,7 @@ std::vector<unsigned char> OBPGPIOProtocol::getEGPIO_AvailableModes(const Bus &b
 		throw ProtocolException(error);
 	}
 
-	vector<byte> result = *raw;
+	vector<unsigned char> result = *raw;
 
 	delete raw;
 
@@ -291,7 +291,7 @@ unsigned char OBPGPIOProtocol::getEGPIO_CurrentMode(const Bus &bus, unsigned cha
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	unsigned char retval = (*raw)[0];
 
 	delete raw;
 
@@ -343,7 +343,7 @@ unsigned int OBPGPIOProtocol::getEGPIO_OutputVector(const Bus &bus) throw (Proto
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	unsigned int retval = (*raw)[0];
 
 	delete raw;
 
@@ -398,7 +398,7 @@ float OBPGPIOProtocol::getEGPIO_Value(const Bus &bus, unsigned char pinNumber) t
 		throw ProtocolException(error);
 	}
 
-	int retval = (*raw)[0];
+	float retval = (*raw)[0];
 
 	delete raw;
 

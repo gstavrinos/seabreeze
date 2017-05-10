@@ -72,7 +72,7 @@
 #define FEATURE_FAMILY_ID_DEVICE_IDENTIFICATION		35
 #define FEATURE_FAMILY_ID_TEST_COMMANDS				36
 #define FEATURE_FAMILY_ID_GPIO						37
-
+#define FEATURE_FAMILY_ID_I2C_MASTER				38
 
 using namespace seabreeze;
 using namespace seabreeze::api;
@@ -354,6 +354,15 @@ seabreeze::api::GPIOFeatureFamily::~GPIOFeatureFamily() {
 
 }
 
+seabreeze::api::I2CMasterFeatureFamily::I2CMasterFeatureFamily()
+	: FeatureFamily("I2CMaster", FEATURE_FAMILY_ID_I2C_MASTER) {
+
+}
+
+seabreeze::api::I2CMasterFeatureFamily::~I2CMasterFeatureFamily() {
+
+}
+
 
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
@@ -387,6 +396,7 @@ vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies()
     retval.push_back(new AcquisitionDelayFeatureFamily());
 	retval.push_back(new IntrospectionFeatureFamily());
 	retval.push_back(new GPIOFeatureFamily());
+	retval.push_back(new I2CMasterFeatureFamily());
 
     return retval;
 }

@@ -65,6 +65,7 @@
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 #include "vendors/OceanOptics/features/raw_bus_access/RawUSBBusAccessFeatureInterface.h"
 #include "vendors/OceanOptics/features/gpio/gpioFeatureInterface.h"
+#include "vendors/OceanOptics/features/i2c_master/i2cMasterFeatureInterface.h"
 
 using namespace seabreeze;
 using namespace std;
@@ -1946,13 +1947,13 @@ unsigned char SeaBreezeWrapper::getEGPIO_NumberOfPins(int index, int *errorCode)
 	return numberOfPins;
 }
 
-void SeaBreezeWrapper::getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxLength)
+unsigned char SeaBreezeWrapper::getEGPIO_AvailableModes(int index, int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maxLength)
 {
-
+	unsigned char modeCount = 0;
 	if (NULL == this->devices[index])
 	{
 		SET_ERROR_CODE(ERROR_NO_DEVICE);
-		return;
+		return modeCount;
 	}
 
 	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
@@ -1973,6 +1974,7 @@ void SeaBreezeWrapper::getEGPIO_AvailableModes(int index, int *errorCode, unsign
 			if (availableModesForEGPIO.size()<= maxLength)
 			{
 				memcpy(availableModes, &(availableModesForEGPIO[0]), availableModesForEGPIO.size());
+				modeCount = availableModesForEGPIO.size() & 0xFF;
 				SET_ERROR_CODE(ERROR_SUCCESS);
 			}
 			else
@@ -1986,6 +1988,7 @@ void SeaBreezeWrapper::getEGPIO_AvailableModes(int index, int *errorCode, unsign
 			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		}
 	}
+	return modeCount;
 }
 
 unsigned char SeaBreezeWrapper::getEGPIO_CurrentMode(int index, int *errorCode, unsigned char pinNumber)
@@ -2160,6 +2163,130 @@ void SeaBreezeWrapper::setEGPIO_Value(int index, int *errorCode, unsigned char p
 		}
 	}
 }
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+// i2c master feature
+//////////////////////////////////////////////////////////////////////////////
+
+unsigned char SeaBreezeWrapper::getI2CMasterNumberOfBuses(int index, int *errorCode)
+{
+	unsigned char numberOfBuses = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return 0;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	i2cMasterFeatureInterface *i2cMasterFI = __seabreeze_getFeature<i2cMasterFeatureInterface>(this->devices[index]);
+	if (NULL != i2cMasterFI)
+	{
+		try
+		{
+			numberOfBuses = i2cMasterFI->i2cMasterGetNumberOfBuses(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]));
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+	return numberOfBuses;
+}
+
+unsigned short SeaBreezeWrapper::readI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+{
+	unsigned short i2cReadLength = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return i2cReadLength;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	i2cMasterFeatureInterface *i2cMasterFI = __seabreeze_getFeature<i2cMasterFeatureInterface>(this->devices[index]);
+
+
+	if (NULL != i2cMasterFI)
+	{
+		vector<unsigned char> i2cReadData;
+
+		try
+		{
+			i2cReadData = i2cMasterFI->i2cMasterReadBus(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				busIndex,
+				slaveAddress,
+				numberOfBytes);
+			i2cReadLength = i2cReadData.size() & 0xFFFF;
+
+				memcpy(readData, &(i2cReadData[0]), i2cReadLength);
+				SET_ERROR_CODE(ERROR_SUCCESS);
+
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+		}
+	}
+
+	return i2cReadLength;
+}
+
+unsigned short SeaBreezeWrapper::writeI2CMasterBus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
+{
+	unsigned short writeDataLength = 0;
+
+	if (NULL == this->devices[index])
+	{
+		SET_ERROR_CODE(ERROR_NO_DEVICE);
+		return writeDataLength;
+	}
+
+	SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+	i2cMasterFeatureInterface *i2cMasterFI = __seabreeze_getFeature<i2cMasterFeatureInterface>(this->devices[index]);
+
+	if (NULL != i2cMasterFI)
+	{
+		vector<unsigned char> *byteVector = new vector<unsigned char>(numberOfBytes);
+		memcpy(&((*byteVector)[0]), writeData, numberOfBytes);
+
+		try
+		{
+			writeDataLength = i2cMasterFI->i2cMasterWriteBus(
+				*__seabreeze_getProtocol(this->devices[index]),
+				*__seabreeze_getBus(this->devices[index]),
+				busIndex,
+				slaveAddress,
+				*byteVector);
+			delete byteVector;
+			SET_ERROR_CODE(ERROR_SUCCESS);
+		}
+		catch (FeatureException &fe)
+		{
+			SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+			delete byteVector;
+		}
+	}
+	return writeDataLength;
+}
+
+
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -4123,6 +4250,105 @@ int seabreeze_write_usb(int index, int *errorCode, unsigned char endpoint, unsig
     SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
     return wrapper->writeUSB(index, errorCode, endpoint, buffer, length);
 }
+
+
+unsigned char seabreeze_get_gpio_number_of_pins(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getGPIO_NumberOfPins(index, error_code);
+}
+
+unsigned int seabreeze_get_gpio_output_enable_vector(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getGPIO_OutputEnableVector(index, error_code);
+}
+
+void seabreeze_set_gpio_output_enable_vector(int index, int *error_code, unsigned int outputEnableVector, unsigned bitMask)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setGPIO_OutputEnableVector(index, error_code, outputEnableVector, bitMask);
+}
+
+unsigned int seabreeze_get_gpio_value_vector(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getGPIO_ValueVector(index, error_code);
+}
+
+void seabreeze_set_gpio_value_vector(int index, int *error_code, unsigned int value, unsigned bitMask)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setGPIO_ValueVector(index, error_code, value, bitMask);
+}
+
+unsigned char seabreeze_get_egpio_number_of_pins(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getEGPIO_NumberOfPins(index, error_code);
+}
+
+unsigned char seabreeze_get_egpio_available_modes(int index, int *error_code, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getEGPIO_AvailableModes(index, error_code, pinNumber, availableModes, maximumModeCount);
+}
+
+unsigned int seabreeze_get_egpio_current_mode(int index, int *error_code, unsigned char pinNumber)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getEGPIO_CurrentMode(index, error_code, pinNumber);
+}
+
+void seabreeze_set_egpio_mode(int index, int *error_code, unsigned char pinNumber, unsigned char mode, float value)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setEGPIO_Mode(index, error_code, pinNumber, mode, value);
+}
+
+unsigned int seabreeze_get_egpio_output_vector(int index, int *error_code)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getEGPIO_OutputVector(index, error_code);
+}
+
+void seabreeze_set_egpio_output_vector(int index, int *error_code, unsigned int value, unsigned bitMask)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setEGPIO_OutputVector(index, error_code, value, bitMask);
+}
+
+float seabreeze_get_egpio_value(int index, int *error_code, unsigned pinNumber)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getEGPIO_Value(index, error_code, pinNumber);
+}
+
+void seabreeze_set_egpio_value(int index, int *error_code, unsigned pinNumber, float value)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->setEGPIO_Value(index, error_code, pinNumber, value);
+}
+
+
+unsigned char seabreeze_get_i2c_master_number_of_buses(int index, int *errorCode)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->getI2CMasterNumberOfBuses(index, errorCode);
+}
+
+unsigned short seabreeze_read_12c_master_bus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->readI2CMasterBus(index, errorCode, busIndex, slaveAddress, readData, numberOfBytes);
+}
+
+unsigned short seabreeae_write_i2c_master_bus(int index, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
+{
+	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+	return wrapper->writeI2CMasterBus(index, errorCode, busIndex, slaveAddress, writeData, numberOfBytes);
+}
+
 
 
 

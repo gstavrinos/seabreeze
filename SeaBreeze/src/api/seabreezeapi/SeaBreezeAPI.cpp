@@ -1785,7 +1785,43 @@ unsigned long sbapi_acquisition_delay_get_delay_minimum_microseconds(long device
 }
 
 
+/**************************************************************************************/
+//  C language wrapper for i2c_master features
+/**************************************************************************************/
+
+int sbapi_get_number_of_i2c_master_features(long deviceID, int *error_code) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getNumberOfI2CMasterFeatures(deviceID, error_code);
+}
+
+int sbapi_get_i2c_master_features(long deviceID, int *error_code, long *features, unsigned int max_features) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->getI2CMasterFeatures(deviceID, error_code, features, max_features);
+}
 
 
+unsigned char sbapi_i2c_master_get_number_of_buses(long deviceID, long featureID, int *error_code) 
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
 
+	return wrapper->i2cMasterGetNumberOfBuses(deviceID, featureID, error_code);
+}
+
+unsigned short sbapi_i2c_master_read_bus(long deviceID, long featureID, int *error_code, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->i2cMasterReadBus(deviceID, featureID, error_code, busIndex, slaveAddress, readData, numberOfBytes);
+}
+
+unsigned short sbapi_i2c_master_write_bus(long deviceID, long featureID, int *error_code, unsigned char busIndex, unsigned char slaveAddress, unsigned char *writeData, unsigned short numberOfBytes)
+{
+	SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+	return wrapper->i2cMasterWriteBus(deviceID, featureID, error_code, busIndex, slaveAddress, writeData, numberOfBytes);
+}
 
