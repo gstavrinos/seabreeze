@@ -14,6 +14,7 @@ help:
 	@echo
 	@echo "  make                   Build library, tests and samples (best with -j)"
 	@echo "  make wordwidth=32      Build in 32 bit mode for Xojo"
+	@echo "  make logger=0          Build without OOI_DEBUG"
 	@echo "  make clean             Remove most build artifacts"
 	@echo "  make distclean         Remove all generated artifacts"
 	@echo "  make winclean          Invoke Visual Studio's 'clean' target"

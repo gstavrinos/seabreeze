@@ -82,19 +82,35 @@ else
 endif
 
 # enable Logger
-CFLAGS_BASE += -DOOI_DEBUG
+ifndef logger
+    logger = 1
+endif
+ifeq ($(logger),1)
+    CFLAGS_BASE += -DOOI_DEBUG
+endif
+
+# osx install name
+ifdef install_name
+    LFLAGS_LIB += -install_name $(install_name)
+endif
 
 # these are for the .o files making up libseabreeze
 CPPFLAGS     = $(CFLAGS_BASE)
 CFLAGS       = $(CFLAGS_BASE) -std=gnu99
 
-	# allow for a 32 bit build
+# allow for a 32 bit build
 ifdef wordwidth
 ifeq ($(wordwidth),32)
 	CPPFLAGS += -arch i386
 	CFLAGS += -arch i386
 	LFLAGS_APP += -arch i386
 	LFLAGS_LIB += -arch i386
+endif
+ifeq ($(wordwidth),fat)
+	CPPFLAGS += -arch i386 -arch x86_64
+	CFLAGS += -arch i386 -arch x86_64
+	LFLAGS_APP += -arch i386 -arch x86_64
+	LFLAGS_LIB += -arch i386 -arch x86_64
 endif
 endif
 
@@ -124,11 +140,11 @@ deps: ${DEPS_CPP} ${DEPS_C}
 
 %.d: %.cpp
 	@echo caching $@
-	@${CPP} ${CPPFLAGS} -MM $< | sed "s/$*.o/& $@/g" > $@
+	@${CPP} ${CFLAGS_BASE} -MM $< | sed "s/$*.o/& $@/g" > $@
 
 %.d: %.c
 	@echo caching $@
-	@${CC} ${CFLAGS} -MM $< | sed "s/$*.o/& $@/g" > $@
+	@${CC} ${CFLAGS_BASE} -MM $< | sed "s/$*.o/& $@/g" > $@
 
 %.o: %.cpp
 	@echo building $@
