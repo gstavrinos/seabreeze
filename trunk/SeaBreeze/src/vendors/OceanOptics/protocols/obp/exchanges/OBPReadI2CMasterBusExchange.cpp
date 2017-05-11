@@ -31,6 +31,7 @@
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadI2CMasterBusExchange.h"
 #include "vendors/OceanOptics/protocols/obp/constants/OBPMessageTypes.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPControlHint.h"
+#include <string.h>
 
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
