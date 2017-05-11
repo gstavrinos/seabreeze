@@ -34,7 +34,7 @@
 #define SEABREEZE_I2CMASTERFEATUREADAPTER_H
 
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
-#include "vendors/OceanOptics/features/i2c_master/I2CMasterFeatureInterface.h"
+#include "vendors/OceanOptics/features/i2c_master/i2cMasterFeatureInterface.h"
 
 namespace seabreeze 
 {

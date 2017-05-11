@@ -29,7 +29,7 @@
 
 #include "common/globals.h"
 #include "vendors/OceanOptics/features/i2c_master/i2cMasterFeature.h"
-#include "vendors/OceanOptics/protocols/interfaces/i2cMasterProtocolInterface.h"
+#include "vendors/OceanOptics/protocols/interfaces/I2CMasterProtocolInterface.h"
 #include "common/exceptions/FeatureControlException.h"
 #include "common/FloatVector.h"
 #include "api/seabreezeapi/FeatureFamilies.h"
