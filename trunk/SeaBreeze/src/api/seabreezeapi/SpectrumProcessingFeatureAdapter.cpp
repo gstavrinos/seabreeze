@@ -58,7 +58,7 @@ SpectrumProcessingFeatureAdapter::~SpectrumProcessingFeatureAdapter() {
 
 
 unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidth(int *errorCode) {
-    unsigned char returnValue;
+    unsigned char returnValue = 0;
     
     // no memory allocated, just pass it through
     try {
@@ -66,7 +66,6 @@ unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidt
         SET_ERROR_CODE(ERROR_SUCCESS);
     }
     catch (FeatureException &fe) {
-        returnValue=-1; 
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return returnValue;
@@ -74,7 +73,7 @@ unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidt
 
 
 unsigned short int SpectrumProcessingFeatureAdapter::readSpectrumProcessingScansToAverage(int *errorCode) {
-    unsigned short int returnValue;
+    unsigned short int returnValue = 0;
     
     // no memory allocated, just pass it through
     try {
@@ -82,7 +81,6 @@ unsigned short int SpectrumProcessingFeatureAdapter::readSpectrumProcessingScans
         SET_ERROR_CODE(ERROR_SUCCESS);
     }
     catch (FeatureException &fe) {
-        returnValue=-1; // clearly an error vlaue
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return returnValue;

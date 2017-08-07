@@ -121,8 +121,12 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_IPV4_MULTICAST_ENABLE_STATE	= 0x00000A90; 
 		static const unsigned int OBP_SET_IPV4_MULTICAST_GRP_ADDRESS	= 0x00000A91; 
 		static const unsigned int OBP_SET_IPV4_MULTICAST_GRP_PORT		= 0x00000A92; 
-		static const unsigned int OBP_SET_IPV4_MULTICAST_TTL			= 0x00000A93; 
-		
+		static const unsigned int OBP_SET_IPV4_MULTICAST_TTL			= 0x00000A93;
+
+// Network Services
+		static const unsigned int OBP_GET_SSH_ENABLED					= 0x00000C00;
+		static const unsigned int OBP_SET_SSH_ENABLED					= 0x00000C10;
+
 // Device Identification
 		static const unsigned int OBP_GET_ORIGINAL_VID					= 0x00000E00; 
 		static const unsigned int OBP_GET_ORIGINAL_PID					= 0x00000E01; 
@@ -145,7 +149,8 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_INQUIRY_ACCESS_CODE			= 0x00000F12; 
 		static const unsigned int OBP_GET_MAXIMUM_PAIRED_DEVICE_COUNT	= 0x00000F20;
 		static const unsigned int OBP_GET_PAIRED_DEVICE_COUNT			= 0x00000F21;
-		static const unsigned int OBP_GET_PAIRED_DEVICE_MAC				= 0x00000F22; 
+		static const unsigned int OBP_GET_PAIRED_DEVICE_MAC				= 0x00000F22;
+		static const unsigned int OBP_GET_PAIRED_DEVICE_NAME			= 0x00000F23;
 		static const unsigned int OBP_REMOVE_PAIRED_DEVIE_MAC			= 0x00000F32; 
 		static const unsigned int OBP_MAKE_DEVICE_DISCOVERABLE			= 0x00000F33; 
 		static const unsigned int OBP_SAVE_BLUETOOTH_SETTINGS			= 0x00000FD0; 
@@ -158,12 +163,14 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_STATUS_LED_COUNT				= 0x00001000;
 		static const unsigned int OBP_GET_STATUS_LED_MODE				= 0x00001001;
 		static const unsigned int OBP_GET_STATUS_LED_PATTERN			= 0x00001002;
-        static const unsigned int OBP_CONFIGURE_STATUS_LED				= 0x00001010; // legacy
+        static const unsigned int OBP_CONFIGURE_STATUS_LED				= 0x00001010; // legacy name
 		static const unsigned int OBP_SET_STATUS_LED_PATTERN			= 0x00001010;
 		static const unsigned int OBP_SET_STATUS_LED_MODE				= 0x00001011;
 
 // Buffering
 		static const unsigned int OBP_ABORT_ACQUISITION					= 0x00100000;
+		// 0x00100800 in fast buffering feature
+		// 0x00100810 in fast buffering feature
         static const unsigned int OBP_GET_BUFFER_SIZE_MAX				= 0x00100820;
         static const unsigned int OBP_GET_BUFFER_SIZE_ACTIVE			= 0x00100822;
         static const unsigned int OBP_CLEAR_BUFFER_ALL					= 0x00100830;
@@ -175,8 +182,8 @@ namespace seabreeze {
 // Fast Buffering
 		static const unsigned int OBP_GET_BUFFERING_ENABLED				= 0x00100800;
 		static const unsigned int OBP_SET_BUFFERING_ENABLED				= 0x00100810;
+		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT     = 0x00110102;
 		static const unsigned int OBP_SET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110112;
-		static const unsigned int OBP_GET_BACK_TO_BACK_SAMPLE_COUNT		= 0x00110102;
 
 //Spectra queries
 		static const unsigned int OBP_ACQUIRE_SPECTRA_INTO_BUFFER		= 0x00100902;	
@@ -194,7 +201,6 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_MAXIMUM_BASELINE_LEVEL		= 0x001010A3;
 
 
-
 // Partial and raw spectra
 		static const unsigned int OBP_GET_RAW_SPECTRUM_NOW				= 0x00101100;
         static const unsigned int OBP_GET_PARTIAL_SPECTRUM_MODE			= 0x00102000;
@@ -210,9 +216,12 @@ namespace seabreeze {
         static const unsigned int OBP_SET_ITIME_USEC					= 0x00110010;
 
 // trigger modes
-		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;		
+		static const unsigned int OBP_GET_TRIGGER_MODE					= 0x00110100;
+		// 0x00110102 is in fast buffering feature
         static const unsigned int OBP_SET_TRIG_MODE						= 0x00110110;
+		// 0x00110112 is in fast buffering feature
         static const unsigned int OBP_SIMULATE_TRIG_PULSE				= 0x00110120;
+
 
 // optical detector characteristics
 		static const unsigned int OBP_GET_NUMBER_OF_PIXELS			= 0x00110220;
@@ -282,7 +291,14 @@ namespace seabreeze {
 		static const unsigned int OBP_GET_DETECTOR_SERIAL_NUMBER	= 0x001B0700;	
 		static const unsigned int OBP_SET_DETECTOR_SERIAL_NUMBER	= 0x001B0710;	
 		static const unsigned int OBP_GET_DETECTOR_TYPE				= 0x001C0000;	
-		static const unsigned int OBP_SET_DETECTOR_TYPE				= 0x001C0010;	
+		static const unsigned int OBP_SET_DETECTOR_TYPE				= 0x001C0010;
+
+// Battery and Power
+		static const unsigned int OBP_GET_BATTERY_CHARGE_LEVEL		= 0x001D0000;
+		static const unsigned int OBP_GET_BATTERY_CHARGING_STATUS	= 0x001D0001;
+		static const unsigned int OBP_GET_BATTERY_TEMPERATURE		= 0x001D0002;
+		static const unsigned int OBP_GET_BATTERY_BATTERY_VOLTAGE	= 0x001D0003;
+		static const unsigned int OBP_CHARACTERIZE_BATTERY_DEPLETION = 0x001D0004;
 
 // GPIO
         static const unsigned int OBP_GET_GPIO_NUMBER_OF_PINS       = 0x00200000;
@@ -327,7 +343,6 @@ namespace seabreeze {
 		static const unsigned int OBP_SET_CONT_STROBE_PERIOD		= 0x00310010; // legacy
         static const unsigned int OBP_SET_CONT_STROBE_ENABLE_US     = 0x00310011;
 		static const unsigned int OBP_SET_CONT_STROBE_ENABLE		= 0x00310011; // Legacy
-
 		static const unsigned int OBP_SET_CONT_STROBE_WIDTH_US		= 0x00310015;
 
 // Temperature control and sensing
@@ -355,11 +370,21 @@ namespace seabreeze {
 		static const unsigned int OBP_SPI_FULL_DUPLEX_TRANSFER		= 0x00500010;	
 		static const unsigned int OBP_SET_SPI_CLOCK_LIMIT_HZ		= 0x00500090;	
 		static const unsigned int OBP_GET_SPI_CONTROLLER_MODE		= 0x00500100;	
+		static const unsigned int OBP_GET_SPI_TRANSFER_MODE			= 0x00500101;
+		static const unsigned int OBP_GET_SPI_CHIP_SELECT_POLARITY	= 0x00500102;
+		static const unsigned int OBP_GET_SPI_CHIP_SELECT_DELAY		= 0x00500103;
+		static const unsigned int OBP_GET_SPI_SAMPLE_PERIOD			= 0x00500104;
+		static const unsigned int OBP_SET_SPI_CONTROLLER_MODE		= 0x00500110;
+		static const unsigned int OBP_SET_SPI_TRANFER_MODE			= 0x00500111;
+		static const unsigned int OBP_SET_SPI_CHIP_SELECT_POLARITY  = 0x00500112;
+		static const unsigned int OBP_sET_SPI_CHIP_SELECT_DELAY		= 0x00500113;
+		static const unsigned int OBP_SET_SPI_SAMPLE_PERIOD			= 0x00500114;
+		static const unsigned int OBP_SAVE_SPI_SETTINGS				= 0x00500120;
 
-/// Intra Integrated Circuit bus			
-		static const unsigned int OBP_GET_I2C_MASTER_BUS_COUNT				= 0x00600000;	
-		static const unsigned int OBP_READ_12C_MASTER_BUS					= 0x00600010;	
-		static const unsigned int OBP_WRITE_I2C_MASTER_BUS					= 0x00600020;	
+		/// Intra Integrated Circuit bus			
+		static const unsigned int OBP_GET_I2C_MASTER_BUS_COUNT		= 0x00600000;	
+		static const unsigned int OBP_READ_12C_MASTER_BUS			= 0x00600010;	
+		static const unsigned int OBP_WRITE_I2C_MASTER_BUS			= 0x00600020;	
 		static const unsigned int OBP_SET_I2C_CLOCK_LIMIT_HZ		= 0x00600080;	
 
 

@@ -107,7 +107,7 @@ Data *OBPReadRawSpectrumExchange::transfer(TransferHelper *helper)
 
     if(0 == isLegalMessageType(message->getMessageType())) {
         string error("Did not get expected message type, got ");
-        error += message->getMessageType();
+        error += (char)(message->getMessageType());
         throw ProtocolException(error);
     }
 

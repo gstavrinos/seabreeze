@@ -55,5 +55,5 @@ OBPTriggerModeExchange::~OBPTriggerModeExchange() {
 }
 
 void OBPTriggerModeExchange::setTriggerMode(SpectrometerTriggerMode &mode) {
-    this->payload[0] = mode.getTriggerMode();
+    this->payload[0] = (unsigned char)mode.getTriggerMode();
 }

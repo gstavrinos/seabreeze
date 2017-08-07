@@ -154,8 +154,8 @@ __device_instance_t *__add_device_instance(char *devicePath,
              * copy that will end when it sees a NULL, simply do a memcpy().
              */
             memcpy(__enumerated_devices[i].devicePath, devicePath, DEVICE_PATH_SIZE);
-            __enumerated_devices[i].vendorID = vendorID;
-            __enumerated_devices[i].productID = productID;
+            __enumerated_devices[i].vendorID = (unsigned short)vendorID;
+            __enumerated_devices[i].productID = (unsigned short)productID;
             __enumerated_device_count++;
             return &(__enumerated_devices[i]);
         }
