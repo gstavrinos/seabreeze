@@ -58,9 +58,9 @@ int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
         int result = USBTransferHelper::receive(*inBuffer, paddedLength);
         if(result != paddedLength) {
             string error("Failed to read padded message length: ");
-            error += result;
+            error += (char)result;
             error += " != ";
-            error += paddedLength;
+            error += (char)paddedLength;
             throw BusTransferException(error);
         }
         memcpy(&buffer[0], &inBuffer[0], length);

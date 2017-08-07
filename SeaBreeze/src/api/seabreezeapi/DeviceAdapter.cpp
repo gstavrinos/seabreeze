@@ -345,7 +345,7 @@ int DeviceAdapter::getDeviceType(int *errorCode, char *buffer, unsigned int maxL
             strcat(buffer, "PLUS");
             i += 4;
         } else {
-            buffer[i] = toupper(*iter);
+            buffer[i] = (char)toupper(*iter);
             i++;
         }
     }

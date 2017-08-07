@@ -40,7 +40,7 @@ Socket *Socket::create() {
 }
 
 NativeSocketWindows::NativeSocketWindows() {
-    this->sock = -1;
+    this->sock = (SOCKET)-1;
     this->bound = false;
     this->closed = true;
 }
@@ -61,12 +61,12 @@ void NativeSocketWindows::connect(Inet4Address &addr, int port)
     memset((void *)&sockaddr, (int)0, sizeof(struct sockaddr));
     memcpy((char *)&sockaddr.sin_addr.s_addr, &in, sizeof(struct in_addr));
     sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(port);
+    sockaddr.sin_port = (unsigned short)htons(port);
     server = socket(PF_INET, SOCK_STREAM, 0);
     
     addrlen = sizeof(sockaddr);
     if(::connect(server, (struct sockaddr *)&sockaddr, addrlen) < 0) {
-        this->sock = -1;
+        this->sock = (SOCKET)-1;
         this->closed = true;
         string error("Socket connect failed: ");
         error += "Error " + WSAGetLastError();
@@ -90,7 +90,7 @@ void NativeSocketWindows::connect(const string hostname, int port)
         string error("Failed to resolve hostname [");
 		error += hostname;
 		error += "]: ";
-		error += WSAGetLastError();
+		error += (char)WSAGetLastError();
         throw BusConnectException(error);
     }
     
@@ -107,7 +107,7 @@ void NativeSocketWindows::close() throw (BusException) {
     if(this->sock >= 0 && false == this->closed) {
         shutdown(this->sock, SD_BOTH);
         result = ::closesocket(this->sock);
-        this->sock = -1;
+        this->sock = (SOCKET)-1;
         this->bound = false;
         this->closed = true;
         
@@ -165,7 +165,7 @@ void NativeSocketWindows::setSOLinger(bool enable, int linger)
     }
     
     so_linger.l_onoff = (true == enable ? 1 : 0);
-    so_linger.l_linger = linger;
+    so_linger.l_linger = (unsigned short)linger;
     
     result = setsockopt(this->sock, SOL_SOCKET, SO_LINGER, (char *)&so_linger,
             sizeof(so_linger));

@@ -186,7 +186,7 @@ int __seabreeze_deviceCount(Device *dev) {
         OOIUSBInterface *usb = dynamic_cast<OOIUSBInterface *>(*iter);
         if(NULL != usb) {
             locations = usb->probeDevices();
-            retval += (unsigned) locations->size();
+            retval += (int)locations->size();
             for(vector<DeviceLocatorInterface *>::iterator iter = locations->begin();
                     iter != locations->end(); iter++) {
                 delete *iter;
@@ -375,7 +375,7 @@ int SeaBreezeWrapper::writeUSB(int index, int *errorCode, unsigned char endpoint
 	if (NULL != feature && NULL != usb) {
 		try {
 			vector<byte> data(length);
-			for (unsigned i = 0; i < length; i++)
+			for (unsigned int i = 0; i < length; i++)
 			{
 				data[i] = buffer[i];
 			}
@@ -3363,7 +3363,7 @@ void SeaBreezeWrapper::setTECFanEnable(int index, int *errorCode,
 
 
 unsigned short SeaBreezeWrapper::getNumberOfPixels(int index, int *errorCode) {
-	unsigned int numberOfPixels = 0;
+	unsigned short numberOfPixels = 0;
 
 	if (NULL == this->devices[index]) {
 		SET_ERROR_CODE(ERROR_NO_DEVICE);
@@ -3506,7 +3506,7 @@ int SeaBreezeWrapper::getModel(int index, int *errorCode,
 			i += 4;
 		}
 		else {
-			buffer[i] = toupper(*iter);
+			buffer[i] = (char)toupper(*iter);
 			i++;
 		}
 	}
@@ -4318,13 +4318,13 @@ void seabreeze_set_egpio_output_vector(int index, int *error_code, unsigned int 
 	return wrapper->setEGPIO_OutputVector(index, error_code, value, bitMask);
 }
 
-float seabreeze_get_egpio_value(int index, int *error_code, unsigned pinNumber)
+float seabreeze_get_egpio_value(int index, int *error_code, unsigned char pinNumber)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getEGPIO_Value(index, error_code, pinNumber);
 }
 
-void seabreeze_set_egpio_value(int index, int *error_code, unsigned pinNumber, float value)
+void seabreeze_set_egpio_value(int index, int *error_code, unsigned char pinNumber, float value)
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->setEGPIO_Value(index, error_code, pinNumber, value);
