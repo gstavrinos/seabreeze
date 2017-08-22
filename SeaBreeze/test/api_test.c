@@ -36,7 +36,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "api/seabreezeapi/SeaBreezeAPI.h"
+#include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 
 #ifndef _WINDOWS
 #include <unistd.h>
@@ -61,9 +63,18 @@ void test_optical_bench_feature(long deviceID, int *unsupportedFeatureCount, int
 void test_stray_light_coeffs_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount);
+
+void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_multicast_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
+void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex); // tested as part of networking features
 
 /* Create a type called "testfunc_t" that is just a pointer to any function that
  * has this signature:  void func(long)
@@ -72,7 +83,8 @@ void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, in
 typedef void (*testfunc_t)(long, int*, int*);
 
 /* Create a list of functions to run on each device that is found and opened */
-static testfunc_t __test_functions[] = {
+static testfunc_t __test_functions[] =
+{
     test_serial_number_feature,
     test_revision_feature,
     test_optical_bench_feature,
@@ -89,6 +101,9 @@ static testfunc_t __test_functions[] = {
     test_stray_light_coeffs_feature,
     test_continuous_strobe_feature,
     test_data_buffer_feature,
+    test_fast_buffer_feature,
+    test_gpio_features,
+    test_networking_features, // also includes ethernet, multicast, ipv4, dhcp server and wifi
     test_acquisition_delay_feature,
     test_pixel_binning_feature,
     //test_miscellaneous_commands
@@ -481,7 +496,7 @@ void test_spectrometer_feature(long deviceID, int *unsupportedFeatureCount, int 
                 sbapi_get_error_string(error));
         tallyErrors(error, testFailureCount);
         
-        printf("\t\t\tGetting minimum integration time\n");
+        printf("\t\t\tGetting minimum integration time (us)\n");
         integration_time = sbapi_spectrometer_get_minimum_integration_time_micros(
                 deviceID, spectrometer_ids[i], &error);
         printf("\t\t\t\tResult is %ld [%s]\n", integration_time,
@@ -1346,7 +1361,7 @@ void test_continuous_strobe_feature(long deviceID, int *unsupportedFeatureCount,
 #ifndef _WINDOWS
         sleep(2);
 #else
-        Sleep(2000);
+        sleep(2000);
 #endif
 
         printf("\t\t\tAttempting to set period to 50ms.\n");
@@ -1488,7 +1503,7 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
 #ifndef _WINDOWS
         sleep(2);
 #else
-        Sleep(2000);
+        sleep(2000);
 #endif
 
         printf("\t\t\tAttempting to get number of items in the buffer...\n");
@@ -1546,6 +1561,227 @@ void test_data_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *
     free(data_buffer_ids);
 
     printf("\tFinished testing data buffer capabilities.\n");
+}
+
+void test_fast_buffer_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+    // assumes one spectrometer id must be obtained, but there is only one data buffer id=0
+
+    int number_of_fast_buffer_features = 0;
+    int error = 0;
+    long fast_buffer_feature_ids = 0;
+    long data_buffer_feature_ids = 0;
+    long spectrometerID = 0;
+    //unsigned char fastBufferEnableState = 0;
+    unsigned int numberOfSamplesToTake = 1000;
+
+    printf("\n\tTesting fast buffer features:\n");
+
+    printf("\t\tGetting number of fast buffer features:\n");
+    number_of_fast_buffer_features = sbapi_get_number_of_fast_buffer_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_fast_buffer_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_fast_buffer_features)
+    {
+        printf("\tNo fast buffer capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+
+        return;
+    }
+
+    printf("\t\t%d: Testing device 0x%02lX, fast buffer 0x%02ulx\n", 0, deviceID, 0);
+
+    // this is just to test the command. There is only one fast buffer feature at this point.
+
+    printf("\t\tGetting fast buffer feature IDs...\n");
+    number_of_fast_buffer_features = sbapi_get_fast_buffer_features(deviceID, &error, &fast_buffer_feature_ids, 1);
+    printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+    int number_of_spectrometers = 0;
+    int number_of_data_buffers = 0;
+
+    // id's needed from other features
+    if (error == 0)
+    {
+        number_of_spectrometers = sbapi_get_spectrometer_features(deviceID, &error, &spectrometerID, 1);
+    }
+
+    if (error == 0)
+    {
+        // there is only one databuffer feature
+        number_of_data_buffers = sbapi_get_data_buffer_features(deviceID, &error, &data_buffer_feature_ids, 1);
+    }
+
+
+    // set up for taking a fast buffered spectrum
+    if (error == 0)
+    {
+        printf("\t\t\tDisable all triggers\n");
+        sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF);
+    }
+
+    if (error == 0)
+    {
+        printf("\t\t\tFast buffering, set buffer to maximum capacity ...\n");
+
+        int maxCapacity = sbapi_data_buffer_get_buffer_capacity_maximum(deviceID, data_buffer_feature_ids, &error);
+        if (0 == error)
+        {
+            sbapi_data_buffer_set_buffer_capacity(deviceID, data_buffer_feature_ids, &error, maxCapacity);
+            if (0 == error)
+            {
+                printf("\t\t\t\tFast buffer capacity was set to: %d\n", maxCapacity);
+            }
+        }
+    }
+
+    if (error == 0)
+    {
+        printf("\t\t\tSetting integration time to 1ms\n");
+        sbapi_spectrometer_set_integration_time_micros(deviceID, spectrometerID, &error, 1000000/numberOfSamplesToTake);
+    }
+
+    if (error == 0)
+    {
+        printf("\t\t\tSetting consecutive sample count to 1000:\n");
+        numberOfSamplesToTake = 1000;
+        sbapi_fast_buffer_set_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error, numberOfSamplesToTake);
+        if (error == 0)
+        {
+            unsigned int sampleCount = sbapi_fast_buffer_get_consecutive_sample_count(deviceID, fast_buffer_feature_ids, &error);
+            if (error == 0)
+            {
+                if (sampleCount != numberOfSamplesToTake)
+                    error = ERROR_VALUE_NOT_EXPECTED;
+            }
+        }
+    }
+
+    if (0 == error)
+    {
+        printf("\t\t\t\tEnable fast buffer.\n");
+        sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_ids, &error, 1);
+        if (error == 0)
+        {
+            unsigned char bufferEnabled = sbapi_fast_buffer_get_buffering_enable(deviceID, fast_buffer_feature_ids, &error);
+            if (error == 0)
+            {
+                if (bufferEnabled != 1)
+                    error = ERROR_VALUE_NOT_EXPECTED;
+            }
+        }
+    }
+
+    if (error == 0)
+    {
+        printf("\t\t\tClear the spectrum buffer\n");
+        sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
+    }
+
+    if (error == 0)
+    {
+        unsigned int numberOfSamplesToRetrieve = 15;
+
+        // Flame Fx is the only spectrometer using this right now, so the pixel size is a short. However, in the future
+        // some way for the user to know what size integer is used for a pixel. That is probably another awkward length call for
+        //  a fast spectrum that returns the total number of bytes.
+        int pixelCount = sbapi_spectrometer_get_formatted_spectrum_length(deviceID, spectrometerID, &error); // this is really just the pixel count
+        int dataMaxLength = (((pixelCount*sizeof(unsigned short)) + 64 + sizeof(uint32_t) ) * numberOfSamplesToRetrieve); // 64 is the metadata.
+        unsigned char dataBuffer[dataMaxLength];
+        int bytesReturned = 0;
+        //unsigned int checksum = 0;
+        if (error == 0)
+        {
+            printf("\t\t\tTake three spectral consecutive sample scans \n");
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                printf("\t\t\t\tScan %d\n", i);
+
+                if (0 == error)
+                {
+                    printf("\t\t\tClear the spectrum buffer\n");
+                    sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
+                }
+
+                if (error == 0)
+                {
+
+                    printf("\t\t\tSet trigger to free running to allow a trigger\n");
+                    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+                }
+
+                if (error == 0)
+                {
+                    printf("\t\t\tSend get spectrum to start sampling\n");
+                    // send a get fast buffered spectrum request only for a trigger, buffer should be clear
+                    // when that is true, no spectra are returned, but a new sample is triggered
+                    bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometerID, &error, dataBuffer, dataMaxLength, 0);
+                }
+
+                // disable all triggers
+                if (error == 0)
+                {
+                    printf("\t\t\tSet trigger to disabled to prevent triggering when fetching samples\n");
+                    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0xFF); // trigger id = 0
+                }
+
+                printf("\t\t\tWaiting to allow data to be buffered...\n");
+                /* This assumes that the spectrometer test occurred before this, so the
+                * integration time and trigger mode were set in a way that this will
+                * keep acquiring a few spectra.
+                */
+
+                sleep(2);
+
+                // call get fast buffered spectrum until the buffer is empty
+                while (error == 0)
+                {
+                    unsigned int retrieveCount = numberOfSamplesToRetrieve;
+                    unsigned int spectraInBuffer = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_feature_ids, &error);
+                    if (spectraInBuffer < numberOfSamplesToRetrieve)
+                        retrieveCount = spectraInBuffer;
+
+                    bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometerID, &error, dataBuffer, dataMaxLength, retrieveCount);
+                    printf("\t\t\tSpectra in Buffer: %d\tSpectrum Count: %d\tTimestamp: %lu\n", spectraInBuffer, *((unsigned int*)(&dataBuffer)[24]), *((unsigned long*)(&dataBuffer)[8]));
+                    if (spectraInBuffer == 0)
+                        break;
+                }
+
+                if (error != 0)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    if (0 == error)
+    {
+        printf("\t\t\t\tDisable fast buffer.\n");
+        sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_ids, &error, 0);
+    }
+
+    if(0==error)
+    {
+        printf("\t\t\tClear the spectrum buffer\n");
+        sbapi_data_buffer_clear(deviceID, data_buffer_feature_ids, &error);
+    }
+
+    if (error == 0)
+    {
+        printf("\t\t\tSet trigger to free running\n");
+        sbapi_spectrometer_set_trigger_mode(deviceID, spectrometerID, &error, 0x00); // trigger id = 0
+    }
+
+    printf("\t\t\t\tResult code is [%s]\n", sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+
+    printf("\t\t%d: Finished testing device 0x%02lux, fast buffer 0x%02x\n", 0, deviceID, 0);
+    printf("\tFinished testing fast buffer capabilities.\n");
 }
 
 void test_acquisition_delay_feature(long deviceID, int *unsupportedFeatureCount, int *testFailureCount) {
@@ -1787,12 +2023,920 @@ void test_pixel_binning_feature(long deviceID, int *unsupportedFeatureCount, int
     printf("\tFinished testing pixel binning capabilities\n");
 }
 
+void test_networking_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+    int error = 0;
+    int number_of_network_configurations;
+    long *network_configuration_ids = 0;
+    int i;
+    unsigned char numberOfNetworkInterfaces;
+
+    printf("\n\tTesting networking features:\n");
+
+    printf("\t\tExercising network configuration commands:\n");
+    printf("\t\tRetrieve number of network configuration features:\n");
+    number_of_network_configurations = sbapi_get_number_of_network_configuration_features(deviceID, &error);
+    printf("\t\tResult is %d  [%s]\n", number_of_network_configurations, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_network_configurations)
+    {
+        printf("\tNo network capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    network_configuration_ids = (long *)calloc(number_of_network_configurations, sizeof(long));
+    printf("\t\tGetting network configuration feature IDs...\n");
+    number_of_network_configurations = sbapi_get_network_configuration_features(deviceID, &error, network_configuration_ids, number_of_network_configurations);
+    printf("\t\t\tResult is %d [%s]\n", number_of_network_configurations, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_network_configurations; i++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, network feature id 0x%02lX\n", i, deviceID, network_configuration_ids[i]);
+
+        printf("\t\t\tAttempting to get the number of network interfaces...\n");
+        numberOfNetworkInterfaces = sbapi_network_configuration_get_interface_count(deviceID, network_configuration_ids[i], &error);
+        printf("\t\t\tResult is %d [%s]\n", numberOfNetworkInterfaces, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        for (unsigned char networkInterfaceIndex = 0; networkInterfaceIndex < numberOfNetworkInterfaces; networkInterfaceIndex++)
+        {
+            printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+            // get interface type
+            printf("\t\t\tAttempting to retrieve the interface type...\n");
+            unsigned char interfaceType = sbapi_network_configuration_get_interface_connection_type(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+            char typeName[20];
+
+            switch (interfaceType)
+            {
+                case 0:
+                    strcpy(typeName, "Loopback");
+                    break;
+                case 1:
+                    strcpy(typeName, "Wired Ethernet");
+                    break;
+                case 2:
+                    strcpy(typeName, "WiFi");
+                    break;
+                case 3:
+                    strcpy(typeName, "CDC Ethernet (USB)");
+                    break;
+                default:
+                    strcpy(typeName, "Undefined");
+                    break;
+            }
+            printf("\n>>>\t\t\tResult is %d [%s]: %s\n\n", interfaceType, sbapi_get_error_string(error), typeName);
+            tallyErrors(error, testFailureCount);
+
+            // switch interface enable state
+            printf("\t\t\tAttempting to retrieve the interface enable state...\n");
+            unsigned char interfaceEnableState1 = sbapi_network_configuration_get_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+            printf("\t\t\tResult is %d [%s]\n", interfaceEnableState1, sbapi_get_error_string(error));
+            tallyErrors(error, testFailureCount);
+
+            if (error == 0)
+            {
+                unsigned char interfaceEnableState2 = interfaceEnableState1;
+                printf("\t\t\tAttempting to switch the interface enable state. (This can take 15 seconds or so.)\n");
+                if (interfaceEnableState2 == 0)
+                {
+                    interfaceEnableState2 = 1;
+                    printf("\t\t\t\tInterface was disabled.\n");
+                }
+                else
+                {
+                    interfaceEnableState2 = 0;
+                    printf("\t\t\t\tInterface was enabled.\n");
+                }
+
+                sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, interfaceEnableState2);
+                sleep(4000);
+                tallyErrors(error, testFailureCount);
+                if (error == 0)
+                {
+                    printf("\t\t\tThe interface enable state was successfully modified.\n");
+                }
+                else
+                {
+                    printf("\t\t\tThe interface enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+                }
+
+
+
+                // set interface enable state to true
+                printf("\t\t\tAttempting to set the interface enable state to true. (This can take 15 seconds or so.)\n");
+                sbapi_network_configuration_set_interface_enable_status(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex, 1);
+                sleep(4000);
+                printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+                tallyErrors(error, testFailureCount);
+
+                if (error == 0)
+                {
+                    switch(interfaceType)
+                    {
+                        case 0: // loopback
+                            test_ethernet_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            break;
+                        case 1: // wired ethernet
+                            // test gigabit ethernet configuration commands
+                            test_ethernet_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            break;
+                        case 2: // wifi
+                            test_wifi_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_ipv4_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_dhcp_server_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            test_multicast_features(deviceID, unsupportedFeatureCount, testFailureCount, networkInterfaceIndex);
+                            break;
+                        case 3: // CDC ethernet (USB)
+
+                            break;
+                        default:
+
+                            break;
+                    }
+
+#ifdef RUN_SELF_TEST
+
+                    // run self test
+					printf("\t\t\tAttempting to run a network interface selftest. This can take up to two minutes to execute. Be patient.\n");
+					unsigned char myResult = sbapi_network_configuration_run_interface_self_test(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+					std::string selftestResult = "Failed";
+					if (myResult == 1)
+						selftestResult = "Passed";
+					printf("\t\t\tSelf test result: %s [%s]\n", selftestResult.data(), sbapi_get_error_string(error));
+					tallyErrors(error, testFailureCount);
+#endif
+
+                }
+
+
+
+                // save interface settings
+                printf("\t\t\tAttempting to save the interface settings\n");
+                sbapi_network_configuration_save_interface_settings(deviceID, network_configuration_ids[i], &error, networkInterfaceIndex);
+                printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+                tallyErrors(error, testFailureCount);
+            }
+
+
+        }
+        printf("\t\t%d: Finished testing device 0x%02lX, network configuration feature 0x%02lX\n", i, deviceID, network_configuration_ids[i]);
+    }
+
+    free(network_configuration_ids);
+
+    printf("\tFinished testing network feature capabilities.\n");
+}
+
+void test_gpio_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
+{
+    int error = 0;
+    int number_of_gpio_features;
+    long *gpio_feature_ids = 0;
+    int featureIndex = 0;
+
+    printf("\n\tTesting gpio features:\n");
+
+    printf("\t\tGetting number of gpio features:\n");
+    number_of_gpio_features = sbapi_get_number_of_gpio_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_gpio_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_gpio_features)
+    {
+        printf("\tNo gpio capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    gpio_feature_ids = (long *)calloc(number_of_gpio_features, sizeof(long));
+    printf("\t\tGetting gpio feature IDs...\n");
+    number_of_gpio_features = sbapi_get_gpio_features(deviceID, &error, gpio_feature_ids, number_of_gpio_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_gpio_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (featureIndex = 0; featureIndex < number_of_gpio_features; featureIndex++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, gpio feature 0x%02lX\n", featureIndex, deviceID, gpio_feature_ids[featureIndex]);
+
+        printf("\t\t\tAttempting to get the number of gpio pins...\n");
+        unsigned gpioPinCount = sbapi_gpio_get_number_of_pins(deviceID, gpio_feature_ids[featureIndex], &error);
+        unsigned int testMask = ((0x00000001 << gpioPinCount) - 1);
+        printf("\t\t\t\tResult is %d [%s]\n", gpioPinCount, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned int outputEnableStateTestValue = 0xFFFFFFFF;
+        unsigned int outputEnableStateBitMask = 0xFFFFFFFF;
+
+        printf("\t\t\tAttempting to set the output enable state of the gpio pins...\n");
+        sbapi_gpio_set_output_enable_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputEnableStateTestValue, outputEnableStateBitMask);
+        printf("\t\t\t\tSent: %x  [%s]\n", outputEnableStateTestValue & testMask, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        if (error == 0)
+        {
+            printf("\t\t\tAttempting to get the output enable state of the gpio pins...\n");
+            unsigned int outputEnableVector = sbapi_gpio_get_output_enable_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+            printf("\t\t\t\tReceived: %x [%s]\n", testMask  & outputEnableVector, sbapi_get_error_string(error));
+            if ((testMask & outputEnableStateTestValue) != (testMask & outputEnableVector))
+            {
+                error = -1;
+                printf("\t\t\t\tSet Value=%x, Get Value=%x\n", outputEnableStateTestValue, outputEnableVector);
+            }
+            tallyErrors(error, testFailureCount);
+        }
+
+        unsigned int valueVectorTest = 0xFFFFFFFF;
+        unsigned int valueVectorBitMask = 0xFFFFFFFF;
+
+        printf("\t\t\tAttempting to set the values of the gpio pins...\n");
+        sbapi_gpio_set_value_vector(deviceID, gpio_feature_ids[featureIndex], &error, valueVectorTest, valueVectorBitMask);
+        printf("\t\t\t\tSent: %x  [%s]\n", valueVectorTest & testMask, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        if (error == 0)
+        {
+            printf("\t\t\tAttempting to get the values of the gpio pins...\n");
+            unsigned int valueVector = sbapi_gpio_get_value_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+            printf("\t\t\t\tReceived: %x [%s]\n", valueVector, sbapi_get_error_string(error));
+            if (valueVectorTest != valueVector)
+                error = -1;
+            tallyErrors(error, testFailureCount);
+        }
+
+
+        printf("\t\t\tAttempting to get the number of extended gpio pins...\n");
+        unsigned char egpioPinCount = sbapi_gpio_extension_get_number_of_pins(deviceID, gpio_feature_ids[featureIndex], &error);
+        printf("\t\t\t\tResult is %d [%s]\n", egpioPinCount, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        if (error == 0)
+        {
+            for (int pinIndex = 0; pinIndex < egpioPinCount; pinIndex++)
+            {
+                unsigned char arraySize = 10;
+                unsigned char pinModes[10];
+
+                printf("\t\t\tAttempting to get the available io modes for pin %d\n", pinIndex);
+                arraySize = sbapi_gpio_extension_get_available_modes(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, pinModes, arraySize);
+                printf("\t\t\t\tModes found: %d [%s]\n", arraySize, sbapi_get_error_string(error));
+                tallyErrors(error, testFailureCount);
+
+                for (int modeIndex = 0; modeIndex < arraySize; modeIndex++)
+                {
+                    float dacTestValue = (float)0.54321;
+
+                    printf("\t\t\tAttempting to set the pin mode to %x\n", pinModes[modeIndex]);
+                    sbapi_gpio_extension_set_mode(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, pinModes[modeIndex], dacTestValue);
+                    printf("\t\t\t\tResult [%s]\n", sbapi_get_error_string(error));
+                    tallyErrors(error, testFailureCount);
+
+                    if (error == 0)
+                    {
+                        printf("\t\t\tAttempting to get the pin mode\n");
+                        unsigned char pinMode = sbapi_gpio_extension_get_current_mode(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex);
+                        printf("\t\t\t\tMode=%x [%s]\n", pinMode, sbapi_get_error_string(error));
+                        tallyErrors(error, testFailureCount);
+
+                        if (pinMode == pinModes[modeIndex])
+                        {
+                            unsigned int outputValue = 0xFFFFFFFF;
+                            unsigned int outputBitMask = 0x00000001 << pinIndex;
+                            unsigned int outputVector = 0;
+                            float adcValue = 0;
+
+                            if (error == 0)
+                            {
+                                switch (pinMode)
+                                {
+                                    case 0x00:
+                                        printf("\t\t\tSet push pull output bit %d to %x\n", pinIndex, 0x00000001 & (outputValue >> pinIndex));
+                                        sbapi_gpio_extension_set_output_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputValue, outputBitMask);
+                                        printf("\t\t\t\tResult %d [%s]\n", error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    case 0x01:
+                                        printf("\t\t\tSet open drain output bit %d to %x\n", pinIndex, 0x00000001 & (outputValue >> pinIndex));
+                                        sbapi_gpio_extension_set_output_vector(deviceID, gpio_feature_ids[featureIndex], &error, outputValue, outputBitMask);
+                                        printf("\t\t\t\tResult is %d [%s]\n", error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    case 0x02:
+                                        printf("\t\t\tSet dac output of bit %d to %f\n", pinIndex, dacTestValue);
+                                        sbapi_gpio_extension_set_value(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex, dacTestValue);
+                                        printf("\t\t\t\tResult is %d [%s]\n", error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    case 0x80:
+                                        printf("\t\t\tGet high Z input for bit %d\n", pinIndex);
+                                        outputVector = sbapi_gpio_extension_get_output_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+                                        printf("\t\t\t\tPin %d=%d, Result %d [%s]\n", pinIndex, 0x00000001 & (outputVector >> pinIndex), error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    case 0x81:
+                                        printf("\t\t\tGet pull down inputfor  bit %d\n", pinIndex);
+                                        outputVector = sbapi_gpio_extension_get_output_vector(deviceID, gpio_feature_ids[featureIndex], &error);
+                                        printf("\t\t\t\tPin %d=%d, Result %d [%s]\n", pinIndex, 0x00000001 & (outputVector >> pinIndex), error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    case 0x82:
+                                        printf("\t\t\tGet adc input for bit %d\n", pinIndex);
+                                        adcValue = sbapi_gpio_extension_get_value(deviceID, gpio_feature_ids[featureIndex], &error, pinIndex);
+                                        printf("\t\t\t\tPin %d=%f, Result is %d [%s]\n", pinIndex, adcValue, error, sbapi_get_error_string(error));
+                                        tallyErrors(error, testFailureCount);
+                                        break;
+                                    default:
+                                        printf("\t\t\t\tUndefined pin mode: %x\n", pinMode);
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                printf("\t\t\t\tMode values didn't match.\n");
+                                tallyErrors(-1, testFailureCount);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+
+        printf("\t\t%d: Finished testing device 0x%02lX, gpio feature 0x%02lX\n", featureIndex, deviceID, gpio_feature_ids[featureIndex]);
+    }
+
+    free(gpio_feature_ids);
+
+    printf("\tFinished testing gpio capabilities.\n");
+}
+
 void test_miscellaneous_commands(long deviceID, int *unsupportedFeatureCount, int *testFailureCount)
 {
-	printf("\n\tTesting miscellaneous commands:\n");
+    int result = 0;
 
+    printf("\n\tTesting miscellaneous commands:\n");
+    char ipAddress[] = "192.168.1.1";
+    int port = 54321;
 
-	// miscellaneous tests go here
-
-	printf("\tFinished testing miscellaneous commands. \n");
+    result = sbapi_add_TCPIPv4_device_location("FLAMEX", ipAddress, port);
+    printf("\tFinished testing miscellaneous commands. \n");
 }
+
+void test_ethernet_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+    int error = 0;
+    int number_of_ethernet_configurations;
+    long *ethernet_configuration_ids = 0;
+    int i;
+
+    printf("\n\tTesting ethernet configuration features for network interface index = %d\n", networkInterfaceIndex);
+
+    printf("\t\tExercising ethernet configuration commands:\n");
+    number_of_ethernet_configurations = sbapi_get_number_of_ethernet_configuration_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_ethernet_configurations, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_ethernet_configurations)
+    {
+        printf("\tNo ethernet capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    ethernet_configuration_ids = (long *)calloc(number_of_ethernet_configurations, sizeof(long));
+    printf("\t\tGetting ethernet configuration feature IDs...\n");
+    number_of_ethernet_configurations = sbapi_get_ethernet_configuration_features(deviceID, &error, ethernet_configuration_ids, number_of_ethernet_configurations);
+    printf("\t\t\tResult is %d [%s]\n", number_of_ethernet_configurations, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_ethernet_configurations; i++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, ethernet feature id 0x%02lX\n", i, deviceID, ethernet_configuration_ids[i]);
+        printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+        // switch GbE enable state
+        printf("\t\t\tAttempting to retrieve the GbE enable state...\n");
+        unsigned char ethernetEnableState1 = sbapi_ethernet_configuration_get_gbe_enable_status(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex);
+        printf("\t\t\tResult is %d [%s]\n", ethernetEnableState1, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char ethernetEnableState2 = ethernetEnableState1;
+        printf("\t\t\tAttempting to switch the GbE enable state...\n");
+        if (ethernetEnableState2 == 0)
+        {
+            ethernetEnableState2 = 1;
+            printf("\t\t\t\tGbE was disabled.\n");
+        }
+        else
+        {
+            ethernetEnableState2 = 0;
+            printf("\t\t\t\tGbE was enabled.\n");
+        }
+
+        sbapi_ethernet_configuration_set_gbe_enable_status(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, ethernetEnableState2);
+        tallyErrors(error, testFailureCount);
+        if (error == 0)
+        {
+            printf("\t\t\tThe GbE enable state was successfully modified.\n");
+        }
+        else
+        {
+            printf("\t\t\tThe GTbE enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+        }
+
+
+        // set GbE enable state to true
+        printf("\t\t\tAttempting to set the GbE enable state to true\n");
+        sbapi_ethernet_configuration_set_gbe_enable_status(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, 1);
+        printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char aMacAddress[6];
+
+        // get the mac address
+        printf("\t\t\tAttempting to retrieve the MAC address...\n");
+        sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, &aMacAddress);
+
+        printf("\t\t\tResult is %x:%x:%x:%x:%x:%x [%s]\n", aMacAddress[0], aMacAddress[1], aMacAddress[2],
+               aMacAddress[3], aMacAddress[4], aMacAddress[5], sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        // set the same mac address and just check the error code
+        printf("\t\t\tAttempting to set the MAC address to the same value...\n");
+        sbapi_ethernet_configuration_get_mac_address(deviceID, ethernet_configuration_ids[i], &error, networkInterfaceIndex, &aMacAddress);
+
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+
+        printf("\t\t%d: Finished testing device 0x%02lX, ethernet configuration feature 0x%02lX\n", i, deviceID, ethernet_configuration_ids[i]);
+    }
+
+    free(ethernet_configuration_ids);
+
+    printf("\tFinished testing ethernet feature capabilities.\n");
+}
+
+void test_dhcp_server_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+    int error = 0;
+    int number_of_dhcp_server_features;
+    long *dhcp_server_ids = 0;
+    int i;
+
+    printf("\n\tTesting dhcp server configuration features for network interface index = %d\n", networkInterfaceIndex);
+
+    printf("\t\tExercising dhcp server commands:\n");
+    number_of_dhcp_server_features = sbapi_get_number_of_dhcp_server_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_dhcp_server_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_dhcp_server_features)
+    {
+        printf("\tNo dhcp server capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    dhcp_server_ids = (long *)calloc(number_of_dhcp_server_features, sizeof(long));
+    printf("\t\tGetting dhcp server feature IDs...\n");
+    number_of_dhcp_server_features = sbapi_get_dhcp_server_features(deviceID, &error, dhcp_server_ids, number_of_dhcp_server_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_dhcp_server_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_dhcp_server_features; i++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, dhcp server feature id 0x%02lX\n", i, deviceID, dhcp_server_ids[i]);
+        printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+        // switch dhcp server enable state
+        printf("\t\t\tAttempting to retrieve the dhcp server enable state...\n");
+        unsigned char dhcpServerEnableState1 = sbapi_dhcp_server_get_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex);
+        printf("\t\t\tResult is %d [%s]\n", dhcpServerEnableState1, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char dhcpServerEnableState2 = dhcpServerEnableState1;
+        printf("\t\t\tAttempting to switch the dhcp server enable state...\n");
+        if (dhcpServerEnableState2 == 0)
+        {
+            dhcpServerEnableState2 = 1;
+            printf("\t\t\t\tThe DHCP server was disabled.\n");
+        }
+        else
+        {
+            dhcpServerEnableState2 = 0;
+            printf("\t\t\t\tThe DHCP server was enabled.\n");
+        }
+
+        sbapi_dhcp_server_set_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, dhcpServerEnableState2);
+        tallyErrors(error, testFailureCount);
+        if (error == 0)
+        {
+            printf("\t\t\tThe dhcp server enable state was successfully modified.\n");
+        }
+        else
+        {
+            printf("\t\t\tThe dhcp server enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+        }
+
+
+        // set dhcp server enable state to false
+        printf("\t\t\tAttempting to set the dhcp server enable state to false\n");
+        sbapi_dhcp_server_set_enable_state(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, 0);
+        printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char dhcpServerAddress[4];
+        unsigned char netMask = 0;
+
+        // get the dhcp server address
+        printf("\t\t\tAttempting to retrieve the dhcp server address...\n");
+        sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, &dhcpServerAddress, &netMask);
+
+        printf("\t\t\tResult is %d.%d.%d.%d/%d [%s]\n", dhcpServerAddress[0], dhcpServerAddress[1], dhcpServerAddress[2],
+               dhcpServerAddress[3], netMask, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        // set the same dhcp server address and just check the error code
+        printf("\t\t\tAttempting to set the dhcp server address to the same value...\n");
+        sbapi_dhcp_server_get_address(deviceID, dhcp_server_ids[i], &error, networkInterfaceIndex, &dhcpServerAddress, &netMask);
+
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t%d: Finished testing device 0x%02lX, dhcp server feature 0x%02lX\n", i, deviceID, dhcp_server_ids[i]);
+    }
+
+    free(dhcp_server_ids);
+
+    printf("\tFinished testing dhcp server feature capabilities.\n");
+}
+
+void test_ipv4_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+    int error = 0;
+    int number_of_ipv4_features;
+    long *ipv4_feature_ids = 0;
+    int i;
+
+    printf("\n\tTesting ipv4 features for network interface index = %d\n", networkInterfaceIndex);
+
+    printf("\t\tExercising ipv4 commands:\n");
+    number_of_ipv4_features = sbapi_get_number_of_ipv4_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_ipv4_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_ipv4_features)
+    {
+        printf("\tNo ipv4 capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    ipv4_feature_ids = (long *)calloc(number_of_ipv4_features, sizeof(long));
+    printf("\t\tGetting ipv4 server feature IDs...\n");
+    number_of_ipv4_features = sbapi_get_ipv4_features(deviceID, &error, ipv4_feature_ids, number_of_ipv4_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_ipv4_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_ipv4_features; i++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, ipv4 feature id 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
+        printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+        // switch dhcp client enable state
+        printf("\t\t\tAttempting to retrieve the dhcp client enable state...\n");
+        unsigned char dhcpEnableState1 = sbapi_ipv4_get_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+        printf("\t\t\tResult is %d [%s]\n", dhcpEnableState1, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char dhcpEnableState2 = dhcpEnableState1;
+        printf("\t\t\tAttempting to switch the dhcp client enable state...\n");
+        if (dhcpEnableState2 == 0)
+        {
+            dhcpEnableState2 = 1;
+            printf("\t\t\t\tThe dhcp client was disabled.\n");
+        }
+        else
+        {
+            dhcpEnableState2 = 0;
+            printf("\t\t\t\tThe dhcp client was enabled.\n");
+        }
+
+        sbapi_ipv4_set_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, dhcpEnableState2);
+        tallyErrors(error, testFailureCount);
+        if (error == 0)
+        {
+            printf("\t\t\tThe dhcp client enable state was successfully modified.\n");
+        }
+        else
+        {
+            printf("\t\t\tThe dhcp client enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+        }
+        sleep(4000);
+
+        // set dhcp server enable state to false
+        printf("\t\t\tAttempting to set the dhcp client enable state to true\n");
+        sbapi_ipv4_set_dhcp_enable_state(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, 1);
+        printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        sleep(4000);
+
+        unsigned char ipv4GatewayAddress[4];
+
+        // get the dhcp gateway address
+        printf("\t\t\tAttempting to retrieve the default gateway address...\n");
+        sbapi_ipv4_get_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, &ipv4GatewayAddress);
+
+        printf("\t\t\tResult is %d.%d.%d.%d[%s]\n", ipv4GatewayAddress[0], ipv4GatewayAddress[1], ipv4GatewayAddress[2],
+               ipv4GatewayAddress[3], sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        // set the same default gateway address and just check the error code
+        printf("\t\t\tAttempting to set the default gateway address to the same value...\n");
+        sbapi_ipv4_set_default_gateway_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4GatewayAddress);
+
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+
+        unsigned char ipv4NumberOfAddresses = 0;
+
+        // get the number of ipv4 addresses
+        printf("\t\t\tAttempting to retrieve the number of ipv4 addresses...\n");
+        ipv4NumberOfAddresses = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+
+        printf("\t\t\tResult is %d [%s]\n", ipv4NumberOfAddresses, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to list the ipv4 addresses...\n");
+        if (error == 0)
+        {
+            for (unsigned char addressIndex = 0; addressIndex < ipv4NumberOfAddresses; addressIndex++)
+            {
+                unsigned char ipv4Address[4];
+                unsigned char netMask = 0;
+
+                // get the address
+                printf("\t\t\t\tAttempting to retrieve an address %d...\n", addressIndex);
+                sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, addressIndex, (&ipv4Address), &netMask);
+                printf("\t\t\t\tResult, IPv4 address =  %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1],
+                       ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+                tallyErrors(error, testFailureCount);
+
+                if (error != 0)
+                    break;
+            }
+        }
+
+        unsigned char ipv4Address[4] = { 192, 168, 1, 69 };
+        unsigned char netMask = 24;
+
+        // add and delete an ipv4 address
+        if (error == 0)
+        {
+            printf("\t\t\tAttempting to change the number of ipv4 addresses...\n");
+            printf("\t\t\t\tIPv4 address count = %d...\n", ipv4NumberOfAddresses);
+
+            printf("\t\t\t\tAdding an address...\n");
+            sbapi_ipv4_add_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, ipv4Address, netMask);
+            printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+            tallyErrors(error, testFailureCount);
+
+            if (error == 0)
+            {
+                unsigned char newAddressCount = 0;
+                newAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+                printf("\t\t\t\tThe new number of addresses = %d...\n", newAddressCount);
+                tallyErrors(error, testFailureCount);
+
+                if (error == 0)
+                {
+                    sbapi_ipv4_get_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1, &ipv4Address, &netMask);
+                    printf("\t\t\t\tAdded ipv4 address %d.%d.%d.%d/%d [%s]\n", ipv4Address[0], ipv4Address[1], ipv4Address[2], ipv4Address[3], netMask, sbapi_get_error_string(error));
+                    tallyErrors(error, testFailureCount);
+
+                    printf("\t\t\tAttempting to delete the recently added ipv4 address...\n");
+                    sbapi_ipv4_delete_address(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex, newAddressCount - 1);
+                    printf("\t\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+                    tallyErrors(error, testFailureCount);
+
+                    unsigned char deletedAddressCount = 0;
+                    deletedAddressCount = sbapi_ipv4_get_number_of_addresses(deviceID, ipv4_feature_ids[i], &error, networkInterfaceIndex);
+                    printf("\t\t\t\tNumber of addresses = %d...\n", deletedAddressCount);
+                    tallyErrors(error, testFailureCount);
+
+                    if (newAddressCount != deletedAddressCount + 1)
+                    {
+                        printf("\t\t\t\tThe number of addresses did not decrement.\n");
+                        tallyErrors(-1, testFailureCount);
+                    }
+                }
+                else
+                {
+                    printf("\t\t\t\tThe number of addresses did not increment.\n");
+                    tallyErrors(-1, testFailureCount);
+                }
+            }
+        }
+
+        printf("\t\t%d: Finished testing device 0x%02lX, ipv4 feature 0x%02lX\n", i, deviceID, ipv4_feature_ids[i]);
+    }
+
+    free(ipv4_feature_ids);
+
+    printf("\tFinished testing ipv4 feature capabilities.\n");
+}
+
+void test_multicast_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+    int error = 0;
+    int number_of_multicast_features;
+    long *multicast_feature_ids = 0;
+    int i;
+
+    printf("\n\tTesting multicast features for network interface index = %d\n", networkInterfaceIndex);
+
+    printf("\t\tExercising multicast commands:\n");
+    number_of_multicast_features = sbapi_get_number_of_multicast_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_multicast_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_multicast_features)
+    {
+        printf("\tNo multicast capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    multicast_feature_ids = (long *)calloc(number_of_multicast_features, sizeof(long));
+    printf("\t\tGetting multicast feature IDs...\n");
+    number_of_multicast_features = sbapi_get_multicast_features(deviceID, &error, multicast_feature_ids, number_of_multicast_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_multicast_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_multicast_features; i++)
+    {
+        printf("\t\t%d: Testing device 0x%02lX, multicast feature id 0x%02lX\n", i, deviceID, multicast_feature_ids[i]);
+        printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+        unsigned char groupAddress[4];
+        unsigned short port;
+
+        // these functions are for convenience. They do not contact the spectrometer
+        sbapi_multicast_get_group_address(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, &groupAddress);
+        port = sbapi_multicast_get_group_port(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex);
+        printf("\t\t\tMulticast Address = %d.%d.%d.%d, Port = %d\n", groupAddress[0], groupAddress[1], groupAddress[2], groupAddress[3], port);
+
+        // switch multicast enable state
+        printf("\t\t\tAttempting to retrieve the multicast enable state...\n");
+        unsigned char multicastEnableState1 = sbapi_multicast_get_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex);
+        printf("\t\t\tResult is %d [%s]\n", multicastEnableState1, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        unsigned char multicastEnableState2= multicastEnableState1;
+        printf("\t\t\tAttempting to switch multicast enable state...\n");
+        if (multicastEnableState2 == 0)
+        {
+            multicastEnableState2 = 1;
+            printf("\t\t\t\tMulticast was disabled.\n");
+        }
+        else
+        {
+            multicastEnableState2 = 0;
+            printf("\t\t\t\tMulticast was enabled.\n");
+        }
+
+        sbapi_multicast_set_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, multicastEnableState2);
+        tallyErrors(error, testFailureCount);
+        if (error == 0)
+        {
+            printf("\t\t\tThe multicast enable state was successfully modified.\n");
+        }
+        else
+        {
+            printf("\t\t\tThe multicast enable state did not change. sbapi error = %s\n", sbapi_get_error_string(error));
+        }
+
+        // set dhcp server enable state to false
+        printf("\t\t\tAttempting to set the multicast enable state to false\n");
+        sbapi_multicast_set_enable_state(deviceID, multicast_feature_ids[i], &error, networkInterfaceIndex, 0);
+        printf("\t\t\tResult is[%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t%d: Finished testing device 0x%02lX, dhcp server feature 0x%02lX\n", i, deviceID, multicast_feature_ids[i]);
+    }
+
+    free(multicast_feature_ids);
+
+    printf("\tFinished testing multicast feature capabilities.\n");
+}
+
+void test_wifi_features(long deviceID, int *unsupportedFeatureCount, int *testFailureCount, unsigned char networkInterfaceIndex)
+{
+    int error = 0;
+    int number_of_wifi_features;
+    long *wifi_feature_ids = 0;
+    int i;
+
+    printf("\n\tTesting wifi features for network interface index = %d\n", networkInterfaceIndex);
+
+    printf("\t\tExercising wifi commands:\n");
+    number_of_wifi_features = sbapi_get_number_of_wifi_configuration_features(deviceID, &error);
+    printf("\t\t\tResult is %d [%s]\n", number_of_wifi_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    if (0 == number_of_wifi_features)
+    {
+        printf("\tNo wifi configuration capabilities found.\n");
+        tallyUnsupportedFeatures(unsupportedFeatureCount);
+        return;
+    }
+
+    wifi_feature_ids = (long *)calloc(number_of_wifi_features, sizeof(long));
+    printf("\t\tGetting wifi configuration feature IDs...\n");
+    number_of_wifi_features = sbapi_get_wifi_configuration_features(deviceID, &error, wifi_feature_ids, number_of_wifi_features);
+    printf("\t\t\tResult is %d [%s]\n", number_of_wifi_features, sbapi_get_error_string(error));
+    tallyErrors(error, testFailureCount);
+
+    for (i = 0; i < number_of_wifi_features; i++)
+    {
+        unsigned char ssid[32];
+        unsigned char characterCount = 0;
+        char myString[64];
+
+        printf("\t\t%d: Testing device 0x%02lX, wifi configuration feature id 0x%02lX\n", i, deviceID, wifi_feature_ids[i]);
+        printf("\t\t\tInterface Index = %d\n", networkInterfaceIndex);
+
+        // wifi commands are tested, but settings are not changed, with the exception of the pass phrase which is changed to PassPhras3!
+
+        printf("\t\t\tAttempting to retrieve the wifi mode...\n");
+        unsigned char wifiMode = sbapi_wifi_configuration_get_mode(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex);
+        if (wifiMode == 0)
+        {
+            strcpy(myString, "Client");
+        }
+        else
+        {
+            strcpy(myString, "Access Point");
+        }
+        printf("\t\t\tResult is %s [%s]\n", myString, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to set the wifi mode with the same value...\n");
+        sbapi_wifi_configuration_set_mode(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, wifiMode);
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+
+        printf("\t\t\tAttempting to retrieve the wifi security type...\n");
+        unsigned char securityType = sbapi_wifi_configuration_get_security_type(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex);
+        if (securityType == 0)
+        {
+            strcpy(myString, "Open");
+        }
+        else
+        {
+            strcpy(myString, "WPA2");
+        }
+        printf("\t\t\tResult is %s [%s]\n", myString, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to set the wifi security type with the same value...\n");
+        sbapi_wifi_configuration_set_security_type(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, securityType);
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to retrieve the wifi ssid...\n");
+        characterCount = sbapi_wifi_configuration_get_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, &ssid);
+        printf("\t\t\tResult is %s [%s]\n", (char *)ssid, sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to set the wifi ssid with the same value...\n");
+        sbapi_wifi_configuration_set_ssid(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, ssid, characterCount);
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t\tAttempting to set the wifi pass phrase with: PassPhras3.\n");
+        strcpy(myString, "PassPhras3");
+        sbapi_wifi_configuration_set_pass_phrase(deviceID, wifi_feature_ids[i], &error, networkInterfaceIndex, (const unsigned char *)myString, (const unsigned char) strlen(myString) & 0xFF);
+        printf("\t\t\tResult is [%s]\n", sbapi_get_error_string(error));
+        tallyErrors(error, testFailureCount);
+
+        printf("\t\t%d: Finished testing device 0x%02lX, wifi configuration feature 0x%02lX\n", i, deviceID, wifi_feature_ids[i]);
+    }
+
+    free(wifi_feature_ids);
+
+    printf("\tFinished testing multicast feature capabilities.\n");
+}
+
