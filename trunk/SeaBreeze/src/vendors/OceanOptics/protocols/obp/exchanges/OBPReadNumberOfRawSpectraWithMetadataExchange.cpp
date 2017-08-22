@@ -37,6 +37,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
+using std::vector;
 
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
@@ -91,12 +92,36 @@ unsigned int OBPReadNumberOfRawSpectraWithMetadataExchange::isLegalMessageType(u
     return 0;
 }
 
+#define OBP_PAYLOAD_START 44
+
 Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *helper)
         throw (ProtocolException) 
 {
     Data *xfer;
     OBPMessage *message = NULL;
     vector<byte> *bytes;
+    vector<byte> obpHeader(OBP_PAYLOAD_START, 0);
+    int flag = 0;
+
+    // this particular call can return less than the number of bytes requested and still be valid.
+    //  read the OBP header first, then request the remaining bytes.
+    try {
+        flag = helper->receive(obpHeader, OBP_PAYLOAD_START);
+        if(((unsigned int)flag) != OBP_PAYLOAD_START) {
+            /* FIXME: retry, throw exception, something here */
+        }
+    } catch (BusException &be) {
+        string error("Failed to write to bus.");
+        /* FIXME: previous exception should probably be bundled up into the new exception */
+        /* FIXME: there is probably a more descriptive type for this than ProtocolException */
+        throw ProtocolException(error);
+    }
+
+    this->length = *reinterpret_cast<const uint32_t*>(&obpHeader[OBP_PAYLOAD_START-sizeof(uint32_t)]);
+
+    // the original vector does not need to be resized because it will be the same size, or larger than the
+    //  data sent back by the spectrometer, since this->length was the maximum number of spectra to be returned
+    // the next transfer will retrieve the number of remaining bytes.
 
     /* This will use the superclass to transfer data from the device
      */
@@ -117,6 +142,10 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
      */
     try 
 	{
+        // the current buffer does not include the header. For the parse to work, those
+        //  44 bytes must be inserted at the front of this->buffer
+        this->buffer->insert(this->buffer->begin(), obpHeader.begin(), obpHeader.end());
+
         message = OBPMessage::parseByteStream(this->buffer);
     } 
 	catch (IllegalArgumentException &iae) 
@@ -133,7 +162,7 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
     }
 
     bytes = message->getData();
-    if(bytes->size() < (this->length - OBP_MESSAGE_OVERHEAD))
+    if((bytes->size() % ((numberOfPixels * numberOfBytesPerPixel)+metadataLength+checkSumLength)) != 0) // the number of bytes should be an integral of the spectrum size
 	{
         string error("Spectrum response does not have enough data.");
         delete message;
@@ -150,10 +179,16 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
 void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfSamplesToRequest(void *myClass, unsigned int numberOfSamples)
 {
 	unsigned int readoutLength;
+    unsigned int sampleSize = 1;
+
+    // the spectrometer currently 20170822 will return one spectrum, if available, even if 0 were requested. Make sure there is space for the rouge transmission.
+    if(numberOfSamples != 0)
+        sampleSize = numberOfSamples;
+
 	OBPReadNumberOfRawSpectraWithMetadataExchange *parentClass = (OBPReadNumberOfRawSpectraWithMetadataExchange *)myClass;
 
 	parentClass->numberOfSamplesToRetrieve = numberOfSamples;
-	readoutLength = (((parentClass->numberOfPixels * parentClass->numberOfBytesPerPixel) + parentClass->metadataLength + parentClass->checkSumLength) * numberOfSamples) + OBP_MESSAGE_OVERHEAD;
+	readoutLength = (((parentClass->numberOfPixels * parentClass->numberOfBytesPerPixel) + parentClass->metadataLength + parentClass->checkSumLength) * sampleSize) + OBP_MESSAGE_OVERHEAD;
 	
 	parentClass->buffer->resize(readoutLength);
 	parentClass->length = readoutLength;

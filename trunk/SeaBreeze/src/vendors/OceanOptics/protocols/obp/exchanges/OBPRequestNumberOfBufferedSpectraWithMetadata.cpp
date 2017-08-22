@@ -58,13 +58,21 @@ void OBPRequestNumberOfBufferedSpectraWithMetadataExchange::setNumberOfSamplesTo
 	OBPMessage message;
 	vector<byte> *stream;
 	unsigned int i;
-	
+	unsigned int adjustedNumberOfSamples = numberOfSamples;
+
 	OBPRequestNumberOfBufferedSpectraWithMetadataExchange *parentClass = (OBPRequestNumberOfBufferedSpectraWithMetadataExchange *)myClass;
+
+	// make sure there is enough memory for the reply. Currently the OceanFX firmware will try to return one
+	// spectrum, even with a request of 0.
+	if(adjustedNumberOfSamples < 1)
+		adjustedNumberOfSamples = 1;
 
 	std::vector<unsigned char> *numberOfSamplesToRetrieve = new vector<unsigned char>(sizeof(unsigned int));
 	// no c++11 yet
 	//memcpy(numberOfSamplesToRetrieve.data(), &numberOfSamples, sizeof(unsigned int)); 
-	memcpy(&((*numberOfSamplesToRetrieve)[0]), &numberOfSamples, sizeof(unsigned int)); 
+	memcpy(&((*numberOfSamplesToRetrieve)[0]), &adjustedNumberOfSamples, sizeof(unsigned int));
+
+
 
 	message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
 	message.setImmediateData(numberOfSamplesToRetrieve); // sets length automatically ~obpMessage destroys the vector
