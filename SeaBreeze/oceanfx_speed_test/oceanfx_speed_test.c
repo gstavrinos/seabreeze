@@ -53,7 +53,7 @@
 #endif
 
 #define SPECTRA_PER_TRIGGER 50000
-#define NUMBER_SPECTRA_TO_RETRIEVE 15 // can be set to a larger number in a future firmware release.
+#define NUMBER_SPECTRA_TO_RETRIEVE 10 // can be set to a larger number in a future firmware release.
 #define FAST_BUFFER_ENABLED 1
 #define DISPLAY_PERIOD 5;
 
@@ -291,7 +291,7 @@ void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, lo
 	sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
     sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
 
-    printf("[/n/n/nStandard speed test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
+    printf("\n\n\n[Standard speed test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
 	if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
 	{
 		if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
@@ -308,7 +308,7 @@ void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, lo
 
                 if(elapsed_time(start_time, timing_mark) > nextDisplay)
                 {
-                    printf("\"Elapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
+                    printf("\nElapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
                            elapsed_time(start_time, timing_mark),
                            elapsed_time(start_time, timing_mark)/loopCount,
                            spectra_retrieved / elapsed_time(start_time, timing_mark), spectra_retrieved, (double)spectra_retrieved/loopCount);
@@ -326,8 +326,8 @@ void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, lo
 				printf("Elapsed time = %f seconds\n", elapsed_time(start_time, timing_mark));
                 printf("Average loop time = %f seconds\n", elapsed_time(start_time, timing_mark)/loopCount);
 				printf("Spectra retrieved = %d\n", spectra_retrieved);
-				printf("Spectra per second = %f\n\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
-                printf("Average retrieved per loop = %f\n", (double)spectra_retrieved/loopCount);
+				printf("Spectra per second = %f\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
+                printf("Average retrieved per loop = %f\n\n", (double)spectra_retrieved/loopCount);
 			}
 			else
 			{
@@ -365,7 +365,7 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
     sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
     sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
 
-    printf("/n/n/n[Request/Response Speed Test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
+    printf("\n\n\n[Request/Response Speed Test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
     if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
     {
         if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
@@ -376,6 +376,8 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
             sbapi_spectrometer_fast_buffer_spectrum_request(deviceID, spectrometer_feature_id, &error, NUMBER_SPECTRA_TO_RETRIEVE);
             while (elapsed_time(start_time, timing_mark) < 60)
             {
+                sbapi_spectrometer_fast_buffer_spectrum_request(deviceID, spectrometer_feature_id, &error, NUMBER_SPECTRA_TO_RETRIEVE);
+
                 if (clock_gettime(CLOCK_REALTIME, &timing_mark) != 0)
                 {
                     printf("clock_gettime() error\n");
@@ -384,14 +386,16 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
 
                 if(elapsed_time(start_time, timing_mark) > nextDisplay)
                 {
-                    printf("\"Elapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
+                    printf("\nElapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
                            elapsed_time(start_time, timing_mark),
                            elapsed_time(start_time, timing_mark)/loopCount,
                            spectra_retrieved / elapsed_time(start_time, timing_mark), spectra_retrieved, (double)spectra_retrieved/loopCount);
                     nextDisplay += DISPLAY_PERIOD;
                 }
 
-                bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
+                //bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
+                bytesReturned = sbapi_spectrometer_fast_buffer_spectrum_response(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
+
                 spectra_retrieved += (bytesReturned / (sizeof(spectral_data[0])));
                 loopCount++;
             }
@@ -403,8 +407,8 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
                 printf("Elapsed time = %f seconds\n", elapsed_time(start_time, timing_mark));
                 printf("Average loop time = %f seconds\n", elapsed_time(start_time, timing_mark)/loopCount);
                 printf("Spectra retrieved = %d\n", spectra_retrieved);
-                printf("Spectra per second = %f\n\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
-                printf("Average retrieved per loop = %f\n", (double)spectra_retrieved/loopCount);
+                printf("Spectra per second = %f\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
+                printf("Average retrieved per loop = %f\n\n", (double)spectra_retrieved/loopCount);
             }
             else
             {
