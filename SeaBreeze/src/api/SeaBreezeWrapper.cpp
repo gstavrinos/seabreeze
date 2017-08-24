@@ -680,6 +680,74 @@ int SeaBreezeWrapper::getFastBufferSpectrum(int index, int *errorCode,
 	return bytesCopied;
 }
 
+void SeaBreezeWrapper::fastBufferSpectrumRequest(int index, int *errorCode, unsigned int numberOfSamplesToRetrieve)
+{
+    if (NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+    OOISpectrometerFeatureInterface *spec =
+            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+    if (NULL != spec) {
+        try {
+            spec->fastBufferSpectrumRequest(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]),
+                    numberOfSamplesToRetrieve);
+
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        }
+        catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return;
+        }
+    }
+}
+
+int SeaBreezeWrapper::fastBufferSpectrumResponse(int index, int *errorCode,
+                                            unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve) {
+    vector<unsigned char> *spectrum;
+    int bytesCopied = 0;
+
+    if (NULL == this->devices[index]) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    if (NULL == buffer) {
+        SET_ERROR_CODE(ERROR_BAD_USER_BUFFER);
+        return 0;
+    }
+
+    SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+
+    OOISpectrometerFeatureInterface *spec =
+            __seabreeze_getFeature<OOISpectrometerFeatureInterface>(this->devices[index]);
+    if (NULL != spec) {
+        try {
+            spectrum = spec->fastBufferSpectrumResponse(
+                    *__seabreeze_getProtocol(this->devices[index]),
+                    *__seabreeze_getBus(this->devices[index]),
+                    numberOfSamplesToRetrieve);
+            int bytes = (int)spectrum->size();
+            bytesCopied = (bytes < buffer_length) ? bytes : buffer_length;
+            memcpy(buffer, &((*spectrum)[0]),
+                   bytesCopied * sizeof(unsigned char));
+            delete spectrum;
+            SET_ERROR_CODE(ERROR_SUCCESS);
+        }
+        catch (FeatureException &fe) {
+            SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
+            return 0;
+        }
+    }
+    return bytesCopied;
+}
+
+
 int SeaBreezeWrapper::getUnformattedSpectrum(int index, int *errorCode,
 	unsigned char *buffer, int buffer_length) {
 	vector<unsigned char> *spectrum;
@@ -4096,6 +4164,18 @@ int seabreeze_get_fast_buffer_spectrum(int index, int *error_code, unsigned char
 {
 	SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
 	return wrapper->getFastBufferSpectrum(index, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
+}
+
+void seabreeze_fast_buffer_spectrum_request(int index, int *error_code, unsigned int numberOfSamplesToRetrieve)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    wrapper->fastBufferSpectrumRequest(index, error_code, numberOfSamplesToRetrieve);
+}
+
+int seabreeze_fast_buffer_spectrum_response(int index, int *error_code, unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve)
+{
+    SeaBreezeWrapper *wrapper = SeaBreezeWrapper::getInstance();
+    return wrapper->fastBufferSpectrumResponse(index, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
 }
 
 int seabreeze_get_wavelengths(int index, int *error_code, double *wavelengths, int length) 

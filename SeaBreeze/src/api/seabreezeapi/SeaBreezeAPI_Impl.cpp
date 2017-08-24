@@ -552,6 +552,30 @@ int SeaBreezeAPI_Impl::spectrometerGetFastBufferSpectrum(long deviceID,
 		buffer, bufferLength, numberOfSamplesToRetrieve);
 }
 
+void SeaBreezeAPI_Impl::spectrometerFastBufferSpectrumRequest(long deviceID,
+                                                         long featureID, int *errorCode, unsigned int numberOfSamplesToRetrieve)
+{
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if (NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return;
+    }
+
+    adapter->spectrometerFastBufferSpectrumRequest(featureID, errorCode, numberOfSamplesToRetrieve);
+}
+
+int SeaBreezeAPI_Impl::spectrometerFastBufferSpectrumResponse(long deviceID,
+                                                         long featureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve)
+{
+    DeviceAdapter *adapter = getDeviceByID(deviceID);
+    if (NULL == adapter) {
+        SET_ERROR_CODE(ERROR_NO_DEVICE);
+        return 0;
+    }
+
+    return adapter->spectrometerFastBufferSpectrumResponse(featureID, errorCode, buffer, bufferLength, numberOfSamplesToRetrieve);
+}
+
 int SeaBreezeAPI_Impl::spectrometerGetUnformattedSpectrum(long deviceID,
         long featureID, int *errorCode, unsigned char *buffer, int bufferLength) {
     DeviceAdapter *adapter = getDeviceByID(deviceID);

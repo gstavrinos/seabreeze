@@ -394,6 +394,25 @@ int sbapi_spectrometer_get_fast_buffer_spectrum(long deviceID,
 		spectrometerFeatureID, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
 }
 
+void sbapi_spectrometer_fast_buffer_spectrum_request(long deviceID,
+                                                long spectrometerFeatureID, int *error_code, unsigned int numberOfSamplesToRetrieve)
+{
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->spectrometerFastBufferSpectrumRequest(deviceID,
+                                                      spectrometerFeatureID, error_code, numberOfSamplesToRetrieve);
+}
+
+int sbapi_spectrometer_fast_buffer_spectrum_response(long deviceID,
+                                                long spectrometerFeatureID, int *error_code,
+                                                unsigned char *buffer, int buffer_length, unsigned int numberOfSamplesToRetrieve)
+{
+    SeaBreezeAPI *wrapper = SeaBreezeAPI::getInstance();
+
+    return wrapper->spectrometerFastBufferSpectrumResponse(deviceID,
+                                                      spectrometerFeatureID, error_code, buffer, buffer_length, numberOfSamplesToRetrieve);
+}
+
 int
 sbapi_spectrometer_get_unformatted_spectrum(long deviceID,
         long spectrometerFeatureID, int *error_code,

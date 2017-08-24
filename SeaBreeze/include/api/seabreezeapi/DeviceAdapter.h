@@ -115,6 +115,8 @@ namespace seabreeze {
             int spectrometerGetUnformattedSpectrumLength(long spectrometerFeatureID, int *errorCode);
             int spectrometerGetUnformattedSpectrum(long spectrometerFeatureID,int *errorCode, unsigned char *buffer, int bufferLength);
 			int spectrometerGetFastBufferSpectrum(long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve);
+			void spectrometerFastBufferSpectrumRequest(long spectrometerFeatureID, int *errorCode, unsigned int numberOfSamplesToRetrieve);
+			int spectrometerFastBufferSpectrumResponse(long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve);
 			int spectrometerGetFormattedSpectrumLength(long spectrometerFeatureID, int *errorCode);
             int spectrometerGetFormattedSpectrum(long spectrometerFeatureID, int *errorCode,double *buffer, int bufferLength);
             int spectrometerGetWavelengths(long spectrometerFeatureID, int *errorCode,double *wavelengths, int length);
