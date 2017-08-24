@@ -53,7 +53,10 @@
 #endif
 
 #define SPECTRA_PER_TRIGGER 50000
-#define NUMBER_SPECTRA_TO_RETRIEVE 15
+#define NUMBER_SPECTRA_TO_RETRIEVE 15 // can be set to a larger number in a future firmware release.
+#define FAST_BUFFER_ENABLED 1
+#define DISPLAY_PERIOD 5;
+
 //
 // show the usage message
 //
@@ -221,7 +224,7 @@ int configure_fast_buffer_feature(long deviceID)
 			    if(error == 0)
 			    {
 			    	// enable the fast buffer
-			    	sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_id, &error, 1);
+			    	sbapi_fast_buffer_set_buffering_enable(deviceID, fast_buffer_feature_id, &error, FAST_BUFFER_ENABLED);
 			    	if(error != 0)
 			    	{
 			    		printf("Error enabling the buffer.\n");
@@ -267,9 +270,9 @@ double elapsed_time(struct timespec start, struct timespec end)
 //
 // keep the ocean fx buffer full and retrieve as many spectra as possible per second. The top scan rate for the 
 //  FPGA and detector is about 4500 spectra per second
-#define DISPLAY_PERIOD 5;
 
-void ocean_fx_speed_test(long deviceID, long data_buffer_feature_id, long spectrometer_feature_id)
+
+void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, long spectrometer_feature_id)
 {   
 	int error = -1;
     static struct ocean_fx_raw_spectrum_with_meta_data
@@ -282,20 +285,17 @@ void ocean_fx_speed_test(long deviceID, long data_buffer_feature_id, long spectr
     int bytesReturned = 0;
     int spectra_retrieved = 0;
 	struct timespec start_time, timing_mark;
-
+    int loopCount = 0;
 
 	// clear the spectrum buffer
 	sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
+    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
 
-
-    printf("Starting the clock. Collecting spectra for about a minute.\n\n");
+    printf("[/n/n/nStandard speed test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
 	if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
 	{
 		if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
 		{
-			// get a large number of spectra
-            sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
-
 			int nextDisplay = DISPLAY_PERIOD;
 
             while (elapsed_time(start_time, timing_mark) < 60)
@@ -306,37 +306,36 @@ void ocean_fx_speed_test(long deviceID, long data_buffer_feature_id, long spectr
 					break;
 				}
 
-                //spectraInBuffer = sbapi_data_buffer_get_number_of_elements(deviceID, data_buffer_feature_id, &error);
                 if(elapsed_time(start_time, timing_mark) > nextDisplay)
                 {
-                    printf("\"Elapsed time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\n\n",
+                    printf("\"Elapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
                            elapsed_time(start_time, timing_mark),
-                           spectra_retrieved / elapsed_time(start_time, timing_mark), spectra_retrieved);
+                           elapsed_time(start_time, timing_mark)/loopCount,
+                           spectra_retrieved / elapsed_time(start_time, timing_mark), spectra_retrieved, (double)spectra_retrieved/loopCount);
 					nextDisplay += DISPLAY_PERIOD;
                 }
-				// 0 bytes needs to be handled gracefully, the spectrometer sends back on spectrum if it is available.
-				bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), 0);
-				bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), 0);
 
-				bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), 15);
+				bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
 				spectra_retrieved += (bytesReturned / (sizeof(spectral_data[0])));
-
+                loopCount++;
 			}
 
 			if (clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
 			{
 				printf("Stopping the clock.\n");
 				printf("Elapsed time = %f seconds\n", elapsed_time(start_time, timing_mark));
+                printf("Average loop time = %f seconds\n", elapsed_time(start_time, timing_mark)/loopCount);
 				printf("Spectra retrieved = %d\n", spectra_retrieved);
 				printf("Spectra per second = %f\n\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
-
-				sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
-				sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+                printf("Average retrieved per loop = %f\n", (double)spectra_retrieved/loopCount);
 			}
 			else
 			{
 				printf("clock_gettime() error\n");
 			}
+
+            sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
+            sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
 		}
 	}
 	else
@@ -346,11 +345,89 @@ void ocean_fx_speed_test(long deviceID, long data_buffer_feature_id, long spectr
 
 }
 
+
+void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long spectrometer_feature_id)
+{
+    int error = -1;
+    static struct ocean_fx_raw_spectrum_with_meta_data
+    {
+        uint8_t meta_data[64];
+        uint16_t pixel_values[2136];
+        uint32_t checksum;
+    } spectral_data[NUMBER_SPECTRA_TO_RETRIEVE];
+
+    int bytesReturned = 0;
+    int spectra_retrieved = 0;
+    struct timespec start_time, timing_mark;
+    int loopCount = 0;
+
+    // clear the spectrum buffer
+    sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
+    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+
+    printf("/n/n/n[Request/Response Speed Test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
+    if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
+    {
+        if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
+        {
+            int nextDisplay = DISPLAY_PERIOD;
+
+            // start the buffered acquisition. The request must be balanced by a response
+            sbapi_spectrometer_fast_buffer_spectrum_request(deviceID, spectrometer_feature_id, &error, NUMBER_SPECTRA_TO_RETRIEVE);
+            while (elapsed_time(start_time, timing_mark) < 60)
+            {
+                if (clock_gettime(CLOCK_REALTIME, &timing_mark) != 0)
+                {
+                    printf("clock_gettime() error\n");
+                    break;
+                }
+
+                if(elapsed_time(start_time, timing_mark) > nextDisplay)
+                {
+                    printf("\"Elapsed time = %f seconds\nAverage loop time = %f seconds\nCurrent spectra per second = %f\nSpectra retrieved = %d\nAverage retrieved per loop = %f\n\n",
+                           elapsed_time(start_time, timing_mark),
+                           elapsed_time(start_time, timing_mark)/loopCount,
+                           spectra_retrieved / elapsed_time(start_time, timing_mark), spectra_retrieved, (double)spectra_retrieved/loopCount);
+                    nextDisplay += DISPLAY_PERIOD;
+                }
+
+                bytesReturned = sbapi_spectrometer_get_fast_buffer_spectrum(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
+                spectra_retrieved += (bytesReturned / (sizeof(spectral_data[0])));
+                loopCount++;
+            }
+            bytesReturned = sbapi_spectrometer_fast_buffer_spectrum_response(deviceID, spectrometer_feature_id, &error, (unsigned char *)spectral_data, sizeof(spectral_data), NUMBER_SPECTRA_TO_RETRIEVE);
+
+            if (clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
+            {
+                printf("Stopping the clock.\n");
+                printf("Elapsed time = %f seconds\n", elapsed_time(start_time, timing_mark));
+                printf("Average loop time = %f seconds\n", elapsed_time(start_time, timing_mark)/loopCount);
+                printf("Spectra retrieved = %d\n", spectra_retrieved);
+                printf("Spectra per second = %f\n\n", spectra_retrieved/elapsed_time(start_time, timing_mark));
+                printf("Average retrieved per loop = %f\n", (double)spectra_retrieved/loopCount);
+            }
+            else
+            {
+                printf("clock_gettime() error\n");
+            }
+
+            sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
+            sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+        }
+    }
+    else
+    {
+        printf("clock_gettime() error\n");
+    }
+
+}
+
 //
 // parse command arguments, look for an ocean fx spectrometer and set up the spectrometer for the speed test
 //
 int main(int argc, char*argv[]) 
 {
+#define MAX_IP_ADDRESS_LENGTH 15
 	long data_buffer_feature_id = 0;
 	long spectrometer_feature_id = 0;
 
@@ -377,7 +454,7 @@ int main(int argc, char*argv[])
 		else if(inet_aton(argv[1], &addr) != 0) // 0 if not valid
 		{
 			use_tcp = true;
-			strncpy(ipAddress, argv[1], 15);
+			strncpy(ipAddress, argv[1], MAX_IP_ADDRESS_LENGTH);
 		}
 		else
 		{
@@ -460,7 +537,8 @@ int main(int argc, char*argv[])
 							// configure fast buffer
 							if((error = configure_fast_buffer_feature(device_ids[0])) == 0)
 							{							
-								ocean_fx_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);						
+								ocean_fx_standard_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);
+                                ocean_fx_split_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);
 							}
 							else
 							{

@@ -1062,12 +1062,14 @@ elseif(APPLE)
 
 
 elseif(UNIX)
+# need to copy os-support/linux/FilesToInstall/10-oceanoptics.rules to the rules folder
+
     message("Building for Unix-like platforms")
     #add_compile_options(-std=c++0x)
     set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ggdb -Wall -Wunused -Wmissing-include-dirs -Werror -O0 -fpic -fno-stack-protector" )
 
     set(PLATFORM_SOURCE_FILES
-        os-support/linux/FilesToInstall/10-oceanoptics.rules
+        
         src/native/usb/linux/NativeUSBLinux.c
         )
 

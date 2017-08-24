@@ -565,6 +565,29 @@ int DeviceAdapter::spectrometerGetFastBufferSpectrum(long featureID,
 	return feature->getFastBufferSpectrum(errorCode, buffer, bufferLength, numberOfSamplesToRetrieve);
 }
 
+
+void DeviceAdapter::spectrometerFastBufferSpectrumRequest(long featureID, int *errorCode, unsigned int numberOfSamplesToRetrieve)
+{
+    SpectrometerFeatureAdapter *feature = getSpectrometerFeatureByID(featureID);
+    if (NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return;
+    }
+
+    feature->fastBufferSpectrumRequest(errorCode, numberOfSamplesToRetrieve);
+}
+
+int DeviceAdapter::spectrometerFastBufferSpectrumResponse(long featureID, int *errorCode, unsigned char *buffer, int bufferLength, unsigned int numberOfSamplesToRetrieve)
+{
+    SpectrometerFeatureAdapter *feature = getSpectrometerFeatureByID(featureID);
+    if (NULL == feature) {
+        SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
+        return 0;
+    }
+
+    return feature->fastBufferSpectrumResponse(errorCode, buffer, bufferLength, numberOfSamplesToRetrieve);
+}
+
 int DeviceAdapter::spectrometerGetFormattedSpectrumLength(
         long featureID, int *errorCode) {
     SpectrometerFeatureAdapter *feature = getSpectrometerFeatureByID(featureID);

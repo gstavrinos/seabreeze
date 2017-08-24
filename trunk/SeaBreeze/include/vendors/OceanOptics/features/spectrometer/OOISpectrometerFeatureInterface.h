@@ -54,6 +54,13 @@ namespace seabreeze {
 		virtual std::vector<byte> *getFastBufferSpectrum(const Protocol &protocol,
 			const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
 
+        virtual void fastBufferSpectrumRequest(const Protocol &protocol,
+                                                         const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
+
+        virtual std::vector<byte> *fastBufferSpectrumResponse(const Protocol &protocol,
+                                                         const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
+
+
         /* Request and read out the wavelengths in nanometers as a vector of doubles */
         virtual std::vector<double> *getWavelengths(const Protocol &protocol,
                 const Bus &bus) throw (FeatureException) = 0;

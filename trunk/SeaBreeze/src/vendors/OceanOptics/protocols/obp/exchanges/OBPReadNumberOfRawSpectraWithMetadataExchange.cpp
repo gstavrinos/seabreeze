@@ -142,6 +142,7 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
      */
     try 
 	{
+
         // the current buffer does not include the header. For the parse to work, those
         //  44 bytes must be inserted at the front of this->buffer
         this->buffer->insert(this->buffer->begin(), obpHeader.begin(), obpHeader.end());

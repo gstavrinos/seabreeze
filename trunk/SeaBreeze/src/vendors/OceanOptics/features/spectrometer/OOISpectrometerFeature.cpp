@@ -108,11 +108,32 @@ vector<byte> *OOISpectrometerFeature::getUnformattedSpectrum(
 }
 
 vector<byte> *OOISpectrometerFeature::getFastBufferSpectrum(
-	const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) {
+	const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException)
+{
 	LOG(__FUNCTION__);
 	writeRequestFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
 	return readFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
 }
+
+
+// the fast spectrum request reponse pair must be called symetrically. Otherwise the OBP communication will
+//  get out of sync
+void OOISpectrometerFeature::fastBufferSpectrumRequest(
+        const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException)
+{
+    LOG(__FUNCTION__);
+    writeRequestFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
+}
+
+vector<byte> *OOISpectrometerFeature::fastBufferSpectrumResponse(
+        const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException)
+{
+    LOG(__FUNCTION__);
+
+    return readFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
+}
+
+
 
 void OOISpectrometerFeature::writeRequestFormattedSpectrum(const Protocol &protocol,
         const Bus &bus) throw (FeatureException) {
