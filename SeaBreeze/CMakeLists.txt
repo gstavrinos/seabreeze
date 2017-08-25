@@ -14,8 +14,6 @@ project(SeaBreeze)
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib/")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-
-
 set(COMMON_SOURCE_FILES
         include/api/seabreezeapi/AcquisitionDelayFeatureAdapter.h
         include/api/seabreezeapi/ContinuousStrobeFeatureAdapter.h
@@ -1036,9 +1034,11 @@ if(WIN32)
     set_target_properties("api_test_win" PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/test/")
 
 elseif(APPLE)
+
     message("Building SeaBreeze for OS X, Darwin")
     set(CMAKE_OSX_ARCHITECTURES "x86_64")
     set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ggdb -Wall -Wunused -Wmissing-include-dirs -Werror -O0 -fpic -fno-stack-protector" )
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ggdb")
 
     set(PLATFORM_SOURCE_FILES
             src/native/usb/osx/NativeUSBMacOSX.c
@@ -1053,7 +1053,7 @@ elseif(APPLE)
     # build test applicaitons against the seabreeze api
     message("Building api test")
 
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ggdb")
+
     add_executable(api_test_posix "test/seabreeze_test_posix.c" "test/spectral_correction.c")
     target_link_libraries(api_test_posix SeaBreeze)
 
@@ -1067,41 +1067,26 @@ elseif(UNIX)
     message("Building for Unix-like platforms")
     #add_compile_options(-std=c++0x)
     set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ggdb -Wall -Wunused -Wmissing-include-dirs -Werror -O0 -fpic -fno-stack-protector" )
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -gdb -pthread -lpthread")
 
     set(PLATFORM_SOURCE_FILES
-        
         src/native/usb/linux/NativeUSBLinux.c
         )
 
+
     add_library(SeaBreeze SHARED ${COMMON_SOURCE_FILES} ${PLATFORM_SOURCE_FILES})
+    target_link_libraries(SeaBreeze usb)
+
+    # build test applicaitons against the seabreeze api
+    message("Building api test")
 
     add_executable(api_test "test/api_test.c")
-    find_library(SEABREEZE_LIB libSeaBreeze.*)
-    target_link_libraries(api_test ${SEABREEZE_LIB})
+    target_link_libraries(api_test SeaBreeze)
 
     set_target_properties("api_test" PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/test/")
-endif()
+endif(WIN32)
 
 message("Building sample code for all platforms.")
-
-set(SAMPLE_CODE_C_TARGETS
-        "demo-averaging"
-        "demo-named-spectrometer"
-        "demo-pthreads"
-        "demo-qepro-api"
-        "demo-raw-usb-seabreezeapi"
-        "demo-raw-usb"
-        "demo-stability-scan"
-        "demo-streaming-xml"
-        "demo-strobe-sts"
-        "demo-strobe"
-        "demo-sts-api"
-        "demo-sts-eeprom"
-        "demo-timeout"
-        "demo-timing"
-        "demo-unformatted-spectrum"
-        "seabreeze-util"
-        )
 
 add_executable(demo-averaging "sample-code/c/demo-averaging.c" "sample-code/c/util.h" "sample-code/c/util.c")
 target_link_libraries(demo-averaging SeaBreeze)
@@ -1151,6 +1136,25 @@ target_link_libraries(demo-unformatted-spectrum SeaBreeze)
 add_executable(seabreeze-util "sample-code/c/seabreeze-util.c" "sample-code/c/util.h" "sample-code/c/util.c")
 target_link_libraries(seabreeze-util SeaBreeze)
 
+set(SAMPLE_CODE_C_TARGETS
+        "demo-averaging"
+        "demo-named-spectrometer"
+        "demo-pthreads"
+        "demo-qepro-api"
+        "demo-raw-usb-seabreezeapi"
+        "demo-raw-usb"
+        "demo-stability-scan"
+        "demo-streaming-xml"
+        "demo-strobe-sts"
+        "demo-strobe"
+        "demo-sts-api"
+        "demo-sts-eeprom"
+        "demo-timeout"
+        "demo-timing"
+        "demo-unformatted-spectrum"
+        "seabreeze-util"
+        )
+
 set_target_properties(${SAMPLE_CODE_C_TARGETS} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/sample-code/c/")
 
 
@@ -1159,6 +1163,8 @@ add_executable(data-collection "sample-code/cpp/data-collection.cpp" "sample-cod
 target_link_libraries(data-collection SeaBreeze)
 
 set_target_properties(${SAMPLE_CODE_CPP_TARGETS} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/sample-code/cpp/")
+
+
 
 message("Building Ocean FX speed test for all platforms.")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/oceanfx_speed_test/")
