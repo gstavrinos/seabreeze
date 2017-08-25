@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdint.h>
 #include "api/seabreezeapi/SeaBreezeAPI.h"
 #include "api/seabreezeapi/SeaBreezeAPIConstants.h"
 

@@ -27,6 +27,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************/
 
+#include <stdint.h>
 #include "common/globals.h"
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPReadNumberOfRawSpectraWithMetadataExchange.h"
 #include "vendors/OceanOptics/protocols/obp/hints/OBPSpectrumHint.h"
