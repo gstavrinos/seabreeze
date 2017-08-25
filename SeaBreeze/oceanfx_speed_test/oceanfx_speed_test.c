@@ -53,10 +53,13 @@
 #endif
 
 #define SPECTRA_PER_TRIGGER 50000
-#define NUMBER_SPECTRA_TO_RETRIEVE 15 // can be set to a larger number in a future firmware release.
+#define NUMBER_SPECTRA_TO_RETRIEVE 15 // current max available from the OceanFX
 #define FAST_BUFFER_ENABLED 1
-#define DISPLAY_PERIOD 5;
-
+#define DISPLAY_PERIOD 5
+#define OCEANFX_TRIGGER_MODE 0x00
+#define TEST_TIME 60
+#define LOOP_DELAY 0
+#define BUFFER_CAPACITY 50000
 //
 // show the usage message
 //
@@ -170,7 +173,7 @@ int configure_data_buffer_feature(long deviceID, long *data_buffer_feature_id_pt
 			if(error == 0)
 			{
 				// we know the capacity of the buffer, so set it to SPECTRA_PER_TRIGGER and clear it
-			    sbapi_data_buffer_set_buffer_capacity(deviceID, *data_buffer_feature_id_ptr, &error, SPECTRA_PER_TRIGGER);
+			    sbapi_data_buffer_set_buffer_capacity(deviceID, *data_buffer_feature_id_ptr, &error, BUFFER_CAPACITY);
 			    if(error == 0)
 			    {
 			    	// clear the data buffer
@@ -289,17 +292,20 @@ void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, lo
 
 	// clear the spectrum buffer
 	sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
-    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, OCEANFX_TRIGGER_MODE);
 
-    printf("\n\n\n[Standard speed test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
+    printf("\n\n\n[Standard speed test]\nStarting the clock. Collecting spectra for about %d seconds.\n\n", TEST_TIME);
 	if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
 	{
 		if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
 		{
 			int nextDisplay = DISPLAY_PERIOD;
 
-            while (elapsed_time(start_time, timing_mark) < 60)
+            while (elapsed_time(start_time, timing_mark) < TEST_TIME)
 			{
+                if(LOOP_DELAY>0)
+                    usleep(LOOP_DELAY);
+
 				if (clock_gettime(CLOCK_REALTIME, &timing_mark) != 0)
 				{
 					printf("clock_gettime() error\n");
@@ -336,7 +342,7 @@ void ocean_fx_standard_speed_test(long deviceID, long data_buffer_feature_id, lo
 
             // new sbapi_spectrometer_abort_spectral_acquisition() command should go here...
             sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
-            sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+            //sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00); // software trigger mode
 		}
 	}
 	else
@@ -364,9 +370,9 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
 
     // clear the spectrum buffer
     sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
-    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+    sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, OCEANFX_TRIGGER_MODE);
 
-    printf("\n\n\n[Request/Response Speed Test]\nStarting the clock. Collecting spectra for about a minute.\n\n");
+    printf("\n\n\n[Overlapping Request Speed Test]\nStarting the clock. Collecting spectra for about %d seconds.\n\n", TEST_TIME);
     if(clock_gettime(CLOCK_REALTIME, &start_time) == 0)
     {
         if(clock_gettime(CLOCK_REALTIME, &timing_mark) == 0)
@@ -375,8 +381,11 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
 
             // start the buffered acquisition. The request must be balanced by a response
             sbapi_spectrometer_fast_buffer_spectrum_request(deviceID, spectrometer_feature_id, &error, NUMBER_SPECTRA_TO_RETRIEVE);
-            while (elapsed_time(start_time, timing_mark) < 60)
+            while (elapsed_time(start_time, timing_mark) < TEST_TIME)
             {
+                if(LOOP_DELAY>0)
+                    usleep(LOOP_DELAY);
+
                 sbapi_spectrometer_fast_buffer_spectrum_request(deviceID, spectrometer_feature_id, &error, NUMBER_SPECTRA_TO_RETRIEVE);
 
                 if (clock_gettime(CLOCK_REALTIME, &timing_mark) != 0)
@@ -418,7 +427,7 @@ void ocean_fx_split_speed_test(long deviceID, long data_buffer_feature_id, long 
 
             // new sbapi_spectrometer_abort_spectral_acquisition() command should go here...
             sbapi_data_buffer_clear(deviceID, data_buffer_feature_id, &error);
-            sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
+            //sbapi_spectrometer_set_trigger_mode(deviceID, spectrometer_feature_id, &error, 0x00);
         }
     }
     else
@@ -475,6 +484,14 @@ int main(int argc, char*argv[])
 	}
     
     printf("\n\n\n=====> STARTING OCEAN FX SPEED TEST <=====\n\n"); fflush(stdout);
+
+    printf("Test time = %d\n", TEST_TIME);
+    printf("Spectra per trigger = %d\n", SPECTRA_PER_TRIGGER);
+    printf("Spectra retrieved per query = %d\n", NUMBER_SPECTRA_TO_RETRIEVE);
+    printf("Fast Buffer Enable = %d\n", FAST_BUFFER_ENABLED);
+    printf("Display period = %d\n", DISPLAY_PERIOD);
+    printf("Trigger Mode = %d\n", OCEANFX_TRIGGER_MODE);
+    printf("Loop delay = %d us\n\n", LOOP_DELAY);
 
     /* Initialize the SeaBreeze driver */
     sbapi_initialize();
@@ -544,7 +561,14 @@ int main(int argc, char*argv[])
 							if((error = configure_fast_buffer_feature(device_ids[0])) == 0)
 							{							
 								ocean_fx_standard_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);
-                                ocean_fx_split_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);
+                                //if(FAST_BUFFER_ENABLED == 1)
+                                //{
+                                    ocean_fx_split_speed_test(device_ids[0], data_buffer_feature_id, spectrometer_feature_id);
+                                //}
+                                //else
+                                //{
+                                    //printf("Overlapped test disabled, since fast buffering is disabled.\n");
+                                //}
 							}
 							else
 							{
