@@ -86,19 +86,22 @@ void Log::setLogLevel(const string& s)
 
 void Log::setLogFile(void *f)
 {
-    if (logFile != NULL)
+    if (logFile != NULL) {
         fflush(logFile);
+    }
     logFile = (FILE*) f;
-    if (logFile != NULL)
+    if (logFile != NULL) {
         fflush(logFile);
+    }
 }
 
 void Log::trace(const char *fmt, ...)
 {
 #ifdef OOI_DEBUG
 	va_list args;
-    if(logLevel < OOI_LOG_LEVEL_TRACE)
+    if(logLevel < OOI_LOG_LEVEL_TRACE) {
         return;
+    }
     va_start(args, fmt);
     formatAndSend(OOI_LOG_LEVEL_TRACE, "TRACE", ":", fmt, args);
     va_end(args);
@@ -109,8 +112,9 @@ void Log::debug(const char *fmt, ...)
 {
 #ifdef OOI_DEBUG
 	va_list args;
-    if(logLevel < OOI_LOG_LEVEL_DEBUG)
+    if(logLevel < OOI_LOG_LEVEL_DEBUG) {
         return;
+    }
     va_start(args, fmt);
     formatAndSend(OOI_LOG_LEVEL_DEBUG, "DEBUG", ":", fmt, args);
     va_end(args);
@@ -121,8 +125,9 @@ void Log::info(const char *fmt, ...)
 {
 #ifdef OOI_DEBUG
     va_list args;
-    if(logLevel < OOI_LOG_LEVEL_INFO)
+    if(logLevel < OOI_LOG_LEVEL_INFO) {
         return;
+    }
     va_start(args, fmt);
     formatAndSend(OOI_LOG_LEVEL_INFO, "INFO", ":", fmt, args);
     va_end(args);
@@ -133,8 +138,9 @@ void Log::warn(const char *fmt, ...)
 {
 #ifdef OOI_DEBUG
     va_list args;
-    if(logLevel < OOI_LOG_LEVEL_WARN)
+    if(logLevel < OOI_LOG_LEVEL_WARN) {
         return;
+    }
     va_start(args, fmt);
     formatAndSend(OOI_LOG_LEVEL_WARN, "WARN", ">>>", fmt, args);
     va_end(args);
@@ -145,8 +151,9 @@ void Log::error(const char *fmt, ...)
 {
 #ifdef OOI_DEBUG
     va_list args;
-    if(logLevel < OOI_LOG_LEVEL_ERROR)
+    if(logLevel < OOI_LOG_LEVEL_ERROR) {
         return;
+    }
     va_start(args, fmt);
     formatAndSend(OOI_LOG_LEVEL_ERROR, "ERROR", "***", fmt, args);
     va_end(args);
@@ -160,12 +167,14 @@ void Log::formatAndSend(
     const char *fmt,
     va_list args)
 {
-    if (logFile == NULL)
+    if (logFile == NULL) {
         return;
+    }
 
 	unsigned indent = (unsigned int) (callstack->size() - 1) * 4;
-	if (OOI_LOG_LEVEL_TRACE == lvl && indent > 2)
+	if (OOI_LOG_LEVEL_TRACE == lvl && indent > 2) {
 		indent -= 2;
+    }
 
     fprintf(logFile, "seabreeze %-7s%-3s%*s%s: ",
         lvlName,
@@ -177,8 +186,9 @@ void Log::formatAndSend(
     fflush(logFile);
 
     vfprintf(logFile, fmt, args);
-    if (fmt[strlen(fmt)] != '\n')
+    if (fmt[strlen(fmt)] != '\n') {
         fprintf(logFile, "\n");
+    }
 	fflush(logFile);
 }
 
@@ -204,8 +214,9 @@ void seabreeze_log_debug(const char *fmt, ...)
 #ifdef OOI_DEBUG
     Log logger("");
 	va_list args;
-    if(logger.logLevel < OOI_LOG_LEVEL_DEBUG)
+    if(logger.logLevel < OOI_LOG_LEVEL_DEBUG) {
         return;
+    }
     va_start(args, fmt);
     logger.formatAndSend(OOI_LOG_LEVEL_DEBUG, "DEBUG", ":", fmt, args);
     va_end(args);
@@ -217,8 +228,9 @@ void seabreeze_log_info (const char *fmt, ...)
 #ifdef OOI_DEBUG
     Log logger("");
     va_list args;
-    if(logger.logLevel < OOI_LOG_LEVEL_INFO)
+    if(logger.logLevel < OOI_LOG_LEVEL_INFO) {
         return;
+    }
     va_start(args, fmt);
     logger.formatAndSend(OOI_LOG_LEVEL_INFO, "INFO", ":", fmt, args);
     va_end(args);
@@ -230,8 +242,9 @@ void seabreeze_log_warn (const char *fmt, ...)
 #ifdef OOI_DEBUG
     Log logger("");
     va_list args;
-    if(logger.logLevel < OOI_LOG_LEVEL_WARN)
+    if(logger.logLevel < OOI_LOG_LEVEL_WARN) {
         return;
+    }
     va_start(args, fmt);
     logger.formatAndSend(OOI_LOG_LEVEL_WARN, "WARN", ">>>", fmt, args);
     va_end(args);
@@ -243,8 +256,9 @@ void seabreeze_log_error(const char *fmt, ...)
 #ifdef OOI_DEBUG
     Log logger("");
     va_list args;
-    if(logger.logLevel < OOI_LOG_LEVEL_ERROR)
+    if(logger.logLevel < OOI_LOG_LEVEL_ERROR) {
         return;
+    }
     va_start(args, fmt);
     logger.formatAndSend(OOI_LOG_LEVEL_ERROR, "ERROR", "***", fmt, args);
     va_end(args);

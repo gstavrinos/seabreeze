@@ -184,8 +184,9 @@ void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfSamplesToRequest(
     unsigned int sampleSize = 1;
 
     // the spectrometer currently 20170822 will return one spectrum, if available, even if 0 were requested. Make sure there is space for the rouge transmission.
-    if(numberOfSamples != 0)
+    if(numberOfSamples != 0) {
         sampleSize = numberOfSamples;
+    }
 
 	OBPReadNumberOfRawSpectraWithMetadataExchange *parentClass = (OBPReadNumberOfRawSpectraWithMetadataExchange *)myClass;
 
